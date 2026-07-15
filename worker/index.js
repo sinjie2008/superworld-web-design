@@ -7,6 +7,76 @@ const cssOverrides = `
 .socials{width:152px;height:74px;background:url("/assets/social.webp") center/contain no-repeat}
 .socials .social{display:none}
 .footer-brand img{width:100%}
+.section-heading.center p{margin-inline:auto}
+.site-header{position:sticky;top:0}
+html{scroll-padding-top:144px}
+.link-arrow::after{content:"";display:inline-block;width:8px;height:8px;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);margin-left:2px}
+.carousel-controls{position:relative}
+.carousel-controls .carousel-dots{position:absolute;left:50%;width:auto;transform:translateX(-50%);justify-content:center}
+.carousel > .carousel-dots{width:100%;justify-content:center;margin-top:22px}
+.carousel-controls button{display:inline-flex;align-items:center;gap:10px}
+.carousel-controls [data-prev]::before,.carousel-controls [data-next]::after{content:"";display:inline-block;width:8px;height:8px;border-color:currentColor}
+.carousel-controls [data-prev]::before{border-left:2px solid;border-bottom:2px solid;transform:rotate(45deg)}
+.carousel-controls [data-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
+.button.is-active{background:#111;color:#fff}
+.menu-caret{width:9px;height:9px;margin-left:10px;font-size:0;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);vertical-align:middle}
+`;
+
+const appEnhancements = `
+(() => {
+  const productSets = {
+    general: [
+      ["EMC Components", "Solutions supporting noise suppression, compliance, and product stability in electronic systems.", "/products/general/emc"],
+      ["Magnetic Components", "Core magnetic products supporting a wide range of electronic, industrial, and power-related applications.", "/products/general"],
+      ["Transformers", "Transformer solutions developed for consistent performance, manufacturing control, and application fit.", "/products/general"],
+      ["Wireless Power Transfer", "Wireless charging-related solutions supporting evolving demand in modern electronics and mobility.", "/products/general"],
+      ["General Components", "Reliable component solutions for electronic, industrial, and power applications.", "/products/general"]
+    ],
+    automotive: [
+      ["Automotive EMC Components", "AEC-Q200-ready components supporting noise suppression and stable vehicle electronics.", "/products"],
+      ["Automotive Power Inductors", "High-current magnetic components developed for demanding automotive power systems.", "/products"],
+      ["Automotive Ferrite Beads", "Compact EMI suppression solutions for connected and electrified vehicles.", "/products"],
+      ["Automotive Transformers", "Controlled transformer solutions for reliable automotive power conversion.", "/products"],
+      ["Automotive Wireless Power", "Magnetic component support for in-vehicle wireless charging applications.", "/products"]
+    ]
+  };
+
+  const cardMarkup = ([title, copy, href]) =>
+    '<article class="media-card slide"><div class="ph soft"></div><div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a><span>17 December 2025</span></div></div></article>';
+
+  function selectProductSet(type) {
+    const root = document.querySelector('[data-carousel="home-products"]');
+    const items = productSets[type];
+    if (!root || !items) return;
+    const track = root.querySelector('.carousel-track');
+    if (track) {
+      track.innerHTML = items.map(cardMarkup).join('');
+      track.style.transform = 'translateX(0px)';
+    }
+    document.querySelectorAll('[data-product-tab]').forEach((button) => {
+      const active = button.dataset.productTab === type;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+  }
+
+  function prepareHomeControls() {
+    const general = document.querySelector('[data-product-tab="general"]');
+    if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
+    const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
+    const releaseLink = releaseCarousel?.closest('section')?.querySelector('.section-heading .link-arrow');
+    if (releaseLink) releaseLink.setAttribute('href', '/news?category=product');
+  }
+
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-product-tab]');
+    if (button) selectProductSet(button.dataset.productTab);
+  });
+
+  const appRoot = document.getElementById('app');
+  if (appRoot) new MutationObserver(prepareHomeControls).observe(appRoot, {childList:true, subtree:true});
+  prepareHomeControls();
+})();
 `;
 
 const assetBase64 = {
@@ -37,8 +107,8 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
-    if (path === "/app.js") return new Response(appJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
+    if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=3"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=6").replace("/app.js", "/app.js?v=6"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

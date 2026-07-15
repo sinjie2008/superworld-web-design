@@ -49,11 +49,19 @@
    - Post-fix evidence: `/workspace/sites/lo-wireframe/qa/footer-implementation.jpg`.
 3. Final pass
    - The home reference and implementation were compared again in the initial carousel state, followed by a focused footer comparison. No P0/P1/P2 findings remained.
+4. User refinement pass
+   - [P2] Carousel dots were not centered, dropdown carets were too small, carousel navigation lacked the reference chevrons, and the regional-support description did not share the heading's centered alignment.
+   - [P2] General and Automotive tabs were visual-only, and the product-release overview link needed explicit verification.
+   - Fixes: centered standalone and in-control carousel dots; added high-contrast CSS chevrons to menus, links, and carousel controls; centered the regional description; made the site header sticky; connected General and Automotive card sets; retained auto-slide behavior; and verified the Product Releases destination at `/news?category=product`.
+   - Post-fix browser evidence: desktop home route at 1363 × 936, including visible header carets, centered carousel dot, right-aligned Prev/Next chevrons, both tab states, sticky header position, and centered regional-support copy. No new P0/P1/P2 findings remained.
 
 ## Primary Interactions Tested
 
 - About and News header panels open and switch correctly.
 - Every carousel advances automatically; transform changes were verified after the configured interval.
+- General and Automotive tabs switch to the matching five-card product sets; the Automotive set continues to auto-slide.
+- The Latest Product Releases overview link opens the Product Releases listing state.
+- Sticky header position, visible dropdown carets, centered carousel dots, and centered regional-support copy were verified from computed browser styles and visual inspection.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
