@@ -8,8 +8,19 @@ const cssOverrides = `
 .socials .social{display:none}
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
+body{font-size:15px}
+h1{font-size:clamp(30px,3.4vw,48px)}
+h2{font-size:clamp(24px,2.4vw,34px)}
+h3{font-size:clamp(18px,1.6vw,24px)}
+h4{font-size:16px}
+.nav-link,.nav-menu-button{font-size:15px}
+.achievement h3{font-size:22px}
+.stat strong{font-size:32px}
+.region h3{font-size:21px}
 .site-header{position:sticky;top:0}
 html{scroll-padding-top:144px}
+.carousel-dots{display:none!important}
+.table-wrap tbody td > .ph{width:86px;height:64px;min-height:0;margin-inline:auto}
 .link-arrow::after{content:"";display:inline-block;width:8px;height:8px;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);margin-left:2px}
 .carousel-controls{position:relative}
 .carousel-controls .carousel-dots{position:absolute;left:50%;width:auto;transform:translateX(-50%);justify-content:center}
@@ -20,6 +31,27 @@ html{scroll-padding-top:144px}
 .carousel-controls [data-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
 .button.is-active{background:#111;color:#fff}
 .menu-caret{width:9px;height:9px;margin-left:10px;font-size:0;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);vertical-align:middle}
+#milestones{overflow:hidden}
+#milestones .timeline{--milestone-visible:5;overflow:hidden;min-height:520px;padding:74px 0 150px}
+#milestones .timeline::before{top:221px}
+#milestones .timeline-row{display:flex;align-items:flex-start;gap:0;width:100%;transition:transform .65s ease;will-change:transform}
+#milestones .timeline-item{flex:0 0 calc(100% / var(--milestone-visible));min-width:0;padding:0 14px;text-align:center;transition:opacity .4s ease}
+#milestones .timeline-item > h3{font-size:clamp(18px,1.7vw,24px);white-space:nowrap;margin-bottom:28px}
+#milestones .timeline-circle{width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease}
+#milestones .timeline-item.active{z-index:2}
+#milestones .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
+.milestone-detail{min-height:112px;margin-top:18px;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
+.timeline-item.active .milestone-detail{opacity:1;visibility:visible;transform:none}
+.milestone-detail h3{margin-bottom:10px}
+.milestone-detail p{margin-inline:auto}
+.milestone-controls{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:-104px;position:relative;z-index:3}
+.milestone-controls button{display:inline-flex;align-items:center;gap:10px;border:0;background:#fff}
+.milestone-controls button::before,.milestone-controls button::after{content:"";display:inline-block;width:8px;height:8px;border-color:currentColor}
+.milestone-controls [data-milestone-prev]::before{border-left:2px solid;border-bottom:2px solid;transform:rotate(45deg)}
+.milestone-controls [data-milestone-prev]::after,.milestone-controls [data-milestone-next]::before{display:none}
+.milestone-controls [data-milestone-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
+@media (max-width:900px){#milestones .timeline{--milestone-visible:3}}
+@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}}
 `;
 
 const appEnhancements = `
@@ -60,12 +92,97 @@ const appEnhancements = `
     });
   }
 
+  const milestoneData = [
+    ["2011 – 2014", "Recognition", "Expanded customer and enterprise recognition."],
+    ["2007 – 2010", "Growth", "Strengthened manufacturing and global customer support."],
+    ["2000 – 2006", "Foundation", "Established Singapore Headquarters Office"],
+    ["1993 – 1999", "Expansion", "Built regional operations and customer reach."],
+    ["1975", "Origins", "The beginning of the company journey."]
+  ];
+  let milestoneCleanup = null;
+
+  function prepareMilestoneSlider() {
+    const timeline = document.querySelector('#milestones .timeline');
+    if (!timeline) {
+      if (milestoneCleanup) milestoneCleanup();
+      return;
+    }
+    if (timeline.dataset.milestoneEnhanced === 'true') return;
+    if (milestoneCleanup) milestoneCleanup();
+
+    timeline.dataset.milestoneEnhanced = 'true';
+    const row = timeline.querySelector('.timeline-row');
+    if (!row) return;
+    row.setAttribute('aria-live', 'polite');
+    const repeated = milestoneData.concat(milestoneData, milestoneData);
+    row.innerHTML = repeated.map((item, index) =>
+      '<article class="timeline-item" data-milestone-index="' + index + '"><h3>' + item[0] + '</h3><div class="timeline-circle" aria-hidden="true"></div><div class="milestone-detail"><h3>' + item[1] + '</h3><p>' + item[2] + '</p></div></article>'
+    ).join('');
+
+    const controls = document.createElement('div');
+    controls.className = 'milestone-controls';
+    controls.innerHTML = '<button type="button" data-milestone-prev aria-label="Previous milestone">Prev</button><button type="button" data-milestone-next aria-label="Next milestone">Next</button>';
+    timeline.insertAdjacentElement('afterend', controls);
+
+    let current = 7;
+    let locked = false;
+    let resetTimer = 0;
+    const items = [...row.querySelectorAll('.timeline-item')];
+
+    const position = (animate = true) => {
+      const visible = Number(getComputedStyle(timeline).getPropertyValue('--milestone-visible')) || 5;
+      const step = timeline.clientWidth / visible;
+      const centerSlot = Math.floor(visible / 2);
+      row.style.transition = animate ? '' : 'none';
+      row.style.transform = 'translate3d(' + ((centerSlot - current) * step) + 'px,0,0)';
+      items.forEach((item, index) => {
+        const active = index === current;
+        item.classList.toggle('active', active);
+        if (active) item.setAttribute('aria-current', 'true');
+        else item.removeAttribute('aria-current');
+      });
+      if (!animate) requestAnimationFrame(() => { row.style.transition = ''; });
+    };
+
+    const move = (delta) => {
+      if (locked) return;
+      locked = true;
+      current += delta;
+      position(true);
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        if (current >= 10) current -= 5;
+        if (current <= 4) current += 5;
+        position(false);
+        locked = false;
+      }, 700);
+    };
+
+    const previous = controls.querySelector('[data-milestone-prev]');
+    const next = controls.querySelector('[data-milestone-next]');
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    const autoTimer = setInterval(() => move(1), 4500);
+    const handleResize = () => position(false);
+    window.addEventListener('resize', handleResize, {passive:true});
+    position(false);
+
+    milestoneCleanup = () => {
+      clearInterval(autoTimer);
+      clearTimeout(resetTimer);
+      window.removeEventListener('resize', handleResize);
+      milestoneCleanup = null;
+    };
+  }
+
   function prepareHomeControls() {
+    document.querySelectorAll('.carousel-dots').forEach((dots) => dots.remove());
     const general = document.querySelector('[data-product-tab="general"]');
     if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
     const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
     const releaseLink = releaseCarousel?.closest('section')?.querySelector('.section-heading .link-arrow');
     if (releaseLink) releaseLink.setAttribute('href', '/news?category=product');
+    prepareMilestoneSlider();
   }
 
   document.addEventListener('click', (event) => {
@@ -109,6 +226,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=6").replace("/app.js", "/app.js?v=6"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=9").replace("/app.js", "/app.js?v=9"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

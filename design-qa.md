@@ -32,7 +32,7 @@
 
 - Fonts and typography: Poppins is loaded locally for headings and navigation; Inter is loaded locally for body text. Computed browser styles confirmed both families. Weight hierarchy and uppercase display treatment match the wireframes; small wrapping differences are attributable to the 77 px viewport-width difference.
 - Spacing and layout rhythm: major grids, section spacing, border weight, card proportions, and page height align closely with the source. The final home page remains within roughly one section-gap of the source height despite the narrower browser viewport.
-- Colors and visual tokens: the implementation uses white, black, and neutral grays only. No brand color was introduced. Borders, fills, active dots, and focus states share the monochrome token system.
+- Colors and visual tokens: the implementation uses white, black, and neutral grays only. No brand color was introduced. Borders, fills, controls, and focus states share the monochrome token system.
 - Image quality and asset fidelity: the header/footer logo, social icons, automotive system map, communication/server map, and A4K product image are source-derived raster assets embedded in the Worker and served at native aspect ratios. No handcrafted SVG or CSS illustration replaces these visible assets.
 - Copy and content: section labels, navigation groups, product names, application categories, inquiry fields, and representative news/product copy follow the supplied wireframe screens.
 
@@ -54,14 +54,26 @@
    - [P2] General and Automotive tabs were visual-only, and the product-release overview link needed explicit verification.
    - Fixes: centered standalone and in-control carousel dots; added high-contrast CSS chevrons to menus, links, and carousel controls; centered the regional description; made the site header sticky; connected General and Automotive card sets; retained auto-slide behavior; and verified the Product Releases destination at `/news?category=product`.
    - Post-fix browser evidence: desktop home route at 1363 × 936, including visible header carets, centered carousel dot, right-aligned Prev/Next chevrons, both tab states, sticky header position, and centered regional-support copy. No new P0/P1/P2 findings remained.
+5. Milestone and typography refinement pass
+   - [P2] The milestone section was static and did not reproduce the supplied centered timeline-slider composition. The center milestone also lacked the larger double-ring treatment, active description, and dedicated Prev/Next controls.
+   - [P2] Site-wide display and body typography appeared oversized relative to the supplied wireframes, and legacy carousel-dot indicators remained visible below card sliders.
+   - Fixes: rebuilt the milestone area as a five-up infinite slider with a 230 px active circle versus 170 px surrounding circles, centered active copy, 4.5-second automatic movement, and working Prev/Next buttons; removed every `.carousel-dots` element; and reduced global body, navigation, heading, statistic, and card typography while preserving Poppins headings and Inter body copy.
+   - Post-fix browser evidence: the supplied milestone reference `/workspace/scratch/0bbd922b2b27/upload/db4c0ba6-6634-4658-b45b-db9c11b916cb.png` and the `/company#milestones` browser state show the same five-milestone structure, enlarged center emphasis, lower active description, and right-aligned slider controls. No new P0/P1/P2 findings remained.
+6. Product-table thumbnail refinement pass
+   - [P2] Empty `.ph` product thumbnails inherited the global 180 px placeholder minimum height and appeared too tall in the Chip Inductor results table.
+   - Fix: scoped product-table placeholders to an exact 86 × 64 px frame, matching the existing real product-thumbnail dimensions without changing placeholders elsewhere on the site.
+   - Post-fix browser evidence: `/products/general/emc` rendered all 12 empty table thumbnails with the new scoped sizing and retained aligned table cells.
 
 ## Primary Interactions Tested
 
 - About and News header panels open and switch correctly.
-- Every carousel advances automatically; transform changes were verified after the configured interval.
+- Every carousel advances automatically; transform changes were verified after the configured interval, including the milestone slider's 4.5-second rotation.
 - General and Automotive tabs switch to the matching five-card product sets; the Automotive set continues to auto-slide.
 - The Latest Product Releases overview link opens the Product Releases listing state.
-- Sticky header position, visible dropdown carets, centered carousel dots, and centered regional-support copy were verified from computed browser styles and visual inspection.
+- Sticky header position, visible dropdown carets, removed carousel dots, and centered regional-support copy were verified from computed browser styles and visual inspection.
+- Milestone Prev/Next moved the active state in both directions; the centered active milestone enlarged to 230 px while surrounding milestones remained 170 px.
+- Site-wide computed typography confirmed the reduced 15 px Inter body size and smaller Poppins display scale.
+- Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
