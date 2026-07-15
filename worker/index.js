@@ -9,15 +9,22 @@ const cssOverrides = `
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
 .section-heading:has([data-product-tab]){align-items:flex-start}
-body{font-size:15px}
-h1{font-size:clamp(30px,3.4vw,48px)}
-h2{font-size:clamp(24px,2.4vw,34px)}
-h3{font-size:clamp(18px,1.6vw,24px)}
-h4{font-size:16px}
-.nav-link,.nav-menu-button{font-size:15px}
-.achievement h3{font-size:22px}
-.stat strong{font-size:32px}
-.region h3{font-size:21px}
+body{font-size:14px}
+h1{font-size:clamp(28px,3vw,42px)}
+h2{font-size:clamp(21px,2.1vw,29px)}
+h3{font-size:clamp(16px,1.4vw,20px)}
+h4{font-size:15px}
+.nav-link,.nav-menu-button{font-size:14px}
+.button{font-size:13px}
+.eyebrow,.crumb{font-size:12px}
+.hero-panel p{font-size:15px}
+.achievement h3{font-size:19px}
+.stat strong{font-size:28px}
+.region h3{font-size:19px}
+.footer-grid h3{font-size:17px}
+.location-tabs button{font-size:18px}
+.number-card .num{font-size:44px}
+.thanks h1{font-size:clamp(38px,5.5vw,64px)}
 .site-header{position:sticky;top:0}
 html{scroll-padding-top:144px}
 .carousel-dots{display:none!important}
@@ -38,7 +45,7 @@ html{scroll-padding-top:144px}
 #milestones .timeline::before{top:221px}
 #milestones .timeline-row{display:flex;align-items:flex-start;gap:0;width:100%;transition:transform .65s ease;will-change:transform}
 #milestones .timeline-item{flex:0 0 calc(100% / var(--milestone-visible));min-width:0;padding:0 14px;text-align:center;transition:opacity .4s ease}
-#milestones .timeline-item > h3{font-size:clamp(18px,1.7vw,24px);white-space:nowrap;margin-bottom:28px}
+#milestones .timeline-item > h3{font-size:clamp(16px,1.4vw,20px);white-space:nowrap;margin-bottom:28px}
 #milestones .timeline-circle{width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease}
 #milestones .timeline-item.active{z-index:2}
 #milestones .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
@@ -230,6 +237,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=12").replace("/app.js", "/app.js?v=12"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=13").replace("/app.js", "/app.js?v=13"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

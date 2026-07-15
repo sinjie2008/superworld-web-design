@@ -71,6 +71,10 @@
    - [P2] The General/Automotive tab group sat lower than the “Discover Our Core Product Lines” heading because the shared heading row used bottom alignment.
    - Fix: scoped `align-items: flex-start` to the section heading containing product tabs, leaving every other `.section-heading` alignment unchanged.
    - Post-fix browser evidence: the Poppins heading and button group both began at the same measured y-coordinate with a 0 px top-edge difference.
+9. Site-wide typography reduction pass
+   - User feedback: the previous reduced scale still appeared too large across the overall website.
+   - Fix: reduced the Inter body base from 15 px to 14 px; lowered the responsive Poppins h1–h3 scale; and reduced navigation, buttons, breadcrumbs, hero copy, achievement labels, statistics, region labels, footer headings, milestone years, location tabs, number cards, and thank-you display text proportionally.
+   - Post-fix browser evidence: the desktop home route computed at 14 px body, 14 px navigation, 13 px buttons, approximately 28.6 px h2, and 19 px h3/achievement headings. Product-table placeholders remained 86 × 64 px, the core-product row retained a 0 px top-edge difference, and the milestone slider retained one enlarged active item.
 
 ## Primary Interactions Tested
 
@@ -80,7 +84,7 @@
 - The Latest Product Releases overview link opens the Product Releases listing state.
 - Sticky header position, visible dropdown carets, the home-hero-only dot placement, and centered regional-support copy were verified from computed browser styles and visual inspection.
 - Milestone Prev/Next moved the active state in both directions; the centered active milestone enlarged to 230 px while surrounding milestones remained 170 px.
-- Site-wide computed typography confirmed the reduced 15 px Inter body size and smaller Poppins display scale.
+- Site-wide computed typography confirmed the reduced 14 px Inter body size and smaller Poppins display scale.
 - Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
 - The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
 - The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
