@@ -75,6 +75,11 @@
    - User feedback: the previous reduced scale still appeared too large across the overall website.
    - Fix: reduced the Inter body base from 15 px to 14 px; lowered the responsive Poppins h1–h3 scale; and reduced navigation, buttons, breadcrumbs, hero copy, achievement labels, statistics, region labels, footer headings, milestone years, location tabs, number cards, and thank-you display text proportionally.
    - Post-fix browser evidence: the desktop home route computed at 14 px body, 14 px navigation, 13 px buttons, approximately 28.6 px h2, and 19 px h3/achievement headings. Product-table placeholders remained 86 × 64 px, the core-product row retained a 0 px top-edge difference, and the milestone slider retained one enlarged active item.
+10. Quality validation capability feature pass
+   - Reference source: `/workspace/scratch/0bbd922b2b27/upload/quality_validation_wireframe_black_white.html`.
+   - [P2] The existing Quality-page validation area only changed the visual state of three buttons; it did not provide the reference feature's tab panels, inner slide states, detail navigation, pause control, or automatic progression.
+   - Fix: rebuilt “IN-HOUSE VALIDATION CAPABILITIES” with three accessible main tabs, 15 total detail slides, 740 × 640 px labeled image placeholders, matching content lists, Overview/number controls, Prev/Pause/Next controls, clickable detail routes, keyboard activation, hover/focus pause behavior, and 4.5-second autoplay that continues into the next capability tab.
+   - Post-fix browser evidence: `/company/quality` rendered the requested 58/42 split in a 640 px panel; Reliability showed 7 slides, Magnetic 4, and EMI / EMC 4. Tab switching, next navigation, direct dots, list routing, pause/play state, and autoplay movement were exercised with no Site-origin console errors.
 
 ## Primary Interactions Tested
 
@@ -88,6 +93,7 @@
 - Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
 - The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
 - The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
+- Quality validation main tabs switch their corresponding panel; inner detail slides support direct dots, Prev/Next, Pause/Play, clickable list routing, keyboard activation, and autoplay.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.

@@ -59,8 +59,50 @@ html{scroll-padding-top:144px}
 .milestone-controls [data-milestone-prev]::before{border-left:2px solid;border-bottom:2px solid;transform:rotate(45deg)}
 .milestone-controls [data-milestone-prev]::after,.milestone-controls [data-milestone-next]::before{display:none}
 .milestone-controls [data-milestone-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
+.quality-section-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:36px}
+.quality-section-header h2{max-width:560px;margin-bottom:0}
+.quality-section-header p{max-width:500px;margin-bottom:0}
+.quality-main-tabs{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin-bottom:24px}
+.quality-main-tab{border:0;border-right:1px solid var(--line);padding:16px 20px;text-align:left;background:#fff}
+.quality-main-tab:last-child{border-right:0}
+.quality-main-tab span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.quality-main-tab strong{display:block;font-family:Poppins,Arial,sans-serif;font-size:16px;text-transform:uppercase;line-height:1.2}
+.quality-main-tab.active{background:#111;color:#fff}
+.quality-tab-panel{display:none}
+.quality-tab-panel.active{display:block}
+.quality-panel-layout{display:grid;grid-template-columns:58% 42%;height:640px;border:1px solid var(--line);overflow:hidden;background:#fff}
+.quality-image-slider{height:100%;overflow:hidden;border-right:1px solid var(--line)}
+.quality-image-slides{display:flex;height:100%;transition:transform .45s ease;will-change:transform}
+.quality-image-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff}
+.quality-image-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#f7f7f7;text-align:center;padding:30px}
+.quality-image-ph span{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.quality-image-ph strong{max-width:460px;font-family:Poppins,Arial,sans-serif;font-size:18px;text-transform:uppercase}
+.quality-image-ph small{font-size:11px}
+.quality-content-side{min-width:0;height:100%;padding:28px 26px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background:#fff}
+.quality-content-wrap{flex:1 1 auto;min-width:0;min-height:0;overflow:hidden}
+.quality-slide-content{display:none}
+.quality-slide-content.active{display:flex;flex-direction:column;height:100%;min-height:0}
+.quality-small-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.quality-slide-content h3{font-size:20px;text-transform:uppercase;margin-bottom:12px}
+.quality-slide-content > p{margin-bottom:16px}
+.quality-content-group{border-top:1px solid var(--line);padding-top:14px;margin-top:14px;min-height:0;display:flex;flex-direction:column}
+.quality-content-group h4{font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.quality-content-group ul{list-style:none;margin:0;padding:0;max-height:250px;overflow-y:auto;scroll-behavior:smooth}
+.quality-content-group li{font-size:12px;padding:7px 26px 7px 0;border-bottom:1px solid #ddd;position:relative;cursor:pointer}
+.quality-content-group li:last-child{border-bottom:0}
+.quality-content-group li::after{content:"→";position:absolute;right:0;top:7px}
+.quality-content-group li:hover,.quality-content-group li.active-route{background:#f2f2f2}
+.quality-slider-controls{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;margin-top:18px;width:100%}
+.quality-slider-dots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;width:100%}
+.quality-slider-dot{width:100%;height:32px;min-width:0;min-height:0;border:1px solid var(--line);background:#fff;padding:0 4px;font-size:10px;text-transform:uppercase;white-space:nowrap}
+.quality-slider-dot.active{background:#111;color:#fff}
+.quality-arrows{display:grid;grid-template-columns:44px minmax(72px,1fr) 44px;gap:9px;width:100%}
+.quality-arrow,.quality-pause-toggle{height:42px;min-height:0;padding:0 10px;border:1px solid var(--line);background:#fff}
+.quality-arrow{width:44px;font-size:18px}
+.quality-pause-toggle{width:100%;font-size:11px;text-transform:uppercase}
 @media (max-width:900px){#milestones .timeline{--milestone-visible:3}}
-@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}}
+@media (max-width:950px){.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}}
+@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}}
 `;
 
 const appEnhancements = `
@@ -184,6 +226,204 @@ const appEnhancements = `
     };
   }
 
+  const qualityValidationData = [
+    {
+      key: "reliability",
+      number: "01",
+      title: "Reliability System",
+      slides: [
+        ["Comprehensive Reliability Verification System", "Ensuring reliable, long-term performance of magnetic components in real-world operation.", "System Sections", ["Application Environment Simulation", "Electrical & Functional Analysis", "Composition Analysis", "Failure Analysis", "Environmental Endurance", "Mechanical Analysis"]],
+        ["Application Environment Simulation", "Simulates application-related stress and damage conditions before product use.", "Actual Items", ["Impulse / Surge simulation Board Flex", "Surge Current Damage Simulation", "Heat Conduction Simulation", "Stress Analysis / Simulation"]],
+        ["Electrical & Functional Analysis", "Checks electrical behavior and functional performance of the component.", "Actual Items", ["Inner Circuit Isolation Simulation", "S-Parameter Analysis", "Power Loss"]],
+        ["Composition Analysis", "Supports material and composition verification.", "Actual Item", ["XRF"]],
+        ["Failure Analysis", "Supports defect investigation and internal structure review.", "Actual Items", ["3D / 2D X-ray (CT)", "Thickness Analyzer", "Grinder", "High Power Stereo Microscope"]],
+        ["Environmental Endurance", "Tests endurance under temperature, humidity, thermal shock, moisture, and salt atmosphere conditions.", "Actual Items", ["High Temperature Storage", "Low Temperature Storage", "High Temperature & Humidity Storage", "Thermal Shock (180°C↔-60°C)", "Temperature Cycling", "Moisture Resistance", "Salt Atmosphere"]],
+        ["Mechanical Analysis", "Validates mechanical strength and durability under physical stress.", "Actual Items", ["Vibration", "Terminal Strength", "Destructive Endurance", "Shock Test"]]
+      ]
+    },
+    {
+      key: "magnetic",
+      number: "02",
+      title: "Magnetic Analysis",
+      slides: [
+        ["Advanced Magnetic Testing Capability", "Supports material properties verification, inductor specification testing, and system-level efficiency validation.", "Actual Sections", ["Material Properties Verification", "Inductor Spec Testing", "Efficiency Verification Tester"]],
+        ["Material Properties Verification", "Verifies magnetic material characteristics and frequency response behavior.", "Actual Items", ["Magnetic material properties", "Frequency response analysis", "IWATSU SY-8218", "Agilent 4991A"]],
+        ["High Current Testing", "Checks inductor performance under high-current conditions using DC bias testing.", "Actual Items", ["DC bias testing up to 200A", "Saturation behavior measurement", "200A DC Bias"]],
+        ["System-Level Validation", "Supports efficiency verification and thermal testing at system or application level.", "Actual Items", ["EVB compatibility", "Efficiency and thermal testing", "Efficiency Verification System", "Compatible with Customer-Provided EVB"]]
+      ]
+    },
+    {
+      key: "emc",
+      number: "03",
+      title: "EMI / EMC Center",
+      slides: [
+        ["In-House EMI / EMC Validation", "In-house EMI / EMC validation for high-reliability electronics.", "Actual Sections", ["1 Anechoic Chamber", "4 EMI Shielding Room", "EMI / EMC Test Capability", "Standards Supported"]],
+        ["Anechoic Chamber & EMI Shielding Room", "Facility support for EMI / EMC validation and testing work.", "Actual Facilities", ["1 Anechoic Chamber", "4 EMI Shielding Room"]],
+        ["EMI / EMC Test Capability", "Supports key EMI / EMC test requirements for electronic components and applications.", "Actual Test Items", ["Conducted emission testing", "Radiated emission testing", "Immunity testing", "ESD testing", "Transient simulation testing"]],
+        ["Standards Supported", "Supports EMI / EMC validation based on recognized international and automotive standards.", "Actual Standard Scope", ["ISO standards", "IEC standards", "Automotive EMC standards"]]
+      ]
+    }
+  ];
+  let qualityValidationCleanup = null;
+
+  const qualityPanelMarkup = (tab) => {
+    const slides = tab.slides.map((slide) =>
+      '<div class="quality-image-slide"><div class="quality-image-ph" role="img" aria-label="Image placeholder for ' + slide[0] + '"><span>Image Placeholder</span><strong>' + slide[0] + '</strong><small>740 × 640 px</small></div></div>'
+    ).join('');
+    const contents = tab.slides.map((slide, index) => {
+      const items = slide[3].map((item, itemIndex) => {
+        const overviewRoute = tab.key === 'emc' ? [1, 1, 2, 3][itemIndex] : Math.min(itemIndex + 1, tab.slides.length - 1);
+        const routeIndex = index === 0 ? overviewRoute : index;
+        return '<li role="button" tabindex="0" data-quality-go="' + routeIndex + '">' + item + '</li>';
+      }).join('');
+      return '<div class="quality-slide-content' + (index === 0 ? ' active' : '') + '" data-quality-content="' + index + '"><div class="quality-small-label">' + tab.title + ' / ' + String(index + 1).padStart(2, '0') + '</div><h3>' + slide[0] + '</h3><p>' + slide[1] + '</p><div class="quality-content-group"><h4>' + slide[2] + '</h4><ul>' + items + '</ul></div></div>';
+    }).join('');
+    const dots = tab.slides.map((slide, index) =>
+      '<button class="quality-slider-dot' + (index === 0 ? ' active' : '') + '" type="button" data-quality-slide="' + index + '" aria-label="Show ' + slide[0] + '">' + (index === 0 ? 'Overview' : String(index + 1).padStart(2, '0')) + '</button>'
+    ).join('');
+    return '<div class="quality-tab-panel' + (tab.number === '01' ? ' active' : '') + '" id="quality-panel-' + tab.key + '" role="tabpanel" aria-labelledby="quality-tab-' + tab.key + '" data-quality-panel="' + tab.key + '"><div class="quality-panel-layout"><div class="quality-image-slider"><div class="quality-image-slides">' + slides + '</div></div><aside class="quality-content-side"><div class="quality-content-wrap">' + contents + '</div><div class="quality-slider-controls"><div class="quality-slider-dots">' + dots + '</div><div class="quality-arrows"><button class="quality-arrow" type="button" data-quality-prev aria-label="Previous slide">←</button><button class="quality-pause-toggle" type="button" data-quality-pause aria-label="Pause autoplay">Pause</button><button class="quality-arrow" type="button" data-quality-next aria-label="Next slide">→</button></div></div></aside></div></div>';
+  };
+
+  function prepareQualityValidation() {
+    const heading = [...document.querySelectorAll('h2')].find((item) => item.textContent.trim() === 'IN-HOUSE VALIDATION CAPABILITIES');
+    const section = heading?.closest('section');
+    if (!section) {
+      if (qualityValidationCleanup) qualityValidationCleanup();
+      return;
+    }
+    if (section.dataset.qualityEnhanced === 'true') return;
+    if (qualityValidationCleanup) qualityValidationCleanup();
+
+    const container = heading.closest('.container');
+    if (!container) return;
+    section.dataset.qualityEnhanced = 'true';
+    container.innerHTML = '<div class="quality-section-header"><div><div class="eyebrow">Testing Capability</div><h2>IN-HOUSE VALIDATION CAPABILITIES</h2></div><p>Superworld verifies component quality through reliability testing, magnetic analysis, and EMI / EMC validation.</p></div><div class="quality-main-tabs" role="tablist" aria-label="Validation capability tabs">' + qualityValidationData.map((tab, index) => '<button class="quality-main-tab' + (index === 0 ? ' active' : '') + '" id="quality-tab-' + tab.key + '" type="button" role="tab" aria-selected="' + (index === 0 ? 'true' : 'false') + '" aria-controls="quality-panel-' + tab.key + '" data-quality-tab="' + tab.key + '"><span>' + tab.number + '</span><strong>' + tab.title + '</strong></button>').join('') + '</div>' + qualityValidationData.map(qualityPanelMarkup).join('');
+
+    const state = Object.fromEntries(qualityValidationData.map((tab) => [tab.key, 0]));
+    let activeKey = qualityValidationData[0].key;
+    let paused = false;
+    let interactionPaused = false;
+    let timer = 0;
+    let scrollTimer = 0;
+
+    const updatePauseButtons = () => {
+      section.querySelectorAll('[data-quality-pause]').forEach((button) => {
+        button.textContent = paused ? 'Play' : 'Pause';
+        button.setAttribute('aria-label', paused ? 'Resume autoplay' : 'Pause autoplay');
+      });
+    };
+
+    const updatePanel = (key) => {
+      const panel = section.querySelector('[data-quality-panel="' + key + '"]');
+      const tab = qualityValidationData.find((item) => item.key === key);
+      if (!panel || !tab) return;
+      const safeIndex = ((state[key] % tab.slides.length) + tab.slides.length) % tab.slides.length;
+      state[key] = safeIndex;
+      const track = panel.querySelector('.quality-image-slides');
+      if (track) track.style.transform = 'translateX(-' + (safeIndex * 100) + '%)';
+      panel.querySelectorAll('[data-quality-slide]').forEach((dot) => {
+        const active = Number(dot.dataset.qualitySlide) === safeIndex;
+        dot.classList.toggle('active', active);
+        dot.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+      panel.querySelectorAll('[data-quality-content]').forEach((content) => content.classList.toggle('active', Number(content.dataset.qualityContent) === safeIndex));
+      panel.querySelectorAll('[data-quality-go]').forEach((item) => item.classList.toggle('active-route', Number(item.dataset.qualityGo) === safeIndex));
+      clearTimeout(scrollTimer);
+      const list = panel.querySelector('.quality-slide-content.active ul');
+      if (list) {
+        list.scrollTop = 0;
+        scrollTimer = setTimeout(() => {
+          const maxScroll = list.scrollHeight - list.clientHeight;
+          if (maxScroll > 4) list.scrollTo({top:maxScroll, behavior:'smooth'});
+        }, 1000);
+      }
+    };
+
+    const setActiveTab = (key, reset = false) => {
+      activeKey = key;
+      if (reset) state[key] = 0;
+      section.querySelectorAll('[data-quality-tab]').forEach((button) => {
+        const active = button.dataset.qualityTab === key;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      section.querySelectorAll('[data-quality-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.qualityPanel === key));
+      updatePanel(key);
+    };
+
+    const shouldPlay = () => !paused && !interactionPaused && !document.hidden;
+    const restartAuto = () => {
+      clearInterval(timer);
+      timer = 0;
+      if (shouldPlay()) timer = setInterval(() => {
+        const tabIndex = qualityValidationData.findIndex((tab) => tab.key === activeKey);
+        const tab = qualityValidationData[tabIndex];
+        if (state[activeKey] < tab.slides.length - 1) {
+          state[activeKey] += 1;
+          updatePanel(activeKey);
+        } else {
+          const nextTab = qualityValidationData[(tabIndex + 1) % qualityValidationData.length];
+          setActiveTab(nextTab.key, true);
+        }
+      }, 4500);
+      updatePauseButtons();
+    };
+
+    const handleClick = (event) => {
+      const tabButton = event.target.closest('[data-quality-tab]');
+      if (tabButton) setActiveTab(tabButton.dataset.qualityTab, true);
+      const dot = event.target.closest('[data-quality-slide]');
+      if (dot) {
+        state[activeKey] = Number(dot.dataset.qualitySlide);
+        updatePanel(activeKey);
+      }
+      if (event.target.closest('[data-quality-prev]')) {
+        state[activeKey] -= 1;
+        updatePanel(activeKey);
+      }
+      if (event.target.closest('[data-quality-next]')) {
+        state[activeKey] += 1;
+        updatePanel(activeKey);
+      }
+      if (event.target.closest('[data-quality-pause]')) paused = !paused;
+      const route = event.target.closest('[data-quality-go]');
+      if (route) {
+        state[activeKey] = Number(route.dataset.qualityGo);
+        updatePanel(activeKey);
+      }
+      restartAuto();
+    };
+    const handleKeydown = (event) => {
+      if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-quality-go]')) {
+        event.preventDefault();
+        event.target.click();
+      }
+    };
+    const handleEnter = () => { interactionPaused = true; clearInterval(timer); };
+    const handleLeave = () => { interactionPaused = false; restartAuto(); };
+    const handleFocusIn = () => { interactionPaused = true; clearInterval(timer); };
+    const handleFocusOut = (event) => { if (!section.contains(event.relatedTarget)) { interactionPaused = false; restartAuto(); } };
+    const handleVisibility = () => restartAuto();
+
+    section.addEventListener('click', handleClick);
+    section.addEventListener('keydown', handleKeydown);
+    section.addEventListener('mouseenter', handleEnter);
+    section.addEventListener('mouseleave', handleLeave);
+    section.addEventListener('focusin', handleFocusIn);
+    section.addEventListener('focusout', handleFocusOut);
+    document.addEventListener('visibilitychange', handleVisibility);
+    setActiveTab(activeKey, true);
+    restartAuto();
+
+    qualityValidationCleanup = () => {
+      clearInterval(timer);
+      clearTimeout(scrollTimer);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      qualityValidationCleanup = null;
+    };
+  }
+
   function prepareHomeControls() {
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
       if (!dots.closest('.home-hero')) dots.remove();
@@ -194,6 +434,7 @@ const appEnhancements = `
     const releaseLink = releaseCarousel?.closest('section')?.querySelector('.section-heading .link-arrow');
     if (releaseLink) releaseLink.setAttribute('href', '/news?category=product');
     prepareMilestoneSlider();
+    prepareQualityValidation();
   }
 
   document.addEventListener('click', (event) => {
@@ -237,6 +478,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=13").replace("/app.js", "/app.js?v=13"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=14").replace("/app.js", "/app.js?v=14"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
