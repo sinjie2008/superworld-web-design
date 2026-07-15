@@ -1,0 +1,11 @@
+{
+  "name": "lo-wireframe",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "bash scripts/build.sh",
+    "validate": "node scripts/validate-artifact.mjs"
+  },
+  "displayName": "LO Wireframe"
+}
