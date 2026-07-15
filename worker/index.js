@@ -8,6 +8,7 @@ const cssOverrides = `
 .socials .social{display:none}
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
+.section-heading:has([data-product-tab]){align-items:flex-start}
 body{font-size:15px}
 h1{font-size:clamp(30px,3.4vw,48px)}
 h2{font-size:clamp(24px,2.4vw,34px)}
@@ -229,6 +230,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=11").replace("/app.js", "/app.js?v=11"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=12").replace("/app.js", "/app.js?v=12"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

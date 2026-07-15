@@ -67,6 +67,10 @@
    - User clarification: carousel dots should remain for the `.home-hero` carousel only, positioned between the hero field and the overlapping achievement cards.
    - Fix: restored the three home-hero indicators as a centered 118 × 8 px group, placed 30 px above the achievement-card edge, while continuing to remove dot containers from every other carousel.
    - Post-fix browser evidence: the home route rendered three 34 × 8 px clickable indicators centered at the requested location; their active state advanced with the 4.5-second automatic hero rotation. No other `.carousel-dots` containers remained.
+8. Product-heading alignment refinement pass
+   - [P2] The General/Automotive tab group sat lower than the “Discover Our Core Product Lines” heading because the shared heading row used bottom alignment.
+   - Fix: scoped `align-items: flex-start` to the section heading containing product tabs, leaving every other `.section-heading` alignment unchanged.
+   - Post-fix browser evidence: the Poppins heading and button group both began at the same measured y-coordinate with a 0 px top-edge difference.
 
 ## Primary Interactions Tested
 
@@ -79,6 +83,7 @@
 - Site-wide computed typography confirmed the reduced 15 px Inter body size and smaller Poppins display scale.
 - Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
 - The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
+- The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
