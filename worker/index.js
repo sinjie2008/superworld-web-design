@@ -20,6 +20,7 @@ h4{font-size:16px}
 .site-header{position:sticky;top:0}
 html{scroll-padding-top:144px}
 .carousel-dots{display:none!important}
+.home-hero .carousel > .carousel-dots{display:flex!important;position:absolute;left:50%;bottom:64px;z-index:3;width:auto;margin:0;transform:translateX(-50%);justify-content:center}
 .table-wrap tbody td > .ph{width:86px;height:64px;min-height:0;margin-inline:auto}
 .link-arrow::after{content:"";display:inline-block;width:8px;height:8px;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);margin-left:2px}
 .carousel-controls{position:relative}
@@ -176,7 +177,9 @@ const appEnhancements = `
   }
 
   function prepareHomeControls() {
-    document.querySelectorAll('.carousel-dots').forEach((dots) => dots.remove());
+    document.querySelectorAll('.carousel-dots').forEach((dots) => {
+      if (!dots.closest('.home-hero')) dots.remove();
+    });
     const general = document.querySelector('[data-product-tab="general"]');
     if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
     const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
@@ -226,6 +229,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=9").replace("/app.js", "/app.js?v=9"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=11").replace("/app.js", "/app.js?v=11"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

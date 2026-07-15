@@ -63,6 +63,10 @@
    - [P2] Empty `.ph` product thumbnails inherited the global 180 px placeholder minimum height and appeared too tall in the Chip Inductor results table.
    - Fix: scoped product-table placeholders to an exact 86 × 64 px frame, matching the existing real product-thumbnail dimensions without changing placeholders elsewhere on the site.
    - Post-fix browser evidence: `/products/general/emc` rendered all 12 empty table thumbnails with the new scoped sizing and retained aligned table cells.
+7. Home-hero indicator refinement pass
+   - User clarification: carousel dots should remain for the `.home-hero` carousel only, positioned between the hero field and the overlapping achievement cards.
+   - Fix: restored the three home-hero indicators as a centered 118 × 8 px group, placed 30 px above the achievement-card edge, while continuing to remove dot containers from every other carousel.
+   - Post-fix browser evidence: the home route rendered three 34 × 8 px clickable indicators centered at the requested location; their active state advanced with the 4.5-second automatic hero rotation. No other `.carousel-dots` containers remained.
 
 ## Primary Interactions Tested
 
@@ -70,10 +74,11 @@
 - Every carousel advances automatically; transform changes were verified after the configured interval, including the milestone slider's 4.5-second rotation.
 - General and Automotive tabs switch to the matching five-card product sets; the Automotive set continues to auto-slide.
 - The Latest Product Releases overview link opens the Product Releases listing state.
-- Sticky header position, visible dropdown carets, removed carousel dots, and centered regional-support copy were verified from computed browser styles and visual inspection.
+- Sticky header position, visible dropdown carets, the home-hero-only dot placement, and centered regional-support copy were verified from computed browser styles and visual inspection.
 - Milestone Prev/Next moved the active state in both directions; the centered active milestone enlarged to 230 px while surrounding milestones remained 170 px.
 - Site-wide computed typography confirmed the reduced 15 px Inter body size and smaller Poppins display scale.
 - Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
+- The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
