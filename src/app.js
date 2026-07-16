@@ -383,6 +383,71 @@
     ["Network Adapter / NIC","High-speed network adapter area","Supports external network adapters and high-throughput AI data paths."]
   ];
 
+  const communicationSystemData = {
+    server: {
+      name: "AI/HPC Server",
+      image: "AI/HPC Server Application Image Placeholder",
+      caption: "1 CPU / GPU VRM / 2 AI Accelerator Module / 3 High-Current DC-DC / 4 High-Speed LAN / 5 NVMe Storage / 6 Network Adapter",
+      hotspots: [["1","server-cpu","server-h1"],["2","server-gpu","server-h2"],["3","server-dcdc","server-h3"],["4","server-lan","server-h4"],["5","server-storage","server-h5"],["6","server-adapter","server-h6"]],
+      cards: [
+        {id:"server-cpu",no:"01",name:"CPU / GPU VRM",type:"Processor and accelerator power area",desc:"High-current, low-voltage rails for CPU, GPU, ASIC, and AI accelerator loads.",design:"High current density, low DCR, fast transient response, EMI control, and thermal stability for AI compute power stages.",bundle:"View AI VRM Bundle",rows:[["Molded Power Inductors","High-current VRM power support",["PBP","PIAQ","PICQ","PIFQ"]],["Trans-Inductor Voltage Regulator Inductor","Fast transient support for multiphase VRM",["SMF"]],["Power Bead","Power noise suppression and low-DCR support",["SMC"]],["Planar Inductors","Converter support",["SPQ"]],["Ferrite Chip Beads","EMI suppression around processor power rails",["Z","Z Large Current"]]]},
+        {id:"server-gpu",no:"02",name:"AI Accelerator Module",type:"GPU / AI accelerator power and signal area",desc:"Supports GPU, accelerator card, HBM, and high-density AI compute board requirements.",design:"High-current power delivery, tight thermal margin, low loss, compact PCB layout, and EMI suppression for dense AI modules.",bundle:"View AI Accelerator Bundle",rows:[["Molded Power Inductors","High-current AI accelerator and HBM rail support",["PBP","PIAQ","PICQ","PIFQ"]],["Trans-Inductor Voltage Regulator Inductor","Fast transient support for GPU and AI accelerator VRM",["SMF"]],["Power Bead","Power-path noise suppression in dense AI boards",["SMC"]],["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]]]},
+        {id:"server-dcdc",no:"03",name:"High-Current DC-DC Converter",type:"Board-level power conversion",desc:"Stable conversion support for AI server power distribution and point-of-load rails.",design:"Efficient power conversion, stable inductance, low DCR, and thermal reliability under continuous AI workloads.",bundle:"View DC-DC Bundle",rows:[["Molded Power Inductors","High-current DC-DC conversion support",["PBP","PIAQ","PICQ","PIFQ"]],["Semi-Shielded Power Inductors","Stable DC-DC conversion support",["SPA","PNS"]],["Shielded Power Inductors","Stable power conversion support",["SDB","PDC"]],["Planar Inductors","Power conversion support",["SPQ"]],["Ferrite Chip Beads","Power rail EMI suppression",["Z","Z Large Current"]]]},
+        {id:"server-lan",no:"04",name:"High-Speed LAN / Ethernet Interface",type:"Data interface filtering",desc:"Supports high-speed data movement between AI servers, storage, and network fabrics.",design:"Clean interface signal path, isolation, common mode noise filtering, and EMI control.",bundle:"View LAN Bundle",rows:[["LAN Transformers","LAN interface support",["SLT"]],["Common Mode Chokes","LAN and Ethernet interface filtering",["W"]],["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]]]},
+        {id:"server-storage",no:"05",name:"NVMe Storage / SSD",type:"High-speed storage power area",desc:"Supports high-speed storage and data loading paths used in AI training and inference systems.",design:"Stable storage power, low-noise operation, and EMI suppression for high-speed storage interfaces.",bundle:"View Storage Bundle",rows:[["Ferrite Chip Beads","Storage circuit EMI support",["Z","Z Large Current"]],["Semi-Shielded Power Inductors","Storage power support",["SPA","PNS"]],["Shielded Power Inductors","Stable storage power conversion",["SDB","PDC"]]]},
+        {id:"server-adapter",no:"06",name:"Network Adapter / NIC",type:"High-speed network adapter area",desc:"Supports external network adapters, accelerator interconnect cards, and high-throughput AI data paths.",design:"Power conversion stability, EMI reduction, and interface filtering for high-bandwidth network cards.",bundle:"View Adapter Bundle",rows:[["Power Converter Transformers","Adapter power conversion support",["EP Core","EE Core","EFD Core"]],["Common Mode Chokes","Network interface noise filtering",["W"]],["Ferrite Chip Beads","Adapter EMI support",["Z","Z Large Current"]]]}
+      ]
+    },
+    router: {
+      name: "Router",
+      image: "Router Application Image Placeholder",
+      caption: "1 AC-DC Converter / 2 DC-DC Converter / 3 WiFi Module / 4 Ethernet Interface",
+      hotspots: [["1","router-acdc","router-h1"],["2","router-dcdc","router-h2"],["3","router-wifi","router-h3"],["4","router-ethernet","router-h4"]],
+      cards: [
+        {id:"router-acdc",no:"01",name:"AC-DC Converter",type:"Input power conversion",desc:"AC-DC conversion support for router power input.",design:"Power conversion support, EMI control, and compact transformer selection.",bundle:"View AC-DC Bundle",rows:[["Power Converter Transformers","AC-DC power conversion support",["EP Core"]],["Planar Transformers","Compact transformer solution",["SPTPQ"]],["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]],["Semi-Shielded Power Inductors","Power support",["SPA","PNS"]]]},
+        {id:"router-dcdc",no:"02",name:"DC-DC Converter",type:"Internal power conversion",desc:"DC-DC power stability for router circuits.",design:"Power stability and compact conversion support.",bundle:"View DC-DC Bundle",rows:[["Semi-Shielded Power Inductors","DC-DC conversion support",["SPA","PNS"]],["Multilayer Power Chip Inductors","Compact power conversion support",["L"]],["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]]]},
+        {id:"router-wifi",no:"03",name:"WiFi Module",type:"Wireless communication area",desc:"RF and module power support.",design:"RF stability and compact power support.",bundle:"View WiFi Bundle",rows:[["Chip Inductors","WiFi module RF support",["C"]],["Semi-Shielded Power Inductors","Module power support",["SPA","PNS"]]]},
+        {id:"router-ethernet",no:"04",name:"Ethernet Interface",type:"Wired data interface",desc:"Ethernet interface filtering and EMI suppression.",design:"Common mode noise filtering and interface stability.",bundle:"View Ethernet Bundle",rows:[["Common Mode Chokes","Ethernet interface filtering",["W"]],["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]]]}
+      ]
+    },
+    settopbox: {
+      name: "Set Top Box",
+      image: "Set Top Box Application Image Placeholder",
+      caption: "1 Interface / 2 DC-DC Converter / 3 Signal Processor / 4 RF Tuner",
+      hotspots: [["1","stb-interface","stb-h1"],["2","stb-dcdc","stb-h2"],["3","stb-signal","stb-h3"],["4","stb-rf","stb-h4"]],
+      cards: [
+        {id:"stb-interface",no:"01",name:"Interface",type:"Signal and connection area",desc:"Interface EMI control and power support.",design:"Signal clarity, EMI suppression, and interface noise filtering.",bundle:"View Interface Bundle",rows:[["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]],["Common Mode Chokes","Interface noise filtering",["W"]],["Semi-Shielded Power Inductors","Interface power support",["SPS","PNS"]],["Shielded Power Inductors","Stable power support",["SDB"]]]},
+        {id:"stb-dcdc",no:"02",name:"DC-DC Converter",type:"Internal power conversion",desc:"Stable DC-DC conversion inside set top box circuits.",design:"Stable power conversion and EMI control.",bundle:"View DC-DC Bundle",rows:[["Semi-Shielded Power Inductors","DC-DC conversion support",["SPS","PNS"]],["Molded Power Inductors","Stable power conversion support",["PIAQ","PICQ","PIFQ"]],["Planar Inductors","Power conversion support",["SPQ"]],["Custom Coils","Custom magnetic support",["Custom Coils"]],["Common Mode Chokes","Noise filtering support",["W"]],["Ferrite Chip Beads","EMI suppression component",["Z"]]]},
+        {id:"stb-signal",no:"03",name:"Signal Processor",type:"Signal processing area",desc:"Signal processor EMI and power conversion support.",design:"Signal clarity and compact power support.",bundle:"View Signal Bundle",rows:[["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]],["Semi-Shielded Power Inductors","Signal processor power support",["SPS","PNS"]],["Shielded Power Inductors","Stable power support",["SDB"]]]},
+        {id:"stb-rf",no:"04",name:"RF Tuner",type:"RF tuning area",desc:"RF tuning and signal support.",design:"RF stability, noise suppression, and signal tuning support.",bundle:"View RF Bundle",rows:[["Ferrite Chip Beads","EMI suppression component",["Z","Z Large Current"]],["Chip Inductors","RF tuning support",["C"]],["Ceramic Wire Wound Inductors","RF tuning support",["SCI"]],["Wire Wound Inductors","Signal tuning support",["WI"]]]}
+      ]
+    }
+  };
+  const communicationSystemOrder = ["server","router","settopbox"];
+
+  function communicationSeriesChips(items) {
+    return items.map(item=>`<span class="series-chip">${item}</span>`).join("");
+  }
+
+  function communicationMappingRows(rows) {
+    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div></div>`).join("");
+  }
+
+  function communicationCardMarkup(card,index) {
+    const isOpen=index===0;
+    return `<article class="subapp-card ${isOpen?"is-open":""}" id="${card.id}" data-subapp-card><div class="subapp-summary"><button class="subapp-trigger" type="button" aria-expanded="${isOpen}" aria-controls="${card.id}-panel"><span class="subapp-no">${card.no}</span><span class="subapp-image">IMAGE</span><span class="subapp-title"><h3>${card.name}</h3><small class="subapp-type">${card.type}</small></span><span class="subapp-desc">${card.desc}</span></button><div class="subapp-actions"><a class="system-action-btn bundle-btn" href="${routes.products}" data-link>${card.bundle}</a><button class="accordion-icon" type="button" aria-label="Toggle ${card.name}">${isOpen?"−":"+"}</button></div></div><div class="subapp-panel ${isOpen?"is-open":""}" id="${card.id}-panel" ${isOpen?"":"hidden"}><div class="subapp-panel-grid"><div class="design-block panel-block"><h4>Design Need</h4><p>${card.design}</p></div><div><h4 class="mapping-title">Component / Series Mapping</h4><div class="mapping-list">${communicationMappingRows(card.rows)}</div></div></div></div></article>`;
+  }
+
+  function communicationPanelMarkup(key) {
+    const data=communicationSystemData[key];
+    const active=key==="server";
+    return `<section class="system-panel ${active?"active":""}" role="tabpanel" data-system-panel="${key}" ${active?"":"hidden"}><div class="system-hotspot-stage"><div class="hotspot-title">Hotspot Image — ${data.name}</div><div class="system-hotspot-image">${data.image}</div>${data.hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${data.cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}<p class="hotspot-caption">${data.caption}</p></div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${data.cards.map(communicationCardMarkup).join("")}</div></section>`;
+  }
+
+  function communicationSystemTabsMarkup() {
+    return `<div class="system-tabs-shell"><div class="system-tabs-nav" role="tablist" aria-label="Communication systems">${communicationSystemOrder.map(key=>`<button class="system-tab-btn ${key==="server"?"active":""}" type="button" role="tab" aria-selected="${key==="server"}" data-system="${key}">${communicationSystemData[key].name}</button>`).join("")}</div>${communicationSystemOrder.map(communicationPanelMarkup).join("")}</div>`;
+  }
+
   function accordionItem(item, index, kind) {
     const series = kind === "automotive"
       ? [["Ferrite Chip Beads","EMI suppression component",["ZQ","ZQ Large Current"]],["Molded Power Inductors","Stable power conversion support",["PIAQ","PICQ","PIFQ"]],["Common Mode Chokes","Noise filtering for signal lines",["WAQ"]]]
@@ -411,7 +476,7 @@
       <section id="design-needs" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"WHAT THE PAGE SHOULD COMMUNICATE FIRST":"SUPPORT STABLE COMMUNICATION CIRCUIT DESIGN"}</h2><p>${automotive?"":"Reduce noise, support power conversion, and keep signal paths clean."}</p></div><div class="design-cards">
         ${(automotive?[["Reduce electrical noise","Show how EMC components support cleaner power and signal paths."],["Stabilise power circuits","Position inductors and transformers around power conversion needs."],["Support compact modules","Connect product families to space-conscious automotive electronics."],["Build selection confidence","Link application choices to quality, testing, and enquiry support."]]:[["Control EMI & Signal noise","Support EMI suppression and noise filtering across LAN, Ethernet, RF, and interface circuits."],["Support AI power conversion","Provide suitable inductor and transformer options."],["Protect Data interfaces","Help users identify components for connected interface stability."],["Speed up series selection","Connect each device area to related component families."]]).map((x,i)=>`<article class="design-card"><h2>0${i+1}</h2><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}
       </div></div></section>
-      <section id="fit" class="section section-rule"><div class="container"><div class="section-heading center"><h2>FIND THE RIGHT SERIES BY ${automotive?"AUTOMOTIVE":"COMMUNICATION"} SYSTEM</h2><p>Use the ${automotive?"vehicle":"system"} map to jump to a system. Expand a card only when needed.</p></div><div class="system-map"><img src="${mapSrc}" alt="${automotive?"Automotive application map":"AI server application map"}"></div><div class="system-controls"><button type="button" data-accordion-all="open">Show All</button><button type="button" data-accordion-all="close">Collapse All</button></div><div class="accordion-list">${systems.map((x,i)=>accordionItem(x,i,kind)).join("")}</div></div></section>
+      <section id="fit" class="section section-rule"><div class="container"><div class="section-heading center"><h2>FIND THE RIGHT SERIES BY ${automotive?"AUTOMOTIVE":"COMMUNICATION"} SYSTEM</h2><p>Use the ${automotive?"vehicle":"system"} map to jump to a system. Expand a card only when needed.</p></div>${automotive?`<div class="system-map"><img src="${mapSrc}" alt="Automotive application map"></div><div class="system-controls"><button type="button" data-accordion-all="open">Show All</button><button type="button" data-accordion-all="close">Collapse All</button></div><div class="accordion-list">${systems.map((x,i)=>accordionItem(x,i,kind)).join("")}</div>`:`<div id="systemTabsRoot">${communicationSystemTabsMarkup()}</div>`}</div></section>
       <section id="confidence" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"BUILT FOR AUTOMOTIVE-ORIENTED RELIABILITY EXPECTATIONS":"QUALITY SUPPORT FOR RELIABLE COMMUNICATION SYSTEMS."}</h2></div><div class="grid grid-3">
         ${card(automotive?"IATF / ISO Focus":"Controlled Manufacturing","Consistent production and inspection for repeat requirements.")}
         ${card(automotive?"Reliability Testing":"Stable Electrical Performance","Supports EMI suppression, power stability, and signal integrity.")}
@@ -647,6 +712,57 @@
     });
   }
 
+  function setupCommunicationSystemTabs() {
+    const root=document.getElementById("systemTabsRoot");
+    if(!root||root.dataset.systemTabsReady==="true") return;
+    root.dataset.systemTabsReady="true";
+    const setCardState=(card,open)=>{
+      const panel=card.querySelector(".subapp-panel");
+      const trigger=card.querySelector(".subapp-trigger");
+      const icon=card.querySelector(".accordion-icon");
+      card.classList.toggle("is-open",open);
+      panel?.classList.toggle("is-open",open);
+      if(panel) panel.hidden=!open;
+      trigger?.setAttribute("aria-expanded",String(open));
+      if(icon) icon.textContent=open?"−":"+";
+    };
+    const activateSystem=system=>{
+      root.querySelectorAll(".system-tab-btn").forEach(button=>{
+        const active=button.dataset.system===system;
+        button.classList.toggle("active",active);
+        button.setAttribute("aria-selected",String(active));
+      });
+      root.querySelectorAll(".system-panel").forEach(panel=>{
+        const active=panel.dataset.systemPanel===system;
+        panel.classList.toggle("active",active);
+        panel.hidden=!active;
+      });
+    };
+    root.addEventListener("click",event=>{
+      const tab=event.target.closest(".system-tab-btn");
+      if(tab){activateSystem(tab.dataset.system);return;}
+      const hotspot=event.target.closest("[data-open-card]");
+      if(hotspot){
+        event.preventDefault();
+        const panel=hotspot.closest(".system-panel");
+        const card=panel?.querySelector(`#${hotspot.dataset.openCard}`);
+        if(card){setCardState(card,true);card.scrollIntoView({behavior:"smooth",block:"start"});}
+        return;
+      }
+      const toggle=event.target.closest(".subapp-trigger,.accordion-icon");
+      if(toggle){
+        event.preventDefault();
+        const card=toggle.closest(".subapp-card");
+        if(card) setCardState(card,!card.classList.contains("is-open"));
+        return;
+      }
+      const showAll=event.target.closest(".show-all-btn");
+      if(showAll){showAll.closest(".system-panel")?.querySelectorAll(".subapp-card").forEach(card=>setCardState(card,true));return;}
+      const collapseAll=event.target.closest(".collapse-all-btn");
+      if(collapseAll) collapseAll.closest(".system-panel")?.querySelectorAll(".subapp-card").forEach(card=>setCardState(card,false));
+    });
+  }
+
   function setupInteractions() {
     document.querySelector(".mobile-toggle")?.addEventListener("click",(e)=>{
       const header = document.querySelector(".site-header");
@@ -720,6 +836,7 @@
       applyLocationFilters();
     }));
     document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>{b.style.background="#fff";b.style.color="#111"});btn.style.background="#111";btn.style.color="#fff";}));
+    setupCommunicationSystemTabs();
     setupCarousels();
   }
 
