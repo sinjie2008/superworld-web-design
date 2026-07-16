@@ -176,6 +176,10 @@
    - User requirement: use placeholder images in every hero-brand slide and display the required image dimensions.
    - Fix: replaced the production imagery with three bordered wireframe placeholders that show `560 × 320 px`, while retaining the existing fade transition, dots, and autoplay behavior.
    - Post-fix evidence: compiled assets confirm three accessible placeholder slides, visible size labels, clickable dots, and 4.5-second autoplay.
+35. Milestone controls and image holders
+   - User requirement: keep Prev/Next visible on hover, move the controls upward, and show an image placeholder with its required dimensions in every milestone item.
+   - Fix: added a scoped dark-text hover state, raised the desktop/mobile controls, and placed centered image labels inside every circle with `170 × 170 px` and active `230 × 230 px` sizing.
+   - Post-fix evidence: compiled assets confirm visible hover text, elevated controls, accessible placeholder labels, and the correct size label switching with the active circle.
 
 ## Primary Interactions Tested
 

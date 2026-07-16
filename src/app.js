@@ -831,7 +831,7 @@
     if (!row) return;
     const repeated = milestoneData.concat(milestoneData, milestoneData);
     row.innerHTML = repeated.map((item, index) =>
-      '<article class="timeline-item" data-milestone-index="' + index + '"><h3>' + item[0] + '</h3><div class="timeline-circle" aria-hidden="true"></div></article>'
+      '<article class="timeline-item" data-milestone-index="' + index + '"><h3>' + item[0] + '</h3><div class="timeline-circle" role="img" aria-label="Milestone image placeholder"><span class="milestone-image-label">Image Placeholder</span><strong class="milestone-image-size milestone-size-default">170 × 170 px</strong><strong class="milestone-image-size milestone-size-active">230 × 230 px</strong></div></article>'
     ).join('');
 
     const activeDetail = document.createElement('div');
