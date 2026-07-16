@@ -307,13 +307,16 @@
   function sustainabilityPage() {
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR COMPANY",routes.company],["SUSTAINABILITY"]])}
       ${heroPanel("ESG Commitment &<br>Sustainability Strategy","At Superworld Electronics, we integrate Environmental, Social, and Governance (ESG) principles into our global manufacturing operations to drive ethical growth and long-term value.",["Environment","Social","Governance"])}
-      <nav class="anchor-nav"><a href="#esg-vision">ESG VISION</a><a href="#pillars">ESG & SUSTAINABILITY PILLARS</a><a href="#environment">ENVIRONMENTAL STEWARDSHIP</a><a href="#integrity">INTEGRITY & ACCOUNTABILITY</a></nav>
+      <nav class="anchor-nav"><a href="#esg-vision">ESG VISION</a><a href="#superworld_electronics_company_sustainability_esg_and_sustainability_pillars">ESG & SUSTAINABILITY PILLARS</a><a href="#environment">ENVIRONMENTAL STEWARDSHIP</a><a href="#integrity">INTEGRITY & ACCOUNTABILITY</a></nav>
       <section id="esg-vision" class="section"><div class="container split"><div><h2>OUR ESG VISION</h2><p>We are evolving beyond traditional corporate citizenship to a robust ESG framework. Our goal is to ensure that every electronic component we produce contributes to a sustainable technological ecosystem.</p><p>Through transparent reporting and rigorous standards, we provide our global partners with confidence that their supply chain meets the highest ethical requirements.</p></div>${ph("tall")}</div></section>
-      <section id="pillars" class="section"><div class="container"><div class="section-heading center"><h2>ESG & SUSTAINABILITY PILLARS</h2></div><div class="grid grid-3">
-        ${card("SOCIAL — Empowering People","Supporting growth & inclusion with fair, Tripartite standards. Active member of Responsible Business Alliance (RBA) to ensure worker rights.")}
-        ${card("ENVIRONMENTAL — Sustainability & Safety","RoHS & REACH compliant products. Ensuring conflict-free sourcing and maintaining zero-hazard environmental management systems.")}
-        ${card("GOVERNANCE — Ethical Governance","Ethics & transparency through ESG-aligned supplier standards. Maintaining rigorous internal audits and anti-corruption policies.")}
-      </div>${carousel("esg-pillars",[1,2,3].map(()=>`<div class="slide">${ph("tall")}</div>`),1,false)}</div></section>
+      <section id="superworld_electronics_company_sustainability_esg_and_sustainability_pillars" class="section esg-pillars-section"><div class="container"><div class="section-heading center"><h2>ESG & SUSTAINABILITY PILLARS</h2></div>
+        <div class="esg-pillars-grid">
+          <article class="esg-pillar-card"><h3>SOCIAL</h3><p class="esg-pillar-lead">Empowering People</p><div class="esg-pillar-copy"><p>Supporting growth &amp; inclusion with fair, Tripartite standards.</p><p>Active member of Responsible Business Alliance (RBA) to ensure worker rights.</p></div><div class="esg-pillar-tags" aria-label="Social standards"><span>Tripartite Standards</span><span>RBA Member</span></div></article>
+          <article class="esg-pillar-card"><h3>ENVIRONMENTAL</h3><p class="esg-pillar-lead">Sustainability &amp; Safety</p><div class="esg-pillar-copy"><p>RoHS &amp; REACH compliant products.<br>Ensuring conflict-free sourcing</p><p>Maintaining zero-hazard environmental management systems.</p></div><div class="esg-pillar-tags" aria-label="Environmental standards"><span>RoHS Compliant</span><span>REACH Standards</span></div></article>
+          <article class="esg-pillar-card"><h3>GOVERNANCE</h3><p class="esg-pillar-lead">Ethical Governance</p><div class="esg-pillar-copy"><p>Ethics &amp; transparency through ESG-aligned supplier standards.</p><p>Maintaining rigorous internal audits and anti-corruption policies.</p></div><div class="esg-pillar-tags" aria-label="Governance standards"><span>ESG Aligned</span><span>ISO Certified</span></div></article>
+        </div>
+        ${carousel("esg-pillars",[1,2,3].map((item)=>`<div class="slide"><div class="esg-pillar-image" role="img" aria-label="ESG sustainability image placeholder ${item}"></div></div>`),1,false,"esg-pillars-carousel")}
+      </div></section>
       <section id="environment" class="section"><div class="container"><div class="split"><div><h2>ENVIRONMENTAL STEWARDSHIP</h2><p>Our manufacturing processes are designed to minimize ecological impact through precision engineering and resource optimization.</p></div><div class="grid grid-2">${card("Energy Efficiency","Transitioning to low-emission machinery and optimizing facility power consumption.")}${card("Waste Management","Comprehensive recycling protocols for manufacturing scrap and chemical byproducts.")}</div></div><div style="margin-top:32px">${carousel("environment-slider",[1,2,3].map(()=>`<div class="slide">${ph("map")}</div>`),1,false)}</div></div></section>
       <section id="integrity" class="section"><div class="container"><h2>INTEGRITY & ACCOUNTABILITY</h2><p>Superworld corporate affairs are managed to enhance long-term shareholder value through improved performance and accountability.</p><div class="grid grid-5">${["Transparency and efficient management","Compliance with laws and business ethics","Safeguard integrity in financial reporting","Control of company information","Recognize and manage risk"].map((x,i)=>`<div class="number-card"><h3>0${i+1}</h3><p>${x}</p></div>`).join("")}</div><div class="cta" style="margin-top:54px"><div><h2>Confidential Misconduct Reporting</h2><p>Communicate concerns regarding ethical misconduct via our confidential channels.</p></div><div class="card"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></div></div></div></section>
     </main>`;
@@ -1508,7 +1511,7 @@
       }
     }
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
-      if (!dots.closest('.home-hero')) dots.remove();
+      if (!dots.closest('.home-hero') && !dots.closest('.esg-pillars-carousel')) dots.remove();
     });
     const general = document.querySelector('[data-product-tab="general"]');
     if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
