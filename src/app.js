@@ -288,7 +288,7 @@
       </div>
     </article>`).join("");
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR COMPANY",routes.company],["QUALITY STANDARDS"]])}
-      ${heroPanel("QUALITY BUILT<br>INTO EVERY STEP",'At Superworld Electronics, "QUALITY MEANS DOING THINGS RIGHT THE FIRST TIME" — through disciplined processes, controlled inspection, and dependable validation.',["SYSTEM — Certified quality framework","PROCESS — Controlled inspection flow","TRUST — Customer-ready documentation"])}
+      <div class="quality-hero-shell"><div class="quality-hero-panel"><div class="quality-hero-copy"><h1>QUALITY BUILT<br>INTO EVERY STEP</h1><p>At Superworld Electronics, "QUALITY MEANS DOING THINGS RIGHT THE FIRST TIME"<br>— through disciplined processes, controlled inspection, and dependable validation.</p><div class="quality-hero-tags"><span><strong>SYSTEM</strong><small>Certified quality framework</small></span><span><strong>PROCESS</strong><small>Controlled inspection flow</small></span><span><strong>TRUST</strong><small>Customer-ready documentation</small></span></div></div><div class="quality-hero-brand">${logo()}</div></div></div>
       <nav class="anchor-nav"><a href="#qms">QUALITY MANAGEMENT SYSTEM</a><a href="#reliability">RELIABILITY TEST STANDARDS</a><a href="#compliance">COMPLIANCE & ENVIRONMENT</a><a href="#certs">CERTIFICATION VAULT</a></nav>
       <section id="qms" class="section quality-wireframe-section quality-qms"><div class="container"><h2>QUALITY MANAGEMENT SYSTEM</h2><p class="quality-section-intro">End-to-end structural integrity through rigorous supplier audits, Statistical Process Control (SPC), and strict global standards to eliminate defects at every production stage.</p><div class="quality-qms-grid">${qms.map(x=>`<article class="quality-step-card"><span class="quality-step-number">${x[0]}</span><h3>${x[1]}</h3><p>${x[2]}</p></article>`).join("")}</div></div></section>
       <section id="reliability" class="section"><div class="container"><h2>RELIABILITY TEST STANDARDS</h2><p>From commercial to automotive standards, our components are tested to ensure reliable performance.</p><div class="grid grid-2 reliability-standard-grid">
@@ -1389,6 +1389,11 @@
   let heroBrandCleanup = null;
 
   function prepareHeroBrandSlider() {
+    if (location.pathname !== '/company') {
+      if (heroBrandCleanup) heroBrandCleanup();
+      heroBrandCleanup = null;
+      return;
+    }
     const brand = document.querySelector('.hero-panel .hero-brand');
     if (!brand) {
       if (heroBrandCleanup) heroBrandCleanup();

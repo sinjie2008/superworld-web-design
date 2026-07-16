@@ -200,6 +200,10 @@
    - User requirement: redo `superworld_electronics_company_quality_certification_vault` to match the supplied centered vault layout.
    - Fix: restored the centered title/subtitle, 744 × 76 px search field, full-width four-column card grid, eight visible 404 px cards with 206 px inset image holders, and centered five-page controls. Added working search, five pages of eight records, active-page state, empty search state, and retained the certificate PDF download.
    - Post-fix evidence: browser measurements confirm the exact section ID, 4 × 2 visible grid, 40 total paginated records, page 2 correctly displaying records 9–16, unmatched search showing the empty state, all certification tags nested inside their image holders, and no Site-originated browser errors. The download endpoint returns a valid `%PDF-1.4` attachment named `Superworld-IATF-16949-Certificate.pdf`.
+40. Exact Quality hero and Certification Vault scale
+   - User requirement: stop enlarging the supplied wireframes and reproduce their literal dimensions, including the three boxed hero attributes.
+   - Fix: rebuilt the Quality hero as a dedicated 796 × 298 px bordered panel with the exact two-line heading, two-line description, 264 px brand mark, and three separately structured 47 px attribute boxes. Rescaled the Certification Vault to a 668 px content area with a 372 × 38 px search field, 153.5 × 203 px cards, 138 × 103 px image holders, 18 px grid gaps, and 21 px pagination controls.
+   - Post-fix evidence: direct browser measurements match every target dimension, all eight cards remain visible in a 4 × 2 grid, the company-only hero slider no longer replaces the Quality logo, and browser logs contain no Site-originated errors.
 
 ## Primary Interactions Tested
 
