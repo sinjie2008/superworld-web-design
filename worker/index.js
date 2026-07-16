@@ -4,8 +4,9 @@ const appJs = "(function clientApp() {\n  const app = document.getElementById(\"
 
 const cssOverrides = `
 .wireframe-note{display:none}
-.socials{width:152px;height:74px;background:url("/assets/social.webp") center/contain no-repeat}
+.socials{width:108px;height:53px;background:url("/assets/social.webp") center/contain no-repeat}
 .socials .social{display:none}
+.footer-brand{width:220px}
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
 .section-heading:has([data-product-tab]){align-items:flex-start}
@@ -66,6 +67,38 @@ html{scroll-padding-top:144px}
 .release-product-copy p{font-size:12px;line-height:1.25;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .release-product-arrow{display:block;width:10px;height:10px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg);justify-self:end}
 [data-carousel="home-products"] .media-card-footer > span{display:none}
+.industry-slider{height:292px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.industry-slides{display:flex;height:100%;transition:transform .5s ease;will-change:transform}
+.industry-slide{flex:0 0 100%;height:100%}
+.industry-image-ph{width:100%;height:100%;min-height:0;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.industry-image-ph span{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.industry-image-ph strong{font-family:Poppins,Arial,sans-serif;font-size:18px}
+.industry-image-ph small{font-size:11px}
+.industries-layout[data-industry-enhanced="true"]{align-items:start}
+.industries-layout[data-industry-enhanced="true"] .industry-list{height:292px;grid-template-rows:repeat(3,1fr)}
+.industries-layout[data-industry-enhanced="true"] .industry-row{position:relative;width:100%;min-height:0;padding:14px 52px 12px 18px;text-align:left;background:#fff;display:flex;flex-direction:column;justify-content:center}
+.industries-layout[data-industry-enhanced="true"] .industry-row:hover{background:#f3f3f3;color:#111}
+.industries-layout[data-industry-enhanced="true"] .industry-row.is-active{box-shadow:inset 4px 0 0 #111;background:#f3f3f3}
+.industries-layout[data-industry-enhanced="true"] .industry-row h3{font-size:18px;margin:0 0 2px}
+.industries-layout[data-industry-enhanced="true"] .industry-row p{font-size:12px;line-height:1.25;margin:0}
+.industry-row-arrow{position:absolute;right:18px;top:50%;width:14px;height:14px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:translateY(-50%) rotate(45deg)}
+.certification-card{min-height:350px;border:1px solid var(--line);background:#fff;padding:0;display:flex;flex-direction:column}
+.certification-visual{height:200px;margin:12px 12px 0;position:relative}
+.certification-visual .ph{height:176px;min-height:0;border:1px solid #777;background:#f7f7f7}
+.certification-tag{position:absolute;left:6px;bottom:8px;border:1px solid var(--line);background:#fff;padding:2px 6px;font-size:9px;line-height:1;text-transform:capitalize}
+.certification-content{flex:1;padding:0 16px 16px;display:flex;flex-direction:column}
+.certification-content h3{font-size:13px;margin:0 0 5px}
+.certification-content p{font-size:12px;line-height:1.35;margin:0}
+.certification-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;font-size:11px}
+.certification-download,.certification-view-more,.home-news-more,.home-news-view-more{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.certification-download::after,.certification-view-more::after,.home-news-more::after,.home-news-view-more::after{content:"";display:inline-block;width:9px;height:9px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg)}
+.certification-view-more,.home-news-view-more{font-size:14px;gap:26px}
+.home-news-card{min-height:360px;padding:0;display:flex;flex-direction:column}
+.media-card.home-news-card > .home-news-visual{height:220px;min-height:0;margin:12px 12px 0;border:1px solid #777;background:#f7f7f7;position:relative}
+.home-news-tag{position:absolute;left:6px;bottom:6px;border:1px solid var(--line);background:#fff;padding:2px 6px;font-size:9px;line-height:1}
+.home-news-content{flex:1;padding:14px 16px 16px;display:flex;flex-direction:column}
+.home-news-content h3{font-size:14px;line-height:1.25;margin:0;max-width:210px}
+.home-news-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;font-size:11px}
 .quality-section-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:36px}
 .quality-section-header h2{max-width:560px;margin-bottom:0}
 .quality-section-header p{max-width:500px;margin-bottom:0}
@@ -108,8 +141,8 @@ html{scroll-padding-top:144px}
 .quality-arrow{width:44px;font-size:18px}
 .quality-pause-toggle{width:100%;font-size:11px;text-transform:uppercase}
 @media (max-width:900px){#milestones .timeline{--milestone-visible:3}}
-@media (max-width:950px){.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}}
-@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}}
+@media (max-width:950px){.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}.industries-layout[data-industry-enhanced="true"]{grid-template-columns:1fr}.industries-layout[data-industry-enhanced="true"] .industry-list{height:auto}}
+@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}}
 `;
 
 const appEnhancements = `
@@ -443,6 +476,91 @@ const appEnhancements = `
     track.style.transform = 'translateX(0px)';
   }
 
+  const industrySelectorData = [
+    ["Automotive", "ADAS, TCU, lighting, wireless charging."],
+    ["Communication", "Server, router, interface, LAN, RF."],
+    ["Consumer", "Compact connected electronics."],
+    ["Healthcare", "Portable and monitoring devices."],
+    ["Industrial & Energy", "Automation and power systems."],
+    ["Smart Home", "IoT, sensors, and control devices."]
+  ];
+  let industrySelectorCleanup = null;
+
+  function prepareIndustrySelector() {
+    const layout = document.querySelector('.industries-layout');
+    if (!layout) {
+      if (industrySelectorCleanup) industrySelectorCleanup();
+      return;
+    }
+    if (layout.dataset.industryEnhanced === 'true') return;
+    if (industrySelectorCleanup) industrySelectorCleanup();
+    layout.dataset.industryEnhanced = 'true';
+    layout.innerHTML = '<div class="industry-slider" aria-live="polite"><div class="industry-slides">' + industrySelectorData.map((item) => '<div class="industry-slide"><div class="ph industry-image-ph" role="img" aria-label="Image placeholder for ' + item[0] + '"><span>Image Placeholder</span><strong>' + item[0] + '</strong><small>560 × 292 px</small></div></div>').join('') + '</div></div><div class="industry-list">' + industrySelectorData.map((item, index) => '<button class="industry-row' + (index === 0 ? ' is-active' : '') + '" type="button" data-industry-index="' + index + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><h3>' + item[0] + '</h3><p>' + item[1] + '</p><span class="industry-row-arrow" aria-hidden="true"></span></button>').join('') + '</div>';
+
+    let current = 0;
+    let timer = 0;
+    const render = () => {
+      const track = layout.querySelector('.industry-slides');
+      if (track) track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      layout.querySelectorAll('[data-industry-index]').forEach((button) => {
+        const active = Number(button.dataset.industryIndex) === current;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    };
+    const restart = () => {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        current = (current + 1) % industrySelectorData.length;
+        render();
+      }, 4500);
+    };
+    const handleClick = (event) => {
+      const button = event.target.closest('[data-industry-index]');
+      if (!button) return;
+      current = Number(button.dataset.industryIndex);
+      render();
+      restart();
+    };
+    layout.addEventListener('click', handleClick);
+    render();
+    restart();
+    industrySelectorCleanup = () => {
+      clearInterval(timer);
+      industrySelectorCleanup = null;
+    };
+  }
+
+  function prepareCertificationCards() {
+    const root = document.querySelector('[data-carousel="home-certs"]');
+    if (!root || root.dataset.certificationCardsEnhanced === 'true') return;
+    const track = root.querySelector('.carousel-track');
+    if (!track) return;
+    root.dataset.certificationCardsEnhanced = 'true';
+    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="Certification image placeholder"></div><span class="certification-tag">Certification</span></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
+    track.style.transform = 'translateX(0px)';
+    const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
+    if (viewMore) {
+      viewMore.classList.remove('link-arrow');
+      viewMore.classList.add('certification-view-more');
+    }
+  }
+
+  function prepareNewsCards() {
+    const root = document.querySelector('[data-carousel="home-news"]');
+    if (!root || root.dataset.newsCardsEnhanced === 'true') return;
+    const track = root.querySelector('.carousel-track');
+    if (!track) return;
+    root.dataset.newsCardsEnhanced = 'true';
+    track.innerHTML = Array.from({length:6}, () => '<article class="media-card home-news-card slide"><div class="ph home-news-visual" role="img" aria-label="News image placeholder"><span class="home-news-tag">Business Updates</span></div><div class="home-news-content"><h3>Our Johor Bahru facility is progressing</h3><div class="home-news-footer"><a class="home-news-more" href="/news/radial-leaded-inductor" data-link>View More</a><span>17 December 2025</span></div></div></article>').join('');
+    track.style.transform = 'translateX(0px)';
+    const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
+    if (viewMore) {
+      viewMore.classList.remove('link-arrow');
+      viewMore.classList.add('home-news-view-more');
+    }
+  }
+
   function prepareHomeControls() {
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
       if (!dots.closest('.home-hero')) dots.remove();
@@ -451,6 +569,9 @@ const appEnhancements = `
     if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
     const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
     prepareReleaseCards();
+    prepareIndustrySelector();
+    prepareCertificationCards();
+    prepareNewsCards();
     const releaseLink = releaseCarousel?.closest('section')?.querySelector('.section-heading .link-arrow');
     if (releaseLink) releaseLink.setAttribute('href', '/news?category=product');
     prepareMilestoneSlider();
@@ -498,6 +619,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=15").replace("/app.js", "/app.js?v=15"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=17").replace("/app.js", "/app.js?v=17"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

@@ -44,8 +44,8 @@
    - Fixes: hid the build-only note; cropped, converted, embedded, and applied the source social raster.
    - Post-fix evidence: `/workspace/sites/lo-wireframe/qa/home-implementation.jpg` and `/workspace/sites/lo-wireframe/qa/footer-implementation.jpg`.
 2. Focused footer pass
-   - [P2] Footer logo rendered smaller than the source target.
-   - Fix: set the footer logo image to fill its measured 315 px container.
+   - [P2] Footer logo initially rendered smaller than the first source target.
+   - Fix: set the footer logo image to fill its measured container; a later user refinement reduced the overall footer brand group to the requested scale.
    - Post-fix evidence: `/workspace/sites/lo-wireframe/qa/footer-implementation.jpg`.
 3. Final pass
    - The home reference and implementation were compared again in the initial carousel state, followed by a focused footer comparison. No P0/P1/P2 findings remained.
@@ -84,6 +84,10 @@
    - [P2] “LATEST PRODUCT RELEASES” used the taller news-card body instead of the compact product strip shown in the supplied wireframe, and “DISCOVER OUR CORE PRODUCT LINES” incorrectly displayed publication dates.
    - Fix: rebuilt all six Latest Product Releases items as compact linked cards with a 194 px image area, 60 px two-line product strip, and right-side arrow; removed the date from both General and Automotive core-product card sets.
    - Post-fix browser evidence: the home route rendered six 256 px product-release cards linking to `/products/general/emc/a4k`; each displayed only “A4K Series” and “Chip Array Ferrite Bead.” General and Automotive both rendered five cards with zero date elements, while the release carousel continued to auto-advance.
+12. Home industry, certification, news, and footer refinement pass
+   - [P2] Industry rows lacked directional arrows and were not synchronized to the image placeholder; certification and Latest News used the wrong card hierarchy; the footer logo and social group appeared oversized.
+   - Fix: rebuilt the industry area as a six-slide 4.5-second carousel with six arrowed, click-synchronized rows; rebuilt certification cards with an inset visual, overlaid category tag, and slim link arrows; rebuilt Latest News cards so “Business Updates” sits inside the image placeholder; reduced the footer brand to 220 px and its social raster to 108 × 53 px, with smaller mobile values.
+   - Post-fix browser evidence: all three home sliders advanced automatically; clicking Smart Home selected row 6 and moved the image track to `translateX(-500%)`; all six certification tags and all six “Business Updates” labels were nested inside their image areas; the footer computed at 220 px for the brand and 108 × 53 px for the social group. The browser console remained clear.
 
 ## Primary Interactions Tested
 
@@ -99,6 +103,9 @@
 - The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
 - Quality validation main tabs switch their corresponding panel; inner detail slides support direct dots, Prev/Next, Pause/Play, clickable list routing, keyboard activation, and autoplay.
 - Latest Product Releases uses the compact product-card format and remains auto-sliding; General and Automotive core-product cards contain no dates.
+- Industry image placeholders auto-slide and remain synchronized with the six arrowed industry rows; selecting a row displays its matching placeholder.
+- Certification and Latest News carousels use the supplied card hierarchies, including category tags inside their image areas and slim arrow treatments.
+- Footer brand and social artwork render at the reduced desktop sizes of 220 px and 108 × 53 px respectively.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
