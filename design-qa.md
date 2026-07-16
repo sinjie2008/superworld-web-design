@@ -132,6 +132,10 @@
    - User requirement: `superworld_electronics_company_product_lines` should provide the same interaction model as the homepage core-product section.
    - Fix: added synchronized General/Automotive product sets, reference-style cards without dates, responsive four/two/one-card views, Prev/Next controls, and 4.5-second autoplay with manual-interaction restart.
    - Post-fix evidence: Worker-level validation confirmed the v28 bundle, company-scoped tabs and carousel controls, both five-card datasets, responsive calculations, cleanup handling, and autoplay.
+24. Company industries reference alignment
+   - [P2] `superworld_electronics_company_industries` retained oversized nested placeholders and left-aligned section copy instead of the supplied compact square-card treatment.
+   - Fix: centered every card label; converted each industry slide to a single-border square box; and removed the inner placeholder border while keeping the section heading and supporting copy aligned with the supplied reference.
+   - Post-fix evidence: Worker-level validation confirmed the v29 bundle, exact section-scoped selectors, square aspect ratios, one visible card border, centered text, and unchanged carousel controls/autoplay.
 
 ## Primary Interactions Tested
 
