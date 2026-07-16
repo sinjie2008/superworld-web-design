@@ -537,7 +537,7 @@ const appEnhancements = `
     const track = root.querySelector('.carousel-track');
     if (!track) return;
     root.dataset.certificationCardsEnhanced = 'true';
-    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="Certification image placeholder"></div><span class="certification-tag">Certification</span></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
+    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="Certification image placeholder"><span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
     track.style.transform = 'translateX(0px)';
     const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
     if (viewMore) {
@@ -619,6 +619,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=17").replace("/app.js", "/app.js?v=17"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=18").replace("/app.js", "/app.js?v=18"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

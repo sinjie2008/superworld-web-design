@@ -88,6 +88,10 @@
    - [P2] Industry rows lacked directional arrows and were not synchronized to the image placeholder; certification and Latest News used the wrong card hierarchy; the footer logo and social group appeared oversized.
    - Fix: rebuilt the industry area as a six-slide 4.5-second carousel with six arrowed, click-synchronized rows; rebuilt certification cards with an inset visual, overlaid category tag, and slim link arrows; rebuilt Latest News cards so “Business Updates” sits inside the image placeholder; reduced the footer brand to 220 px and its social raster to 108 × 53 px, with smaller mobile values.
    - Post-fix browser evidence: all three home sliders advanced automatically; clicking Smart Home selected row 6 and moved the image track to `translateX(-500%)`; all six certification tags and all six “Business Updates” labels were nested inside their image areas; the footer computed at 220 px for the brand and 108 × 53 px for the social group. The browser console remained clear.
+13. Certification tag containment pass
+   - [P2] The certification tag was visually aligned near the image edge but remained a sibling of the image placeholder in the card DOM.
+   - Fix: moved `.certification-tag` directly inside the `.ph` certification image placeholder on all six cards.
+   - Post-fix browser evidence: all six tags matched `.certification-visual > .ph > .certification-tag`, zero sibling tags remained, and the first tag's measured bounds were fully contained by the 267 × 176 px placeholder. The browser console remained clear.
 
 ## Primary Interactions Tested
 
