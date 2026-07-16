@@ -543,22 +543,33 @@
   }
 
   const locationData = [
-    ["Head Office (Singapore)","Superworld Electronics (S) Pte Ltd","16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204","sales@superworld.com.sg","(65) 6298 2866"],
-    ["Hong Kong","Superworld Electronics (HK) Limited","Unit 8-9 1/F, Hope Sea Industrial Centre No. 26 Lam Hing Street, Kowloon Bay Kowloon, Hong Kong","sales@superworld.com.sg","(852) 2612 2969"],
-    ["Dongguan","Superworld Electronics (Dongguan) Co., Ltd","No. 2 East Ring Street 5, Jitigang Village Huangjiang Town, Dongguan City Guangdong Province, China 523757","sales@superworld.com.sg","(86) 769 8353 6633"],
-    ["Kunshan","Superworld Electronics (Dongguan) Co., Ltd","No. 925 Guoshi Road Hi-Tech Industrial Development Zone Kunshan, Jiangsu Province, China 215333","sales@superworld.com.sg","(86) 512 5525 8255"],
-    ["Malaysia","Superworld Electronics Co., Ltd","5F No. 479 Zhongyang Road Xinzhuang District, New Taipei City, Taiwan 24251","sales@superworld.com.sg","(886) 2 8521 1890"],
-    ["Penang","Superworld Electronics (M) Sdn. Bhd","1-14-01C, Menara IJM Land No. 1 Lebuh Tunku Kudin 3 11700 Gelugor, Penang, Malaysia","sales@superworld.com.sg","(604) 287 3689"]
+    {type:"office",title:"Head Office (Singapore)",office:"Superworld Electronics (S) Pte Ltd",address:"16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204",email:"sales@superworld.com.sg",contact:"(65) 6298 2866",fax:"(65) 6298 8900"},
+    {type:"office",title:"Hong Kong",office:"Superworld Electronics (HK) Limited",address:"Unit 8-9 1/F, Hope Sea Industrial Centre No. 26 Lam Hing Street, Kowloon Bay Kowloon, Hong Kong",email:"sales@superworld.com.sg",contact:"(852) 2612 2969"},
+    {type:"office",title:"Dongguan",office:"Superworld Electronics (Dongguan) Co., Ltd",address:"No. 2 East Ring Street 5, Jitigang Village Huangjiang Town, Dongguan City Guangdong Province, China 523757",email:"sales@superworld.com.sg",contact:"(86) 769 8353 6633"},
+    {type:"office",title:"Kunshan",office:"Superworld Electronics (Dongguan) Co., Ltd",address:"No. 925 Guoshi Road Hi-Tech Industrial Development Zone Kunshan, Jiangsu Province, China 215333",email:"sales@superworld.com.sg",contact:"(86) 512 5525 8255"},
+    {type:"office",title:"Taiwan",office:"Superworld Electronics Co., Ltd",address:"5F No. 479 Zhongyang Road Xinzhuang District, New Taipei City Taiwan 24251",email:"sales@superworld.com.sg",contact:"(886) 2 8521 1890",fax:"(886) 2 8521 1831"},
+    {type:"office",title:"Malaysia",office:"Superworld Electronics (M) Sdn. Bhd",address:"1-14-01C, Menara IJM Land No. 1 Lebuh Tunku Kudin 3 11700 Gelugor, Penang, Malaysia",email:"sales@superworld.com.sg",contact:"(604) 287 3689"},
+    {type:"agent",title:"Agent (Israel)",office:"Ziontronics Ltd",address:"10th Moshe Dayan St. Metropark Center Building C Petah Tikva 4951810 Israel",email:"info@ziontronics.co.ilj",contact:"(972) 3649 8642"},
+    {type:"agent",title:"Agent (China)",office:"SEMTEK Technology Trading(Hong Kong) Limited",address:"4/F, 4B, No.51, South 4th section of the second ring road, Wuhou Dist, ChengDu",email:"steven.tang@semtek.cn",contact:"13193139115"},
+    {type:"agent",title:"Agent (China)",office:"Shenzhen Lavincon Technology Ltd",address:"Rm807, Block B, Ipark Bg, No.26 Dengliang Rd, Nanshan ShenZhen, China",email:"landchan@kc-hk.com",contact:"+86-755-83662336 83668001"},
+    {type:"agent",title:"Agent (Taiwan)",office:"LSH Electronics Co., Ltd",address:"No.1, Sec 1 Xuecheng Rd., Dashu Dist., Kaohsiung City, Taiwan (R.O.C) (Rm.61107,11F, International College)",email:"Benjamin@Ishe.com.tw",contact:"0935-346-196"},
+    {type:"agent",title:"Agent (Taiwan)",office:"Chuan Yuan Electronics Co., Ltd",address:"No. 176-1, Minguang Rd., Taoyuan Dist., Taoyuan City 33043 (R.O.C.)",email:"angela@cye-co.com.tw",contact:"0935-551-771"},
+    {type:"agent",title:"Agent (Japan)",office:"Fuji Tech Sales",address:"1-11-1 Kitasaiwai, Mizunobu Bldg. 7th Floor, Nish-ku,Yokohama, Kanagawa, Japan 220-0004",email:"info@fuji-tech.biz",contact:"+81 80-1240-3595",website:"www.fuji-tech.biz"},
+    {type:"distributor",title:"Distributor (Netherlands)",office:"INNOVA Technologies",address:"Weesperzijde 25, 1091EC Amsterdam, The Netherlands",email:"eyal@innovatechnolog.com",contact:"(31) 20 670 21 82"},
+    {type:"distributor",title:"Distributor (Italy)",office:"Starday S.R.L.",address:"Via Serra, 34 40012 Lippo di Calderara di Reno BO, Italy",email:"gianluca.guarnieri@stardaysrl.it",contact:"(39) 0513175148"},
+    {type:"distributor",title:"Distributor (United Kingdom)",office:"Jauch Quartz UK Ltd",address:"Unit 4.7, Frimley 4 Business Park Frimley, Surrey, GU16 7SG, United Kingdom",email:"sales@jauch.com",contact:"+44-1276-6059-10"},
+    {type:"distributor",title:"Distributor (France)",office:"Jauch Quartz France",address:"116 Rue de Silly, 92100 Boulogne-Billancourt, France",email:"celine.patureau@jauch.com",contact:"+33-1-469995-50"},
+    {type:"distributor",title:"Distributor (America)",office:"Jauch Quartz America, Inc.",address:"43-100 Cook St, Suite 200, Palm Desert, CA 92211",email:"neil.floodgate@jauch.com",contact:"+1 760.282.3527"},
+    {type:"distributor",title:"Distributor (Singapore)",office:"Supreme Components International (SCI)",address:"62 Jalan Eunos, Singapore 419591",email:"arvin@supremecomponents.com",contact:"+65 6848 1178",fax:"+65 6848 1176"}
   ];
 
   function locationsPage() {
-    const locationCards = (items=locationData)=>items.map(x=>`<article class="location-card"><h3>${x[0]}</h3><p>${x[1]}<br>${x[2]}</p><p><u>${x[3]}</u></p><p>${x[4]}</p></article>`).join("");
+    const locationCards = (items=locationData)=>items.map(item=>`<article class="location-card" data-location-type="${item.type}"><h3>${item.title}</h3><p>${item.office}<br>${item.address}</p><p><a href="mailto:${item.email}">${item.email}</a></p><p>${item.contact}</p>${item.fax?`<p>Fax: ${item.fax}</p>`:""}${item.website?`<p><a href="https://${item.website}" target="_blank" rel="noopener">${item.website}</a></p>`:""}</article>`).join("");
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["ABOUT US",routes.company],["GLOBAL PRESENCE"]])}
       ${heroPanel("GLOBAL PRESENCE","Our global operations enable us to deliver consistent quality, engineering expertise, and scalable production to customers across key markets worldwide.")}
       <nav class="anchor-nav"><a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a></nav>
       <section id="regional" class="section"><div class="container"><div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map")}<div class="regions" style="margin-top:52px">${regionCards()}</div></div></section>
-      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading"><div class="location-tabs"><button type="button" data-location-filter="all">ALL</button><button type="button" data-location-filter="office">Office</button><button type="button" data-location-filter="agent">Agent</button><button type="button" data-location-filter="distributor">Distributor</button></div><input type="search" data-location-search placeholder="Search Locations ..." style="padding:16px;border:1px solid #111;min-width:320px"></div><div class="location-grid" data-location-grid>${locationCards()}</div>
-        <h2 style="margin-top:72px">AGENT</h2><div class="location-grid">${locationCards(locationData.slice(1,4).concat(locationData.slice(1,4)))}</div><h2 style="margin-top:72px">DISTRIBUTOR</h2><div class="location-grid">${locationCards(locationData.slice(1,4).concat(locationData.slice(1,4)))}</div>
+      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations"><button class="is-active" type="button" data-location-filter="all" aria-pressed="true">ALL</button><button type="button" data-location-filter="office" aria-pressed="false">Office</button><button type="button" data-location-filter="agent" aria-pressed="false">Agent</button><button type="button" data-location-filter="distributor" aria-pressed="false">Distributor</button></div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-grid" data-location-grid>${locationCards()}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
       </div></section>
     </main>`;
   }
@@ -682,11 +693,32 @@
     document.querySelector("[data-back]")?.addEventListener("click",()=>history.back());
     document.querySelector("[data-inquiry-form]")?.addEventListener("submit",(e)=>{e.preventDefault();navigate(routes.thanks);});
     const locationSearch=document.querySelector("[data-location-search]");
-    locationSearch?.addEventListener("input",()=>{
-      const q=locationSearch.value.toLowerCase();
-      document.querySelectorAll("[data-location-grid] .location-card").forEach(c=>c.classList.toggle("hidden",!c.textContent.toLowerCase().includes(q)));
-    });
-    document.querySelectorAll("[data-location-filter]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-location-filter]").forEach(b=>b.style.background="#fff");btn.style.background="#111";btn.style.color="#fff";}));
+    const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
+    const locationCards=[...document.querySelectorAll("[data-location-grid] .location-card")];
+    let activeLocationFilter="all";
+    const applyLocationFilters=()=>{
+      const query=locationSearch?.value.trim().toLowerCase()||"";
+      let visibleCount=0;
+      locationCards.forEach(card=>{
+        const typeMatches=activeLocationFilter==="all"||card.dataset.locationType===activeLocationFilter;
+        const searchMatches=!query||card.textContent.toLowerCase().includes(query);
+        const visible=typeMatches&&searchMatches;
+        card.hidden=!visible;
+        if(visible) visibleCount+=1;
+      });
+      const empty=document.querySelector("[data-location-empty]");
+      if(empty) empty.hidden=visibleCount!==0;
+    };
+    locationSearch?.addEventListener("input",applyLocationFilters);
+    locationFilterButtons.forEach(btn=>btn.addEventListener("click",()=>{
+      activeLocationFilter=btn.dataset.locationFilter;
+      locationFilterButtons.forEach(button=>{
+        const active=button===btn;
+        button.classList.toggle("is-active",active);
+        button.setAttribute("aria-pressed",String(active));
+      });
+      applyLocationFilters();
+    }));
     document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>{b.style.background="#fff";b.style.color="#111"});btn.style.background="#111";btn.style.color="#fff";}));
     setupCarousels();
   }
