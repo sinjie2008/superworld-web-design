@@ -307,7 +307,7 @@
   function sustainabilityPage() {
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR COMPANY",routes.company],["SUSTAINABILITY"]])}
       ${heroPanel("ESG Commitment &<br>Sustainability Strategy","At Superworld Electronics, we integrate Environmental, Social, and Governance (ESG) principles into our global manufacturing operations to drive ethical growth and long-term value.",["Environment","Social","Governance"])}
-      <nav class="anchor-nav"><a href="#esg-vision">ESG VISION</a><a href="#superworld_electronics_company_sustainability_esg_and_sustainability_pillars">ESG & SUSTAINABILITY PILLARS</a><a href="#environment">ENVIRONMENTAL STEWARDSHIP</a><a href="#integrity">INTEGRITY & ACCOUNTABILITY</a></nav>
+      <nav class="anchor-nav"><a href="#esg-vision">ESG VISION</a><a href="#superworld_electronics_company_sustainability_esg_and_sustainability_pillars">ESG & SUSTAINABILITY PILLARS</a><a href="#environment">ENVIRONMENTAL STEWARDSHIP</a><a href="#superworld_electronics_company_sustainability_integrity_and_accountability">INTEGRITY & ACCOUNTABILITY</a></nav>
       <section id="esg-vision" class="section"><div class="container split"><div><h2>OUR ESG VISION</h2><p>We are evolving beyond traditional corporate citizenship to a robust ESG framework. Our goal is to ensure that every electronic component we produce contributes to a sustainable technological ecosystem.</p><p>Through transparent reporting and rigorous standards, we provide our global partners with confidence that their supply chain meets the highest ethical requirements.</p></div>${ph("tall")}</div></section>
       <section id="superworld_electronics_company_sustainability_esg_and_sustainability_pillars" class="section esg-pillars-section"><div class="container"><div class="section-heading center"><h2>ESG & SUSTAINABILITY PILLARS</h2></div>
         <div class="esg-pillars-grid">
@@ -318,7 +318,18 @@
         ${carousel("esg-pillars",[1,2,3].map((item)=>`<div class="slide"><div class="esg-pillar-image" role="img" aria-label="ESG sustainability image placeholder ${item}"></div></div>`),1,false,"esg-pillars-carousel")}
       </div></section>
       <section id="environment" class="section"><div class="container"><div class="split"><div><h2>ENVIRONMENTAL STEWARDSHIP</h2><p>Our manufacturing processes are designed to minimize ecological impact through precision engineering and resource optimization.</p></div><div class="grid grid-2">${card("Energy Efficiency","Transitioning to low-emission machinery and optimizing facility power consumption.")}${card("Waste Management","Comprehensive recycling protocols for manufacturing scrap and chemical byproducts.")}</div></div><div style="margin-top:32px">${carousel("environment-slider",[1,2,3].map(()=>`<div class="slide">${ph("map")}</div>`),1,false)}</div></div></section>
-      <section id="integrity" class="section"><div class="container"><h2>INTEGRITY & ACCOUNTABILITY</h2><p>Superworld corporate affairs are managed to enhance long-term shareholder value through improved performance and accountability.</p><div class="grid grid-5">${["Transparency and efficient management","Compliance with laws and business ethics","Safeguard integrity in financial reporting","Control of company information","Recognize and manage risk"].map((x,i)=>`<div class="number-card"><h3>0${i+1}</h3><p>${x}</p></div>`).join("")}</div><div class="cta" style="margin-top:54px"><div><h2>Confidential Misconduct Reporting</h2><p>Communicate concerns regarding ethical misconduct via our confidential channels.</p></div><div class="card"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></div></div></div></section>
+      <section id="superworld_electronics_company_sustainability_integrity_and_accountability" class="section integrity-accountability-section"><div class="container">
+        <h2>INTEGRITY &amp; ACCOUNTABILITY</h2>
+        <p class="integrity-intro">Superworld corporate affairs are managed to enhance long-term shareholder value through<br class="integrity-desktop-break"> improved performance and accountability.</p>
+        <div class="integrity-principles-grid">
+          <article class="integrity-principle-card"><strong>01</strong><p>Transparency and efficient<br>management</p></article>
+          <article class="integrity-principle-card"><strong>02</strong><p>Compliance with laws and<br>business ethics</p></article>
+          <article class="integrity-principle-card"><strong>03</strong><p>Safeguard integrity in<br>financial reporting</p></article>
+          <article class="integrity-principle-card"><strong>04</strong><p>Control of company<br>information</p></article>
+          <article class="integrity-principle-card"><strong>05</strong><p>Recognize and manage risk</p></article>
+        </div>
+        <div class="misconduct-panel"><div class="misconduct-copy"><h2>Confidential Misconduct Reporting</h2><p>Communicate concerns regarding ethical misconduct via our confidential channels.</p></div><aside class="misconduct-contact" aria-label="Confidential misconduct reporting contact information"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></aside></div>
+      </div></section>
     </main>`;
   }
 
