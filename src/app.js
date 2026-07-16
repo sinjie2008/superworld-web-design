@@ -1316,6 +1316,57 @@
     startAutoPlay();
   }
 
+  const heroBrandSlides = [
+    ["/assets/logo.webp", "Superworld Electronics company identity"],
+    ["/assets/world-map.webp", "Superworld Electronics global presence"],
+    ["/assets/a4k-product.webp", "Superworld Electronics component capability"]
+  ];
+  let heroBrandCleanup = null;
+
+  function prepareHeroBrandSlider() {
+    const brand = document.querySelector('.hero-panel .hero-brand');
+    if (!brand) {
+      if (heroBrandCleanup) heroBrandCleanup();
+      heroBrandCleanup = null;
+      return;
+    }
+    if (brand.dataset.heroSliderEnhanced === 'true') return;
+    if (heroBrandCleanup) heroBrandCleanup();
+    brand.dataset.heroSliderEnhanced = 'true';
+    brand.setAttribute('aria-label', 'Company feature image slider');
+    brand.innerHTML = '<div class="hero-brand-slides">' + heroBrandSlides.map((slide, index) => '<div class="hero-brand-slide' + (index === 0 ? ' is-active' : '') + '" style="--hero-background:url(' + slide[0] + ')" role="img" aria-label="' + slide[1] + '"></div>').join('') + '</div><div class="hero-brand-dots" role="group" aria-label="Choose company feature image">' + heroBrandSlides.map((slide, index) => '<button class="hero-brand-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-hero-brand-dot="' + index + '" aria-label="Show slide ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"></button>').join('') + '</div>';
+
+    const slides = [...brand.querySelectorAll('.hero-brand-slide')];
+    const dots = [...brand.querySelectorAll('[data-hero-brand-dot]')];
+    let activeIndex = 0;
+    let timer;
+    const activate = (index) => {
+      activeIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === activeIndex));
+      dots.forEach((dot, dotIndex) => {
+        const active = dotIndex === activeIndex;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-pressed', String(active));
+      });
+    };
+    const startAutoPlay = () => {
+      window.clearInterval(timer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
+      timer = window.setInterval(() => activate(activeIndex + 1), 4500);
+    };
+    dots.forEach((dot) => dot.addEventListener('click', () => {
+      activate(Number(dot.dataset.heroBrandDot));
+      startAutoPlay();
+    }));
+    const visibilityHandler = () => startAutoPlay();
+    document.addEventListener('visibilitychange', visibilityHandler);
+    startAutoPlay();
+    heroBrandCleanup = () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', visibilityHandler);
+    };
+  }
+
   function prepareSectionIds() {
     const sectionPrefix = 'superworld_electronics_';
     const sections = [...document.querySelectorAll('section')];
@@ -1402,6 +1453,7 @@
     prepareQualityValidation();
     prepareRegionalMap();
     prepareCompanyGlobalMap();
+    prepareHeroBrandSlider();
     prepareCompanyProductLines();
     prepareSectionIds();
   }

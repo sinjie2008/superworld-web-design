@@ -164,6 +164,10 @@
    - User requirement: make the full card borders visible without changing the cards or bottom labels.
    - Fix: reserved one pixel inside the carousel window and stretched the track items so the cards' lower borders are no longer clipped.
    - Post-fix evidence: compiled CSS confirms the company-industries-scoped clipping correction and existing four-sided card border rule.
+32. Hero panel scale and brand slider
+   - User requirement: reduce the hero heading, keep all tags inline, and turn the hero-brand area into an autoplaying background slider with dots.
+   - Fix: added a smaller responsive hero heading, compact no-wrap tags with safe horizontal overflow, three image-backed slides, centered click controls, 4.5-second autoplay, visibility handling, and reduced-motion support.
+   - Post-fix evidence: compiled assets confirm all three slides and dots, active-state updates, manual selection, autoplay cleanup, and responsive hero sizing.
 
 ## Primary Interactions Tested
 
