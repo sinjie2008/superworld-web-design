@@ -92,6 +92,10 @@
    - [P2] The certification tag was visually aligned near the image edge but remained a sibling of the image placeholder in the card DOM.
    - Fix: moved `.certification-tag` directly inside the `.ph` certification image placeholder on all six cards.
    - Post-fix browser evidence: all six tags matched `.certification-visual > .ph > .certification-tag`, zero sibling tags remained, and the first tag's measured bounds were fully contained by the 267 × 176 px placeholder. The browser console remained clear.
+14. Global section-heading alignment pass
+   - User clarification: every shared `.section-heading` row should use top-edge alignment, not only the core-product heading.
+   - Fix: replaced the product-tab-specific alignment override with a global `.section-heading { align-items: flex-start; }` rule.
+   - Post-fix browser evidence: all four flex-based home heading rows—Latest Product Releases, Discover Our Core Product Lines, Quality Certified, and Latest News—computed to `align-items: flex-start`; the centered block heading retained its intentional non-flex layout. The browser console remained clear.
 
 ## Primary Interactions Tested
 
@@ -104,7 +108,7 @@
 - Site-wide computed typography confirmed the reduced 14 px Inter body size and smaller Poppins display scale.
 - Chip Inductor table placeholders use an exact 86 × 64 px scoped rule; the matching real product image already uses the same dimensions.
 - The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
-- The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
+- All flex-based `.section-heading` rows—including the core-product heading and General/Automotive controls—use `align-items: flex-start`, so headings and their right-side actions share the same top edge.
 - Quality validation main tabs switch their corresponding panel; inner detail slides support direct dots, Prev/Next, Pause/Play, clickable list routing, keyboard activation, and autoplay.
 - Latest Product Releases uses the compact product-card format and remains auto-sliding; General and Automotive core-product cards contain no dates.
 - Industry image placeholders auto-slide and remain synchronized with the six arrowed industry rows; selecting a row displays its matching placeholder.
