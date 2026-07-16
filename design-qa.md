@@ -112,6 +112,10 @@
    - User refinements: remove the map frame border, enlarge the world-map artwork, and automatically rotate the highlighted regional location.
    - Fix: removed the `.regional-map` border, placed the map image and pins in a shared 112% stage so geographic alignment is preserved while the artwork appears larger, and added a 3-second autoplay loop that advances the synchronized pin/card selection. Manual pin, mouse, and keyboard selections restart the autoplay interval; reduced-motion preferences are respected.
    - Post-fix evidence: Worker-level validation confirmed the v23 bundle, border-free map rule, enlarged shared map stage, 3-second rotating selection, reciprocal manual activation, and visibility-aware autoplay restart.
+19. Regional map crop correction
+   - [P2] The enlarged 112% map stage cropped the northern edge of Greenland and the southern edge of South America.
+   - Fix: returned the shared image-and-pin stage to the full 100% map viewport so `object-fit: contain` preserves the complete world-map artwork without disturbing pin alignment or autoplay.
+   - Post-fix evidence: Worker-level validation confirmed the v24 bundle, a full-inset 100% map stage, contained image rendering, and unchanged synchronized pin/card autoplay.
 
 ## Primary Interactions Tested
 

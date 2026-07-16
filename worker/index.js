@@ -143,7 +143,7 @@ html{scroll-padding-top:144px}
 .quality-arrow{width:44px;font-size:18px}
 .quality-pause-toggle{width:100%;font-size:11px;text-transform:uppercase}
 .regional-map{position:relative;height:560px;background:#fff;overflow:hidden}
-.regional-map-stage{position:absolute;left:50%;top:50%;width:112%;height:112%;transform:translate(-50%,-50%)}
+.regional-map-stage{position:absolute;inset:0;width:100%;height:100%}
 .regional-map img{width:100%;height:100%;object-fit:contain;filter:grayscale(1);opacity:.9}
 .regional-map-pin{position:absolute;left:var(--x);top:var(--y);z-index:2;width:30px;height:34px;min-height:0;padding:0;border:0;background:transparent;transform:translate(-50%,-100%)}
 .regional-map-pin::before{content:"";position:absolute;left:50%;top:2px;width:16px;height:16px;border:2px solid #111;border-radius:50% 50% 50% 0;background:#fff;transform:translateX(-50%) rotate(-45deg);transition:background .2s ease,box-shadow .2s ease,transform .2s ease}
@@ -716,6 +716,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=23").replace("/app.js", "/app.js?v=23"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=24").replace("/app.js", "/app.js?v=24"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
