@@ -201,6 +201,88 @@ const appEnhancements = `
     });
   }
 
+  let companyProductCleanup = null;
+
+  function prepareCompanyProductLines() {
+    const section = location.pathname === '/company'
+      ? [...document.querySelectorAll('section')].find((item) => item.querySelector('h2')?.textContent.trim() === 'PRODUCT LINES')
+      : null;
+    if (!section) {
+      if (companyProductCleanup) companyProductCleanup();
+      companyProductCleanup = null;
+      return;
+    }
+    if (section.dataset.companyProductsEnhanced === 'true') return;
+    if (companyProductCleanup) companyProductCleanup();
+    section.dataset.companyProductsEnhanced = 'true';
+
+    const originalGrid = section.querySelector('.grid.grid-4');
+    const tabs = [...section.querySelectorAll('.button-group button')];
+    if (!originalGrid || tabs.length < 2) return;
+
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel company-product-carousel';
+    carousel.dataset.carousel = 'company-products';
+    carousel.style.setProperty('--visible', '4');
+    carousel.innerHTML = '<div class="carousel-window"><div class="carousel-track"></div></div><div class="carousel-controls"><button type="button" data-company-prev aria-label="Previous product">Prev</button><button type="button" data-company-next aria-label="Next product">Next</button></div>';
+    originalGrid.replaceWith(carousel);
+
+    const track = carousel.querySelector('.carousel-track');
+    let type = 'general';
+    let index = 0;
+    let timer;
+    const visible = () => window.innerWidth <= 560 ? 1 : window.innerWidth <= 820 ? 2 : 4;
+    const maxIndex = () => Math.max(0, productSets[type].length - visible());
+    const update = () => {
+      index = Math.max(0, Math.min(index, maxIndex()));
+      carousel.style.setProperty('--visible', String(visible()));
+      const gap = 22;
+      const width = carousel.querySelector('.carousel-window').clientWidth;
+      const cardWidth = (width - gap * (visible() - 1)) / visible();
+      track.style.transform = 'translateX(-' + index * (cardWidth + gap) + 'px)';
+    };
+    const restart = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => {
+        index = index >= maxIndex() ? 0 : index + 1;
+        update();
+      }, 4500);
+    };
+    const render = (nextType) => {
+      type = nextType;
+      index = 0;
+      track.innerHTML = productSets[type].map(cardMarkup).join('');
+      tabs.forEach((tab) => {
+        const active = tab.dataset.companyProductTab === type;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      update();
+      restart();
+    };
+    const move = (delta) => {
+      index += delta;
+      if (index > maxIndex()) index = 0;
+      if (index < 0) index = maxIndex();
+      update();
+      restart();
+    };
+
+    tabs.forEach((tab, tabIndex) => {
+      tab.classList.add('button', 'small');
+      tab.dataset.companyProductTab = tabIndex === 0 ? 'general' : 'automotive';
+      tab.addEventListener('click', () => render(tab.dataset.companyProductTab));
+    });
+    carousel.querySelector('[data-company-prev]').addEventListener('click', () => move(-1));
+    carousel.querySelector('[data-company-next]').addEventListener('click', () => move(1));
+    window.addEventListener('resize', update, {passive:true});
+    companyProductCleanup = () => {
+      window.clearInterval(timer);
+      window.removeEventListener('resize', update);
+    };
+    render('general');
+  }
+
   const milestoneData = [
     ["2011 – 2014", "Recognition", "Expanded customer and enterprise recognition."],
     ["2007 – 2010", "Growth", "Strengthened manufacturing and global customer support."],
@@ -744,6 +826,7 @@ const appEnhancements = `
     prepareMilestoneSlider();
     prepareQualityValidation();
     prepareRegionalMap();
+    prepareCompanyProductLines();
     prepareSectionIds();
   }
 
@@ -789,6 +872,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=27").replace("/app.js", "/app.js?v=27"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=28").replace("/app.js", "/app.js?v=28"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

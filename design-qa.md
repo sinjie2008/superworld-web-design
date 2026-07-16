@@ -128,6 +128,10 @@
    - User requirement: every `<section>` needs a stable, unique ID using the `superworld_electronics_` prefix so individual areas can be identified precisely in later feedback.
    - Fix: added deterministic route-and-heading-based section IDs, automatic duplicate suffixes, and migration of existing hash links, scroll-target controls, and the current URL hash to their new prefixed targets.
    - Post-fix evidence: Worker-level validation confirmed the v27 bundle, the global section-ID enhancer, uniqueness protection, and reciprocal anchor/scroll-target rewriting across SPA route renders.
+23. Company product-line carousel parity
+   - User requirement: `superworld_electronics_company_product_lines` should provide the same interaction model as the homepage core-product section.
+   - Fix: added synchronized General/Automotive product sets, reference-style cards without dates, responsive four/two/one-card views, Prev/Next controls, and 4.5-second autoplay with manual-interaction restart.
+   - Post-fix evidence: Worker-level validation confirmed the v28 bundle, company-scoped tabs and carousel controls, both five-card datasets, responsive calculations, cleanup handling, and autoplay.
 
 ## Primary Interactions Tested
 
