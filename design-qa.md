@@ -120,6 +120,10 @@
    - [P1] Hovering the About, Support, or language buttons applied the global white hover text while the utility-specific transparent background remained in force, causing the label to disappear.
    - Fix: added a utility-navigation hover override that preserves the dark text and transparent background while applying the same underline treatment as the primary navigation.
    - Post-fix evidence: Worker-level validation confirmed the v25 bundle and the more-specific `.utility button:hover` rule with inherited text color, transparent background, and visible underline.
+21. Company statistics content restoration
+   - [P1] The four secondary “WHO WE ARE” cards displayed only their headline figures and labels; the supporting product-line, patent, investment, and market-exposure content from the reference was missing.
+   - Fix: restored all four supporting descriptions and added the reference-aligned variable-width desktop grid, with two-column tablet and single-column mobile fallbacks.
+   - Post-fix evidence: Worker-level validation confirmed the v26 bundle, all seven statistics cards, all reference content strings, and responsive secondary-grid rules.
 
 ## Primary Interactions Tested
 
