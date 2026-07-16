@@ -45,15 +45,15 @@ html{scroll-padding-top:144px}
 .carousel-controls [data-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
 .button.is-active{background:#111;color:#fff}
 .menu-caret{width:9px;height:9px;margin-left:10px;font-size:0;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);vertical-align:middle}
-#milestones{overflow:hidden}
-#milestones .timeline{--milestone-visible:5;overflow:hidden;min-height:520px;padding:74px 0 150px}
-#milestones .timeline::before{top:221px}
-#milestones .timeline-row{display:flex;align-items:flex-start;gap:0;width:100%;transition:transform .65s ease;will-change:transform}
-#milestones .timeline-item{flex:0 0 calc(100% / var(--milestone-visible));min-width:0;padding:0 14px;text-align:center;transition:opacity .4s ease}
-#milestones .timeline-item > h3{font-size:clamp(16px,1.4vw,20px);white-space:nowrap;margin-bottom:28px}
-#milestones .timeline-circle{width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease}
-#milestones .timeline-item.active{z-index:2}
-#milestones .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
+.milestone-section{overflow:hidden}
+.milestone-section .timeline{--milestone-visible:5;overflow:hidden;min-height:520px;padding:74px 0 150px}
+.milestone-section .timeline::before{top:221px}
+.milestone-section .timeline-row{display:flex;align-items:flex-start;gap:0;width:100%;transition:transform .65s ease;will-change:transform}
+.milestone-section .timeline-item{flex:0 0 calc(100% / var(--milestone-visible));min-width:0;padding:0 14px;text-align:center;transition:opacity .4s ease}
+.milestone-section .timeline-item > h3{font-size:clamp(16px,1.4vw,20px);white-space:nowrap;margin-bottom:28px}
+.milestone-section .timeline-circle{width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease}
+.milestone-section .timeline-item.active{z-index:2}
+.milestone-section .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
 .milestone-detail{min-height:112px;margin-top:18px;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
 .timeline-item.active .milestone-detail{opacity:1;visibility:visible;transform:none}
 .milestone-detail h3{margin-bottom:10px}
@@ -158,9 +158,9 @@ html{scroll-padding-top:144px}
 .regions[data-region-map-enhanced="true"] .region{border:1px solid transparent;padding:12px;cursor:pointer;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease}
 .regions[data-region-map-enhanced="true"] .region:hover{border-color:#777}
 .regions[data-region-map-enhanced="true"] .region.is-active{border-color:#111;background:#f3f3f3;box-shadow:inset 4px 0 0 #111}
-@media (max-width:900px){#milestones .timeline{--milestone-visible:3}}
+@media (max-width:900px){.milestone-section .timeline{--milestone-visible:3}}
 @media (max-width:950px){.home-hero .carousel-window,.home-hero .slide{height:500px}.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}.industries-layout[data-industry-enhanced="true"]{grid-template-columns:1fr}.industries-layout[data-industry-enhanced="true"] .industry-list{height:auto}.regional-map{height:420px}.company-stat-secondary{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
+@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
 `;
 
 const appEnhancements = `
@@ -219,6 +219,7 @@ const appEnhancements = `
     if (timeline.dataset.milestoneEnhanced === 'true') return;
     if (milestoneCleanup) milestoneCleanup();
 
+    timeline.closest('section')?.classList.add('milestone-section');
     timeline.dataset.milestoneEnhanced = 'true';
     const row = timeline.querySelector('.timeline-row');
     if (!row) return;
@@ -658,10 +659,54 @@ const appEnhancements = `
     startAutoPlay();
   }
 
+  function prepareSectionIds() {
+    const sectionPrefix = 'superworld_electronics_';
+    const sections = [...document.querySelectorAll('section')];
+    if (sections.length && !sections.every((section) => section.id.startsWith(sectionPrefix))) {
+      const routeName = location.pathname.split('/').filter(Boolean).join('_') || 'home';
+      const slugify = (value) => value
+        .toLowerCase()
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+      const usedIds = new Set();
+      const updatedIds = new Map();
+
+      sections.forEach((section, index) => {
+        const previousId = section.id;
+        const heading = section.querySelector('h1, h2, h3');
+        const fallback = previousId || [...section.classList].filter((name) => name !== 'section' && name !== 'section-sm' && name !== 'section-rule').join('_') || 'section_' + (index + 1);
+        const sectionName = slugify(heading?.textContent.trim() || fallback) || 'section_' + (index + 1);
+        const baseId = sectionPrefix + slugify(routeName) + '_' + sectionName;
+        let uniqueId = baseId;
+        let suffix = 2;
+        while (usedIds.has(uniqueId)) uniqueId = baseId + '_' + suffix++;
+        usedIds.add(uniqueId);
+        if (previousId) updatedIds.set(previousId, uniqueId);
+        section.id = uniqueId;
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        const previousTarget = anchor.getAttribute('href').slice(1);
+        if (updatedIds.has(previousTarget)) anchor.setAttribute('href', '#' + updatedIds.get(previousTarget));
+      });
+      document.querySelectorAll('[data-scroll-target]').forEach((control) => {
+        const previousTarget = control.dataset.scrollTarget;
+        if (updatedIds.has(previousTarget)) control.dataset.scrollTarget = updatedIds.get(previousTarget);
+      });
+
+      const currentTarget = location.hash.slice(1);
+      if (updatedIds.has(currentTarget)) {
+        history.replaceState(history.state, '', location.pathname + location.search + '#' + updatedIds.get(currentTarget));
+      }
+    }
+  }
+
   function prepareHomeControls() {
     const companyStats = document.getElementById('who-we-are');
-    if (companyStats && companyStats.dataset.statsEnhanced !== 'true') {
-      const cards = [...companyStats.querySelectorAll('.stat')];
+    const companyStatsSection = companyStats || document.querySelector('[id$="_who_we_are"]');
+    if (companyStatsSection && companyStatsSection.dataset.statsEnhanced !== 'true') {
+      const cards = [...companyStatsSection.querySelectorAll('.stat')];
       const details = [
         'EMC Components, Magnetic Components, Transformers & Wireless Power Transfer',
         '28 Invention Patents',
@@ -681,7 +726,7 @@ const appEnhancements = `
             card.append(copy);
           }
         });
-        companyStats.dataset.statsEnhanced = 'true';
+        companyStatsSection.dataset.statsEnhanced = 'true';
       }
     }
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
@@ -699,6 +744,7 @@ const appEnhancements = `
     prepareMilestoneSlider();
     prepareQualityValidation();
     prepareRegionalMap();
+    prepareSectionIds();
   }
 
   document.addEventListener('click', (event) => {
@@ -743,6 +789,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=26").replace("/app.js", "/app.js?v=26"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=27").replace("/app.js", "/app.js?v=27"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

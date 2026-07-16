@@ -124,6 +124,10 @@
    - [P1] The four secondary “WHO WE ARE” cards displayed only their headline figures and labels; the supporting product-line, patent, investment, and market-exposure content from the reference was missing.
    - Fix: restored all four supporting descriptions and added the reference-aligned variable-width desktop grid, with two-column tablet and single-column mobile fallbacks.
    - Post-fix evidence: Worker-level validation confirmed the v26 bundle, all seven statistics cards, all reference content strings, and responsive secondary-grid rules.
+22. Globally targetable section IDs
+   - User requirement: every `<section>` needs a stable, unique ID using the `superworld_electronics_` prefix so individual areas can be identified precisely in later feedback.
+   - Fix: added deterministic route-and-heading-based section IDs, automatic duplicate suffixes, and migration of existing hash links, scroll-target controls, and the current URL hash to their new prefixed targets.
+   - Post-fix evidence: Worker-level validation confirmed the v27 bundle, the global section-ID enhancer, uniqueness protection, and reciprocal anchor/scroll-target rewriting across SPA route renders.
 
 ## Primary Interactions Tested
 
