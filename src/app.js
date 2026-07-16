@@ -274,23 +274,33 @@
       ["02","Incoming Inspection","Defined checks before production."],
       ["03","Qualification","Validation for product readiness."],
       ["04","Process Control","In-process & final release control."],
-      ["05","Support","24–48hrs Response Dedicated Engineering Quality Team"]
+      ["05","Support","24–48hrs Response<br>Dedicated Engineering<br>Quality Team"]
     ];
-    const certCards = Array.from({length:8},()=>mediaCard("IATF 16949","Quality management certification.","Download","#")).join("");
+    const complianceCards = [
+      ["RoHS 3.0", "Directive 2015/863/EU compliance.", "Download Declaration", "/downloads/rohs-declaration.pdf", "Superworld-RoHS-Declaration.pdf"],
+      ["REACH", "SVHC disclosure and monitoring.", "Download Statement", "/downloads/reach-statement.pdf", "Superworld-REACH-Statement.pdf"],
+      ["CONFLICT MINERALS", "Ethical 3TG sourcing report.", "Download RMI Template", "/downloads/rmi-template.pdf", "Superworld-RMI-Template.pdf"]
+    ].map((item) => `<article class="quality-compliance-card"><h3>${item[0]}</h3><p>${item[1]}</p><a class="quality-download-link" href="${item[3]}" download="${item[4]}">${item[2]}</a></article>`).join("");
+    const certCards = Array.from({length:8},(_, index) => `<article class="quality-certificate-card">
+      <div class="quality-certificate-visual" role="img" aria-label="Certification image placeholder ${index + 1}"><span class="certification-tag">Certification</span></div>
+      <div class="quality-certificate-copy"><h3>IATF 16949</h3><p>Quality management certification.</p>
+        <div class="quality-certificate-footer"><a class="quality-download-link" href="/downloads/iatf-16949-certificate.pdf" download="Superworld-IATF-16949-Certificate.pdf">Download</a><span>17 December 2025</span></div>
+      </div>
+    </article>`).join("");
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR COMPANY",routes.company],["QUALITY STANDARDS"]])}
       ${heroPanel("QUALITY BUILT<br>INTO EVERY STEP",'At Superworld Electronics, "QUALITY MEANS DOING THINGS RIGHT THE FIRST TIME" — through disciplined processes, controlled inspection, and dependable validation.',["SYSTEM — Certified quality framework","PROCESS — Controlled inspection flow","TRUST — Customer-ready documentation"])}
       <nav class="anchor-nav"><a href="#qms">QUALITY MANAGEMENT SYSTEM</a><a href="#reliability">RELIABILITY TEST STANDARDS</a><a href="#compliance">COMPLIANCE & ENVIRONMENT</a><a href="#certs">CERTIFICATION VAULT</a></nav>
-      <section id="qms" class="section"><div class="container"><h2>QUALITY MANAGEMENT SYSTEM</h2><p>End-to-end structural integrity through rigorous supplier audits, Statistical Process Control (SPC), and strict global standards to eliminate defects at every production stage.</p><div class="grid grid-5">${qms.map(x=>`<article class="number-card"><h3>${x[0]}</h3><h3>${x[1]}</h3><p>${x[2]}</p></article>`).join("")}</div></div></section>
+      <section id="qms" class="section quality-wireframe-section quality-qms"><div class="container"><h2>QUALITY MANAGEMENT SYSTEM</h2><p class="quality-section-intro">End-to-end structural integrity through rigorous supplier audits, Statistical Process Control (SPC), and strict global standards to eliminate defects at every production stage.</p><div class="quality-qms-grid">${qms.map(x=>`<article class="quality-step-card"><span class="quality-step-number">${x[0]}</span><h3>${x[1]}</h3><p>${x[2]}</p></article>`).join("")}</div></div></section>
       <section id="reliability" class="section"><div class="container"><h2>RELIABILITY TEST STANDARDS</h2><p>From commercial to automotive standards, our components are tested to ensure reliable performance.</p><div class="grid grid-2 reliability-standard-grid">
         <article class="card reliability-standard-card"><h3>Automotive Grade</h3><p>For demanding environments such as automotive and high-reliability systems.</p><a class="reliability-download link-arrow" href="/downloads/automotive-test-specs.pdf" download="Superworld-Automotive-Test-Specifications.pdf" aria-label="Download Automotive Test Specifications PDF">Download Automotive Test Specs (PDF)</a></article>
         <article class="card reliability-standard-card"><h3>Commercial Grade</h3><p>For stable environments such as consumer and industrial electronics.</p><a class="reliability-download link-arrow" href="/downloads/general-test-specs.pdf" download="Superworld-General-Test-Specifications.pdf" aria-label="Download General Test Specifications PDF">Download General Test Specs (PDF)</a></article>
       </div></div></section>
-      <section id="compliance" class="section"><div class="container"><h2>COMPLIANCE & ENVIRONMENT</h2><p>Committed to sustainability through global hazardous substance regulation compliance and transparent, ethical conflict-free mineral sourcing.</p><div class="grid grid-3">${card("RoHS 3.0","Directive 2015/863/EU compliance. Download Declaration")}${card("REACH","SVHC disclosure and monitoring. Download Statement")}${card("CONFLICT MINERALS","Ethical 3TG sourcing report. Download RMI Template")}</div></div></section>
+      <section id="compliance" class="section quality-wireframe-section quality-compliance"><div class="container"><h2>COMPLIANCE & ENVIRONMENT</h2><p class="quality-section-intro">Committed to sustainability through global hazardous substance regulation compliance (RoHS/REACH) and transparent, ethical conflict-free mineral sourcing.</p><div class="quality-compliance-grid">${complianceCards}</div></div></section>
       <section class="section"><div class="container"><div class="section-heading center"><h2>IN-HOUSE VALIDATION CAPABILITIES</h2><p>Verifies component quality through reliability testing, magnetic analysis, and EMI / EMC validation.</p></div>
         <div class="lab-tabs"><button class="lab-tab is-active" type="button">01<br>RELIABILITY TEST SYSTEM</button><button class="lab-tab" type="button">02<br>MAGNETIC ANALYSIS</button><button class="lab-tab" type="button">03<br>EMI / EMC CENTER</button></div>
         <div class="lab-view">${ph("tall")}<div class="lab-copy"><h3>COMPREHENSIVE RELIABILITY VERIFICATION SYSTEM</h3><p>Ensuring reliable, long-term performance of magnetic components in real-world operation.</p><hr><p>SYSTEM SECTIONS</p>${["Application Environment Simulation","Electrical & Functional Analysis","Composition Analysis","Failure Analysis","Environmental Endurance","Mechanical Analysis"].map(x=>`<p>${x}</p>`).join("")}<div class="button-group"><button>Prev</button><button class="wide">Play</button><button>Next</button></div></div></div>
       </div></section>
-      <section id="certs" class="section section-rule"><div class="container"><div class="section-heading center"><h2>CERTIFICATION VAULT</h2><p>Official Accreditation Documents</p></div><div class="cert-search"><input type="search" placeholder="Search certificate..."></div><div class="grid grid-4">${certCards}</div>${pagination()}</div></section>
+      <section id="certs" class="section section-rule quality-certificates"><div class="container"><div class="section-heading center"><h2>CERTIFICATION VAULT</h2><p>Official Accreditation Documents</p></div><div class="quality-certificate-grid">${certCards}</div></div></section>
     </main>`;
   }
 
@@ -977,7 +987,7 @@
     const container = heading.closest('.container');
     if (!container) return;
     section.dataset.qualityEnhanced = 'true';
-    container.innerHTML = '<div class="quality-section-header"><div><div class="eyebrow">Testing Capability</div><h2>IN-HOUSE VALIDATION CAPABILITIES</h2></div><p>Superworld verifies component quality through reliability testing, magnetic analysis, and EMI / EMC validation.</p></div><div class="quality-main-tabs" role="tablist" aria-label="Validation capability tabs">' + qualityValidationData.map((tab, index) => '<button class="quality-main-tab' + (index === 0 ? ' active' : '') + '" id="quality-tab-' + tab.key + '" type="button" role="tab" aria-selected="' + (index === 0 ? 'true' : 'false') + '" aria-controls="quality-panel-' + tab.key + '" data-quality-tab="' + tab.key + '"><span>' + tab.number + '</span><strong>' + tab.title + '</strong></button>').join('') + '</div>' + qualityValidationData.map(qualityPanelMarkup).join('');
+    container.innerHTML = '<div class="quality-section-header"><h2>IN-HOUSE VALIDATION CAPABILITIES</h2><p>Verifies component quality through reliability testing, magnetic analysis, and EMI / EMC validation.</p></div><div class="quality-main-tabs" role="tablist" aria-label="Validation capability tabs">' + qualityValidationData.map((tab, index) => '<button class="quality-main-tab' + (index === 0 ? ' active' : '') + '" id="quality-tab-' + tab.key + '" type="button" role="tab" aria-selected="' + (index === 0 ? 'true' : 'false') + '" aria-controls="quality-panel-' + tab.key + '" data-quality-tab="' + tab.key + '"><span>' + tab.number + '</span><strong>' + tab.title + '</strong></button>').join('') + '</div>' + qualityValidationData.map(qualityPanelMarkup).join('');
 
     const state = Object.fromEntries(qualityValidationData.map((tab) => [tab.key, 0]));
     let activeKey = qualityValidationData[0].key;

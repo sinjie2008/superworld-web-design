@@ -65,6 +65,22 @@ const pdfDownloads = {
   "/downloads/general-test-specs.pdf": {
     filename: "Superworld-General-Test-Specifications.pdf",
     title: "General Test Specifications"
+  },
+  "/downloads/rohs-declaration.pdf": {
+    filename: "Superworld-RoHS-Declaration.pdf",
+    title: "RoHS Declaration"
+  },
+  "/downloads/reach-statement.pdf": {
+    filename: "Superworld-REACH-Statement.pdf",
+    title: "REACH Statement"
+  },
+  "/downloads/rmi-template.pdf": {
+    filename: "Superworld-RMI-Template.pdf",
+    title: "Responsible Minerals Initiative Template"
+  },
+  "/downloads/iatf-16949-certificate.pdf": {
+    filename: "Superworld-IATF-16949-Certificate.pdf",
+    title: "IATF 16949 Certificate"
   }
 };
 
@@ -85,6 +101,6 @@ export default {
     if (path === "/styles.css") return new Response(css, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=40").replace("/app.js", "/app.js?v=40"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=41").replace("/app.js", "/app.js?v=41"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

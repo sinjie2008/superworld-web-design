@@ -192,6 +192,10 @@
    - User requirement: make both download actions in the Reliability Test Standards two-card grid functional.
    - Fix: separated the descriptive copy from two real download anchors, added accessible labels and stable filenames, and introduced same-origin PDF endpoints with attachment headers for Automotive and General test specifications.
    - Post-fix evidence: worker-level requests return valid `%PDF-1.4` documents with `application/pdf`, `Content-Disposition: attachment`, the expected filenames, and no-store caching. The temporary PDF pages clearly identify themselves as wireframe placeholders until approved official specifications are supplied.
+38. Quality page wireframe cards, typography, and downloads
+   - User requirement: enlarge the local typography, restore the supplied headings, make the compliance and certification downloads functional, and match the four supplied card layouts.
+   - Fix: rebuilt the Quality Management System as five numbered bordered cards, rebuilt Compliance & Environment as three download cards, centered the exact In-House Validation Capabilities heading and description, and rebuilt the certification area as an eight-card 4 × 2 grid with inset image holders and nested certification tags.
+   - Post-fix evidence: browser geometry confirms 5 QMS cards at 229 × 220 px, 3 compliance cards at 398 × 130 px, and 8 certification cards in four 207 px columns; scoped heading/body/card typography resolves to 31.35/15/21 px where applicable. All six distinct PDF endpoints return valid `%PDF-1.4` payloads with attachment filenames, and browser logs contain no Site-originated errors.
 
 ## Primary Interactions Tested
 
