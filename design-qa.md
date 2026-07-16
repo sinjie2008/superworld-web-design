@@ -243,4 +243,10 @@
 - [x] Source-derived raster assets embedded and checked.
 - [x] Post-fix full-view and focused comparisons completed.
 
+## Quality Standards Exact-Size Correction
+
+- [x] Re-measured the Quality hero and Certification Vault from the original 1440 px `Lo - Home _ Quality Standards.png` source rather than the reduced chat preview.
+- [x] Restored the Quality hero to its 1282 × 481 px desktop frame, including source-scale typography, logo, tags, and spacing.
+- [x] Restored the Certification Vault to the source-scale 1296 px four-column grid with 395 px cards, 201 px image placeholders, a 722 × 74 px search field, and 42 px pagination controls.
+
 final result: passed
