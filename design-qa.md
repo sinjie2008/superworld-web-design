@@ -104,6 +104,10 @@
    - User refinement: primary navigation hover should use an underline instead of a black filled rectangle.
    - Fix: scoped hover styles for `.nav-link` and `.nav-menu-button` to retain transparent backgrounds and inherited text color while adding a 1 px underline with a 6 px offset.
    - Post-fix browser evidence: the loaded v21 stylesheet contained the exact scoped hover rule; the navigation retained its transparent base background and visible dark text/caret. The browser console remained clear.
+17. Regional support map pass
+   - [P2] “REGIONAL SUPPORT FOR GLOBAL CUSTOMERS” still used a blank placeholder and the ten region entries were not connected to geographic locations.
+   - Fix: replaced the placeholder with a responsive monochrome world-map raster and ten geographically positioned interactive pins for Singapore, USA, UK, France, Italy, North China, South China, Taiwan, Malaysia, and Israel. Map pins and `.region` cards now share one synchronized selected state; region cards also support Enter and Space activation.
+   - Post-fix evidence: Worker-level validation confirmed the v22 HTML/CSS/JS bundle, the embedded 800 × 400 WebP asset, ten pin controls, one default Singapore selection, and reciprocal pin/card activation logic.
 
 ## Primary Interactions Tested
 
@@ -122,6 +126,7 @@
 - Industry image placeholders auto-slide and remain synchronized with the six arrowed industry rows; selecting a row displays its matching placeholder.
 - Certification and Latest News carousels use the supplied card hierarchies, including category tags inside their image areas and slim arrow treatments.
 - Footer brand and social artwork render at the reduced desktop sizes of 220 px and 108 × 53 px respectively.
+- The regional-support world map contains ten matching pins; selecting either a pin or its `.region` card highlights both representations, with keyboard activation available on every region card.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.
