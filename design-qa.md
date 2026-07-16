@@ -152,6 +152,18 @@
    - User requirement: use only an SCSS and ES6 JavaScript base system.
    - Fix: moved all styling into a compiled SCSS source, moved all browser behavior into a framework-free ES6 module, and introduced a deterministic Sass/esbuild pipeline that produces the existing Sites Worker artifact.
    - Post-fix evidence: Sass compilation, ES module bundling, Worker parsing, route responses, and artifact validation all pass without changing the visible wireframe or existing interactions.
+29. Company Milestones copy and heading
+   - User requirement: restore the missing Foundation copy and keep the centered section description inline.
+   - Fix: corrected the ES6 multiline milestone string so all three Foundation lines render, and explicitly centered the milestone heading with an inline-block description.
+   - Post-fix evidence: source and compiled bundle checks confirm the complete three-line copy and company-milestone-scoped heading rules.
+30. Company Global Presence layout
+   - User requirement: correct the Global Presence layout shown in the supplied screenshot.
+   - Fix: top-aligned the copy and map columns, restored the compact 16:9 map proportion, balanced the column widths and spacing, and retained a single-column responsive layout.
+   - Post-fix evidence: compiled CSS confirms the company-global-presence-scoped desktop and responsive rules while the interactive pins and autoplay remain intact.
+31. Company Industries lower borders
+   - User requirement: make the full card borders visible without changing the cards or bottom labels.
+   - Fix: reserved one pixel inside the carousel window and stretched the track items so the cards' lower borders are no longer clipped.
+   - Post-fix evidence: compiled CSS confirms the company-industries-scoped clipping correction and existing four-sided card border rule.
 
 ## Primary Interactions Tested
 

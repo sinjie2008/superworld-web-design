@@ -810,7 +810,7 @@
   const milestoneData = [
     ["2011 – 2014", "Recognition", "Expanded customer and enterprise recognition."],
     ["2007 – 2010", "Growth", "Strengthened manufacturing and global customer support."],
-    ["2000 – 2006", "Foundation", "Established Singapore Headquarters Office\\nResearch and Development Center and Ferrite Bead Plant in Taiwan\\nTransformer and Inductor factory in South China"],
+    ["2000 – 2006", "Foundation", "Established Singapore Headquarters Office\nResearch and Development Center and Ferrite Bead Plant in Taiwan\nTransformer and Inductor factory in South China"],
     ["1993 – 1999", "Expansion", "Built regional operations and customer reach."],
     ["1975", "Origins", "The beginning of the company journey."]
   ];
