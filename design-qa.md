@@ -108,6 +108,10 @@
    - [P2] “REGIONAL SUPPORT FOR GLOBAL CUSTOMERS” still used a blank placeholder and the ten region entries were not connected to geographic locations.
    - Fix: replaced the placeholder with a responsive monochrome world-map raster and ten geographically positioned interactive pins for Singapore, USA, UK, France, Italy, North China, South China, Taiwan, Malaysia, and Israel. Map pins and `.region` cards now share one synchronized selected state; region cards also support Enter and Space activation.
    - Post-fix evidence: Worker-level validation confirmed the v22 HTML/CSS/JS bundle, the embedded 800 × 400 WebP asset, ten pin controls, one default Singapore selection, and reciprocal pin/card activation logic.
+18. Regional map presentation and autoplay pass
+   - User refinements: remove the map frame border, enlarge the world-map artwork, and automatically rotate the highlighted regional location.
+   - Fix: removed the `.regional-map` border, placed the map image and pins in a shared 112% stage so geographic alignment is preserved while the artwork appears larger, and added a 3-second autoplay loop that advances the synchronized pin/card selection. Manual pin, mouse, and keyboard selections restart the autoplay interval; reduced-motion preferences are respected.
+   - Post-fix evidence: Worker-level validation confirmed the v23 bundle, border-free map rule, enlarged shared map stage, 3-second rotating selection, reciprocal manual activation, and visibility-aware autoplay restart.
 
 ## Primary Interactions Tested
 
@@ -126,7 +130,7 @@
 - Industry image placeholders auto-slide and remain synchronized with the six arrowed industry rows; selecting a row displays its matching placeholder.
 - Certification and Latest News carousels use the supplied card hierarchies, including category tags inside their image areas and slim arrow treatments.
 - Footer brand and social artwork render at the reduced desktop sizes of 220 px and 108 × 53 px respectively.
-- The regional-support world map contains ten matching pins; selecting either a pin or its `.region` card highlights both representations, with keyboard activation available on every region card.
+- The regional-support world map contains ten matching pins; the active pin/card pair advances automatically every 3 seconds, while selecting either a pin or its `.region` card highlights both representations and restarts autoplay. Keyboard activation remains available on every region card.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.

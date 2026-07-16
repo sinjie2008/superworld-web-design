@@ -142,7 +142,8 @@ html{scroll-padding-top:144px}
 .quality-arrow,.quality-pause-toggle{height:42px;min-height:0;padding:0 10px;border:1px solid var(--line);background:#fff}
 .quality-arrow{width:44px;font-size:18px}
 .quality-pause-toggle{width:100%;font-size:11px;text-transform:uppercase}
-.regional-map{position:relative;height:560px;border:1px solid var(--line);background:#fff;overflow:hidden}
+.regional-map{position:relative;height:560px;background:#fff;overflow:hidden}
+.regional-map-stage{position:absolute;left:50%;top:50%;width:112%;height:112%;transform:translate(-50%,-50%)}
 .regional-map img{width:100%;height:100%;object-fit:contain;filter:grayscale(1);opacity:.9}
 .regional-map-pin{position:absolute;left:var(--x);top:var(--y);z-index:2;width:30px;height:34px;min-height:0;padding:0;border:0;background:transparent;transform:translate(-50%,-100%)}
 .regional-map-pin::before{content:"";position:absolute;left:50%;top:2px;width:16px;height:16px;border:2px solid #111;border-radius:50% 50% 50% 0;background:#fff;transform:translateX(-50%) rotate(-45deg);transition:background .2s ease,box-shadow .2s ease,transform .2s ease}
@@ -603,11 +604,14 @@ const appEnhancements = `
     const map = document.createElement('div');
     map.className = 'regional-map';
     map.setAttribute('aria-label', 'Interactive regional support world map');
-    map.innerHTML = '<img src="/assets/world-map.webp" alt="World map showing Superworld Electronics regional support locations">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' regional support" aria-pressed="false"></button>').join('');
+    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics regional support locations">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' regional support" aria-pressed="false"></button>').join('') + '</div>';
     placeholder.replaceWith(map);
 
     const pins = [...map.querySelectorAll('[data-region-pin]')];
+    let activeIndex = 0;
+    let autoPlayTimer;
     const activate = (index) => {
+      activeIndex = index;
       pins.forEach((pin, pinIndex) => {
         const active = pinIndex === index;
         pin.classList.toggle('is-active', active);
@@ -621,20 +625,35 @@ const appEnhancements = `
       regions.dataset.activeRegion = String(index);
     };
 
-    pins.forEach((pin) => pin.addEventListener('click', () => activate(Number(pin.dataset.regionPin))));
+    const startAutoPlay = () => {
+      window.clearInterval(autoPlayTimer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
+      autoPlayTimer = window.setInterval(() => activate((activeIndex + 1) % pins.length), 3000);
+    };
+
+    pins.forEach((pin) => pin.addEventListener('click', () => {
+      activate(Number(pin.dataset.regionPin));
+      startAutoPlay();
+    }));
     cards.forEach((card, index) => {
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', 'Highlight ' + regionalMapPoints[index][0] + ' on the map');
-      card.addEventListener('click', () => activate(index));
+      card.addEventListener('click', () => {
+        activate(index);
+        startAutoPlay();
+      });
       card.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           activate(index);
+          startAutoPlay();
         }
       });
     });
+    document.addEventListener('visibilitychange', startAutoPlay);
     activate(0);
+    startAutoPlay();
   }
 
   function prepareHomeControls() {
@@ -697,6 +716,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=22").replace("/app.js", "/app.js?v=22"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=23").replace("/app.js", "/app.js?v=23"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
