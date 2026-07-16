@@ -116,6 +116,10 @@
    - [P2] The enlarged 112% map stage cropped the northern edge of Greenland and the southern edge of South America.
    - Fix: returned the shared image-and-pin stage to the full 100% map viewport so `object-fit: contain` preserves the complete world-map artwork without disturbing pin alignment or autoplay.
    - Post-fix evidence: Worker-level validation confirmed the v24 bundle, a full-inset 100% map stage, contained image rendering, and unchanged synchronized pin/card autoplay.
+20. Utility navigation hover correction
+   - [P1] Hovering the About, Support, or language buttons applied the global white hover text while the utility-specific transparent background remained in force, causing the label to disappear.
+   - Fix: added a utility-navigation hover override that preserves the dark text and transparent background while applying the same underline treatment as the primary navigation.
+   - Post-fix evidence: Worker-level validation confirmed the v25 bundle and the more-specific `.utility button:hover` rule with inherited text color, transparent background, and visible underline.
 
 ## Primary Interactions Tested
 
