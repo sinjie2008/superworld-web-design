@@ -168,6 +168,14 @@
    - User requirement: reduce the hero heading, keep all tags inline, and turn the hero-brand area into an autoplaying background slider with dots.
    - Fix: added a smaller responsive hero heading, compact no-wrap tags with safe horizontal overflow, three image-backed slides, centered click controls, 4.5-second autoplay, visibility handling, and reduced-motion support.
    - Post-fix evidence: compiled assets confirm all three slides and dots, active-state updates, manual selection, autoplay cleanup, and responsive hero sizing.
+33. Milestone description anchoring
+   - User requirement: ensure the active milestone title and all three description lines remain visible below the centered circle.
+   - Fix: moved the active description out of the translated slider track into a fixed, centered live region inside the timeline and update it from the active milestone index.
+   - Post-fix evidence: compiled assets confirm one stationary milestone detail region, complete Foundation copy, and reciprocal content updates during manual and automatic sliding.
+34. Hero slider image placeholders
+   - User requirement: use placeholder images in every hero-brand slide and display the required image dimensions.
+   - Fix: replaced the production imagery with three bordered wireframe placeholders that show `560 × 320 px`, while retaining the existing fade transition, dots, and autoplay behavior.
+   - Post-fix evidence: compiled assets confirm three accessible placeholder slides, visible size labels, clickable dots, and 4.5-second autoplay.
 
 ## Primary Interactions Tested
 

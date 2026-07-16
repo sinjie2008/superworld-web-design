@@ -829,11 +829,18 @@
     timeline.dataset.milestoneEnhanced = 'true';
     const row = timeline.querySelector('.timeline-row');
     if (!row) return;
-    row.setAttribute('aria-live', 'polite');
     const repeated = milestoneData.concat(milestoneData, milestoneData);
     row.innerHTML = repeated.map((item, index) =>
-      '<article class="timeline-item" data-milestone-index="' + index + '"><h3>' + item[0] + '</h3><div class="timeline-circle" aria-hidden="true"></div><div class="milestone-detail"><h3>' + item[1] + '</h3><p>' + item[2] + '</p></div></article>'
+      '<article class="timeline-item" data-milestone-index="' + index + '"><h3>' + item[0] + '</h3><div class="timeline-circle" aria-hidden="true"></div></article>'
     ).join('');
+
+    const activeDetail = document.createElement('div');
+    activeDetail.className = 'milestone-detail milestone-active-detail is-active';
+    activeDetail.setAttribute('aria-live', 'polite');
+    activeDetail.innerHTML = '<h3></h3><p></p>';
+    timeline.append(activeDetail);
+    const detailTitle = activeDetail.querySelector('h3');
+    const detailCopy = activeDetail.querySelector('p');
 
     const controls = document.createElement('div');
     controls.className = 'milestone-controls';
@@ -857,6 +864,9 @@
         if (active) item.setAttribute('aria-current', 'true');
         else item.removeAttribute('aria-current');
       });
+      const detail = milestoneData[((current % milestoneData.length) + milestoneData.length) % milestoneData.length];
+      detailTitle.textContent = detail[1];
+      detailCopy.textContent = detail[2];
       if (!animate) requestAnimationFrame(() => { row.style.transition = ''; });
     };
 
@@ -1317,9 +1327,9 @@
   }
 
   const heroBrandSlides = [
-    ["/assets/logo.webp", "Superworld Electronics company identity"],
-    ["/assets/world-map.webp", "Superworld Electronics global presence"],
-    ["/assets/a4k-product.webp", "Superworld Electronics component capability"]
+    "Company feature image 1",
+    "Company feature image 2",
+    "Company feature image 3"
   ];
   let heroBrandCleanup = null;
 
@@ -1334,7 +1344,7 @@
     if (heroBrandCleanup) heroBrandCleanup();
     brand.dataset.heroSliderEnhanced = 'true';
     brand.setAttribute('aria-label', 'Company feature image slider');
-    brand.innerHTML = '<div class="hero-brand-slides">' + heroBrandSlides.map((slide, index) => '<div class="hero-brand-slide' + (index === 0 ? ' is-active' : '') + '" style="--hero-background:url(' + slide[0] + ')" role="img" aria-label="' + slide[1] + '"></div>').join('') + '</div><div class="hero-brand-dots" role="group" aria-label="Choose company feature image">' + heroBrandSlides.map((slide, index) => '<button class="hero-brand-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-hero-brand-dot="' + index + '" aria-label="Show slide ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"></button>').join('') + '</div>';
+    brand.innerHTML = '<div class="hero-brand-slides">' + heroBrandSlides.map((slide, index) => '<div class="hero-brand-slide' + (index === 0 ? ' is-active' : '') + '" role="img" aria-label="Image placeholder for ' + slide + ', recommended size 560 by 320 pixels"><span>Image Placeholder</span><strong>560 × 320 px</strong></div>').join('') + '</div><div class="hero-brand-dots" role="group" aria-label="Choose company feature image">' + heroBrandSlides.map((slide, index) => '<button class="hero-brand-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-hero-brand-dot="' + index + '" aria-label="Show slide ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"></button>').join('') + '</div>';
 
     const slides = [...brand.querySelectorAll('.hero-brand-slide')];
     const dots = [...brand.querySelectorAll('[data-hero-brand-dot]')];
