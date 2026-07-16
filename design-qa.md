@@ -136,6 +136,10 @@
    - [P2] `superworld_electronics_company_industries` retained oversized nested placeholders and left-aligned section copy instead of the supplied compact square-card treatment.
    - Fix: centered every card label; converted each industry slide to a single-border square box; and removed the inner placeholder border while keeping the section heading and supporting copy aligned with the supplied reference.
    - Post-fix evidence: Worker-level validation confirmed the v29 bundle, exact section-scoped selectors, square aspect ratios, one visible card border, centered text, and unchanged carousel controls/autoplay.
+25. Company industry label and border correction
+   - [P1] The hidden placeholder still affected the card paint order, covering the lower border, while the legacy flow layout kept the industry label vertically centered.
+   - Fix: removed the inner placeholder from layout, forced one complete outer border, and absolutely anchored every label to the bottom center of its square card.
+   - Post-fix evidence: Worker-level validation confirmed the v30 bundle, hidden inner placeholders, explicit four-sided card borders, and bottom-positioned labels.
 
 ## Primary Interactions Tested
 

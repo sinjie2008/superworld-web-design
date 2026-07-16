@@ -11,9 +11,9 @@ const cssOverrides = `
 .section-heading.center p{margin-inline:auto}
 .section-heading{align-items:flex-start}
 .company-stat-secondary{display:grid;grid-template-columns:1.35fr .78fr .94fr 1.42fr;gap:24px;margin-top:24px}
-#superworld_electronics_company_industries .slide.card{position:relative;aspect-ratio:1/1;height:auto;min-height:0;padding:0;display:flex;align-items:center;justify-content:flex-end;overflow:hidden}
-#superworld_electronics_company_industries .slide.card .ph{position:absolute;inset:0;width:100%;height:100%;min-height:0;border:0;background:#fafafa}
-#superworld_electronics_company_industries .slide.card h3{position:relative;z-index:1;width:100%;margin:0!important;padding:18px 12px;text-align:center;font-family:Inter,Arial,sans-serif;font-size:14px;font-weight:400;text-transform:capitalize}
+#superworld_electronics_company_industries .slide.card{position:relative;aspect-ratio:1/1;height:auto;min-height:0;padding:0;overflow:hidden;border:1px solid var(--line)!important;background:#fafafa}
+#superworld_electronics_company_industries .slide.card .ph{display:none}
+#superworld_electronics_company_industries .slide.card h3{position:absolute;left:0;right:0;bottom:0;z-index:1;width:100%;margin:0!important;padding:18px 12px;text-align:center;font-family:Inter,Arial,sans-serif;font-size:14px;font-weight:400;text-transform:capitalize}
 .home-hero .carousel-window,.home-hero .slide{height:620px}
 body{font-size:14px}
 h1{font-size:clamp(28px,3vw,42px)}
@@ -875,6 +875,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=29").replace("/app.js", "/app.js?v=29"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=30").replace("/app.js", "/app.js?v=30"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
