@@ -80,6 +80,10 @@
    - [P2] The existing Quality-page validation area only changed the visual state of three buttons; it did not provide the reference feature's tab panels, inner slide states, detail navigation, pause control, or automatic progression.
    - Fix: rebuilt “IN-HOUSE VALIDATION CAPABILITIES” with three accessible main tabs, 15 total detail slides, 740 × 640 px labeled image placeholders, matching content lists, Overview/number controls, Prev/Pause/Next controls, clickable detail routes, keyboard activation, hover/focus pause behavior, and 4.5-second autoplay that continues into the next capability tab.
    - Post-fix browser evidence: `/company/quality` rendered the requested 58/42 split in a 640 px panel; Reliability showed 7 slides, Magnetic 4, and EMI / EMC 4. Tab switching, next navigation, direct dots, list routing, pause/play state, and autoplay movement were exercised with no Site-origin console errors.
+11. Home product-card correction pass
+   - [P2] “LATEST PRODUCT RELEASES” used the taller news-card body instead of the compact product strip shown in the supplied wireframe, and “DISCOVER OUR CORE PRODUCT LINES” incorrectly displayed publication dates.
+   - Fix: rebuilt all six Latest Product Releases items as compact linked cards with a 194 px image area, 60 px two-line product strip, and right-side arrow; removed the date from both General and Automotive core-product card sets.
+   - Post-fix browser evidence: the home route rendered six 256 px product-release cards linking to `/products/general/emc/a4k`; each displayed only “A4K Series” and “Chip Array Ferrite Bead.” General and Automotive both rendered five cards with zero date elements, while the release carousel continued to auto-advance.
 
 ## Primary Interactions Tested
 
@@ -94,6 +98,7 @@
 - The three home-hero dots are clickable and track the automatic slide state; all non-hero dot containers remain removed.
 - The core-product heading and General/Automotive controls share the same top edge; the alignment rule is scoped to that row only.
 - Quality validation main tabs switch their corresponding panel; inner detail slides support direct dots, Prev/Next, Pause/Play, clickable list routing, keyboard activation, and autoplay.
+- Latest Product Releases uses the compact product-card format and remains auto-sliding; General and Automotive core-product cards contain no dates.
 - Application “View All” expands all six market cards and updates to “Collapse All.”
 - Specification categories update the selected count; Clear resets checked filters.
 - Inquiry quantity controls update the cart.

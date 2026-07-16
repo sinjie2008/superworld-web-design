@@ -59,6 +59,13 @@ html{scroll-padding-top:144px}
 .milestone-controls [data-milestone-prev]::before{border-left:2px solid;border-bottom:2px solid;transform:rotate(45deg)}
 .milestone-controls [data-milestone-prev]::after,.milestone-controls [data-milestone-next]::before{display:none}
 .milestone-controls [data-milestone-next]::after{border-right:2px solid;border-top:2px solid;transform:rotate(45deg)}
+.release-product-card{display:block;border:1px solid var(--line);background:#fff;overflow:hidden}
+.release-product-card .ph{height:194px;min-height:0;border:0;border-bottom:1px solid var(--line);background:#f3f3f3}
+.release-product-copy{min-height:60px;display:grid;grid-template-columns:minmax(0,1fr) 18px;align-items:center;gap:10px;padding:9px 15px}
+.release-product-copy h3{font-size:14px;line-height:1.2;margin:0 0 2px}
+.release-product-copy p{font-size:12px;line-height:1.25;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.release-product-arrow{display:block;width:10px;height:10px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg);justify-self:end}
+[data-carousel="home-products"] .media-card-footer > span{display:none}
 .quality-section-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:36px}
 .quality-section-header h2{max-width:560px;margin-bottom:0}
 .quality-section-header p{max-width:500px;margin-bottom:0}
@@ -125,7 +132,7 @@ const appEnhancements = `
   };
 
   const cardMarkup = ([title, copy, href]) =>
-    '<article class="media-card slide"><div class="ph soft"></div><div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a><span>17 December 2025</span></div></div></article>';
+    '<article class="media-card slide"><div class="ph soft"></div><div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a></div></div></article>';
 
   function selectProductSet(type) {
     const root = document.querySelector('[data-carousel="home-products"]');
@@ -424,6 +431,18 @@ const appEnhancements = `
     };
   }
 
+  function prepareReleaseCards() {
+    const root = document.querySelector('[data-carousel="home-releases"]');
+    if (!root || root.dataset.releaseCardsEnhanced === 'true') return;
+    const track = root.querySelector('.carousel-track');
+    if (!track) return;
+    root.dataset.releaseCardsEnhanced = 'true';
+    track.innerHTML = Array.from({length:6}, () =>
+      '<a class="release-product-card slide" href="/products/general/emc/a4k" data-link aria-label="View A4K Series Chip Array Ferrite Bead"><div class="ph" aria-hidden="true"></div><div class="release-product-copy"><div><h3>A4K Series</h3><p>Chip Array Ferrite Bead</p></div><span class="release-product-arrow" aria-hidden="true"></span></div></a>'
+    ).join('');
+    track.style.transform = 'translateX(0px)';
+  }
+
   function prepareHomeControls() {
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
       if (!dots.closest('.home-hero')) dots.remove();
@@ -431,6 +450,7 @@ const appEnhancements = `
     const general = document.querySelector('[data-product-tab="general"]');
     if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
     const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
+    prepareReleaseCards();
     const releaseLink = releaseCarousel?.closest('section')?.querySelector('.section-heading .link-arrow');
     if (releaseLink) releaseLink.setAttribute('href', '/news?category=product');
     prepareMilestoneSlider();
@@ -478,6 +498,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=14").replace("/app.js", "/app.js?v=14"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=15").replace("/app.js", "/app.js?v=15"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
