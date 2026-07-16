@@ -320,15 +320,15 @@
       <section id="environment" class="section"><div class="container"><div class="split"><div><h2>ENVIRONMENTAL STEWARDSHIP</h2><p>Our manufacturing processes are designed to minimize ecological impact through precision engineering and resource optimization.</p></div><div class="grid grid-2">${card("Energy Efficiency","Transitioning to low-emission machinery and optimizing facility power consumption.")}${card("Waste Management","Comprehensive recycling protocols for manufacturing scrap and chemical byproducts.")}</div></div><div style="margin-top:32px">${carousel("environment-slider",[1,2,3].map(()=>`<div class="slide">${ph("map")}</div>`),1,false)}</div></div></section>
       <section id="superworld_electronics_company_sustainability_integrity_and_accountability" class="section integrity-accountability-section"><div class="container">
         <h2>INTEGRITY &amp; ACCOUNTABILITY</h2>
-        <p class="integrity-intro">Superworld corporate affairs are managed to enhance long-term shareholder value through<br class="integrity-desktop-break"> improved performance and accountability.</p>
+        <p class="integrity-intro">Superworld corporate affairs are managed to enhance long-term shareholder value through improved<br class="integrity-desktop-break"> performance and accountability. Our Company's mission is guided by five core governance principles:</p>
         <div class="integrity-principles-grid">
-          <article class="integrity-principle-card"><strong>01</strong><p>Transparency and efficient<br>management</p></article>
-          <article class="integrity-principle-card"><strong>02</strong><p>Compliance with laws and<br>business ethics</p></article>
+          <article class="integrity-principle-card"><strong>01</strong><p>Transparency and<br>efficient management</p></article>
+          <article class="integrity-principle-card"><strong>02</strong><p>Compliance with laws<br>and business ethics</p></article>
           <article class="integrity-principle-card"><strong>03</strong><p>Safeguard integrity in<br>financial reporting</p></article>
           <article class="integrity-principle-card"><strong>04</strong><p>Control of company<br>information</p></article>
-          <article class="integrity-principle-card"><strong>05</strong><p>Recognize and manage risk</p></article>
+          <article class="integrity-principle-card"><strong>05</strong><p>Recognize and<br>manage risk</p></article>
         </div>
-        <div class="misconduct-panel"><div class="misconduct-copy"><h2>Confidential Misconduct Reporting</h2><p>Communicate concerns regarding ethical misconduct via our confidential channels.</p></div><aside class="misconduct-contact" aria-label="Confidential misconduct reporting contact information"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></aside></div>
+        <div class="misconduct-panel"><div class="misconduct-copy"><h2>Confidential Misconduct Reporting</h2><p>Superworld is dedicated to the highest moral and ethical standards.<br>Communicate concerns regarding ethical misconduct via our<br class="integrity-desktop-break"> confidential channels.</p></div><aside class="misconduct-contact" aria-label="Confidential misconduct reporting contact information"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></aside></div>
       </div></section>
     </main>`;
   }
