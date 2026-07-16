@@ -281,7 +281,7 @@
       ["REACH", "SVHC disclosure and monitoring.", "Download Statement", "/downloads/reach-statement.pdf", "Superworld-REACH-Statement.pdf"],
       ["CONFLICT MINERALS", "Ethical 3TG sourcing report.", "Download RMI Template", "/downloads/rmi-template.pdf", "Superworld-RMI-Template.pdf"]
     ].map((item) => `<article class="quality-compliance-card"><h3>${item[0]}</h3><p>${item[1]}</p><a class="quality-download-link" href="${item[3]}" download="${item[4]}">${item[2]}</a></article>`).join("");
-    const certCards = Array.from({length:8},(_, index) => `<article class="quality-certificate-card">
+    const certCards = Array.from({length:40},(_, index) => `<article class="quality-certificate-card" data-certificate-card${index >= 8 ? " hidden" : ""}>
       <div class="quality-certificate-visual" role="img" aria-label="Certification image placeholder ${index + 1}"><span class="certification-tag">Certification</span></div>
       <div class="quality-certificate-copy"><h3>IATF 16949</h3><p>Quality management certification.</p>
         <div class="quality-certificate-footer"><a class="quality-download-link" href="/downloads/iatf-16949-certificate.pdf" download="Superworld-IATF-16949-Certificate.pdf">Download</a><span>17 December 2025</span></div>
@@ -300,7 +300,7 @@
         <div class="lab-tabs"><button class="lab-tab is-active" type="button">01<br>RELIABILITY TEST SYSTEM</button><button class="lab-tab" type="button">02<br>MAGNETIC ANALYSIS</button><button class="lab-tab" type="button">03<br>EMI / EMC CENTER</button></div>
         <div class="lab-view">${ph("tall")}<div class="lab-copy"><h3>COMPREHENSIVE RELIABILITY VERIFICATION SYSTEM</h3><p>Ensuring reliable, long-term performance of magnetic components in real-world operation.</p><hr><p>SYSTEM SECTIONS</p>${["Application Environment Simulation","Electrical & Functional Analysis","Composition Analysis","Failure Analysis","Environmental Endurance","Mechanical Analysis"].map(x=>`<p>${x}</p>`).join("")}<div class="button-group"><button>Prev</button><button class="wide">Play</button><button>Next</button></div></div></div>
       </div></section>
-      <section id="certs" class="section section-rule quality-certificates"><div class="container"><div class="section-heading center"><h2>CERTIFICATION VAULT</h2><p>Official Accreditation Documents</p></div><div class="quality-certificate-grid">${certCards}</div></div></section>
+      <section id="certs" class="section section-rule quality-certificates"><div class="container"><div class="section-heading center"><h2>CERTIFICATION VAULT</h2><p>Official Accreditation Documents</p></div><form class="quality-certificate-search" role="search"><label for="quality-certificate-search-input">Search certificates</label><input id="quality-certificate-search-input" type="search" placeholder="Search certificate..." autocomplete="off" data-certificate-search></form><div class="quality-certificate-grid" data-certificate-grid>${certCards}</div><p class="quality-certificate-empty" data-certificate-empty hidden>No certificates found.</p><nav class="quality-certificate-pagination" aria-label="Certification pages">${[1,2,3,4,5].map((page) => `<button type="button" data-certificate-page="${page}"${page === 1 ? ' class="is-active" aria-current="page"' : ''}>${page}</button>`).join("")}</nav></div></section>
     </main>`;
   }
 
@@ -1196,6 +1196,46 @@
     }
   }
 
+  function prepareCertificationVault() {
+    const section = document.querySelector('#superworld_electronics_company_quality_certification_vault') || [...document.querySelectorAll('section')].find((item) => item.querySelector('h2')?.textContent.trim() === 'CERTIFICATION VAULT');
+    if (!section || section.dataset.certificationVaultEnhanced === 'true') return;
+    const input = section.querySelector('[data-certificate-search]');
+    const cards = [...section.querySelectorAll('[data-certificate-card]')];
+    const buttons = [...section.querySelectorAll('[data-certificate-page]')];
+    const empty = section.querySelector('[data-certificate-empty]');
+    if (!input || !cards.length || !buttons.length) return;
+    section.dataset.certificationVaultEnhanced = 'true';
+    const pageSize = 8;
+    let page = 1;
+
+    const render = () => {
+      const query = input.value.trim().toLowerCase();
+      const matching = cards.filter((card) => card.textContent.toLowerCase().includes(query));
+      const pageCount = Math.max(1, Math.ceil(matching.length / pageSize));
+      page = Math.min(page, pageCount);
+      cards.forEach((card) => { card.hidden = true; });
+      matching.slice((page - 1) * pageSize, page * pageSize).forEach((card) => { card.hidden = false; });
+      buttons.forEach((button, index) => {
+        const buttonPage = index + 1;
+        const available = buttonPage <= pageCount && matching.length > 0;
+        button.hidden = !available;
+        button.classList.toggle('is-active', buttonPage === page && available);
+        if (buttonPage === page && available) button.setAttribute('aria-current', 'page');
+        else button.removeAttribute('aria-current');
+      });
+      if (empty) empty.hidden = matching.length > 0;
+    };
+
+    input.addEventListener('input', () => { page = 1; render(); });
+    section.querySelector('.quality-certificate-search')?.addEventListener('submit', (event) => event.preventDefault());
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      page = Number(button.dataset.certificatePage);
+      render();
+      section.querySelector('[data-certificate-grid]')?.scrollIntoView({behavior:'smooth',block:'start'});
+    }));
+    render();
+  }
+
   function prepareNewsCards() {
     const root = document.querySelector('[data-carousel="home-news"]');
     if (!root || root.dataset.newsCardsEnhanced === 'true') return;
@@ -1481,6 +1521,7 @@
     prepareHeroBrandSlider();
     prepareCompanyProductLines();
     prepareSectionIds();
+    prepareCertificationVault();
   }
 
   document.addEventListener('click', (event) => {

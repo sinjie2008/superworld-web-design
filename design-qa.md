@@ -196,6 +196,10 @@
    - User requirement: enlarge the local typography, restore the supplied headings, make the compliance and certification downloads functional, and match the four supplied card layouts.
    - Fix: rebuilt the Quality Management System as five numbered bordered cards, rebuilt Compliance & Environment as three download cards, centered the exact In-House Validation Capabilities heading and description, and rebuilt the certification area as an eight-card 4 × 2 grid with inset image holders and nested certification tags.
    - Post-fix evidence: browser geometry confirms 5 QMS cards at 229 × 220 px, 3 compliance cards at 398 × 130 px, and 8 certification cards in four 207 px columns; scoped heading/body/card typography resolves to 31.35/15/21 px where applicable. All six distinct PDF endpoints return valid `%PDF-1.4` payloads with attachment filenames, and browser logs contain no Site-originated errors.
+39. Certification Vault exact wireframe restoration
+   - User requirement: redo `superworld_electronics_company_quality_certification_vault` to match the supplied centered vault layout.
+   - Fix: restored the centered title/subtitle, 744 × 76 px search field, full-width four-column card grid, eight visible 404 px cards with 206 px inset image holders, and centered five-page controls. Added working search, five pages of eight records, active-page state, empty search state, and retained the certificate PDF download.
+   - Post-fix evidence: browser measurements confirm the exact section ID, 4 × 2 visible grid, 40 total paginated records, page 2 correctly displaying records 9–16, unmatched search showing the empty state, all certification tags nested inside their image holders, and no Site-originated browser errors. The download endpoint returns a valid `%PDF-1.4` attachment named `Superworld-IATF-16949-Certificate.pdf`.
 
 ## Primary Interactions Tested
 
