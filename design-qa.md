@@ -96,6 +96,10 @@
    - User clarification: every shared `.section-heading` row should use top-edge alignment, not only the core-product heading.
    - Fix: replaced the product-tab-specific alignment override with a global `.section-heading { align-items: flex-start; }` rule.
    - Post-fix browser evidence: all four flex-based home heading rows—Latest Product Releases, Discover Our Core Product Lines, Quality Certified, and Latest News—computed to `align-items: flex-start`; the centered block heading retained its intentional non-flex layout. The browser console remained clear.
+15. Home hero height pass
+   - User refinement: increase the `.home-hero` frame height while retaining its existing carousel controls and overlapping achievement composition.
+   - Fix: increased the desktop hero window and slides from 530 px to 620 px, with responsive 500 px tablet and 390 px mobile heights.
+   - Post-fix browser evidence: at the 1363 px desktop viewport, both the carousel window and active slide measured exactly 620 px; the three dots remained centered above the achievement strip, and the strip retained its `-42px` overlap. The browser console remained clear.
 
 ## Primary Interactions Tested
 

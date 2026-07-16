@@ -10,6 +10,7 @@ const cssOverrides = `
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
 .section-heading{align-items:flex-start}
+.home-hero .carousel-window,.home-hero .slide{height:620px}
 body{font-size:14px}
 h1{font-size:clamp(28px,3vw,42px)}
 h2{font-size:clamp(21px,2.1vw,29px)}
@@ -141,8 +142,8 @@ html{scroll-padding-top:144px}
 .quality-arrow{width:44px;font-size:18px}
 .quality-pause-toggle{width:100%;font-size:11px;text-transform:uppercase}
 @media (max-width:900px){#milestones .timeline{--milestone-visible:3}}
-@media (max-width:950px){.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}.industries-layout[data-industry-enhanced="true"]{grid-template-columns:1fr}.industries-layout[data-industry-enhanced="true"] .industry-list{height:auto}}
-@media (max-width:640px){#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}}
+@media (max-width:950px){.home-hero .carousel-window,.home-hero .slide{height:500px}.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}.industries-layout[data-industry-enhanced="true"]{grid-template-columns:1fr}.industries-layout[data-industry-enhanced="true"] .industry-list{height:auto}}
+@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}#milestones .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}}
 `;
 
 const appEnhancements = `
@@ -619,6 +620,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=19").replace("/app.js", "/app.js?v=19"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=20").replace("/app.js", "/app.js?v=20"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
