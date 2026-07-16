@@ -100,6 +100,10 @@
    - User refinement: increase the `.home-hero` frame height while retaining its existing carousel controls and overlapping achievement composition.
    - Fix: increased the desktop hero window and slides from 530 px to 620 px, with responsive 500 px tablet and 390 px mobile heights.
    - Post-fix browser evidence: at the 1363 px desktop viewport, both the carousel window and active slide measured exactly 620 px; the three dots remained centered above the achievement strip, and the strip retained its `-42px` overlap. The browser console remained clear.
+16. Primary navigation hover pass
+   - User refinement: primary navigation hover should use an underline instead of a black filled rectangle.
+   - Fix: scoped hover styles for `.nav-link` and `.nav-menu-button` to retain transparent backgrounds and inherited text color while adding a 1 px underline with a 6 px offset.
+   - Post-fix browser evidence: the loaded v21 stylesheet contained the exact scoped hover rule; the navigation retained its transparent base background and visible dark text/caret. The browser console remained clear.
 
 ## Primary Interactions Tested
 

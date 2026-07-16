@@ -17,6 +17,7 @@ h2{font-size:clamp(21px,2.1vw,29px)}
 h3{font-size:clamp(16px,1.4vw,20px)}
 h4{font-size:15px}
 .nav-link,.nav-menu-button{font-size:14px}
+.nav-link:hover,.nav-menu-button:hover{background:transparent;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
 .button{font-size:13px}
 .eyebrow,.crumb{font-size:12px}
 .hero-panel p{font-size:15px}
@@ -620,6 +621,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=20").replace("/app.js", "/app.js?v=20"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=21").replace("/app.js", "/app.js?v=21"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };
