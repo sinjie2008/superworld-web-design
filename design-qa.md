@@ -188,6 +188,10 @@
    - User requirement: match the supplied Enterprise 50, Distinguished Awards, and Customer Awards wireframes and show the required image sizes inside all image placeholders.
    - Fix: rebuilt the Enterprise 50 section as a 1.3:1 three-column matrix with a two-row featured card, added its `320 × 400 px` image holder, restored the complete distinguished-award copy, and rebuilt both long-form award sections with proportional right-side `540 × 670 px` image holders.
    - Post-fix evidence: the paired source/implementation comparison and computed browser geometry confirm the exact section IDs, two-row featured-card span, seven-card Enterprise 50 hierarchy, four distinguished and five customer entries, bordered placeholders, visible size labels, and responsive two-column/one-column fallbacks. Browser logs contained no Site-originated errors.
+37. Reliability standard PDF downloads
+   - User requirement: make both download actions in the Reliability Test Standards two-card grid functional.
+   - Fix: separated the descriptive copy from two real download anchors, added accessible labels and stable filenames, and introduced same-origin PDF endpoints with attachment headers for Automotive and General test specifications.
+   - Post-fix evidence: worker-level requests return valid `%PDF-1.4` documents with `application/pdf`, `Content-Disposition: attachment`, the expected filenames, and no-store caching. The temporary PDF pages clearly identify themselves as wireframe placeholders until approved official specifications are supplied.
 
 ## Primary Interactions Tested
 

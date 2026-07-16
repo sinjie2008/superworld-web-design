@@ -27,15 +27,64 @@ function decodeBase64(value) {
   return bytes;
 }
 
+function escapePdfText(value) {
+  return value.replace(/([\\()])/g, "\\$1");
+}
+
+function createPlaceholderPdf(title) {
+  const subtitle = "Wireframe download placeholder - replace with the approved official specification.";
+  const stream = "BT\n/F1 20 Tf\n72 720 Td\n(" + escapePdfText(title) + ") Tj\n0 -36 Td\n/F1 11 Tf\n(" + escapePdfText(subtitle) + ") Tj\nET";
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>",
+    "<< /Length " + stream.length + " >>\nstream\n" + stream + "\nendstream",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+  ];
+  const offsets = [0];
+  const pdfSpace = String.fromCharCode(32);
+  let pdf = "%PDF-1.4\n";
+  objects.forEach((object, index) => {
+    offsets.push(pdf.length);
+    pdf += (index + 1) + " 0 obj\n" + object + "\nendobj\n";
+  });
+  const xrefOffset = pdf.length;
+  pdf += "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f" + pdfSpace + "\n";
+  offsets.slice(1).forEach((offset) => {
+    pdf += String(offset).padStart(10, "0") + " 00000 n" + pdfSpace + "\n";
+  });
+  pdf += "trailer\n<< /Size " + (objects.length + 1) + " /Root 1 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF";
+  return new TextEncoder().encode(pdf);
+}
+
+const pdfDownloads = {
+  "/downloads/automotive-test-specs.pdf": {
+    filename: "Superworld-Automotive-Test-Specifications.pdf",
+    title: "Automotive Test Specifications"
+  },
+  "/downloads/general-test-specs.pdf": {
+    filename: "Superworld-General-Test-Specifications.pdf",
+    title: "General Test Specifications"
+  }
+};
+
 const mime = (path) => path.endsWith(".webp") ? "image/webp" : "font/woff2";
 
 export default {
   async fetch(request) {
     const url = new URL(request.url);
     const path = url.pathname;
+    if (pdfDownloads[path]) {
+      const document = pdfDownloads[path];
+      return new Response(createPlaceholderPdf(document.title), { headers: {
+        "content-type": "application/pdf",
+        "content-disposition": "attachment; filename=\"" + document.filename + "\"",
+        "cache-control": "no-store"
+      } });
+    }
     if (path === "/styles.css") return new Response(css, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=39").replace("/app.js", "/app.js?v=39"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=40").replace("/app.js", "/app.js?v=40"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

@@ -173,6 +173,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .achievement-image-placeholder{width:100%;aspect-ratio:540/670;min-height:0}
 .number-card{border:1px solid var(--line);padding:26px;min-height:220px}
 .number-card .num{font-family:Poppins;font-size:54px;font-weight:600}
+.reliability-standard-grid{margin-top:48px}
+.reliability-standard-card{min-height:198px;padding:28px 36px;justify-content:flex-start}
+.reliability-standard-card h3{font-size:24px;margin-bottom:12px}
+.reliability-standard-card p{margin-bottom:24px}
+.reliability-download{align-self:flex-start;margin-top:auto;font-size:16px;font-weight:500}
 .lab-tabs{display:grid;grid-template-columns:repeat(3,1fr)}
 .lab-tab{border:1px solid var(--line);padding:20px;text-align:left}
 .lab-tab.is-active{background:#111;color:#fff}
