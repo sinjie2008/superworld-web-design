@@ -1,19 +1,23 @@
-# Sites Worker ESM starter
+# Superworld Electronics wireframe
 
-Use this starter for a static microsite, click counter, or simple internal UI whose state is browser-scoped. It has no dependencies and needs no install.
+This site uses a framework-free SCSS and ES6+ JavaScript foundation.
 
-Edit `worker/index.js`. Use the Sites checkpoint when a coherent milestone is ready to inspect or share; the remote builder then runs the checked-in build and validation scripts. Do not run them as a normal pre-checkpoint step.
+## Source files
 
-The build copies only `worker/index.js` and `.openai/hosting.json`. Do not add standalone asset files. Embed any essential raster bytes in `worker/index.js` and serve or reference them as a data URL.
+- `src/styles.scss` — all visual styles and responsive rules.
+- `src/app.js` — all browser-side behavior written in framework-free ES6+ JavaScript and loaded as a module.
+- `src/worker.js` — the ES module Worker shell, HTML document, and embedded assets.
+- `worker/index.js` — generated deployment bundle; do not edit directly.
 
-For targeted diagnosis after a remote build failure, the same commands are available in the Sites Linux environment:
+## Commands
 
 ```sh
-bash scripts/build.sh
-node scripts/validate-artifact.mjs
+npm run dev
+npm run build
+npm run validate
 ```
 
-The deterministic build produces:
+The build compiles SCSS, bundles the ES6 JavaScript, then creates the Sites Worker artifact:
 
 ```text
 dist/
@@ -23,4 +27,4 @@ dist/
     └── index.js
 ```
 
-`dist/server/index.js` is an ES module with a default export containing `fetch(request, env, ctx)`. Edit `worker/index.js`, not the generated file under `dist/`.
+`dist/server/index.js` is an ES module with a default `fetch(request, env, ctx)` export.

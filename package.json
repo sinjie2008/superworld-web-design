@@ -3,9 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/dev.mjs",
+    "dev": "npm run build --silent && node scripts/dev.mjs",
     "build": "bash scripts/build.sh",
     "validate": "node scripts/validate-artifact.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.6",
+    "sass": "^1.89.2"
   },
   "displayName": "LO Wireframe"
 }

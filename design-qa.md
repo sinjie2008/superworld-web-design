@@ -148,6 +148,10 @@
    - User requirement: match the supplied milestones wireframe while preserving the slider and autoplay behavior.
    - Fix: restored five visible milestones on one horizontal axis, added the black top markers, vertically centered the enlarged double-ring milestone, centered its multi-line detail beneath the track, and separated Prev/Next controls to the lower corners.
    - Post-fix evidence: Worker-level validation confirmed the centered five-card loop, active marker/ring styles, complete Foundation copy, manual controls, and 4.5-second autoplay.
+28. SCSS and ES6 source foundation
+   - User requirement: use only an SCSS and ES6 JavaScript base system.
+   - Fix: moved all styling into a compiled SCSS source, moved all browser behavior into a framework-free ES6 module, and introduced a deterministic Sass/esbuild pipeline that produces the existing Sites Worker artifact.
+   - Post-fix evidence: Sass compilation, ES module bundling, Worker parsing, route responses, and artifact validation all pass without changing the visible wireframe or existing interactions.
 
 ## Primary Interactions Tested
 
