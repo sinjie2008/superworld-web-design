@@ -50,18 +50,21 @@ html{scroll-padding-top:144px}
 .menu-caret{width:9px;height:9px;margin-left:10px;font-size:0;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);vertical-align:middle}
 .milestone-section{overflow:hidden}
 .milestone-section .timeline{--milestone-visible:5;overflow:hidden;min-height:520px;padding:74px 0 150px}
-.milestone-section .timeline::before{top:221px}
+.milestone-section .timeline::before{top:211px}
 .milestone-section .timeline-row{display:flex;align-items:flex-start;gap:0;width:100%;transition:transform .65s ease;will-change:transform}
 .milestone-section .timeline-item{flex:0 0 calc(100% / var(--milestone-visible));min-width:0;padding:0 14px;text-align:center;transition:opacity .4s ease}
-.milestone-section .timeline-item > h3{font-size:clamp(16px,1.4vw,20px);white-space:nowrap;margin-bottom:28px}
-.milestone-section .timeline-circle{width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease}
+.milestone-section .timeline-item > h3{font-size:clamp(16px,1.4vw,20px);white-space:nowrap;margin-bottom:28px;transition:transform .55s ease}
+.milestone-section .timeline-circle{position:relative;width:170px;height:170px;margin:0 auto;background:#fff;transition:width .55s ease,height .55s ease,border .55s ease,transform .55s ease}
+.milestone-section .timeline-circle::before{content:"";position:absolute;left:50%;top:0;z-index:2;width:34px;height:34px;border-radius:50%;background:#111;transform:translate(-50%,-50%);transition:width .55s ease,height .55s ease}
 .milestone-section .timeline-item.active{z-index:2}
+.milestone-section .timeline-item.active > h3,.milestone-section .timeline-item.active .timeline-circle{transform:translateY(-30px)}
 .milestone-section .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
-.milestone-detail{min-height:112px;margin-top:18px;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
-.timeline-item.active .milestone-detail{opacity:1;visibility:visible;transform:none}
+.milestone-section .timeline-item.active .timeline-circle::before{width:44px;height:44px}
+.milestone-detail{position:absolute;left:50%;top:280px;width:min(560px,70vw);min-height:112px;margin:0;opacity:0;visibility:hidden;transform:translate(-50%,12px);transition:opacity .35s ease,transform .35s ease}
+.timeline-item.active .milestone-detail{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .milestone-detail h3{margin-bottom:10px}
-.milestone-detail p{margin-inline:auto}
-.milestone-controls{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:-104px;position:relative;z-index:3}
+.milestone-detail p{margin-inline:auto;white-space:pre-line;font-size:12px;line-height:1.35}
+.milestone-controls{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:-104px;padding:0 7%;position:relative;z-index:3}
 .milestone-controls button{display:inline-flex;align-items:center;gap:10px;border:0;background:#fff}
 .milestone-controls button::before,.milestone-controls button::after{content:"";display:inline-block;width:8px;height:8px;border-color:currentColor}
 .milestone-controls [data-milestone-prev]::before{border-left:2px solid;border-bottom:2px solid;transform:rotate(45deg)}
@@ -163,7 +166,7 @@ html{scroll-padding-top:144px}
 .regions[data-region-map-enhanced="true"] .region.is-active{border-color:#111;background:#f3f3f3;box-shadow:inset 4px 0 0 #111}
 @media (max-width:900px){.milestone-section .timeline{--milestone-visible:3}}
 @media (max-width:950px){.home-hero .carousel-window,.home-hero .slide{height:500px}.quality-section-header,.quality-main-tabs,.quality-panel-layout{grid-template-columns:1fr}.quality-main-tab{border-right:0;border-bottom:1px solid var(--line)}.quality-main-tab:last-child{border-bottom:0}.quality-panel-layout{height:auto}.quality-image-slider{height:420px;border-right:0;border-bottom:1px solid var(--line)}.quality-content-side{min-height:500px;overflow:visible}.quality-slide-content.active{height:auto}.quality-content-wrap{overflow:hidden}.industries-layout[data-industry-enhanced="true"]{grid-template-columns:1fr}.industries-layout[data-industry-enhanced="true"] .industry-list{height:auto}.regional-map{height:420px}.company-stat-secondary{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:center;margin-top:-92px}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
+@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:space-between;margin-top:-92px;padding-inline:4%}.milestone-detail{width:88vw}.quality-section-header{gap:20px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
 `;
 
 const appEnhancements = `
@@ -289,7 +292,7 @@ const appEnhancements = `
   const milestoneData = [
     ["2011 – 2014", "Recognition", "Expanded customer and enterprise recognition."],
     ["2007 – 2010", "Growth", "Strengthened manufacturing and global customer support."],
-    ["2000 – 2006", "Foundation", "Established Singapore Headquarters Office"],
+    ["2000 – 2006", "Foundation", "Established Singapore Headquarters Office\\nResearch and Development Center and Ferrite Bead Plant in Taiwan\\nTransformer and Inductor factory in South China"],
     ["1993 – 1999", "Expansion", "Built regional operations and customer reach."],
     ["1975", "Origins", "The beginning of the company journey."]
   ];
@@ -744,6 +747,57 @@ const appEnhancements = `
     startAutoPlay();
   }
 
+  let companyGlobalMapCleanup = null;
+
+  function prepareCompanyGlobalMap() {
+    const heading = [...document.querySelectorAll('h2')].find((item) => item.textContent.trim() === 'GLOBAL PRESENCE');
+    const section = location.pathname === '/company' ? heading?.closest('section') : null;
+    const placeholder = section?.querySelector('.ph.map');
+    if (!section || !placeholder) {
+      if (companyGlobalMapCleanup) companyGlobalMapCleanup();
+      companyGlobalMapCleanup = null;
+      return;
+    }
+    if (section.dataset.companyGlobalMapEnhanced === 'true') return;
+    if (companyGlobalMapCleanup) companyGlobalMapCleanup();
+    section.dataset.companyGlobalMapEnhanced = 'true';
+
+    const map = document.createElement('div');
+    map.className = 'regional-map company-regional-map';
+    map.setAttribute('aria-label', 'Interactive global presence world map');
+    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics global presence">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-company-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' global presence" aria-pressed="false"></button>').join('') + '</div>';
+    placeholder.replaceWith(map);
+
+    const pins = [...map.querySelectorAll('[data-company-region-pin]')];
+    let activeIndex = 0;
+    let timer;
+    const activate = (index) => {
+      activeIndex = index;
+      pins.forEach((pin, pinIndex) => {
+        const active = pinIndex === index;
+        pin.classList.toggle('is-active', active);
+        pin.setAttribute('aria-pressed', String(active));
+      });
+    };
+    const startAutoPlay = () => {
+      window.clearInterval(timer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
+      timer = window.setInterval(() => activate((activeIndex + 1) % pins.length), 3000);
+    };
+    pins.forEach((pin) => pin.addEventListener('click', () => {
+      activate(Number(pin.dataset.companyRegionPin));
+      startAutoPlay();
+    }));
+    const visibilityHandler = () => startAutoPlay();
+    document.addEventListener('visibilitychange', visibilityHandler);
+    companyGlobalMapCleanup = () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', visibilityHandler);
+    };
+    activate(0);
+    startAutoPlay();
+  }
+
   function prepareSectionIds() {
     const sectionPrefix = 'superworld_electronics_';
     const sections = [...document.querySelectorAll('section')];
@@ -829,6 +883,7 @@ const appEnhancements = `
     prepareMilestoneSlider();
     prepareQualityValidation();
     prepareRegionalMap();
+    prepareCompanyGlobalMap();
     prepareCompanyProductLines();
     prepareSectionIds();
   }
@@ -875,6 +930,6 @@ export default {
     if (path === "/styles.css") return new Response(css + cssOverrides, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs + appEnhancements, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=30").replace("/app.js", "/app.js?v=30"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(html.replace("/styles.css", "/styles.css?v=32").replace("/app.js", "/app.js?v=32"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
   }
 };

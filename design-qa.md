@@ -140,6 +140,14 @@
    - [P1] The hidden placeholder still affected the card paint order, covering the lower border, while the legacy flow layout kept the industry label vertically centered.
    - Fix: removed the inner placeholder from layout, forced one complete outer border, and absolutely anchored every label to the bottom center of its square card.
    - Post-fix evidence: Worker-level validation confirmed the v30 bundle, hidden inner placeholders, explicit four-sided card borders, and bottom-positioned labels.
+26. Company Global Presence interactive map
+   - User requirement: replace the image placeholder in `superworld_electronics_company_global_presence` with the homepage regional-map-stage experience.
+   - Fix: added the same contained world-map asset, ten geographically positioned interactive pins, active-pin lighting, manual selection, and 3-second autoplay with visibility and reduced-motion handling.
+   - Post-fix evidence: Worker-level validation confirmed the v31 bundle, company-scoped map enhancement, all ten pin controls, reciprocal active-state updates, autoplay, and cleanup across route renders.
+27. Company Milestones wireframe fidelity
+   - User requirement: match the supplied milestones wireframe while preserving the slider and autoplay behavior.
+   - Fix: restored five visible milestones on one horizontal axis, added the black top markers, vertically centered the enlarged double-ring milestone, centered its multi-line detail beneath the track, and separated Prev/Next controls to the lower corners.
+   - Post-fix evidence: Worker-level validation confirmed the centered five-card loop, active marker/ring styles, complete Foundation copy, manual controls, and 4.5-second autoplay.
 
 ## Primary Interactions Tested
 
