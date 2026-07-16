@@ -146,9 +146,31 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .timeline-item{text-align:center}
 .timeline-circle{width:170px;height:170px;border:1px solid var(--line);border-radius:50%;margin:18px auto;background:#fff}
 .timeline-item.active .timeline-circle{width:230px;height:230px;border:double 4px #111}
-.award-grid{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:28px}
-.award-card{border:1px solid var(--line);min-height:280px;padding:28px;display:flex;flex-direction:column;justify-content:center}
-.award-card.featured{grid-row:span 2;min-height:588px;justify-content:flex-end}
+.award-grid{display:grid;grid-template-columns:1.3fr repeat(3,1fr);grid-template-rows:repeat(2,288px);gap:28px;margin-top:30px}
+.award-card{border:1px solid var(--line);min-height:0;padding:26px;display:flex;flex-direction:column;justify-content:center;background:#fff}
+.award-card>span{align-self:flex-start}
+.award-card .display{line-height:1;margin:18px 0 10px;text-align:center}
+.award-card>p{width:100%;margin:0;text-align:center;font-size:13px}
+.award-card>h3{margin:0;text-align:center;font-size:18px}
+.award-card.featured{grid-row:span 2;min-height:604px;justify-content:flex-start}
+.award-featured-image,.achievement-image-placeholder{border:1px solid var(--line);background:#fafafa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.award-featured-image{width:100%;height:400px;min-height:400px;margin-bottom:22px}
+.award-featured-image span,.achievement-image-placeholder span{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.award-featured-image strong,.achievement-image-placeholder strong{font-family:$font-heading;font-size:14px;font-weight:600}
+.award-featured-copy{margin-top:auto}
+.award-featured-copy h2{font-size:27px;margin:8px 0 14px}
+.award-featured-copy p{margin:0;font-size:13px}
+.achievement-detail-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:70px;align-items:start;margin-top:30px}
+#superworld_electronics_company_achievements_singapore_enterprise_50>.container>h2,
+#superworld_electronics_company_achievements_distinguished_awards>.container>h2,
+#superworld_electronics_company_achievements_customer_awards>.container>h2{margin-bottom:0}
+.achievement-list{padding-top:22px}
+.achievement-list-item{margin-bottom:42px}
+.achievement-list-item:last-child{margin-bottom:0}
+.achievement-list-item>span{display:block;margin-bottom:2px;font-size:14px}
+.achievement-list-item h3{margin:0 0 2px;font-size:18px}
+.achievement-list-item p{margin:0;font-size:13px;line-height:1.45}
+.achievement-image-placeholder{width:100%;aspect-ratio:540/670;min-height:0}
 .number-card{border:1px solid var(--line);padding:26px;min-height:220px}
 .number-card .num{font-family:Poppins;font-size:54px;font-weight:600}
 .lab-tabs{display:grid;grid-template-columns:repeat(3,1fr)}
@@ -288,6 +310,12 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
   .achievement-strip{grid-template-columns:1fr 1fr;margin-top:0}
   .achievement:last-child{grid-column:1/-1}
   .grid-3,.grid-4,.grid-5,.stat-grid,.award-grid{grid-template-columns:1fr 1fr}
+  .enterprise-awards-grid{grid-template-rows:auto;grid-auto-rows:250px}
+  .enterprise-awards-grid .award-card.featured{grid-column:1/-1;grid-row:auto;min-height:560px}
+  .achievement-detail-layout{grid-template-columns:1fr 1fr;gap:36px}
+  .achievement-list{padding-top:8px}
+  .achievement-list-item{margin-bottom:30px}
+  .achievement-list-item h3{font-size:18px}
   .regions{grid-template-columns:1fr 1fr}
   .flow{grid-template-columns:1fr}
   .flow-card{border-right:0;border-bottom:1px solid var(--line)}
@@ -309,6 +337,12 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
   .section{padding:50px 0}
   .section-heading{align-items:flex-start;flex-direction:column}
   .grid-2,.grid-3,.grid-4,.grid-5,.regions,.stat-grid,.award-grid,.design-cards,.category-picker,.category-columns,.filter-grid,.footer-grid,.form-grid-2,.news-grid{grid-template-columns:1fr}
+  .enterprise-awards-grid{grid-auto-rows:auto;gap:18px;margin-top:30px}
+  .enterprise-awards-grid .award-card{min-height:220px}
+  .enterprise-awards-grid .award-card.featured{grid-column:auto;min-height:520px}
+  .award-featured-image{height:340px;min-height:340px}
+  .achievement-detail-layout{grid-template-columns:1fr;gap:34px;margin-top:30px}
+  .achievement-image-placeholder{grid-row:1}
   .mega-inner,.mega-inner.news-mega,.mega-inner.languages{grid-template-columns:1fr}
   .mega-news-cards{grid-template-columns:1fr}
   .achievement-strip{grid-template-columns:1fr}

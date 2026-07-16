@@ -6,8 +6,10 @@
 - Primary source screen: `/workspace/scratch/0bbd922b2b27/wireframe-reference-20260715/Lo - Home.jpg` (1440 × 6839)
 - Product-detail source screen: `/workspace/scratch/0bbd922b2b27/wireframe-reference-20260715/Lo - Our Products _ General _ EMC _ CAFB _ A4K.png`
 - Focused source region: `/workspace/scratch/0bbd922b2b27/wireframe-reference-20260715/Lo - Footer.png`
+- Achievements source screens: `/workspace/scratch/0bbd922b2b27/upload/7b7fcc9e-606f-4f76-9146-c1cff874f39d.png`, `/workspace/scratch/0bbd922b2b27/upload/420e8db1-32b1-45eb-bea1-2ba899069e52.png`, and `/workspace/scratch/0bbd922b2b27/upload/7be0c1e9-dfdb-428e-b0ba-e5854e5e0449.png`.
 - Browser-rendered implementation screenshot: `/workspace/sites/lo-wireframe/qa/home-implementation.jpg` (1348 × 6923)
 - Focused implementation screenshot: `/workspace/sites/lo-wireframe/qa/footer-implementation.jpg`
+- Achievements implementation screenshot: cloud-browser full-page capture `achievementsShot39c` at a 1363 × 936 viewport.
 - Browser viewport: 1363 × 936; the screenshot content width excludes the vertical scrollbar.
 - State: desktop, monochrome wireframe, home route, initial carousel position. A4K product detail, application expansion, specification filters, inquiry cart, and inquiry success states were also inspected.
 
@@ -22,11 +24,13 @@
 - The source home screenshot and the browser-rendered home screenshot were opened together in the same comparison input at the desktop state.
 - The initial and post-fix comparisons covered the header, hero placeholder, achievement strip, product carousels, company overview, product lines, applications, global support, certification cards, news cards, and footer.
 - The A4K product-detail source and browser-rendered product-detail page were also opened together. The implementation retains the source hierarchy, product raster, metrics, specifications table, environmental and performance sections, physical-dimension panels, tape-and-reel area, soldering area, and inquiry CTA.
+- The three supplied achievements references and the final browser-rendered achievements route were opened together in one comparison input. Enterprise 50 card tracks, two-row feature span, award-list hierarchy, right-side image proportions, border weight, copy, and vertical alignment were checked at the same 1363 px comparison width.
 
 ## Focused Region Comparison Evidence
 
 - Footer source and implementation crops were opened together after the final fixes.
 - The footer now uses the real source WeChat and LinkedIn raster, a source-derived grayscale logo, six matching navigation columns, and the same legal-text alignment.
+- Focused achievements checks confirmed seven Enterprise 50 cards, four distinguished-award entries, five customer-award entries, and visible `320 × 400 px` / `540 × 670 px` placeholder labels. A separate focused crop was unnecessary because these elements remained fully legible in the paired full-page comparison.
 
 ## Required Fidelity Surfaces
 
@@ -180,6 +184,10 @@
    - User requirement: keep Prev/Next visible on hover, move the controls upward, and show an image placeholder with its required dimensions in every milestone item.
    - Fix: added a scoped dark-text hover state, raised the desktop/mobile controls, and placed centered image labels inside every circle with `170 × 170 px` and active `230 × 230 px` sizing.
    - Post-fix evidence: compiled assets confirm visible hover text, elevated controls, accessible placeholder labels, and the correct size label switching with the active circle.
+36. Key Achievements wireframe fidelity
+   - User requirement: match the supplied Enterprise 50, Distinguished Awards, and Customer Awards wireframes and show the required image sizes inside all image placeholders.
+   - Fix: rebuilt the Enterprise 50 section as a 1.3:1 three-column matrix with a two-row featured card, added its `320 × 400 px` image holder, restored the complete distinguished-award copy, and rebuilt both long-form award sections with proportional right-side `540 × 670 px` image holders.
+   - Post-fix evidence: the paired source/implementation comparison and computed browser geometry confirm the exact section IDs, two-row featured-card span, seven-card Enterprise 50 hierarchy, four distinguished and five customer entries, bordered placeholders, visible size labels, and responsive two-column/one-column fallbacks. Browser logs contained no Site-originated errors.
 
 ## Primary Interactions Tested
 
