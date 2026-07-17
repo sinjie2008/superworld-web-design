@@ -101,9 +101,8 @@
       </div></div>
       <div class="mega-panel" data-panel="products"><div class="container mega-inner simple">
         ${link(routes.products, "All Products")}
-        ${link(routes.general, "General Components")}
-        ${link(routes.emc, "EMC Components")}
-        ${link(routes.a4k, "A4K Series")}
+        ${link(routes.products+"#superworld_electronics_products_general_components", "General Components")}
+        ${link(routes.products+"#superworld_electronics_products_automotive_components", "Automotive Components")}
       </div></div>
       <div class="mega-panel" data-panel="news"><div class="container mega-inner news-mega">
         <div class="mega-column"><h4>Company News</h4>
@@ -554,8 +553,8 @@
     const releases = Array.from({length:6},()=>mediaCard("A4K Series","Chip Array Ferrite Bead","View More",routes.a4k));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS"]])}
       ${heroPanel("OUR PRODUCTS","Comprehensive range of general and automotive electronic components, including EMC, magnetic, transformer, and wireless power solutions, engineered for high efficiency and reliable performance.")}
-      <section class="section"><div class="container"><div class="section-heading"><h2>GENERAL COMPONENTS</h2>${link(routes.general,"View More","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
-      <section class="section"><div class="container"><div class="section-heading"><h2>AUTOMOTIVE COMPONENTS</h2>${link(routes.products,"View More","link-arrow")}</div><div class="category-columns">${Object.entries(generalCategories).slice(0,3).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.slice(0,5).map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("")}</div></div></section>
+      <section id="superworld_electronics_products_general_components" class="section"><div class="container"><div class="section-heading"><h2>GENERAL COMPONENTS</h2>${link(routes.general,"View More","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
+      <section id="superworld_electronics_products_automotive_components" class="section"><div class="container"><div class="section-heading"><h2>AUTOMOTIVE COMPONENTS</h2>${link(routes.products,"View More","link-arrow")}</div><div class="category-columns">${Object.entries(generalCategories).slice(0,3).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.slice(0,5).map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("")}</div></div></section>
       <section class="section"><div class="container"><div class="section-heading"><h2>LATEST RELEASE</h2>${link(routes.news+"?category=product","View More","link-arrow")}</div>${carousel("product-releases",releases,4)}</div></section>
     </main>`;
   }
@@ -1012,7 +1011,9 @@
     app.innerHTML = header() + pageForPath() + footer() + `<div class="wireframe-note">Black & white wireframe · Poppins headings · Inter body</div>`;
     setupInteractions();
     document.title = "Superworld Electronics — Wireframe";
-    if (scrollTop) window.scrollTo({top:0,behavior:"instant"});
+    const hashTarget=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1))):null;
+    if(hashTarget) hashTarget.scrollIntoView({block:"start",behavior:"instant"});
+    else if (scrollTop) window.scrollTo({top:0,behavior:"instant"});
   }
 
   document.addEventListener("click",(e)=>{
