@@ -204,8 +204,23 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .market-details{display:none;border-top:1px solid var(--line);padding:20px}
 .market-card.is-open .market-details{display:block}
 .market-card.is-open .market-toggle::after{content:" — Close"}
-.market-detail-item{display:grid;grid-template-columns:1fr 110px;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
-.market-detail-item .ph{height:86px;min-height:0;margin:0}
+.market-search{position:relative;margin-bottom:6px}
+.market-search input{width:100%;height:42px;border:1px solid var(--line);padding:9px 46px 9px 12px;background:#fff;font-size:13px}
+.market-search input::-webkit-search-cancel-button{appearance:none}
+.market-search button{position:absolute;top:1px;right:1px;display:grid;place-items:center;width:40px;height:40px;min-height:0;border:0;padding:0;background:#fff}
+.market-search button:hover{background:#f1f1f1;color:#111}
+.market-search-icon{position:relative;width:16px;height:16px}
+.market-search-icon::before{content:"";position:absolute;left:1px;top:1px;width:8px;height:8px;border:2px solid currentColor;border-radius:50%}
+.market-search-icon::after{content:"";position:absolute;left:11px;top:11px;width:6px;height:2px;background:currentColor;transform:rotate(45deg);transform-origin:left center}
+.market-search button.is-clear .market-search-icon::before,.market-search button.is-clear .market-search-icon::after{left:7px;top:0;width:2px;height:17px;border:0;border-radius:0;background:currentColor;transform:rotate(45deg);transform-origin:center}
+.market-search button.is-clear .market-search-icon::after{transform:rotate(-45deg)}
+.market-detail-item{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:16px;min-height:122px;padding:18px 0;border-bottom:1px solid var(--line)}
+.market-detail-item[hidden]{display:none}
+.market-detail-copy h4{margin:0 0 9px;font-size:14px}
+.market-detail-copy ul{margin:0;padding:0;list-style:none}
+.market-detail-copy li{font-size:12px;line-height:1.35}
+.market-detail-image{width:110px;height:86px;border:1px solid #777;background:#fff}
+.market-no-results{margin:20px 0 6px;font-size:13px}
 .design-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
 .design-card{border:1px solid var(--line);min-height:290px;padding:28px}
 .system-map{border:1px solid var(--line);background:#fff;overflow:hidden}

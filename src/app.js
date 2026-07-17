@@ -334,20 +334,45 @@
   }
 
   const applicationMarkets = [
-    {name:"Automotive",copy:"Connected, sensing, control, and wireless vehicle electronics.",items:["TCU","Sensing Camera","Infotainment","TPMS","Headlamp","Keyless Entry System","Wireless Charging","ADAS"],href:routes.automotive},
-    {name:"AI, HPC & Emerging Tech",copy:"Reliable power, filtering, and signal support for next-generation systems.",items:["AI/HPC Server","Router","Set Top Box"],href:routes.communication},
-    {name:"Consumer",copy:"Compact solutions for high-volume, space-sensitive electronics.",items:["Speakers","Hearable Products","Unmanned Aerial Vehicle","Robotic Cleaner","Sensor","Air Purifier"],href:routes.applications},
-    {name:"Healthcare Devices",copy:"Reliable power, control, and wireless functions in medical-support electronics.",items:["Blood Pressure Devices","Electronic Thermometer"],href:routes.applications},
-    {name:"Industrial & Energy",copy:"Power conversion, automation, and electrically noisy operating environments.",items:["Industrial Robots","3D Printers","Security Products","Smart Meter"],href:routes.applications},
-    {name:"Smart Home",copy:"Connected home controls and power management.",items:["Thermostat","Smart Coffee Machine","Keyless Entry Door Lock"],href:routes.applications}
+    {name:"Automotive",copy:"Connected, sensing, control, and wireless vehicle electronics.",items:[
+      {name:"TCU",components:[]},{name:"Sensing Camera",components:[]},{name:"Infotainment",components:[]},{name:"TPMS",components:[]},{name:"Headlamp",components:[]},{name:"Keyless Entry System",components:[]},{name:"Wireless Charging",components:[]},{name:"ADAS",components:[]}
+    ],href:routes.automotive},
+    {name:"AI, HPC & Emerging Tech",copy:"Reliable power, filtering, and signal support for next-generation systems.",items:[
+      {name:"AI/HPC Server",components:["CPU","DC-DC Converter","LAN Interface","Hard Disk Drive","Network Adapter"]},
+      {name:"Router",components:["AC-DC Converter","DC-DC Converter","LAN Interface","WiFi Module","Ethernet Interface"]},
+      {name:"Set Top Box",components:["Interface","DC-DC Converter","Signal Processor","RF Tuner"]}
+    ],href:routes.communication},
+    {name:"Consumer",copy:"Compact solutions for high-volume, space-sensitive electronics.",items:[
+      {name:"Speakers",components:["WiFi / Bluetooth","DC-DC Converter","Power Conditioning","Speaker, Headphone and Microphone"]},
+      {name:"Hearable Products",components:["Connectivity","DC-DC Converter","Battery"]},
+      {name:"Unmanned Aerial Vehicle",components:["Remote Control","Charger","Camera","Vehicle Control Module"]},
+      {name:"Robotic Cleaner",components:["CPU","Wireless Connectivity"]},
+      {name:"Sensor",components:["AC-DC Converter","DC-DC Converter","Display Panel"]},
+      {name:"Air Purifier",components:["CPU","Driver Board","DC-DC Converter","Power Supply"]}
+    ],href:routes.applications},
+    {name:"Healthcare Devices",copy:"Reliable power, control, and wireless functions in medical-support electronics.",items:[
+      {name:"Blood Pressure Devices",components:["Power Supply Unit","Display Panel","Wireless Connectivity","Wireless Charging","CPU"]},
+      {name:"Electronic Thermometer",components:["Wireless Connectivity","Temperature Detection","CPU","Display Panel","Wireless Charging"]}
+    ],href:routes.applications},
+    {name:"Industrial & Energy",copy:"Power conversion, automation, and electrically noisy operating environments.",items:[
+      {name:"Industrial Robots",components:["Controller Board"]},
+      {name:"3D Printers",components:["Interface","WiFi Connection","Motor Driver","Power Supply"]},
+      {name:"Security Products",components:["Camera Module","DC-DC Converter","WiFi","USB / HDMI"]},
+      {name:"Smart Meter",components:["Power Supply Circuit","AC-DC Converter","Wireless Module","LED Lighting","AC Power","AC-DC Converter"]}
+    ],href:routes.applications},
+    {name:"Smart Home",copy:"Connected home controls and power management.",items:[
+      {name:"Thermostat",components:["Display Panel","Interface","Power Management"]},
+      {name:"Smart Coffee Machine",components:["Power Board","Connectivity","NFC Module","Intelligent Control Board"]},
+      {name:"Keyless Entry Door Lock",components:["Wireless Communication","Main Control Board","DC-DC Converter"]}
+    ],href:routes.applications}
   ];
 
   function marketCard(m) {
-    return `<article class="market-card">
+    return `<article class="market-card" data-market-card>
       ${ph()}
       <div class="market-summary"><h3>${m.name}</h3><p>${m.copy}</p></div>
-      <div class="market-details"><input type="search" placeholder="Search...">${m.items.map(x=>`<div class="market-detail-item"><div><h4>${x}</h4><p>Power, interface, control and connectivity support.</p></div>${ph()}</div>`).join("")}</div>
-      <button class="market-toggle" type="button">View details</button>
+      <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image" role="img" aria-label="Image placeholder for ${item.name}"></div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
+      <button class="market-toggle" type="button" aria-expanded="false">View details</button>
       ${link(m.href,"View More","button")}
     </article>`;
   }
@@ -802,10 +827,28 @@
     document.querySelector("[data-market-all]")?.addEventListener("click",(e)=>{
       const cards=[...document.querySelectorAll(".market-card")];
       const allOpen=cards.every(c=>c.classList.contains("is-open"));
-      cards.forEach(c=>c.classList.toggle("is-open",!allOpen));
+      cards.forEach(c=>{c.classList.toggle("is-open",!allOpen);c.querySelector(".market-toggle")?.setAttribute("aria-expanded",String(!allOpen));});
       e.currentTarget.textContent=allOpen?"View All":"Collapse All";
     });
-    document.querySelectorAll(".market-toggle").forEach(btn=>btn.addEventListener("click",()=>btn.closest(".market-card").classList.toggle("is-open")));
+    document.querySelectorAll(".market-toggle").forEach(btn=>btn.addEventListener("click",()=>{const card=btn.closest(".market-card");card.classList.toggle("is-open");btn.setAttribute("aria-expanded",String(card.classList.contains("is-open")));}));
+    document.querySelectorAll("[data-market-card]").forEach(card=>{
+      const input=card.querySelector("[data-market-search]");
+      const action=card.querySelector("[data-market-search-action]");
+      const items=[...card.querySelectorAll("[data-market-item]")];
+      const empty=card.querySelector("[data-market-no-results]");
+      const applyMarketSearch=()=>{
+        const query=input.value.trim().toLowerCase();
+        let visibleCount=0;
+        items.forEach(item=>{const visible=!query||item.textContent.toLowerCase().includes(query);item.hidden=!visible;if(visible)visibleCount+=1;});
+        action.classList.toggle("is-clear",Boolean(query));
+        action.setAttribute("aria-label",query?`Clear ${card.querySelector(".market-summary h3")?.textContent||"market"} search`:`Focus ${card.querySelector(".market-summary h3")?.textContent||"market"} search`);
+        if(empty) empty.hidden=visibleCount!==0;
+      };
+      input?.addEventListener("input",applyMarketSearch);
+      input?.addEventListener("search",applyMarketSearch);
+      action?.addEventListener("click",()=>{if(input.value){input.value="";applyMarketSearch();}input.focus();});
+      applyMarketSearch();
+    });
     document.querySelectorAll(".accordion-head").forEach(btn=>btn.addEventListener("click",()=>{
       const box=btn.closest(".accordion"); box.classList.toggle("is-open");
       btn.setAttribute("aria-expanded",String(box.classList.contains("is-open")));
