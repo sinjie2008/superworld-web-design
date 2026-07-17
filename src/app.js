@@ -945,7 +945,12 @@
       const empty=document.querySelector("[data-news-empty]");
       if(empty) empty.hidden=visible!==0;
     };
-    newsType?.addEventListener("change",()=>navigate(routes.news+(newsType.value&&newsType.value!=="all"?`?category=${newsType.value}`:"")));
+    newsType?.addEventListener("change",()=>{
+      const filterTop=newsType.closest(".news-filters")?.getBoundingClientRect().top??0;
+      navigate(routes.news+(newsType.value&&newsType.value!=="all"?`?category=${newsType.value}`:""),false);
+      const nextFilter=document.querySelector(".news-filters");
+      if(nextFilter) window.scrollBy({top:nextFilter.getBoundingClientRect().top-filterTop,behavior:"instant"});
+    });
     newsYear?.addEventListener("change",applyNewsFilters);
     newsSearch?.addEventListener("input",applyNewsFilters);
     newsSearchButton?.addEventListener("click",()=>newsSearch?.focus());
@@ -953,10 +958,10 @@
     setupCarousels();
   }
 
-  function navigate(href) {
+  function navigate(href,scrollTop=true) {
     const url = new URL(href,location.origin);
     history.pushState({}, "", url.pathname + url.search + url.hash);
-    render();
+    render(scrollTop);
   }
 
   function render(scrollTop = true) {
