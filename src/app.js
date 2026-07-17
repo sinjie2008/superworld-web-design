@@ -1589,15 +1589,24 @@
     ["Israel", 57, 48]
   ];
 
+  let regionalMapCleanup = null;
+
   function prepareRegionalMap() {
     const heading = [...document.querySelectorAll('h2')].find((item) => item.textContent.trim() === 'REGIONAL SUPPORT FOR GLOBAL CUSTOMERS');
     const section = heading?.closest('section');
     const placeholder = section?.querySelector('.ph.map');
     const regions = section?.querySelector('.regions');
-    if (!section || !placeholder || !regions || regions.dataset.regionMapEnhanced === 'true') return;
+    if (!section || !regions) {
+      if (regionalMapCleanup) regionalMapCleanup();
+      regionalMapCleanup = null;
+      return;
+    }
+    if (regions.dataset.regionMapEnhanced === 'true') return;
+    if (!placeholder) return;
 
     const cards = [...regions.querySelectorAll('.region')];
     if (cards.length !== regionalMapPoints.length) return;
+    if (regionalMapCleanup) regionalMapCleanup();
     regions.dataset.regionMapEnhanced = 'true';
 
     const map = document.createElement('div');
@@ -1606,9 +1615,11 @@
     map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics regional support locations">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' regional support" aria-pressed="false"></button>').join('') + '</div>';
     placeholder.replaceWith(map);
 
+    const stage = map.querySelector('.regional-map-stage');
     const pins = [...map.querySelectorAll('[data-region-pin]')];
     let activeIndex = 0;
     let autoPlayTimer;
+    let stageVisible = false;
     const activate = (index) => {
       activeIndex = index;
       pins.forEach((pin, pinIndex) => {
@@ -1626,7 +1637,7 @@
 
     const startAutoPlay = () => {
       window.clearInterval(autoPlayTimer);
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
+      if (!stageVisible || window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
       autoPlayTimer = window.setInterval(() => activate((activeIndex + 1) % pins.length), 3000);
     };
 
@@ -1650,9 +1661,19 @@
         }
       });
     });
-    document.addEventListener('visibilitychange', startAutoPlay);
+    const visibilityHandler = () => startAutoPlay();
+    document.addEventListener('visibilitychange', visibilityHandler);
+    const observer = new IntersectionObserver((entries) => {
+      stageVisible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= .2);
+      startAutoPlay();
+    }, {threshold:[0,.2]});
+    if (stage) observer.observe(stage);
+    regionalMapCleanup = () => {
+      window.clearInterval(autoPlayTimer);
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', visibilityHandler);
+    };
     activate(0);
-    startAutoPlay();
   }
 
   let companyGlobalMapCleanup = null;
