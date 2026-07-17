@@ -368,12 +368,11 @@
   ];
 
   function marketCard(m) {
-    return `<article class="market-card" data-market-card>
+    return `<article class="market-card" data-market-card data-market-name="${m.name}">
       ${ph()}
-      <div class="market-summary"><h3>${m.name}</h3><p>${m.copy}</p></div>
+      <div class="market-summary"><div class="market-summary-copy"><h3>${m.name}</h3><p>${m.copy}</p></div><button class="market-state-toggle" type="button" aria-expanded="false" aria-label="Open ${m.name} details"><span class="market-state-icon" aria-hidden="true"></span></button></div>
       <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image" role="img" aria-label="Image placeholder for ${item.name}"></div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
-      <button class="market-toggle" type="button" aria-expanded="false">View details</button>
-      ${link(m.href,"View More","button")}
+      <div class="market-actions"><button class="market-toggle" type="button" aria-expanded="false">View Details</button>${link(m.href,"View More","button market-more-link")}</div>
     </article>`;
   }
 
@@ -824,13 +823,21 @@
     document.addEventListener("click",()=>document.querySelectorAll(".mega-panel").forEach(p=>p.classList.remove("is-open")),{once:true});
     document.querySelectorAll(".mega-panel").forEach(p=>p.addEventListener("click",e=>e.stopPropagation()));
     document.querySelectorAll("[data-language]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();alert(`${a.dataset.language} is shown as a wireframe option. Translation will be added in the content phase.`);}));
-    document.querySelector("[data-market-all]")?.addEventListener("click",(e)=>{
+    const marketAllButton=document.querySelector("[data-market-all]");
+    const syncMarketAllLabel=()=>{if(marketAllButton){const cards=[...document.querySelectorAll(".market-card")];marketAllButton.textContent=cards.length&&cards.every(card=>card.classList.contains("is-open"))?"Collapse All":"View All";}};
+    const setMarketCardState=(card,open)=>{
+      card.classList.toggle("is-open",open);
+      card.querySelectorAll(".market-toggle,.market-state-toggle").forEach(control=>control.setAttribute("aria-expanded",String(open)));
+      const name=card.querySelector(".market-summary h3")?.textContent||"market";
+      card.querySelector(".market-state-toggle")?.setAttribute("aria-label",`${open?"Close":"Open"} ${name} details`);
+    };
+    marketAllButton?.addEventListener("click",()=>{
       const cards=[...document.querySelectorAll(".market-card")];
       const allOpen=cards.every(c=>c.classList.contains("is-open"));
-      cards.forEach(c=>{c.classList.toggle("is-open",!allOpen);c.querySelector(".market-toggle")?.setAttribute("aria-expanded",String(!allOpen));});
-      e.currentTarget.textContent=allOpen?"View All":"Collapse All";
+      cards.forEach(card=>setMarketCardState(card,!allOpen));
+      syncMarketAllLabel();
     });
-    document.querySelectorAll(".market-toggle").forEach(btn=>btn.addEventListener("click",()=>{const card=btn.closest(".market-card");card.classList.toggle("is-open");btn.setAttribute("aria-expanded",String(card.classList.contains("is-open")));}));
+    document.querySelectorAll(".market-toggle,.market-state-toggle").forEach(btn=>btn.addEventListener("click",()=>{const card=btn.closest(".market-card");setMarketCardState(card,!card.classList.contains("is-open"));syncMarketAllLabel();}));
     document.querySelectorAll("[data-market-card]").forEach(card=>{
       const input=card.querySelector("[data-market-search]");
       const action=card.querySelector("[data-market-search-action]");
