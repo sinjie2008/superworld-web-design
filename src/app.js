@@ -549,13 +549,8 @@
   };
 
   function productsPage() {
-    const generalSectionIds = {
-      "EMC Components":"superworld_electronics_products_general_emc_components",
-      "Magnetic Components":"superworld_electronics_products_general_magnetic_components",
-      "Transformer":"superworld_electronics_products_general_transformer",
-      "Wireless Power Transfer":"superworld_electronics_products_general_wireless_power_transfer"
-    };
-    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${link(routes.general+"#"+generalSectionIds[k],k)}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("");
+    const chipArrayTarget = routes.emc+"/#superworld_electronics_products_general_emc_chip_array_ferrite_bead";
+    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${k==="EMC Components"?link(routes.emc+"/",k):k}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${k==="EMC Components"&&x==="Chip Array Ferrite Bead"?link(chipArrayTarget,x):x}</li>`).join("")}</ul></div>`).join("");
     const releases = Array.from({length:6},()=>mediaCard("A4K Series","Chip Array Ferrite Bead","View More",routes.a4k));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS"]])}
       ${heroPanel("OUR PRODUCTS","Comprehensive range of general and automotive electronic components, including EMC, magnetic, transformer, and wireless power solutions, engineered for high efficiency and reliable performance.")}
@@ -582,15 +577,16 @@
   const productRows = (series, count = 4) => Array.from({length:count},(_,i)=>`<tr><td>${i===0&&series==="A4K"?a4kImage("product-thumb"):ph()}</td><td><a data-link href="${series==="A4K"?routes.a4k:"#"}"><u>${series}${i?i:""}</u></a></td><td>XXXXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td><button class="button small">Download</button></td></tr>`).join("");
 
   function emcPage() {
+    const emcSections = [
+      ["Chip Array Ferrite Bead","superworld_electronics_products_general_emc_chip_array_ferrite_bead","Combining four 0603 chips into a single package reduces both board space and processing time.","A4K",1],
+      ["Chip Inductor","superworld_electronics_products_general_emc_chip_inductor","Design of multilayer construction with excellent reliability. Small form factor, low profile, high current capability.","C",4],
+      ["Ferrite Bead Assembly","superworld_electronics_products_general_emc_ferrite_bead_assembly","High Current capabilities. Suitable for application in EMI filtering for differential mode noise.","Z",3],
+      ["Ferrite Chip Bead","superworld_electronics_products_general_emc_ferrite_chip_bead","Multilayer construction, ideal for power lines, general and high-speed signal lines.","Z",5]
+    ];
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS",routes.general],["EMC COMPONENTS"]])}
       ${heroPanel("EMC Components","Designed to reduce electrical noise and prevent interference between electronic devices. They ensure products operate reliably, safely, and in compliance with international standards.",[],true)}
-      <nav class="anchor-nav">${Object.values(generalCategories)[0].slice(0,5).map(x=>`<a href="#${x.toLowerCase().replaceAll(" ","-")}">${x}</a>`).join("")}</nav>
-      ${[
-        ["Chip Array Ferrite Bead","Combining four 0603 chips into a single package reduces both board space and processing time.","A4K",1],
-        ["Chip Inductor","Design of multilayer construction with excellent reliability. Small form factor, low profile, high current capability.","C",4],
-        ["Ferrite Bead Assembly","High Current capabilities. Suitable for application in EMI filtering for differential mode noise.","Z",3],
-        ["Ferrite Chip Bead","Multilayer construction, ideal for power lines, general and high-speed signal lines.","Z",5]
-      ].map((x,i)=>`<section id="${x[0].toLowerCase().replaceAll(" ","-")}" class="section-sm"><div class="container"><h2>${x[0]}</h2><p>${x[1]}</p><div class="table-wrap"><table><thead><tr><th>Product</th><th>Series</th><th>Dimension</th><th>Impedance Range (ohm)</th><th>DCR Range (ohm)</th><th>Current Range (mA)</th><th>Specification</th></tr></thead><tbody>${productRows(x[2],x[3])}</tbody></table></div></div></section>`).join("")}
+      <nav class="anchor-nav">${emcSections.map(x=>`<a href="#${x[1]}">${x[0]}</a>`).join("")}</nav>
+      ${emcSections.map(x=>`<section id="${x[1]}" class="section-sm"><div class="container"><h2>${x[0]}</h2><p>${x[2]}</p><div class="table-wrap"><table><thead><tr><th>Product</th><th>Series</th><th>Dimension</th><th>Impedance Range (ohm)</th><th>DCR Range (ohm)</th><th>Current Range (mA)</th><th>Specification</th></tr></thead><tbody>${productRows(x[3],x[4])}</tbody></table></div></div></section>`).join("")}
     </main>`;
   }
 
