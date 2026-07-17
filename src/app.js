@@ -387,6 +387,8 @@
     server: {
       name: "AI/HPC Server",
       image: "AI/HPC Server Application Image Placeholder",
+      imageSrc: "/assets/server-map.webp",
+      imageAlt: "AI and HPC server exploded diagram with six component hotspots",
       caption: "1 CPU / GPU VRM / 2 AI Accelerator Module / 3 High-Current DC-DC / 4 High-Speed LAN / 5 NVMe Storage / 6 Network Adapter",
       hotspots: [["1","server-cpu","server-h1"],["2","server-gpu","server-h2"],["3","server-dcdc","server-h3"],["4","server-lan","server-h4"],["5","server-storage","server-h5"],["6","server-adapter","server-h6"]],
       cards: [
@@ -441,7 +443,8 @@
   function communicationPanelMarkup(key) {
     const data=communicationSystemData[key];
     const active=key==="server";
-    return `<section class="system-panel ${active?"active":""}" role="tabpanel" data-system-panel="${key}" ${active?"":"hidden"}><div class="system-hotspot-stage"><div class="hotspot-title">Hotspot Image — ${data.name}</div><div class="system-hotspot-image">${data.image}</div>${data.hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${data.cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}<p class="hotspot-caption">${data.caption}</p></div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${data.cards.map(communicationCardMarkup).join("")}</div></section>`;
+    const hasImage=Boolean(data.imageSrc);
+    return `<section class="system-panel ${active?"active":""}" role="tabpanel" data-system-panel="${key}" ${active?"":"hidden"}><div class="system-hotspot-stage ${hasImage?"has-system-image":""}"><div class="hotspot-title">Hotspot Image — ${data.name}</div><div class="system-hotspot-image ${hasImage?"has-image":""}">${hasImage?`<img src="${data.imageSrc}" alt="${data.imageAlt}">`:data.image}</div>${data.hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${data.cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}<p class="hotspot-caption">${data.caption}</p></div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${data.cards.map(communicationCardMarkup).join("")}</div></section>`;
   }
 
   function communicationSystemTabsMarkup() {

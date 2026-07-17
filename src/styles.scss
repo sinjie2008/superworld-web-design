@@ -80,16 +80,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .hero-panel p{font-size:17px}
 .hero-brand{display:flex;justify-content:center;align-items:center}
 .hero-brand img{width:min(470px,100%)}
-.communication-route-section{position:relative;z-index:3;margin-top:-40px;padding:0 0 44px}
-.communication-route-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);width:calc(100% - 40px);min-height:132px;margin-inline:auto;border:1px solid var(--line);background:#f4f4f4}
-.communication-route-copy{display:flex;flex-direction:column;justify-content:center;padding:12px 26px;border-right:1px solid var(--line)}
-.communication-route-copy h2{margin:0 0 10px;font-family:$font-body;font-size:clamp(22px,2vw,26px);font-weight:400;line-height:1.15;letter-spacing:0}
+.communication-route-section{position:relative;z-index:3;margin-top:-68px;padding:0 0 44px}
+.communication-route-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);width:calc(100% - 60px);min-height:220px;margin-inline:auto;border:1px solid var(--line);background:#f4f4f4}
+.communication-route-copy{display:flex;flex-direction:column;justify-content:center;padding:28px 44px;border-right:1px solid var(--line)}
+.communication-route-copy h2{margin:0 0 18px;font-family:$font-body;font-size:clamp(30px,2.5vw,36px);font-weight:400;line-height:1.2;letter-spacing:0}
 .communication-route-copy p{max-width:none;margin:0;font-size:13px;line-height:1.35}
 .communication-route-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-.communication-route-metrics .stat{min-height:66px;padding:11px 18px;border:0;border-bottom:1px solid var(--line);text-align:left;align-items:flex-start}
+.communication-route-metrics .stat{min-height:110px;padding:22px 30px;border:0;border-bottom:1px solid var(--line);text-align:left;align-items:flex-start}
 .communication-route-metrics .stat:nth-child(odd){border-right:1px solid var(--line)}
 .communication-route-metrics .stat:nth-child(n+3){border-bottom:0}
-.communication-route-metrics .stat strong{font-size:24px;line-height:1.05}
+.communication-route-metrics .stat strong{font-size:32px;line-height:1.05}
 .communication-route-metrics .stat b{font-size:11px;font-weight:400}
 .tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
 .tag{border:1px solid var(--line);padding:9px 13px;font-size:13px}
@@ -230,10 +230,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #systemTabsRoot .system-hotspot-stage{position:relative;min-height:300px;margin-bottom:28px;border:1.5px solid var(--line);background:#fff}
 #systemTabsRoot .hotspot-title{position:absolute;top:20px;left:28px;z-index:2;font-family:$font-heading;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 #systemTabsRoot .system-hotspot-image{position:absolute;inset:54px 26px 26px;display:grid;place-items:center;border:1px solid var(--line);background:linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),var(--soft);background-size:24px 24px;color:var(--muted);font-family:$font-heading;font-weight:700;text-align:center}
+#systemTabsRoot .system-hotspot-stage.has-system-image{aspect-ratio:2.16/1;min-height:0}
+#systemTabsRoot .has-system-image .hotspot-title,#systemTabsRoot .has-system-image .hotspot-caption{display:none}
+#systemTabsRoot .system-hotspot-image.has-image{inset:0;border:0;background:#fff}
+#systemTabsRoot .system-hotspot-image.has-image img{width:100%;height:100%;object-fit:contain;filter:grayscale(1)}
 #systemTabsRoot .hotspot-link{position:absolute;z-index:6;display:grid;place-items:center;width:34px;height:34px;border:1.5px solid var(--line);border-radius:50%;background:#fff;color:#111;font-family:$font-heading;font-size:12px;font-weight:700}
 #systemTabsRoot .hotspot-link:hover{background:#111;color:#fff}
 #systemTabsRoot .hotspot-caption{position:absolute;left:28px;right:28px;bottom:6px;margin:0;color:var(--muted);font-size:12px}
-#systemTabsRoot .server-h1{top:38%;left:24%}#systemTabsRoot .server-h2{top:34%;left:48%}#systemTabsRoot .server-h3{top:56%;left:45%}#systemTabsRoot .server-h4{top:34%;right:22%}#systemTabsRoot .server-h5{bottom:23%;left:26%}#systemTabsRoot .server-h6{bottom:23%;right:18%}
+#systemTabsRoot .has-system-image .hotspot-link{width:42px;height:42px;border-color:transparent;background:transparent;color:transparent}
+#systemTabsRoot .has-system-image .hotspot-link:hover,#systemTabsRoot .has-system-image .hotspot-link:focus-visible{border-color:#111;background:rgba(255,255,255,.88);color:#111}
+#systemTabsRoot .server-h1{top:12%;left:14%}#systemTabsRoot .server-h2{top:32%;left:12%}#systemTabsRoot .server-h3{top:12%;left:71%}#systemTabsRoot .server-h4{top:24%;left:71%}#systemTabsRoot .server-h5{top:60%;left:10.5%}#systemTabsRoot .server-h6{top:85%;left:69%}
 #systemTabsRoot .router-h1{top:43%;left:22%}#systemTabsRoot .router-h2{top:56%;left:46%}#systemTabsRoot .router-h3{top:32%;right:24%}#systemTabsRoot .router-h4{bottom:24%;right:30%}
 #systemTabsRoot .stb-h1{top:42%;left:22%}#systemTabsRoot .stb-h2{top:56%;left:46%}#systemTabsRoot .stb-h3{top:34%;right:26%}#systemTabsRoot .stb-h4{bottom:24%;right:22%}
 #systemTabsRoot .accordion-toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px}
@@ -736,5 +742,5 @@ html{scroll-padding-top:144px}
 @media (max-width:680px){.quality-hero-panel{height:auto;grid-template-columns:1fr;padding:26px 22px}.quality-hero-brand{order:-1;transform:none}.quality-hero-copy{transform:none}.quality-hero-tags{overflow-x:auto;margin-top:24px}.quality-hero-copy h1{font-size:20px}}
 @media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.hero-brand[data-hero-slider-enhanced="true"]{min-height:230px}.hero-brand-dots{right:16px;bottom:14px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:space-between;margin-top:-108px;padding-inline:4%}.milestone-detail{width:88vw;top:340px}.quality-section-header{gap:20px}.quality-section-header p{font-size:13px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.quality-qms-grid,.quality-compliance-grid{grid-template-columns:1fr}.quality-step-card{min-height:190px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
 @media (max-width:420px){.quality-certificate-grid{grid-template-columns:1fr}.quality-certificates .container{width:calc(100% - 32px)}}
-@media (max-width:760px){.communication-route-section{margin-top:-24px;padding-bottom:40px}.communication-route-panel{grid-template-columns:1fr;width:calc(100% - 20px)}.communication-route-copy{border-right:0;border-bottom:1px solid var(--line)}.communication-route-break{display:none}}
+@media (max-width:760px){.communication-route-section{margin-top:-24px;padding-bottom:40px}.communication-route-panel{grid-template-columns:1fr;width:calc(100% - 20px);min-height:0}.communication-route-copy{padding:24px 26px;border-right:0;border-bottom:1px solid var(--line)}.communication-route-copy h2{font-size:24px}.communication-route-break{display:none}.communication-route-metrics .stat{min-height:84px;padding:16px 18px}.communication-route-metrics .stat strong{font-size:26px}#systemTabsRoot .system-hotspot-stage.has-system-image{aspect-ratio:2.16/1}}
 @media (max-width:480px){.communication-route-panel{width:100%}.communication-route-copy{padding:22px 20px}.communication-route-metrics .stat{padding:12px 14px}.communication-route-metrics .stat strong{font-size:21px}}
