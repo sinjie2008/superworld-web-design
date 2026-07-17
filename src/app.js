@@ -451,6 +451,28 @@
     return `<div class="system-tabs-shell"><div class="system-tabs-nav" role="tablist" aria-label="Communication systems">${communicationSystemOrder.map(key=>`<button class="system-tab-btn ${key==="server"?"active":""}" type="button" role="tab" aria-selected="${key==="server"}" data-system="${key}">${communicationSystemData[key].name}</button>`).join("")}</div>${communicationSystemOrder.map(communicationPanelMarkup).join("")}</div>`;
   }
 
+  const automotiveMappingRows = [
+    ["Ferrite Chip Beads","EMI suppression component",["ZQ","ZQ Large Current"]],
+    ["Molded Power Inductors","Stable power conversion support",["PIAQ","PICQ","PIFQ"]],
+    ["Common Mode Chokes","Noise filtering for signal lines",["WAQ"]]
+  ];
+
+  function automotiveSystemFeatureMarkup() {
+    const ids=["tcu","sensing-camera","infotainment","tpms","headlamp","keyless-entry","wireless-charging","adas"];
+    const cards=automotiveSystems.map((item,index)=>({
+      id:`automotive-${ids[index]}`,
+      no:String(index+1).padStart(2,"0"),
+      name:item[0],
+      type:item[1],
+      desc:item[2],
+      design:"EMI control and stable module power.",
+      bundle:"View Bundle",
+      rows:automotiveMappingRows
+    }));
+    const hotspots=cards.map((card,index)=>[String(index+1),card.id,`automotive-h${index+1}`]);
+    return `<div id="systemTabsRoot" class="automotive-system-feature"><section class="system-panel active" role="tabpanel" data-system-panel="automotive"><div class="system-hotspot-stage has-system-image"><div class="system-hotspot-image has-image"><img src="/assets/automotive-map.webp" alt="Automotive application map"></div>${hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}</div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${cards.map(communicationCardMarkup).join("")}</div></section></div>`;
+  }
+
   function accordionItem(item, index, kind) {
     const series = kind === "automotive"
       ? [["Ferrite Chip Beads","EMI suppression component",["ZQ","ZQ Large Current"]],["Molded Power Inductors","Stable power conversion support",["PIAQ","PICQ","PIFQ"]],["Common Mode Chokes","Noise filtering for signal lines",["WAQ"]]]
@@ -465,10 +487,8 @@
 
   function industryDetailPage(kind) {
     const automotive = kind === "automotive";
-    const systems = automotive ? automotiveSystems : serverSystems;
     const title = automotive ? "RELIABLE COMPONENTS FOR<br>AUTOMOTIVE ELECTRONICS." : "COMPONENTS FOR<br>AI, HPC & EMERGING TECH";
     const copy = automotive ? "Magnetic and EMC component support for stable power, signal integrity, and reliable in-vehicle performance." : "Magnetic and EMC component support for AI/HPC servers, routers, set top boxes, and connected signal and power circuits.";
-    const mapSrc = automotive ? "/assets/automotive-map.webp" : "/assets/server-map.webp";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["APPLICATION",routes.applications],[automotive?"AUTOMOTIVE":"COMMUNICATION & NETWORKING"]])}
       ${heroPanel(title,copy,["VIEW APPLICATION FIT","CONTACT SALES"])}
       ${automotive?`<section class="communication-route-section automotive-route-section"><div class="container"><div class="communication-route-panel"><div class="communication-route-copy"><h2>One clear route from vehicle<br> area to product family.</h2><p>Identify the automotive system, understand the circuit need, and access<br class="communication-route-break"> the relevant series bundle without reading repeated product lists.</p></div><div class="communication-route-metrics"><div class="stat"><strong>8</strong><b>Application Areas</b></div><div class="stat"><strong>10+</strong><b>Component Types</b></div><div class="stat"><strong>IATF 16949</strong><b>Design Focus</b></div><div class="stat"><strong>Global</strong><b>Selection Support</b></div></div></div></div></section>`:`<section class="communication-route-section"><div class="container"><div class="communication-route-panel"><div class="communication-route-copy"><h2>One clear route from system<br> area to product family.</h2><p>Identify the communication system, understand the circuit need, and access<br class="communication-route-break"> the relevant series bundle without reading repeated product lists.</p></div><div class="communication-route-metrics"><div class="stat"><strong>3</strong><b>System Groups</b></div><div class="stat"><strong>14</strong><b>Application Areas</b></div><div class="stat"><strong>AI / EMI</strong><b>Design Focus</b></div><div class="stat"><strong>Series</strong><b>Selection Support</b></div></div></div></div></section>`}
@@ -476,7 +496,7 @@
       <section id="design-needs" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"WHAT THE PAGE SHOULD COMMUNICATE FIRST":"SUPPORT STABLE COMMUNICATION CIRCUIT DESIGN"}</h2><p>${automotive?"":"Reduce noise, support power conversion, and keep signal paths clean."}</p></div><div class="design-cards">
         ${(automotive?[["Reduce electrical noise","Show how EMC components support cleaner power and signal paths."],["Stabilise power circuits","Position inductors and transformers around power conversion needs."],["Support compact modules","Connect product families to space-conscious automotive electronics."],["Build selection confidence","Link application choices to quality, testing, and enquiry support."]]:[["Control EMI & Signal noise","Support EMI suppression and noise filtering across LAN, Ethernet, RF, and interface circuits."],["Support AI power conversion","Provide suitable inductor and transformer options."],["Protect Data interfaces","Help users identify components for connected interface stability."],["Speed up series selection","Connect each device area to related component families."]]).map((x,i)=>`<article class="design-card"><h2>0${i+1}</h2><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}
       </div></div></section>
-      <section id="fit" class="section section-rule"><div class="container"><div class="section-heading center"><h2>FIND THE RIGHT SERIES BY ${automotive?"AUTOMOTIVE":"COMMUNICATION"} SYSTEM</h2><p>Use the ${automotive?"vehicle":"system"} map to jump to a system. Expand a card only when needed.</p></div>${automotive?`<div class="system-map"><img src="${mapSrc}" alt="Automotive application map"></div><div class="system-controls"><button type="button" data-accordion-all="open">Show All</button><button type="button" data-accordion-all="close">Collapse All</button></div><div class="accordion-list">${systems.map((x,i)=>accordionItem(x,i,kind)).join("")}</div>`:`<div id="systemTabsRoot">${communicationSystemTabsMarkup()}</div>`}</div></section>
+      <section id="fit" class="section section-rule"><div class="container"><div class="section-heading center"><h2>FIND THE RIGHT SERIES BY ${automotive?"AUTOMOTIVE":"COMMUNICATION"} SYSTEM</h2><p>Use the ${automotive?"vehicle":"system"} map to jump to a system. Expand a card only when needed.</p></div>${automotive?automotiveSystemFeatureMarkup():`<div id="systemTabsRoot">${communicationSystemTabsMarkup()}</div>`}</div></section>
       <section id="confidence" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"BUILT FOR AUTOMOTIVE-ORIENTED RELIABILITY EXPECTATIONS":"QUALITY SUPPORT FOR RELIABLE COMMUNICATION SYSTEMS."}</h2></div><div class="grid grid-3">
         ${card(automotive?"IATF / ISO Focus":"Controlled Manufacturing","Consistent production and inspection for repeat requirements.")}
         ${card(automotive?"Reliability Testing":"Stable Electrical Performance","Supports EMI suppression, power stability, and signal integrity.")}
