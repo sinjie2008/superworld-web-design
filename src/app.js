@@ -176,7 +176,7 @@
         ${link(routes.company,"View Our Company","link-arrow")}</div>${ph("tall")}
       </div></section>
       <section class="section"><div class="container">
-        <div class="section-heading"><h2>DISCOVER OUR CORE PRODUCT LINES</h2><div class="button-group"><button class="button small" type="button" data-product-tab="general">General</button><button class="button small" type="button" data-product-tab="automotive">Automotive</button></div></div>
+        <div class="section-heading"><h2>DISCOVER OUR CORE PRODUCT LINES</h2><div class="button-group"><button class="button small" type="button" data-product-tab="general" data-product-carousel="home-products">General</button><button class="button small" type="button" data-product-tab="automotive" data-product-carousel="home-products">Automotive</button></div></div>
         ${carousel("home-products",productLines,4)}
       </div></section>
       <section class="section"><div class="container">
@@ -377,13 +377,19 @@
   }
 
   function applicationsPage() {
-    const productLines = ["EMC Components","Magnetic Components","Transformers","Wireless Power Transfer"].map(x=>mediaCard(x,"Component capabilities for a wide range of system requirements.","View More",routes.products));
+    const productLines = [
+      ["EMC Components","Solutions supporting noise suppression, compliance, and product stability in electronic systems.",routes.emc],
+      ["Magnetic Components","Core magnetic products supporting a wide range of electronic, industrial, and power-related applications.",routes.general],
+      ["Transformers","Transformer solutions developed for consistent performance, manufacturing control, and application fit.",routes.general],
+      ["Wireless Power Transfer","Wireless charging-related solutions supporting evolving demand in modern electronics and mobility.",routes.general],
+      ["General Components","Reliable component solutions for electronic, industrial, and power applications.",routes.general]
+    ].map(x=>mediaCard(x[0],x[1],"View More",x[2]));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["APPLICATION"]])}
       ${heroPanel("SOLUTIONS BUILT AROUND<br>REAL APPLICATION NEEDS","Superworld provides core power and connectivity solutions for automotive, industrial, healthcare, and consumer systems, with technologies designed to support efficiency, reliability, and innovation.",["EXPLORE INDUSTRIES","DISCUSS YOUR PROJECT"])}
       <nav class="anchor-nav"><a href="#markets">APPLICATION MARKETS</a><a href="#core-solutions">CORE SOLUTIONS ACROSS APPLICATIONS</a><a href="#system-design">HOW SUPERWORLD FITS INTO SYSTEM DESIGN</a><a href="#why">WHY WORK WITH SUPERWORLD</a></nav>
       <section id="markets" class="section"><div class="container"><div class="section-heading"><div><h2>APPLICATION MARKETS</h2><p>Explore the key markets we support and the system needs behind each application.</p></div><button type="button" data-market-all>View All</button></div><div class="market-grid">${applicationMarkets.map(marketCard).join("")}</div></div></section>
-      <section id="core-solutions" class="section section-rule"><div class="container"><div class="section-heading"><div><h2>CORE SOLUTIONS ACROSS APPLICATIONS</h2><p>Our component capabilities support a wide range of system requirements across multiple markets.</p></div><div class="button-group"><button>General</button><button>Automotive</button></div></div>${carousel("app-products",productLines,4)}</div></section>
-      <section id="system-design" class="section section-rule"><div class="container"><div class="section-heading center"><h2>HOW SUPERWORLD FITS INTO SYSTEM DESIGN</h2><p>From input filtering to power conversion and connectivity, our solutions support key functions across modern electronic systems.</p></div><div class="flow">${[["Input / Interface","EMC filtering"],["Power Conversion","Inductors + transformers"],["Control Board","Stable signal support"],["Connectivity","LAN / wireless support"],["End Device Function","Application-specific output"]].map(x=>`<article class="flow-card">${ph()}<h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}</div></div></section>
+      <section id="core-solutions" class="section section-rule"><div class="container"><div class="section-heading"><div><h2>CORE SOLUTIONS ACROSS APPLICATIONS</h2><p>Our component capabilities support a wide range of system requirements across multiple markets.</p></div><div class="button-group"><button class="button small" type="button" data-product-tab="general" data-product-carousel="app-products">General</button><button class="button small" type="button" data-product-tab="automotive" data-product-carousel="app-products">Automotive</button></div></div>${carousel("app-products",productLines,4)}</div></section>
+      <section id="system-design" class="section section-rule"><div class="container"><div class="section-heading center"><h2>HOW SUPERWORLD FITS INTO SYSTEM DESIGN</h2><p>From input filtering to power conversion and connectivity, our solutions support key functions across modern electronic systems.</p></div><div class="flow">${[["Input / Interface","EMC filtering"],["Power Conversion","Inductors + transformers"],["Control Board","Stable signal support"],["Connectivity","LAN / wireless support"],["End Device Function","Application-specific output"]].map((x,i)=>`<article class="flow-card">${ph()}<div class="flow-card-copy"><h3>${x[0]}</h3><p>${x[1]}</p></div></article>${i<4?`<span class="flow-arrow" aria-hidden="true"></span>`:""}`).join("")}</div></div></section>
       <section id="why" class="section section-rule"><div class="container"><div class="section-heading center"><h2>WHY WORK WITH SUPERWORLD</h2><p>A trusted partner for application-focused component solutions.</p></div><div class="grid grid-4">${["Application Breadth","Integrated Manufacturing","Quality & Reliability","Project Support"].map(x=>`<article class="media-card">${ph()}<div class="media-card-body"><h3>${x}</h3><p>Practical support for repeatable component selection and project delivery.</p></div></article>`).join("")}</div><div class="cta" style="margin-top:70px"><div><h2>NEED SUPPORT FOR A SPECIFIC APPLICATION?</h2><p>Keep the final section clean, visual, and action-driven.</p></div><div class="button-group">${buttonLink(routes.products,"View Products")}${buttonLink(routes.inquiry,"Contact Sales")}</div></div></div></section>
     </main>`;
   }
@@ -957,8 +963,8 @@
   const cardMarkup = ([title, copy, href]) =>
     '<article class="media-card slide"><div class="ph soft"></div><div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a></div></div></article>';
 
-  function selectProductSet(type) {
-    const root = document.querySelector('[data-carousel="home-products"]');
+  function selectProductSet(type, carouselId) {
+    const root = document.querySelector('[data-carousel="' + carouselId + '"]');
     const items = productSets[type];
     if (!root || !items) return;
     const track = root.querySelector('.carousel-track');
@@ -966,7 +972,7 @@
       track.innerHTML = items.map(cardMarkup).join('');
       track.style.transform = 'translateX(0px)';
     }
-    document.querySelectorAll('[data-product-tab]').forEach((button) => {
+    root.closest('section')?.querySelectorAll('[data-product-tab]').forEach((button) => {
       const active = button.dataset.productTab === type;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
@@ -1743,8 +1749,9 @@
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
       if (!dots.closest('.home-hero') && !dots.closest('.esg-pillars-carousel')) dots.remove();
     });
-    const general = document.querySelector('[data-product-tab="general"]');
-    if (general && !general.hasAttribute('aria-pressed')) selectProductSet('general');
+    document.querySelectorAll('[data-product-tab="general"]').forEach((general) => {
+      if (!general.hasAttribute('aria-pressed')) selectProductSet('general', general.dataset.productCarousel);
+    });
     const releaseCarousel = document.querySelector('[data-carousel="home-releases"]');
     prepareReleaseCards();
     prepareIndustrySelector();
@@ -1764,7 +1771,7 @@
 
   document.addEventListener('click', (event) => {
     const button = event.target.closest('[data-product-tab]');
-    if (button) selectProductSet(button.dataset.productTab);
+    if (button) selectProductSet(button.dataset.productTab, button.dataset.productCarousel);
   });
 
   const appRoot = document.getElementById('app');
