@@ -549,11 +549,17 @@
   };
 
   function productsPage() {
-    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("");
+    const generalSectionIds = {
+      "EMC Components":"superworld_electronics_products_general_emc_components",
+      "Magnetic Components":"superworld_electronics_products_general_magnetic_components",
+      "Transformer":"superworld_electronics_products_general_transformer",
+      "Wireless Power Transfer":"superworld_electronics_products_general_wireless_power_transfer"
+    };
+    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${link(routes.general+"#"+generalSectionIds[k],k)}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("");
     const releases = Array.from({length:6},()=>mediaCard("A4K Series","Chip Array Ferrite Bead","View More",routes.a4k));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS"]])}
       ${heroPanel("OUR PRODUCTS","Comprehensive range of general and automotive electronic components, including EMC, magnetic, transformer, and wireless power solutions, engineered for high efficiency and reliable performance.")}
-      <section id="superworld_electronics_products_general_components" class="section"><div class="container"><div class="section-heading"><h2>GENERAL COMPONENTS</h2>${link(routes.general,"View More","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
+      <section id="superworld_electronics_products_general_components" class="section"><div class="container"><div class="section-heading"><h2>${link(routes.general,"GENERAL COMPONENTS")}</h2>${link(routes.general,"View More","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
       <section id="superworld_electronics_products_automotive_components" class="section"><div class="container"><div class="section-heading"><h2>AUTOMOTIVE COMPONENTS</h2>${link(routes.products,"View More","link-arrow")}</div><div class="category-columns">${Object.entries(generalCategories).slice(0,3).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.slice(0,5).map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("")}</div></div></section>
       <section class="section"><div class="container"><div class="section-heading"><h2>LATEST RELEASE</h2>${link(routes.news+"?category=product","View More","link-arrow")}</div>${carousel("product-releases",releases,4)}</div></section>
     </main>`;
@@ -561,14 +567,15 @@
 
   function generalPage() {
     const families = [
-      ["EMC Components","Designed to reduce electrical noise and prevent interference between electronic devices.",Object.values(generalCategories)[0]],
-      ["Magnetic Components","Essential parts that use magnetic fields to store energy, filter noise, and ensure efficient power conversion.",Object.values(generalCategories)[1].slice(0,8)],
-      ["Transformer","Electronic components that transfer electrical energy between circuits, enabling voltage conversion and isolation.",Object.values(generalCategories)[2]]
+      ["EMC Components","superworld_electronics_products_general_emc_components","Designed to reduce electrical noise and prevent interference between electronic devices.",Object.values(generalCategories)[0]],
+      ["Magnetic Components","superworld_electronics_products_general_magnetic_components","Essential parts that use magnetic fields to store energy, filter noise, and ensure efficient power conversion.",Object.values(generalCategories)[1].slice(0,8)],
+      ["Transformer","superworld_electronics_products_general_transformer","Electronic components that transfer electrical energy between circuits, enabling voltage conversion and isolation.",Object.values(generalCategories)[2]],
+      ["Wireless Power Transfer","superworld_electronics_products_general_wireless_power_transfer","Wireless charging components developed for dependable power transfer between transmitter and receiver systems.",Object.values(generalCategories)[3]]
     ];
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS"]])}
       ${heroPanel("GENERAL COMPONENTS","Essential electronic parts that manage power, reduce electromagnetic interference (EMI), and support efficient signal transmission, ensuring reliable performance in electronic circuits.")}
-      <nav class="anchor-nav">${["EMC Components","Magnetic Components","Transformer","Wireless Power Transfer"].map(x=>`<a href="#${x.split(" ")[0].toLowerCase()}">${x}</a>`).join("")}</nav>
-      ${families.map((f,i)=>`<section id="${f[0].split(" ")[0].toLowerCase()}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[1]}</p></div>${ph("tall")}<div class="family-icons">${f[2].map((x,j)=>`<div class="family-icon">${j===0&&i===0?`<div class="ph" style="display:grid;place-items:center">${a4kImage("product-thumb")}</div>`:ph()}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
+      <nav class="anchor-nav">${families.map(f=>`<a href="#${f[1]}">${f[0]}</a>`).join("")}</nav>
+      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall")}<div class="family-icons">${f[3].map((x,j)=>`<div class="family-icon">${j===0&&i===0?`<div class="ph" style="display:grid;place-items:center">${a4kImage("product-thumb")}</div>`:ph()}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
     </main>`;
   }
 
