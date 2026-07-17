@@ -614,7 +614,7 @@
   }
 
   const newsCategories = {
-    latest:"Latest Product News", product:"Product Releases", brochures:"Brochures", events:"Exhibitions & Trade Shows", csr:"Corporate Social Responsibility", eol:"End-of-Life Notices", business:"Business Updates", announcements:"Announcements"
+    all:"ALL", latest:"Latest Product News", product:"Product Releases", brochures:"Brochures", events:"Exhibitions & Trade Shows", csr:"Corporate Social Responsibility", eol:"End-of-Life Notices", business:"Business Updates", announcements:"Announcements"
   };
 
   function newsHero() {
@@ -622,21 +622,41 @@
       ["Program at Gladiolus Place","Corporate Social Responsibility"],
       ["New A4K Series Release","Latest Product News"],
       ["Electronica India Preview","Exhibitions & Trade Shows"]
-    ].map(x=>`<div class="slide"><div class="feature-news">${ph()}<span class="tag">${x[1]}</span><h2>${x[0]}</h2><p>Superworld Electronics news and activity highlight.</p>${link(routes.detail,"View More","link-arrow")}</div></div>`);
-    return `<div class="news-top">${carousel("news-feature",features,1,false)}<aside class="event-box"><h2>Event Calendar</h2>${Array.from({length:5},()=>`<div class="event-row"><div class="event-date"><b>JAN</b><br>21</div><div><h4>NEPCON Japan 2026 - Tokyo</h4><p>Booth no : # E36 – 27</p></div></div>`).join("")}${buttonLink(routes.calendar,"Full Schedule","wide")}</aside></div>`;
+    ].map(x=>`<div class="slide"><article class="feature-news"><div class="ph feature-news-visual" role="img" aria-label="Featured news image placeholder"><span class="tag">${x[1]}</span></div><div class="feature-news-content"><h2>${x[0]}</h2><p>Gladiolus Place is a non-profit Children’s Home, that provides a safe refuge for vulnerable teenage Girls aged 11-21 years old, ...</p>${link(routes.detail,"View More","link-arrow")}</div></article></div>`);
+    return `<div class="news-top">${carousel("news-feature",features,1,false,"news-feature-carousel")}<aside class="event-box"><h2>Event Calendar</h2><div class="event-list">${Array.from({length:5},()=>`<div class="event-row"><div class="event-date"><b>JAN</b><span>21</span></div><div><h4>NEPCON Japan 2026 - Tokyo</h4><p>Booth no : # E36 – 27</p></div></div>`).join("")}</div>${buttonLink(routes.calendar,"Full Schedule","wide")}</aside></div>`;
   }
 
   function newsPage() {
     const params = new URLSearchParams(location.search);
-    const category = params.get("category") || "latest";
+    const category = params.get("category") || "all";
     const label = newsCategories[category] || newsCategories.latest;
-    const cards = Array.from({length:8},(_,i)=>`<article class="news-card">${ph()}<span class="tag">${i===0?label:"Business Updates"}</span><h3>${i===0?(category==="events"?"NEPCON Japan 2026 Recap: Innovations, Insights & Trends":category==="csr"?"Superworld Electronics’ CSR Program at Gladiolus Place":category==="brochures"?"Radial-Leaded Inductor: Fully Automated Production Overview":"Radial-Leaded Inductor: Fully Automated Production Overview"):"Our Johor Bahru facility is progressing"}</h3><div class="media-card-footer">${link(routes.detail,"View More","link-arrow")}<span>17 December 2025</span></div></article>`);
-    const list = Array.from({length:5},()=>`<article class="news-list-item">${ph()}<div><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance.</p></div><div><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>Release Date : 15/04/2026</small></div></article>`).join("");
+    const allNewsCards = [
+      ["Latest Product News","Radial-Leaded Inductor: Fully Automated Production Overview"],
+      ["Business Updates","Our Johor Bahru facility is progressing"],
+      ["Exhibitions & Trade Shows","NEPCON Japan 2026 Recap: Innovations, Insights & Trends"],
+      ["Corporate Social Responsibility","Superworld Electronics’ CSR Program at Gladiolus Place"],
+      ["Announcements","Holiday closure notice"],
+      ["Brochures","Superworld Product Brochure"],
+      ["Latest Product News","New A4K Series Release"],
+      ["Business Updates","Superworld Electronics expands regional support"]
+    ];
+    const categoryCards = {
+      latest: allNewsCards.filter(item=>item[0]==="Latest Product News"),
+      events: allNewsCards.filter(item=>item[0]==="Exhibitions & Trade Shows"),
+      csr: allNewsCards.filter(item=>item[0]==="Corporate Social Responsibility"),
+      business: allNewsCards.filter(item=>["Business Updates","Corporate Social Responsibility","Announcements"].includes(item[0])),
+      announcements: allNewsCards.filter(item=>item[0]==="Announcements"),
+      brochures: allNewsCards.filter(item=>item[0]==="Brochures")
+    };
+    const selectedCards = category==="all" ? allNewsCards : (categoryCards[category]||allNewsCards);
+    const cards = Array.from({length:8},(_,i)=>selectedCards[i%selectedCards.length]).map((item,i)=>`<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual" role="img" aria-label="Image placeholder for ${item[1]}"><span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail,"View More","link-arrow")}<span>17 December 2025</span></div></div></article>`);
+    const list = Array.from({length:5},()=>`<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image" role="img" aria-label="Molded Power Inductor image placeholder"></div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category==="eol"?"End-of-Life":"Release Date"} : 15/04/2026</small></div>${link(routes.detail,`<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>`,"news-list-arrow-link")}</article>`).join("");
     const listMode = category === "product" || category === "eol";
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS"]])}<section class="section-sm"><div class="container">${newsHero()}
+    const categoryOptions = Object.entries(newsCategories).map(([value,name])=>`<option value="${value}" ${value===category?"selected":""}>${name}</option>`).join("");
+    return `<main id="main-content" class="page-main news-page">${crumb([["HOME",routes.home],["NEWS"]])}<section class="section-sm news-page-section"><div class="container news-page-container">${newsHero()}
       <nav class="anchor-nav">${[["Latest News","latest"],["Product News","product"],["Events & Activities","events"],["Company News","business"],["Resources","brochures"]].map(x=>link(routes.news+"?category="+x[1],x[0])).join("")}</nav>
-      <div class="news-filters"><select aria-label="Category"><option>${label}</option><option>All</option></select><select aria-label="Year"><option>Year</option><option>2026</option><option>2025</option></select><input type="search" placeholder="Search news"></div>
-      <section class="section-sm">${listMode?`<div class="news-list">${list}</div>`:`<div class="news-grid">${cards.join("")}</div>`}${pagination()}</section>
+      <div class="news-filters"><select aria-label="Category" data-news-type>${categoryOptions}</select><select aria-label="Year" data-news-year><option value="">Year</option><option value="2026">2026</option><option value="2025">2025</option></select><div class="news-search"><input type="search" aria-label="Search news" data-news-search autocomplete="off"><button type="button" data-news-search-button aria-label="Search news"><span class="news-search-icon" aria-hidden="true"></span></button></div></div>
+      <div class="news-results">${listMode?`<div class="news-list">${list}</div>`:`<div class="news-grid">${cards.join("")}</div>`}<p class="news-empty" data-news-empty hidden>No news matches your search.</p>${pagination()}</div>
     </div></section></main>`;
   }
 
@@ -912,6 +932,23 @@
       applyLocationFilters();
     }));
     document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>{b.style.background="#fff";b.style.color="#111"});btn.style.background="#111";btn.style.color="#fff";}));
+    const newsType=document.querySelector("[data-news-type]");
+    const newsYear=document.querySelector("[data-news-year]");
+    const newsSearch=document.querySelector("[data-news-search]");
+    const newsSearchButton=document.querySelector("[data-news-search-button]");
+    const newsItems=[...document.querySelectorAll("[data-news-search-item]")];
+    const applyNewsFilters=()=>{
+      const query=newsSearch?.value.trim().toLowerCase()||"";
+      const year=newsYear?.value||"";
+      let visible=0;
+      newsItems.forEach(item=>{const show=(!query||item.textContent.toLowerCase().includes(query))&&(!year||item.dataset.newsYear===year);item.hidden=!show;if(show)visible+=1;});
+      const empty=document.querySelector("[data-news-empty]");
+      if(empty) empty.hidden=visible!==0;
+    };
+    newsType?.addEventListener("change",()=>navigate(routes.news+(newsType.value&&newsType.value!=="all"?`?category=${newsType.value}`:"")));
+    newsYear?.addEventListener("change",applyNewsFilters);
+    newsSearch?.addEventListener("input",applyNewsFilters);
+    newsSearchButton?.addEventListener("click",()=>newsSearch?.focus());
     setupCommunicationSystemTabs();
     setupCarousels();
   }
@@ -1747,7 +1784,7 @@
       }
     }
     document.querySelectorAll('.carousel-dots').forEach((dots) => {
-      if (!dots.closest('.home-hero') && !dots.closest('.esg-pillars-carousel')) dots.remove();
+      if (!dots.closest('.home-hero') && !dots.closest('.esg-pillars-carousel') && !dots.closest('.news-feature-carousel')) dots.remove();
     });
     document.querySelectorAll('[data-product-tab="general"]').forEach((general) => {
       if (!general.hasAttribute('aria-pressed')) selectProductSet('general', general.dataset.productCarousel);
