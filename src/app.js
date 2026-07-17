@@ -121,9 +121,15 @@
           ${link(routes.news + "?category=latest", "Product Enhancements")}
           ${link(routes.news + "?category=eol", "End-of-Life (EOL) Notices")}
         </div>
-        <div class="mega-news-cards">
-          <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small></article>
-          <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small></article>
+        <div class="mega-news-slider" data-mega-news-slider>
+          <button class="mega-news-control mega-news-prev" type="button" data-mega-news-prev aria-label="Previous news events"><span aria-hidden="true"></span></button>
+          <div class="mega-news-window"><div class="mega-news-track">
+            <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph()}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph()}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+          </div></div>
+          <button class="mega-news-control mega-news-next" type="button" data-mega-news-next aria-label="Next news events"><span aria-hidden="true"></span></button>
         </div>
       </div></div>
     </header>`;
@@ -661,8 +667,8 @@
   }
 
   function eventCalendarPage() {
-    const rows = Array.from({length:6},()=>`<tr><td>${ph()}</td><td>21 Jan (Wed) – 23 Jan (Fri)</td><td><strong>Tokyo Big Sight, Japan</strong><br># E36 – 27</td><td><button>Learn More</button></td><td><button>Learn More</button><br>Book an Appointment</td></tr>`).join("");
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["EVENT CALENDAR"]])}<section class="section-sm"><div class="container">${newsHero()}<nav class="anchor-nav">${link(routes.news,"Latest News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=brochures","Resources")}</nav><div class="news-filters"><select><option>ALL</option></select><select><option>Year</option></select><input type="search" placeholder="Search events"></div><div class="table-wrap" style="margin-top:56px"><table><thead><tr><th>Event</th><th>Date</th><th>Location, Booth No</th><th>Exhibition website</th><th>Our Expo Page</th></tr></thead><tbody>${rows}</tbody></table></div>${pagination()}</div></section></main>`;
+    const rows = Array.from({length:6},(_,index)=>`<tr data-event-search-item data-event-year="2026"><td>${ph()}</td><td>${index<3?"21 Jan (Wed) – 23 Jan (Fri)":"15 Apr (Wed) – 17 Apr (Fri)"}</td><td><strong>${index<3?"Tokyo Big Sight, Japan":"Bangalore International Exhibition Centre, India"}</strong><br>${index<3?"# E36 – 27":"# Hall 2 – B18"}</td><td><button>Learn More</button></td><td><button>Learn More</button><br>Book an Appointment</td></tr>`).join("");
+    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["EVENT CALENDAR"]])}<section class="section-sm"><div class="container">${newsHero()}<nav class="anchor-nav">${link(routes.news,"Latest News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=brochures","Resources")}</nav><div class="news-filters"><select aria-label="Event category"><option>ALL</option></select><select aria-label="Event year" data-event-year-filter><option value="">Year</option><option value="2026">2026</option></select><div class="news-search"><input type="search" aria-label="Search events" data-event-search autocomplete="off"><button type="button" data-event-search-button aria-label="Search events"><span class="news-search-icon" aria-hidden="true"></span></button></div></div><div class="table-wrap" style="margin-top:56px"><table><thead><tr><th>Event</th><th>Date</th><th>Location, Booth No</th><th>Exhibition website</th><th>Our Expo Page</th></tr></thead><tbody>${rows}</tbody></table></div><p class="news-empty" data-event-empty hidden>No events match your search.</p>${pagination()}</div></section></main>`;
   }
 
   function newsDetailPage() {
@@ -845,9 +851,31 @@
       const panel = document.querySelector(`[data-panel="${name}"]`);
       document.querySelectorAll(".mega-panel").forEach(p=>{if(p!==panel)p.classList.remove("is-open");});
       panel?.classList.toggle("is-open");
+      if(panel?.classList.contains("is-open")) panel.querySelector("[data-mega-news-slider]")?.dispatchEvent(new CustomEvent("mega:open"));
     }));
     document.addEventListener("click",()=>document.querySelectorAll(".mega-panel").forEach(p=>p.classList.remove("is-open")),{once:true});
     document.querySelectorAll(".mega-panel").forEach(p=>p.addEventListener("click",e=>e.stopPropagation()));
+    document.querySelectorAll("[data-mega-news-slider]").forEach(root=>{
+      const windowEl=root.querySelector(".mega-news-window");
+      const track=root.querySelector(".mega-news-track");
+      const slides=[...root.querySelectorAll(".mega-news-card")];
+      let index=0;
+      const visible=()=>window.innerWidth<=560?1:2;
+      const maxIndex=()=>Math.max(0,slides.length-visible());
+      const update=()=>{
+        if(!windowEl||!track) return;
+        index=Math.min(index,maxIndex());
+        const gap=22;
+        const cardWidth=(windowEl.clientWidth-gap*(visible()-1))/visible();
+        slides.forEach(slide=>slide.style.flexBasis=`${cardWidth}px`);
+        track.style.transform=`translateX(-${index*(cardWidth+gap)}px)`;
+      };
+      const move=delta=>{index+=delta;if(index>maxIndex())index=0;if(index<0)index=maxIndex();update();};
+      root.querySelector("[data-mega-news-prev]")?.addEventListener("click",()=>move(-1));
+      root.querySelector("[data-mega-news-next]")?.addEventListener("click",()=>move(1));
+      root.addEventListener("mega:open",update);
+      window.addEventListener("resize",update,{passive:true});
+    });
     document.querySelectorAll("[data-language]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();alert(`${a.dataset.language} is shown as a wireframe option. Translation will be added in the content phase.`);}));
     const marketAllButton=document.querySelector("[data-market-all]");
     const syncMarketAllLabel=()=>{if(marketAllButton){const cards=[...document.querySelectorAll(".market-card")];marketAllButton.textContent=cards.length&&cards.every(card=>card.classList.contains("is-open"))?"Collapse All":"View All";}};
@@ -954,6 +982,21 @@
     newsYear?.addEventListener("change",applyNewsFilters);
     newsSearch?.addEventListener("input",applyNewsFilters);
     newsSearchButton?.addEventListener("click",()=>newsSearch?.focus());
+    const eventYear=document.querySelector("[data-event-year-filter]");
+    const eventSearch=document.querySelector("[data-event-search]");
+    const eventSearchButton=document.querySelector("[data-event-search-button]");
+    const eventItems=[...document.querySelectorAll("[data-event-search-item]")];
+    const applyEventFilters=()=>{
+      const query=eventSearch?.value.trim().toLowerCase()||"";
+      const year=eventYear?.value||"";
+      let visible=0;
+      eventItems.forEach(item=>{const show=(!query||item.textContent.toLowerCase().includes(query))&&(!year||item.dataset.eventYear===year);item.hidden=!show;if(show)visible+=1;});
+      const empty=document.querySelector("[data-event-empty]");
+      if(empty) empty.hidden=visible!==0;
+    };
+    eventYear?.addEventListener("change",applyEventFilters);
+    eventSearch?.addEventListener("input",applyEventFilters);
+    eventSearchButton?.addEventListener("click",()=>eventSearch?.focus());
     setupCommunicationSystemTabs();
     setupCarousels();
   }
