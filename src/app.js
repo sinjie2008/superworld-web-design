@@ -2,7 +2,16 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
 (function clientApp() {
   const app = document.getElementById("app");
-  const state = { cart: [1, 1, 1], timers: [], newsPage: 1 };
+  const state = {
+    cart: [],
+    inquiryProducts: [],
+    inquiryQueryKey: null,
+    inquiryResolvedKey: null,
+    inquiryLoading: false,
+    inquiryError: "",
+    timers: [],
+    newsPage: 1
+  };
 
   const routes = {
     home: "/",
@@ -25,6 +34,21 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     inquiry: "/inquiry",
     thanks: "/thank-you"
   };
+
+  const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+
+  const inquiryIdsFromQuery = () => Array.from(new Set(new URLSearchParams(location.search)
+    .getAll("inquiry")
+    .map(Number)
+    .filter((value) => Number.isInteger(value) && value > 0)));
+
+  const safeDataUrl = (value, prefix) => typeof value === "string" && value.startsWith(prefix) && !/["<>\s]/.test(value) ? value : "";
 
   const ph = (className = "") => `<div class="ph ${className}" aria-label="Image placeholder"></div>`;
   const logo = (className = "") => `<img class="${className}" src="/assets/logo.webp" alt="Superworld Electronics">`;
@@ -713,10 +737,87 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     </main>`;
   }
 
+  function syncInquiryStateFromQuery() {
+    if (location.pathname !== routes.inquiry) return;
+    const key = inquiryIdsFromQuery().join(",");
+    if (key === state.inquiryQueryKey) return;
+    state.inquiryQueryKey = key;
+    state.inquiryResolvedKey = null;
+    state.inquiryLoading = false;
+    state.inquiryError = "";
+    state.inquiryProducts = [];
+    state.cart = [];
+  }
+
+  async function loadInquiryProducts() {
+    const ids = inquiryIdsFromQuery();
+    const key = ids.join(",");
+    if (!key || state.inquiryLoading || state.inquiryResolvedKey === key) {
+      if (!key) state.inquiryResolvedKey = key;
+      return;
+    }
+    state.inquiryLoading = true;
+    try {
+      const response = await fetch("/spec-search/mock-data.json");
+      if (!response.ok) throw new Error(`Product data request failed (${response.status})`);
+      const payload = await response.json();
+      const products = payload?.products?.data?.items;
+      if (!Array.isArray(products)) throw new Error("Product data is unavailable");
+      if (state.inquiryQueryKey !== key) return;
+      const productsById = new Map(products.map((product) => [Number(product.id), product]));
+      state.inquiryProducts = ids.map((id) => productsById.get(id)).filter(Boolean);
+      state.cart = state.inquiryProducts.map(() => 1);
+      state.inquiryError = "";
+    } catch (error) {
+      console.error(error);
+      if (state.inquiryQueryKey === key) {
+        state.inquiryProducts = [];
+        state.cart = [];
+        state.inquiryError = "Selected products could not be loaded. Please return to Specification Search and try again.";
+      }
+    } finally {
+      if (state.inquiryQueryKey === key) {
+        state.inquiryLoading = false;
+        state.inquiryResolvedKey = key;
+        render(false);
+      }
+    }
+  }
+
+  function updateInquiryQuery() {
+    const params = new URLSearchParams(location.search);
+    params.delete("inquiry");
+    state.inquiryProducts.forEach((product) => params.append("inquiry", String(product.id)));
+    const query = params.toString();
+    history.replaceState({}, "", `${location.pathname}${query ? `?${query}` : ""}${location.hash}`);
+    const key = state.inquiryProducts.map((product) => product.id).join(",");
+    state.inquiryQueryKey = key;
+    state.inquiryResolvedKey = key;
+  }
+
+  function removeInquiryItem(index) {
+    state.inquiryProducts.splice(index, 1);
+    state.cart.splice(index, 1);
+    updateInquiryQuery();
+    render(false);
+  }
+
   function inquiryPage() {
-    const cartRows = state.cart.map((qty,i)=>`<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i+1}</div><div class="cart-product">${ph()}<div><h3>C0-10NJ-E-10</h3><p><strong>L W H</strong> &nbsp; XXXXX &nbsp; <strong>SPQ</strong> (reel) : 1000</p><p><strong>Category</strong><br>General Products &gt; EMC Components &gt; Chip Inductor</p><div class="grid grid-2"><p><strong>Inductance (uH)</strong> XXXXX<br><strong>Impedance (Ω)</strong> XXXXX<br><strong>DCR (mΩ)</strong> XXXXX</p><p><strong>Isat (mA)</strong> XXXXX<br><strong>Irms (mA)</strong> XXXXX<br><strong>Specification</strong> Download</p></div></div></div><div class="cart-quantity"><strong>Quantity</strong><div class="quantity"><button type="button" data-qty="${i}" data-delta="1">+</button><output>${qty}</output><button type="button" data-qty="${i}" data-delta="-1">−</button></div><button type="button" data-remove="${i}">Remove</button></div></div>`).join("");
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["INQUIRY CART"]])}<section class="section-sm"><div class="container"><div class="section-heading"><h1>INQUIRY CART SUMMARY</h1><button type="button" data-back>Back</button></div><div class="inquiry-summary"><h2 style="padding:18px 96px;border-bottom:1px solid #111">Product Details</h2><div data-cart-container>${cartRows||`<div class="card"><h3>Your inquiry cart is empty.</h3>${buttonLink(routes.products,"Browse Products")}</div>`}</div></div>
-      <section class="section"><h1>INQUIRY DETAILS</h1><form class="inquiry-form" data-inquiry-form><div class="form-columns"><div><h2>CONTACT DETAILS</h2><div class="field"><label for="fullname">Full Name</label><input id="fullname" name="fullname" required></div><div class="form-grid-2"><div class="field"><label>Job Title / Department</label><input name="job"></div><div class="field"><label>Phone Number</label><input name="phone" type="tel"></div></div><div class="field"><label>Business Email</label><input name="email" type="email" required></div></div><div><h2>BUSINESS / PROJECT INFO</h2><div class="form-grid-2"><div class="field"><label>Company Name</label><input name="company" required></div><div class="field"><label>Industry</label><input name="industry"></div><div class="field"><label>Country / Region</label><input name="country"></div><div class="field"><label>Project Timeline</label><select name="timeline"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option></select></div></div><div class="field"><label>Company Website</label><input name="website" type="url"></div></div></div><h2>OVERALL REMARKS</h2><div class="field"><textarea name="remarks"></textarea></div><div class="section-heading"><label><input type="checkbox" required> Kindly consent to the terms and conditions.<br>Click "Read More" for further comprehension.</label><button class="button wide" type="submit">Submit</button></div></form></section>
+    const value = (product, key) => escapeHtml(product[key] || "—");
+    const cartRows = state.inquiryProducts.map((product, i) => {
+      const sku = escapeHtml(product.sku || product.name || product.series || "Product");
+      const image = safeDataUrl(product.seriesImage, "data:image/");
+      const pdf = safeDataUrl(product.pdfDownload, "data:application/pdf;base64,");
+      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}">` : ph()}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product,"acf.length")} × ${value(product,"acf.width")} × ${value(product,"acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product,"series")}</p><p><strong>Category</strong><br>${value(product,"category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product,"acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product,"acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product,"acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product,"acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product,"acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
+    }).join("");
+    const pending = state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
+    const summaryContent = pending
+      ? `<div class="inquiry-empty" role="status">Loading selected products…</div>`
+      : state.inquiryError
+        ? `<div class="inquiry-empty inquiry-error" role="alert">${escapeHtml(state.inquiryError)}</div>`
+        : cartRows || `<div class="inquiry-empty"><h3>Your inquiry cart is empty.</h3>${buttonLink(routes.tools,"Search Products")}</div>`;
+    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["INQUIRY CART"]])}<section class="section-sm"><div class="container"><div class="section-heading"><h1>INQUIRY CART SUMMARY</h1><button type="button" data-back>Back</button></div><div class="inquiry-summary"><div class="inquiry-summary-header"><span aria-hidden="true"></span><h2>Product Details</h2><strong>Quantity</strong></div><div data-cart-container>${summaryContent}</div></div>
+      <section class="section inquiry-details"><h1>INQUIRY DETAILS</h1><form class="inquiry-form" data-inquiry-form><div class="form-columns"><div><h2>CONTACT DETAILS</h2><div class="field"><label for="fullname">Full Name</label><input id="fullname" name="fullname" required></div><div class="form-grid-2"><div class="field"><label>Job Title / Department</label><input name="job"></div><div class="field"><label>Phone Number</label><input name="phone" type="tel"></div></div><div class="field"><label>Business Email</label><input name="email" type="email" required></div></div><div><h2>BUSINESS / PROJECT INFO</h2><div class="form-grid-2"><div class="field"><label>Company Name</label><input name="company" required></div><div class="field"><label>Industry</label><input name="industry"></div><div class="field"><label>Country / Region</label><input name="country"></div><div class="field"><label>Project Timeline</label><select name="timeline"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option></select></div></div><div class="field"><label>Company Website</label><input name="website" type="url"></div></div></div><h2>OVERALL REMARKS</h2><div class="field"><textarea name="remarks"></textarea></div><div class="section-heading"><label><input type="checkbox" required> Kindly consent to the terms and conditions.<br>Click "Read More" for further comprehension.</label><button class="button wide" type="submit">Submit</button></div></form></section>
     </div></section></main>`;
   }
 
@@ -925,9 +1026,13 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     document.querySelector("[data-clear-filters]")?.addEventListener("click",()=>{document.querySelectorAll(".search-block input[type=checkbox]").forEach(c=>c.checked=false);const l=document.querySelector("[data-selected-count]");if(l)l.textContent="0 selected";});
     document.querySelector("[data-spec-search]")?.addEventListener("click",()=>alert("Wireframe search applied. The results table below represents the result state."));
     document.querySelectorAll("[data-qty]").forEach(btn=>btn.addEventListener("click",()=>{
-      const i=Number(btn.dataset.qty); state.cart[i]=Math.max(1,state.cart[i]+Number(btn.dataset.delta)); render(false);
+      const i=Number(btn.dataset.qty);
+      const quantity=state.cart[i]+Number(btn.dataset.delta);
+      if(quantity<=0){removeInquiryItem(i);return;}
+      state.cart[i]=quantity;
+      render(false);
     }));
-    document.querySelectorAll("[data-remove]").forEach(btn=>btn.addEventListener("click",()=>{state.cart.splice(Number(btn.dataset.remove),1);render(false);}));
+    document.querySelectorAll("[data-remove]").forEach(btn=>btn.addEventListener("click",()=>removeInquiryItem(Number(btn.dataset.remove))));
     document.querySelector("[data-back]")?.addEventListener("click",()=>history.back());
     document.querySelector("[data-inquiry-form]")?.addEventListener("submit",(e)=>{e.preventDefault();navigate(routes.thanks);});
     const locationSearch=document.querySelector("[data-location-search]");
@@ -1007,9 +1112,11 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   function render(scrollTop = true) {
     stopTimers();
+    syncInquiryStateFromQuery();
     app.innerHTML = header() + pageForPath() + footer() + `<div class="wireframe-note">Black & white wireframe · Poppins headings · Inter body</div>`;
     setupInteractions();
     if (location.pathname === routes.tools) window.SpecSearchApp?.initialize();
+    if (location.pathname === routes.inquiry) void loadInquiryProducts();
     document.title = "Superworld Electronics — Wireframe";
     const hashTarget=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1))):null;
     if(hashTarget) hashTarget.scrollIntoView({block:"start",behavior:"instant"});

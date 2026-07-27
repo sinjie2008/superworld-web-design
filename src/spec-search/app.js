@@ -752,20 +752,9 @@ function buildQueryString(rootId, categoryIds, filters, inquiryProductIds = []) 
     return params.toString();
 }
 
-function buildInquiryMailto(products) {
-    const productLines = products.map((product) => {
-        const productName = product.sku || product.name || product.series || "Product";
-        const details = [product.series, product.category].filter(Boolean).join(" — ");
-        return details ? `- ${productName}: ${details}` : `- ${productName}`;
-    });
-    const body = [
-        "I would like to inquire about the following products:",
-        "",
-        ...productLines,
-        "",
-        "Please contact me with more information."
-    ].join("\n");
-    return `mailto:?subject=${encodeURIComponent("Product Inquiry")}&body=${encodeURIComponent(body)}`;
+function buildInquiryUrl() {
+    const query = buildQueryString(state.rootId, state.categoryIds, state.filters, [...state.inquiryProductIds]);
+    return `/inquiry${query ? `?${query}` : ""}`;
 }
 
 function syncQueryString() {
@@ -1356,8 +1345,7 @@ function bindEvents() {
     dom["table-search"].addEventListener("input", applyTableSearch);
     dom["table-search-submit"].addEventListener("click", applyTableSearch);
     dom["inquiry-button"].addEventListener("click", () => {
-        const products = state.products.filter((product) => state.inquiryProductIds.has(product.id));
-        if (products.length > 0) window.location.href = buildInquiryMailto(products);
+        if (state.inquiryProductIds.size > 0) window.location.href = buildInquiryUrl();
     });
 
     dom["page-size"].addEventListener("change", () => {
