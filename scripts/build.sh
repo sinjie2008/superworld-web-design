@@ -9,11 +9,19 @@ rm -rf "$dist_root" "$generated_root"
 mkdir -p "$dist_root/server" "$dist_root/.openai"
 mkdir -p "$generated_root"
 
+node "$project_root/scripts/prepare-spec-search.mjs"
+
 "$project_root/node_modules/.bin/sass" \
   --no-source-map \
   --style=compressed \
   "$project_root/src/styles.scss" \
   "$generated_root/styles.css"
+
+"$project_root/node_modules/.bin/sass" \
+  --no-source-map \
+  --style=compressed \
+  "$generated_root/spec-search.scss" \
+  "$generated_root/spec-search.css"
 
 "$project_root/node_modules/.bin/esbuild" \
   "$project_root/src/app.js" \
@@ -23,6 +31,17 @@ mkdir -p "$generated_root"
   --minify \
   --outfile="$generated_root/app.js"
 cp "$generated_root/app.js" "$generated_root/app.txt"
+
+"$project_root/node_modules/.bin/esbuild" \
+  "$project_root/src/spec-search/app.js" \
+  --bundle \
+  --format=iife \
+  --target=es2020 \
+  --minify \
+  --outfile="$generated_root/spec-search-app.js"
+cp "$generated_root/spec-search-app.js" "$generated_root/spec-search-app.txt"
+cp "$project_root/src/spec-search/mock-data.json" "$generated_root/spec-search-mock-data.txt"
+cp "$project_root/src/spec-search/mock-data.js" "$generated_root/spec-search-mock-data-script.txt"
 
 "$project_root/node_modules/.bin/esbuild" \
   "$project_root/src/worker.js" \

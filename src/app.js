@@ -1,3 +1,5 @@
+import specSearchMarkup from "../.generated/spec-search-markup.txt";
+
 (function clientApp() {
   const app = document.getElementById("app");
   const state = { cart: [1, 1, 1], timers: [], newsPage: 1 };
@@ -608,17 +610,11 @@
   }
 
   function specSearchPage() {
-    const filters = [
-      ["Series",["C0","C1","C2","C3","SCT20022R0K","SCT50036R3KA11S"]],
-      ["Length",["xx"]],["Width",["xx"]],["Height",["xx"]],["Impedance",["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"]],
-      ["Dcr",["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"]],["Irms",["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"]],
-      ["Qi Standard",["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"]],["Power",["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"]],["SPQ",["Reel"]]
-    ];
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["TOOLS"],["Specification Search"]])}<section class="section-sm"><div class="container"><h1>SPECIFICATION SEARCH</h1>
-      <div class="search-block"><h4>Choose starting category</h4><div class="radio-row"><label><input type="radio" name="start" value="application"> Application</label><label><input type="radio" name="start" checked value="general"> General Products</label><label><input type="radio" name="start" value="automotive"> Automotive Products</label></div></div>
-      <div class="search-block"><div class="section-heading"><div><h4>Product Categories</h4><p>Pick one or more</p></div><span class="tag" data-selected-count>2 selected</span></div><div class="category-picker">${Object.entries(generalCategories).map(([k,vals])=>`<div class="filter-box"><h4>${k}</h4>${vals.slice(0,12).map((x,i)=>`<label class="filter-option"><input class="category-check" type="checkbox" ${((k==="EMC Components"&&i===1)||(k==="Wireless Power Transfer"&&i===1))?"checked":""}>${x}</label>`).join("")}</div>`).join("")}</div></div>
-      <div class="search-block"><div class="section-heading"><div><h4>Filters</h4><p>Series & custom fields</p></div><button type="button" data-clear-filters>Clear</button></div><div class="filter-grid">${filters.map(f=>`<div class="filter-box"><h4>${f[0]}</h4><input type="search" aria-label="Search ${f[0]}">${f[1].map(x=>`<label class="filter-option"><input type="checkbox">${x}</label>`).join("")}</div>`).join("")}</div></div>
-      <div class="search-actions"><input type="search" placeholder="Search Terms:"><button type="button" data-spec-search>Search</button>${buttonLink(routes.inquiry,"Inquiry")}</div><p>Choose the part numbers you need and submit your inquiry.</p><div class="table-wrap"><table><thead><tr><th></th><th>Product</th><th>Category</th><th>Length (mm)</th><th>Width (mm)</th><th>Height (mm)</th><th>Inductance (uH)</th><th>Impedance (Ω)</th><th>DCR (mΩ)</th><th>Isat (mA)</th><th>Irms (mA)</th><th>SPQ</th><th></th></tr></thead><tbody>${productDataRows()}</tbody></table></div>${pagination()}</div></section></main>`;
+    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["TOOLS"],["Specification Search"]])}
+      <section id="superworld_electronics_tools_spec_search_specification_search" data-section-id-preserve>
+        ${specSearchMarkup}
+      </section>
+    </main>`;
   }
 
   const newsCategories = {
@@ -1013,6 +1009,7 @@
     stopTimers();
     app.innerHTML = header() + pageForPath() + footer() + `<div class="wireframe-note">Black & white wireframe · Poppins headings · Inter body</div>`;
     setupInteractions();
+    if (location.pathname === routes.tools) window.SpecSearchApp?.initialize();
     document.title = "Superworld Electronics — Wireframe";
     const hashTarget=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1))):null;
     if(hashTarget) hashTarget.scrollIntoView({block:"start",behavior:"instant"});
@@ -1801,6 +1798,10 @@
 
       sections.forEach((section, index) => {
         const previousId = section.id;
+        if (section.hasAttribute('data-section-id-preserve') && previousId) {
+          usedIds.add(previousId);
+          return;
+        }
         const heading = section.querySelector('h1, h2, h3');
         const fallback = previousId || [...section.classList].filter((name) => name !== 'section' && name !== 'section-sm' && name !== 'section-rule').join('_') || 'section_' + (index + 1);
         const sectionName = slugify(heading?.textContent.trim() || fallback) || 'section_' + (index + 1);

@@ -1,7 +1,11 @@
 import css from "../.generated/styles.css";
 import appJs from "../.generated/app.txt";
+import specSearchCss from "../.generated/spec-search.css";
+import specSearchJs from "../.generated/spec-search-app.txt";
+import specSearchMockData from "../.generated/spec-search-mock-data.txt";
+import specSearchMockDataScript from "../.generated/spec-search-mock-data-script.txt";
 
-const html = "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <meta name=\"description\" content=\"Superworld Electronics website wireframe prototype\">\n  <title>Superworld Electronics — Wireframe</title>\n  <link rel=\"stylesheet\" href=\"/styles.css\">\n</head>\n<body>\n  <a class=\"skip-link\" href=\"#main-content\">Skip to content</a>\n  <div id=\"app\"></div>\n  <script type=\"module\" src=\"/app.js\"></script>\n</body>\n</html>";
+const html = "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <meta name=\"description\" content=\"Superworld Electronics website wireframe prototype\">\n  <title>Superworld Electronics — Wireframe</title>\n  <link rel=\"stylesheet\" href=\"/styles.css\">\n  <link rel=\"stylesheet\" href=\"/spec-search.css\">\n</head>\n<body>\n  <a class=\"skip-link\" href=\"#main-content\">Skip to content</a>\n  <div id=\"app\"></div>\n  <script src=\"/spec-search.js\"></script>\n  <script type=\"module\" src=\"/app.js\"></script>\n</body>\n</html>";
 
 
 
@@ -100,7 +104,18 @@ export default {
     }
     if (path === "/styles.css") return new Response(css, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/app.js") return new Response(appJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
+    if (path === "/spec-search.css") return new Response(specSearchCss, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300" } });
+    if (path === "/spec-search.js") return new Response(specSearchJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
+    if (path === "/spec-search/mock-data.json") return new Response(specSearchMockData, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+    if (path === "/spec-search/mock-data.js") return new Response(specSearchMockDataScript, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "no-store" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(html.replace("/styles.css", "/styles.css?v=81").replace("/app.js", "/app.js?v=81"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    return new Response(
+      html
+        .replace("/styles.css", "/styles.css?v=82")
+        .replace("/spec-search.css", "/spec-search.css?v=82")
+        .replace("/spec-search.js", "/spec-search.js?v=82")
+        .replace("/app.js", "/app.js?v=82"),
+      { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } }
+    );
   }
 };
