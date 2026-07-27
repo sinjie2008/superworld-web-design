@@ -14,6 +14,7 @@
 - Removing a cart row also removes its `inquiry` parameter; decrementing quantity 1 removes the row.
 - The A4K detail page keeps the site's global header and adapts the standalone product-spec wireframe without its `.topbar`.
 - A4K table selections use category `159` and real product IDs from the specification-search data; Analyze Losses reports estimated I²R loss at rated current.
+- A4K section navigation owns its vertical offset using the live sticky header and section-nav heights; horizontally center buttons by scrolling `.a4k-section-nav`, because button `scrollIntoView()` also moves the page vertically.
 
 ## Known pitfalls
 

@@ -636,7 +636,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const sections = [["overview","Introduction"],["specifications","Specifications"],["environmental","Environmental"],["performance-curves","Performance Curves"],["physical","Physical Characteristics"],["tape-reel","Tape & Reel"],["soldering","Soldering / Washing"]];
     return `<main id="main-content" class="page-main a4k-page" data-a4k-page>${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS",routes.general],["EMC COMPONENTS",routes.emc],["CHIP ARRAY FERRITE BEAD",routes.emc],["A4K SERIES"]])}<div class="container a4k-shell">
       <section class="a4k-hero" id="overview" data-section-id-preserve><div class="a4k-hero-copy"><div><div class="a4k-heading-row"><h1><span>A4K Series</span><small>Chip Array Ferrite Bead</small></h1><span class="tag">EMC COMPONENTS</span></div><div class="a4k-intro"><strong>Introduction</strong><p>A4K Series is a compact chip array ferrite bead for multi-line EMI noise suppression in high-density electronic circuits.</p><ul><li><b>4-line array design</b> supports compact filtering in one package.</li><li><b>Multiple impedance options</b> support different noise suppression needs.</li><li><b>Low DCR selection</b> helps reduce unwanted circuit power loss.</li></ul></div></div><div class="a4k-compliance" aria-label="Product compliance status"><div><b>Compliance</b><span>Product status</span></div><div><b>R</b><span><strong>RoHS / REACH</strong>Compliant</span></div><div><b>H</b><span><strong>Halogen</strong>Free</span></div><div><b>A</b><span><strong>AEC</strong>Q200 / -125°C</span></div></div></div><aside class="a4k-product-card" aria-label="Product summary"><div class="a4k-product-media"><div class="a4k-media-toggle" aria-label="Product media view"><button class="is-active" type="button" data-a4k-media="image" aria-pressed="true">Image</button><button type="button" data-a4k-media="3d" aria-pressed="false">3D View</button></div><div class="a4k-media-panel is-active" data-a4k-panel="image">${a4kImage()}</div><div class="a4k-media-panel" data-a4k-panel="3d"><div class="a4k-3d-object" aria-hidden="true"></div><span>Interactive 3D product view</span></div></div><div class="a4k-spec-mini"><div><span>Length</span><b>3.20 mm</b></div><div><span>Width</span><b>1.60 mm</b></div><div><span>Height</span><b>0.90 mm</b></div><div><span>SPQ</span><b>3,000 / reel</b></div></div><a class="button" href="/downloads/a4k-series-datasheet.pdf" download>Download Datasheet</a></aside></section>
-      <div class="a4k-section-nav-wrap"><strong>Product Details</strong><nav class="a4k-section-nav" aria-label="Product detail sections">${sections.map((section,i)=>`<button class="${i===0?"is-active":""}" type="button" data-scroll-target="${section[0]}" data-a4k-section="${section[0]}">${section[1]}</button>`).join("")}</nav></div>
+      <div class="a4k-section-nav-wrap"><strong>Product Details</strong><nav class="a4k-section-nav" aria-label="Product detail sections">${sections.map((section,i)=>`<button class="${i===0?"is-active":""}" type="button" data-a4k-section="${section[0]}">${section[1]}</button>`).join("")}</nav></div>
       <section class="a4k-section" id="specifications" data-section-id-preserve><h2>Specifications</h2><div class="a4k-summary-grid"><div><span>Product Type</span><b>Chip Array Ferrite Bead</b></div><div><span>Impedance Range</span><b>30–1000 Ω</b></div><div><span>Test Frequency</span><b>100 MHz</b></div><div><span>Operating Temp.</span><b>-40°C to +125°C</b></div></div><div class="a4k-table-tools"><input type="search" data-a4k-search aria-label="Search A4K specifications" placeholder="Search part number, impedance, DCR, current..."><button type="button" data-a4k-search-action>Search</button><button class="a4k-primary" type="button" data-a4k-inquiry>Inquire Selected</button><button type="button" data-a4k-losses>Analyze Losses</button></div><p>Choose the products you need, then submit an inquiry or compare their losses.</p><div class="a4k-table-wrap"><table aria-label="A4K Series Electrical Characteristics"><thead><tr><th class="a4k-select-cell">Inquire / Losses Compare</th><th>Part Number</th><th>Impedance Ω ±25%</th><th>Test Frequency</th><th>DCR Ω Max</th><th>Rated Current mA Max</th><th>Download</th></tr></thead><tbody>${a4kProductRows()}<tr data-a4k-empty hidden><td colspan="7">No A4K parts match your search.</td></tr></tbody></table></div><div class="a4k-compare-bar"><span><b>Selected parts:</b> <span data-a4k-selected-parts></span></span><button class="a4k-primary" type="button" data-a4k-inquiry>Send Selected Parts to Inquiry</button></div></section>
       <section class="a4k-section" id="environmental" data-section-id-preserve><h2>Environmental</h2><div class="a4k-two-col"><article class="a4k-info-card"><h3>Operating Conditions</h3><ul><li>Operating temperature: -40°C to +125°C</li><li>Storage temperature: -40°C to +125°C on board</li><li>Electrical data referenced to 25°C ambient</li></ul></article><article class="a4k-info-card"><h3>Storage Conditions</h3><ul><li>Store components in original packaging before use</li><li>Recommended storage: less than 40°C</li><li>Recommended humidity: less than 60% RH</li></ul></article></div></section>
       <section class="a4k-section" id="performance-curves" data-section-id-preserve><h2>Performance Curves</h2><article class="a4k-diagram-card"><h3>Characteristics Curve</h3><p>Impedance characteristics by selected part number</p><div class="a4k-diagram-box" data-a4k-losses-output role="status" aria-live="polite">Select products in the specification table, then choose Analyze Losses.</div></article></section>
@@ -968,18 +968,35 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       root.querySelectorAll("[data-a4k-panel]").forEach(panel=>panel.classList.toggle("is-active",panel.dataset.a4kPanel===view));
     }));
     const sectionButtons=[...root.querySelectorAll("[data-a4k-section]")];
-    const activateSection=(sectionId,center=false)=>sectionButtons.forEach(button=>{
-      const active=button.dataset.a4kSection===sectionId;
-      button.classList.toggle("is-active",active);
-      if(active&&center) button.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
-    });
-    sectionButtons.forEach(button=>button.addEventListener("click",()=>activateSection(button.dataset.a4kSection,true)));
-    const sectionObserver=new IntersectionObserver(entries=>{
-      const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
-      if(visible) activateSection(visible.target.id,true);
-    },{rootMargin:"-180px 0px -60% 0px",threshold:[0,.1,.3]});
-    sectionButtons.forEach(button=>{const section=document.getElementById(button.dataset.a4kSection);if(section)sectionObserver.observe(section);});
-    state.cleanups.push(()=>sectionObserver.disconnect());
+    const sectionNav=root.querySelector(".a4k-section-nav");
+    const sectionNavWrap=root.querySelector(".a4k-section-nav-wrap");
+    let activeSectionId="overview";
+    const activateSection=(sectionId,center=false)=>{
+      activeSectionId=sectionId;
+      sectionButtons.forEach(button=>{
+        const active=button.dataset.a4kSection===sectionId;
+        button.classList.toggle("is-active",active);
+        if(active&&center&&sectionNav) sectionNav.scrollTo({left:button.offsetLeft-(sectionNav.clientWidth-button.offsetWidth)/2,behavior:"smooth"});
+      });
+    };
+    const sectionOffset=()=>{
+      const stickyTop=parseFloat(getComputedStyle(sectionNavWrap).top)||0;
+      const headerBottom=document.querySelector(".site-header")?.getBoundingClientRect().bottom||0;
+      return Math.max(stickyTop,headerBottom)+sectionNavWrap.offsetHeight+16;
+    };
+    const scrollToSection=sectionId=>{
+      const section=document.getElementById(sectionId);
+      if(!section||!sectionNavWrap) return;
+      window.scrollTo({top:Math.max(0,section.getBoundingClientRect().top+window.scrollY-sectionOffset()),behavior:"smooth"});
+      activateSection(sectionId,true);
+    };
+    sectionButtons.forEach(button=>button.addEventListener("click",()=>scrollToSection(button.dataset.a4kSection)));
+    const syncSection=()=>{
+      const current=sectionButtons.map(button=>document.getElementById(button.dataset.a4kSection)).filter(section=>section?.getBoundingClientRect().top<=sectionOffset()+1).at(-1);
+      if(current&&current.id!==activeSectionId) activateSection(current.id,true);
+    };
+    window.addEventListener("scroll",syncSection,{passive:true});
+    state.cleanups.push(()=>window.removeEventListener("scroll",syncSection));
     const rows=[...root.querySelectorAll("[data-a4k-row]")];
     const selectedParts=()=>rows.filter(row=>row.querySelector("[data-a4k-select]")?.checked).map(row=>a4kParts.find(part=>part.id===Number(row.dataset.productId))).filter(Boolean);
     const syncSelection=()=>{
@@ -1008,9 +1025,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       const parts=selectedParts();
       const output=root.querySelector("[data-a4k-losses-output]");
       if(output) output.textContent=`Estimated I²R loss at rated current: ${parts.map(part=>`${part.sku} ${(Number(part.dcr)*Math.pow(Number(part.current)/1000,2)*1000).toFixed(1)} mW`).join(" · ")}`;
-      const target=document.getElementById("performance-curves");
-      target?.scrollIntoView({behavior:"smooth",block:"start"});
-      activateSection("performance-curves",true);
+      scrollToSection("performance-curves");
     });
     syncSelection();
   }
