@@ -28,12 +28,16 @@ const scopedScss = `
   min-width: 0;
   color: #111827;
   background: var(--page);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Inter, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
 
-  h1, h2, h3, h4, button, input, select {
-    font-family: inherit;
+  h1, h2, h3, h4, h5, h6, .section-title {
+    font-family: Poppins, Arial, sans-serif;
+  }
+
+  button, input, select {
+    font-family: Inter, Arial, sans-serif;
   }
 
   .section-heading {

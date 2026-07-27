@@ -111,10 +111,10 @@ export default {
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
     return new Response(
       html
-        .replace("/styles.css", "/styles.css?v=82")
-        .replace("/spec-search.css", "/spec-search.css?v=82")
-        .replace("/spec-search.js", "/spec-search.js?v=82")
-        .replace("/app.js", "/app.js?v=82"),
+        .replace("/styles.css", "/styles.css?v=83")
+        .replace("/spec-search.css", "/spec-search.css?v=83")
+        .replace("/spec-search.js", "/spec-search.js?v=83")
+        .replace("/app.js", "/app.js?v=83"),
       { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } }
     );
   }

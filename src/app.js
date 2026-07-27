@@ -611,7 +611,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   function specSearchPage() {
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["TOOLS"],["Specification Search"]])}
-      <section id="superworld_electronics_tools_spec_search_specification_search" data-section-id-preserve>
+      <section id="superworld_electronics_tools_spec_search_specification_search" class="container" data-section-id-preserve>
         ${specSearchMarkup}
       </section>
     </main>`;
