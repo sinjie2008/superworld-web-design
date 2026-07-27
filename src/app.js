@@ -128,8 +128,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       </div></div>
       <div class="mega-panel" data-panel="products"><div class="container mega-inner simple">
         ${link(routes.products, "All Products")}
-        ${link(routes.products+"#superworld_electronics_products_general_components", "General Components")}
-        ${link(routes.products+"#superworld_electronics_products_automotive_components", "Automotive Components")}
+        ${link(routes.general, "General Components")}
+        <span aria-disabled="true">Automotive Components</span>
       </div></div>
       <div class="mega-panel" data-panel="news"><div class="container mega-inner news-mega">
         <div class="mega-column"><h4>Company News</h4>

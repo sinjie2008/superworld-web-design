@@ -15,6 +15,7 @@
 - The A4K detail page keeps the site's global header and adapts the standalone product-spec wireframe without its `.topbar`.
 - A4K table selections use category `159` and real product IDs from the specification-search data; Analyze Losses reports estimated I²R loss at rated current.
 - A4K section navigation owns its vertical offset using the live sticky header and section-nav heights; horizontally center buttons by scrolling `.a4k-section-nav`, because button `scrollIntoView()` also moves the page vertically.
+- In the shared Our Products menu, General Components links to `/products/general`; Automotive Components remains non-interactive until its page is ready.
 
 ## Known pitfalls
 
