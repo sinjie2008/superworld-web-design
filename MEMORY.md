@@ -12,8 +12,11 @@
 - Specification Search passes selected product IDs to Inquiry as repeated positive `inquiry` query parameters.
 - Inquiry resolves those IDs from `/spec-search/mock-data.json`, preserves query order, and starts each selected product at quantity 1.
 - Removing a cart row also removes its `inquiry` parameter; decrementing quantity 1 removes the row.
+- The A4K detail page keeps the site's global header and adapts the standalone product-spec wireframe without its `.topbar`.
+- A4K table selections use category `159` and real product IDs from the specification-search data; Analyze Losses reports estimated I²R loss at rated current.
 
 ## Known pitfalls
 
 - Keep the Specification Search and Inquiry query schema aligned; the Inquiry action must navigate to `/inquiry`, not open a `mailto:` URL.
 - When JavaScript or CSS changes, bump the asset query version in `src/worker.js`; otherwise returning visitors can receive the previous five-minute cached asset.
+- Keep the inline A4K table IDs and electrical values aligned with `src/spec-search/mock-data.json` when that mock data changes.
