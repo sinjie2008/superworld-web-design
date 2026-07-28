@@ -890,10 +890,17 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const groups = supportProductCategoryGroups.map(([group,items],groupIndex)=>{
       const options = items.map((item,itemIndex)=>{
         const id = `support-category-${groupIndex}-${itemIndex}`;
-        return `<label class="support-category-option" for="${id}" data-support-category-option>
-          <input id="${id}" name="support-product-categories" type="checkbox" value="${escapeHtml(item)}">
-          <span>${escapeHtml(item)}</span>
-        </label>`;
+        const detailId = `${id}-detail`;
+        return `<div class="support-category-option-row" data-support-category-option>
+          <label class="support-category-option" for="${id}">
+            <input id="${id}" name="support-product-categories" type="checkbox" value="${escapeHtml(item)}">
+            <span>${escapeHtml(item)}</span>
+          </label>
+          <div class="support-category-detail" data-support-category-detail hidden>
+            <label class="sr-only" for="${detailId}">Series name or part number for ${escapeHtml(item)}</label>
+            <input id="${detailId}" name="support-product-reference-${groupIndex}-${itemIndex}" type="text" placeholder="Series name or part number" data-support-category-detail-input disabled>
+          </div>
+        </div>`;
       }).join("");
       return `<section class="support-category-group" data-support-category-group>
         <h3>${escapeHtml(group)}</h3>
@@ -912,10 +919,12 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
           ${groups}
           <section class="support-category-group support-category-other-group" data-support-category-group>
             <h3>Other</h3>
-            <label class="support-category-option" for="support-category-other" data-support-category-option>
-              <input id="support-category-other" name="support-product-categories" type="checkbox" value="Other" data-support-category-other>
-              <span>Other</span>
-            </label>
+            <div class="support-category-option-row" data-support-category-option>
+              <label class="support-category-option" for="support-category-other">
+                <input id="support-category-other" name="support-product-categories" type="checkbox" value="Other" data-support-category-other>
+                <span>Other</span>
+              </label>
+            </div>
           </section>
           <p class="support-category-empty" data-support-category-empty hidden>No matching product categories.</p>
         </div>
@@ -1014,7 +1023,6 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       </div>
       <div class="support-location-controls">
         <button type="button" data-support-location-prev aria-controls="support-location-slider" aria-label="Previous location"><span aria-hidden="true">‹</span> Prev</button>
-        <span class="support-location-status" data-support-location-status aria-live="polite"></span>
         <button type="button" data-support-location-next aria-controls="support-location-slider" aria-label="Next location">Next <span aria-hidden="true">›</span></button>
       </div>
     </section>`;
@@ -1400,6 +1408,13 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
           otherInput.disabled=!showOther;
           otherInput.required=showOther;
         }
+        checkboxes.forEach(checkbox=>{
+          const option=checkbox.closest("[data-support-category-option]");
+          const detail=option?.querySelector("[data-support-category-detail]");
+          const detailInput=option?.querySelector("[data-support-category-detail-input]");
+          if(detail) detail.hidden=!checkbox.checked;
+          if(detailInput) detailInput.disabled=!checkbox.checked;
+        });
       };
       const filterCategories=()=>{
         const query=search.value.trim().toLowerCase();
@@ -1433,7 +1448,9 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         if(checkbox===otherCheckbox&&checkbox.checked){
           setCategoryOpen(false);
           window.requestAnimationFrame(()=>otherInput?.focus());
+          return;
         }
+        if(checkbox.checked) window.requestAnimationFrame(()=>checkbox.closest("[data-support-category-option]")?.querySelector("[data-support-category-detail-input]")?.focus());
       }));
       document.addEventListener("click",handleCategoryDocumentClick);
       state.cleanups.push(()=>document.removeEventListener("click",handleCategoryDocumentClick));
@@ -1458,9 +1475,13 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const supportLocationGrid=document.querySelector("[data-support-location-grid]");
     const supportLocationPrev=document.querySelector("[data-support-location-prev]");
     const supportLocationNext=document.querySelector("[data-support-location-next]");
-    const supportLocationStatus=document.querySelector("[data-support-location-status]");
     if(supportLocationGrid&&supportLocationPrev&&supportLocationNext){
       const supportLocationCards=[...supportLocationGrid.querySelectorAll("[data-support-location-card]")];
+      const supportLocationSection=supportLocationGrid.closest(".support-locations");
+      const reducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let supportLocationAutoTimer=0;
+      let supportLocationHoverPaused=false;
+      let supportLocationFocusPaused=false;
       const sliderMetrics=()=>{
         const card=supportLocationCards[0];
         const gap=parseFloat(getComputedStyle(supportLocationGrid).columnGap)||0;
@@ -1470,27 +1491,69 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         return {step,visible,maxScroll};
       };
       const updateSupportLocationControls=()=>{
-        const {step,visible,maxScroll}=sliderMetrics();
-        const first=Math.min(Math.max(0,Math.round(supportLocationGrid.scrollLeft/step)),Math.max(0,supportLocationCards.length-visible));
+        const {maxScroll}=sliderMetrics();
         supportLocationPrev.disabled=supportLocationGrid.scrollLeft<=2;
         supportLocationNext.disabled=supportLocationGrid.scrollLeft>=maxScroll-2;
-        if(supportLocationStatus) supportLocationStatus.textContent=`${first+1}–${Math.min(first+visible,supportLocationCards.length)} of ${supportLocationCards.length}`;
       };
       const moveSupportLocations=direction=>{
-        const {step}=sliderMetrics();
+        const {step,maxScroll}=sliderMetrics();
+        const atStart=supportLocationGrid.scrollLeft<=2;
+        const atEnd=supportLocationGrid.scrollLeft>=maxScroll-2;
+        if(direction>0&&atEnd){
+          supportLocationGrid.scrollTo({left:0,behavior:"smooth"});
+          return;
+        }
+        if(direction<0&&atStart){
+          supportLocationGrid.scrollTo({left:maxScroll,behavior:"smooth"});
+          return;
+        }
         supportLocationGrid.scrollBy({left:step*direction,behavior:"smooth"});
       };
+      const stopSupportLocationAuto=()=>{
+        window.clearInterval(supportLocationAutoTimer);
+        supportLocationAutoTimer=0;
+      };
+      const startSupportLocationAuto=()=>{
+        stopSupportLocationAuto();
+        if(reducedMotion||supportLocationHoverPaused||supportLocationFocusPaused||document.hidden||supportLocationCards.length<2) return;
+        supportLocationAutoTimer=window.setInterval(()=>moveSupportLocations(1),4500);
+      };
+      const resetSupportLocationAuto=()=>{
+        stopSupportLocationAuto();
+        startSupportLocationAuto();
+      };
       const onSupportLocationScroll=()=>window.requestAnimationFrame(updateSupportLocationControls);
-      const onSupportLocationResize=()=>updateSupportLocationControls();
-      supportLocationPrev.addEventListener("click",()=>moveSupportLocations(-1));
-      supportLocationNext.addEventListener("click",()=>moveSupportLocations(1));
+      const onSupportLocationResize=()=>{updateSupportLocationControls();resetSupportLocationAuto();};
+      const onSupportLocationPointerEnter=()=>{supportLocationHoverPaused=true;stopSupportLocationAuto();};
+      const onSupportLocationPointerLeave=()=>{supportLocationHoverPaused=false;startSupportLocationAuto();};
+      const onSupportLocationFocusIn=()=>{supportLocationFocusPaused=true;stopSupportLocationAuto();};
+      const onSupportLocationFocusOut=event=>{
+        if(supportLocationSection?.contains(event.relatedTarget)) return;
+        supportLocationFocusPaused=false;
+        startSupportLocationAuto();
+      };
+      const onSupportLocationVisibility=()=>{if(document.hidden) stopSupportLocationAuto();else startSupportLocationAuto();};
+      supportLocationPrev.addEventListener("click",()=>{moveSupportLocations(-1);resetSupportLocationAuto();});
+      supportLocationNext.addEventListener("click",()=>{moveSupportLocations(1);resetSupportLocationAuto();});
       supportLocationGrid.addEventListener("scroll",onSupportLocationScroll,{passive:true});
+      supportLocationSection?.addEventListener("pointerenter",onSupportLocationPointerEnter);
+      supportLocationSection?.addEventListener("pointerleave",onSupportLocationPointerLeave);
+      supportLocationSection?.addEventListener("focusin",onSupportLocationFocusIn);
+      supportLocationSection?.addEventListener("focusout",onSupportLocationFocusOut);
+      document.addEventListener("visibilitychange",onSupportLocationVisibility);
       window.addEventListener("resize",onSupportLocationResize,{passive:true});
       state.cleanups.push(()=>{
+        stopSupportLocationAuto();
         supportLocationGrid.removeEventListener("scroll",onSupportLocationScroll);
+        supportLocationSection?.removeEventListener("pointerenter",onSupportLocationPointerEnter);
+        supportLocationSection?.removeEventListener("pointerleave",onSupportLocationPointerLeave);
+        supportLocationSection?.removeEventListener("focusin",onSupportLocationFocusIn);
+        supportLocationSection?.removeEventListener("focusout",onSupportLocationFocusOut);
+        document.removeEventListener("visibilitychange",onSupportLocationVisibility);
         window.removeEventListener("resize",onSupportLocationResize);
       });
       updateSupportLocationControls();
+      startSupportLocationAuto();
     }
     const locationSearch=document.querySelector("[data-location-search]");
     const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
