@@ -22,6 +22,7 @@
 - Inquiry and Support text, date, and select controls share a 52 px standard height; selects use the same custom chevron with consistent right spacing.
 - Support product categories use a searchable, grouped multi-checkbox picker with subcategories. Selecting Other reveals a required free-text field.
 - Selecting a Support product subcategory reveals an inline optional field for its series name or part number; clearing the checkbox hides and disables that field.
+- Support inquiry fields and the Contact/Business column rows align to shared vertical positions. Nested two-field groups use a 14 px row gap without last-child grid stretching, and both bordered detail panels share the same height.
 
 ## Known pitfalls
 

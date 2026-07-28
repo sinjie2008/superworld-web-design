@@ -548,10 +548,14 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .support-hero-logo img{width:min(430px,100%);filter:grayscale(1) contrast(1.05)}
 .support-form-section{margin-top:34px}
 .support-form-section > h2,.support-detail-column > h2{font-size:22px;text-transform:none;margin:0 0 10px}
-.support-inquiry-panel{display:grid;grid-template-columns:1fr 1fr;gap:30px;border:1px solid var(--line);padding:18px}
-.support-details-columns{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:34px}
-.support-field-panel{border:1px solid var(--line);padding:18px}
-.support-two-fields{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.support-inquiry-panel{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:30px;border:1px solid var(--line);padding:18px}
+.support-inquiry-panel > .support-field{align-self:start;margin-bottom:0}
+.support-details-columns{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;gap:48px;margin-top:34px}
+.support-detail-column{display:flex;min-width:0;flex-direction:column}
+.support-field-panel{flex:1;border:1px solid var(--line);padding:18px}
+.support-two-fields{display:grid;grid-template-columns:1fr 1fr;column-gap:22px;row-gap:14px}
+.support-field-panel > .support-two-fields{margin-bottom:14px}
+.support-two-fields > .support-field{align-self:start;margin-bottom:0}
 .support-field{display:grid;gap:6px;margin-bottom:14px;min-width:0}
 .support-field:last-child{margin-bottom:0}
 .support-field label,.support-field-label,.support-appointment-card legend{font-size:13px;font-weight:600}
