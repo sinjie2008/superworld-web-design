@@ -32,6 +32,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     calendar: "/news/event-calendar",
     detail: "/news/radial-leaded-inductor",
     locations: "/locations",
+    support: "/support",
     inquiry: "/inquiry",
     thanks: "/thank-you"
   };
@@ -116,9 +117,9 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         ${link(routes.locations, "Global Presence")}
       </div></div>
       <div class="mega-panel" data-panel="support"><div class="container mega-inner simple">
-        ${link(routes.inquiry, "Request for Quotation")}
-        ${link(routes.inquiry, "Technical Support")}
-        ${link(routes.inquiry, "Quality / Complaint")}
+        ${link(routes.support+"?type=Request%20for%20Quotation", "Request for Quotation")}
+        ${link(routes.support+"?type=Technical%20Support", "Technical Support")}
+        ${link(routes.support+"?type=Quality%20%2F%20Complaint", "Quality / Complaint")}
         ${link(routes.locations, "Service & Sales Offices")}
       </div></div>
       <div class="mega-panel" data-panel="language"><div class="container mega-inner languages">
@@ -170,7 +171,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         <div><h3>Applications</h3>${link(routes.automotive,"Automotive")}${link(routes.communication,"AI, HPC & Emerging Tech")}${link(routes.applications,"Consumer")}${link(routes.applications,"Healthcare Devices")}${link(routes.applications,"Industrial & Energy")}${link(routes.applications,"Smart Home")}</div>
         <div><h3>News</h3>${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=brochures","Resources")}</div>
         <div><h3>Tools</h3>${link(routes.tools,"Specification Search")}</div>
-        <div><h3>Contact Us</h3>${link(routes.inquiry,"Request for Quotation")}${link(routes.inquiry,"Technical Support")}${link(routes.inquiry,"Quality / Complaint")}${link(routes.locations,"Service & Sales Offices")}</div>
+        <div><h3>Contact Us</h3>${link(routes.support+"?type=Request%20for%20Quotation","Request for Quotation")}${link(routes.support+"?type=Technical%20Support","Technical Support")}${link(routes.support+"?type=Quality%20%2F%20Complaint","Quality / Complaint")}${link(routes.locations,"Service & Sales Offices")}</div>
       </div>
       <div class="footer-bottom"><span>Terms of Use | Privacy Policy</span><span>© Superworld Electronics (S) Pte Ltd. All Rights Reserved.</span></div>
     </div></footer>`;
@@ -817,6 +818,189 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     render(false);
   }
 
+  const supportRequestTypes = [
+    "General Inquiry",
+    "Request for Quotation",
+    "Technical Support",
+    "Quality / Complaint",
+    "Book An Appointment",
+    "Anonymous"
+  ];
+
+  function supportRequestFromQuery() {
+    const params = new URLSearchParams(location.search);
+    const firstEntry = params.entries().next().value;
+    const candidate = params.get("type")
+      || params.get("request")
+      || params.get("support")
+      || params.get("inquiry")
+      || params.get("help")
+      || firstEntry?.[1]
+      || firstEntry?.[0]
+      || "General Inquiry";
+    const normalized = candidate.trim().toLowerCase().replace(/[_+-]+/g," ").replace(/\s+/g," ");
+    const aliases = {
+      "general": "General Inquiry",
+      "general inquiry": "General Inquiry",
+      "quotation": "Request for Quotation",
+      "rfq": "Request for Quotation",
+      "request for quotation": "Request for Quotation",
+      "technical": "Technical Support",
+      "technical support": "Technical Support",
+      "quality": "Quality / Complaint",
+      "complaint": "Quality / Complaint",
+      "quality complaint": "Quality / Complaint",
+      "quality / complaint": "Quality / Complaint",
+      "appointment": "Book An Appointment",
+      "book appointment": "Book An Appointment",
+      "book an appointment": "Book An Appointment",
+      "anonymous": "Anonymous"
+    };
+    return aliases[normalized] || supportRequestTypes.find(type=>type.toLowerCase()===normalized) || "General Inquiry";
+  }
+
+  function supportSelectOptions(selectedType) {
+    return supportRequestTypes.map(type=>`<option value="${type}" ${type===selectedType?"selected":""}>${type}</option>`).join("");
+  }
+
+  function supportField(id,label,type="text",attributes="") {
+    return `<div class="support-field"><label for="${id}">${label}</label><input id="${id}" name="${id}" type="${type}" ${attributes}></div>`;
+  }
+
+  function supportContactAndBusinessFields() {
+    return `<div class="support-details-columns">
+      <section class="support-detail-column" aria-labelledby="support-contact-heading">
+        <h2 id="support-contact-heading">Contact details</h2>
+        <div class="support-field-panel">
+          ${supportField("support-full-name","Full Name","text","autocomplete=\"name\" required")}
+          <div class="support-two-fields">
+            ${supportField("support-job-title","Job Title / Department","text","autocomplete=\"organization-title\"")}
+            ${supportField("support-phone","Phone Number","tel","autocomplete=\"tel\"")}
+          </div>
+          ${supportField("support-email","Business Email","email","autocomplete=\"email\" required")}
+        </div>
+      </section>
+      <section class="support-detail-column" aria-labelledby="support-business-heading">
+        <h2 id="support-business-heading">Business / project info</h2>
+        <div class="support-field-panel">
+          <div class="support-two-fields">
+            ${supportField("support-company","Company Name","text","autocomplete=\"organization\" required")}
+            ${supportField("support-industry","Industry")}
+            ${supportField("support-country","Country / Region","text","autocomplete=\"country-name\"")}
+            <div class="support-field"><label for="support-timeline">Project Timeline</label><select id="support-timeline" name="support-timeline"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>More than 12 months</option></select></div>
+          </div>
+          ${supportField("support-website","Company Website","url","autocomplete=\"url\"")}
+        </div>
+      </section>
+    </div>`;
+  }
+
+  function supportAttachmentField() {
+    return `<section class="support-form-section">
+      <h2>Attachment</h2>
+      <label class="support-file-control" for="support-attachment">
+        <span data-support-file-name>No file selected</span>
+        <strong>Choose file</strong>
+      </label>
+      <input class="sr-only" id="support-attachment" name="support-attachment" type="file" data-support-file accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+      <small class="support-help" data-support-file-status>Maximum allowed file size is 6 MB</small>
+    </section>`;
+  }
+
+  function supportAppointmentFields() {
+    return `<section class="support-form-section">
+      <h2>Appointment Location</h2>
+      <div class="support-field support-wide-select"><label class="sr-only" for="support-appointment-location">Appointment Location</label><select id="support-appointment-location" name="support-appointment-location"><option>Singapore Office</option><option>Hong Kong Office</option><option>Dongguan Office</option></select></div>
+    </section>
+    <section class="support-form-section">
+      <h2>Book An Appointment Date</h2>
+      <div class="support-appointment-grid">
+        <fieldset class="support-appointment-card">
+          <legend>Preferred date 1</legend>
+          <div class="support-two-fields">
+            ${supportField("support-date-one","Date","date","required")}
+            <div class="support-field"><label for="support-time-one">Time</label><select id="support-time-one" name="support-time-one"><option value="">Select time</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option></select></div>
+          </div>
+        </fieldset>
+        <fieldset class="support-appointment-card">
+          <legend>Preferred date 2</legend>
+          <div class="support-two-fields">
+            ${supportField("support-date-two","Date","date")}
+            <div class="support-field"><label for="support-time-two">Time</label><select id="support-time-two" name="support-time-two"><option value="">Select time</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option></select></div>
+          </div>
+        </fieldset>
+      </div>
+    </section>`;
+  }
+
+  function supportOfficeCards() {
+    return `<section class="support-locations" aria-labelledby="support-locations-heading">
+      <h2 id="support-locations-heading">SUPERWORLD ELECTRONICS LOCATIONS</h2>
+      <div class="support-location-grid" data-support-location-grid>
+        <article class="support-location-card">
+          <h3>Head Office (Singapore)</h3>
+          <p>Superworld Electronics (S) Pte Ltd<br>16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204</p>
+          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
+          <p>(65) 6298 2866</p><p>(65) 6298 8900</p>
+          <p><a href="https://maps.google.com/?q=16+New+Industrial+Road+Singapore+536204" target="_blank" rel="noopener">Get Directions</a></p>
+          <p>${link(routes.support+"?type=Book%20An%20Appointment","Book an Appointment")}</p>
+        </article>
+        <article class="support-location-card">
+          <h3>Hong Kong</h3>
+          <p>Superworld Electronics (HK) Limited<br>Unit 8-9 1/F, Hope Sea Industrial Centre No. 26 Lam Hing Street, Kowloon Bay Kowloon, Hong Kong</p>
+          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
+          <p>(852) 2612 2969</p>
+        </article>
+        <article class="support-location-card">
+          <h3>Dongguan</h3>
+          <p>Superworld Electronics (Dongguan) Co., Ltd<br>No. 2 East Ring Street 5, Jitigang Village Huangjiang Town, Dongguan City Guangdong Province, China 523757</p>
+          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
+          <p>(86) 769 8353 6633</p>
+        </article>
+      </div>
+      <div class="support-location-controls">
+        <button type="button" data-support-location-prev aria-label="Previous location"><span aria-hidden="true">‹</span> Prev</button>
+        <button type="button" data-support-location-next aria-label="Next location">Next <span aria-hidden="true">›</span></button>
+      </div>
+    </section>`;
+  }
+
+  function supportPage() {
+    const requestType = supportRequestFromQuery();
+    const isAnonymous = requestType === "Anonymous";
+    const isAppointment = requestType === "Book An Appointment";
+    return `<main id="main-content" class="page-main support-page">
+      ${crumb([["HOME",routes.home],["CONTACT US"]])}
+      <div class="container">
+        <section class="support-hero">
+          <div><h1>CONTACT US</h1><p>Get in touch with our team for product inquiries, quotations, or technical support.<br>We support your design and application needs with reliable magnetic solutions.</p></div>
+          <div class="support-hero-logo">${logo()}</div>
+        </section>
+        <form class="support-form" data-support-form>
+          <section class="support-form-section">
+            <h2>Inquiry Details</h2>
+            <div class="support-inquiry-panel">
+              <div class="support-field"><label for="support-request-type">How can we help you?</label><select id="support-request-type" name="support-request-type" data-support-request-type>${supportSelectOptions(requestType)}</select></div>
+              <div class="support-field"><label for="support-product-category">Product Category</label><select id="support-product-category" name="support-product-category"><option value="">Select product category</option><option>EMC Components</option><option>Magnetic Components</option><option>Transformers</option><option>Wireless Power Transfer</option><option>Automotive Components</option></select></div>
+            </div>
+          </section>
+          ${isAnonymous?"":supportContactAndBusinessFields()}
+          ${supportAttachmentField()}
+          ${isAppointment?supportAppointmentFields():""}
+          <section class="support-form-section">
+            <h2>Overall remarks</h2>
+            <div class="support-field"><label class="sr-only" for="support-remarks">Overall remarks</label><textarea id="support-remarks" name="support-remarks" required></textarea></div>
+          </section>
+          <div class="support-form-actions">
+            <label class="support-consent"><input type="checkbox" required><span>Kindly consent to the terms and conditions. Click "Read More" for further comprehension.</span></label>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+        ${supportOfficeCards()}
+      </div>
+    </main>`;
+  }
+
   function inquiryPage() {
     const value = (product, key) => escapeHtml(product[key] || "—");
     const cartRows = state.inquiryProducts.map((product, i) => {
@@ -858,6 +1042,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     if (p === routes.calendar) return eventCalendarPage();
     if (p === routes.detail) return newsDetailPage();
     if (p === routes.locations) return locationsPage();
+    if (p === routes.support) return supportPage();
     if (p === routes.inquiry) return inquiryPage();
     if (p === routes.thanks) return thanksPage();
     if (p === routes.news) return newsPage();
@@ -1127,6 +1312,28 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     document.querySelectorAll("[data-remove]").forEach(btn=>btn.addEventListener("click",()=>removeInquiryItem(Number(btn.dataset.remove))));
     document.querySelector("[data-back]")?.addEventListener("click",()=>history.back());
     document.querySelector("[data-inquiry-form]")?.addEventListener("submit",(e)=>{e.preventDefault();navigate(routes.thanks);});
+    document.querySelector("[data-support-request-type]")?.addEventListener("change",(event)=>{
+      history.replaceState({}, "", `${routes.support}?type=${encodeURIComponent(event.currentTarget.value)}`);
+      render(false);
+    });
+    const supportFile=document.querySelector("[data-support-file]");
+    supportFile?.addEventListener("change",()=>{
+      const file=supportFile.files?.[0];
+      const name=document.querySelector("[data-support-file-name]");
+      const status=document.querySelector("[data-support-file-status]");
+      if(file&&file.size>6*1024*1024){
+        supportFile.value="";
+        if(name) name.textContent="No file selected";
+        if(status){status.textContent="This file is larger than 6 MB. Please choose a smaller file.";status.classList.add("is-error");}
+        return;
+      }
+      if(name) name.textContent=file?.name||"No file selected";
+      if(status){status.textContent="Maximum allowed file size is 6 MB";status.classList.remove("is-error");}
+    });
+    document.querySelector("[data-support-form]")?.addEventListener("submit",(event)=>{event.preventDefault();navigate(routes.thanks);});
+    const supportLocationGrid=document.querySelector("[data-support-location-grid]");
+    document.querySelector("[data-support-location-prev]")?.addEventListener("click",()=>supportLocationGrid?.scrollBy({left:-supportLocationGrid.clientWidth*.85,behavior:"smooth"}));
+    document.querySelector("[data-support-location-next]")?.addEventListener("click",()=>supportLocationGrid?.scrollBy({left:supportLocationGrid.clientWidth*.85,behavior:"smooth"}));
     const locationSearch=document.querySelector("[data-location-search]");
     const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
     const locationCards=[...document.querySelectorAll("[data-location-grid] .location-card")];

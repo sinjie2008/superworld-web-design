@@ -16,6 +16,8 @@
 - A4K table selections use category `159` and real product IDs from the specification-search data; Analyze Losses reports estimated I²R loss at rated current.
 - A4K section navigation owns its vertical offset using the live sticky header and section-nav heights; horizontally center buttons by scrolling `.a4k-section-nav`, because button `scrollIntoView()` also moves the page vertically.
 - In the shared Our Products menu, General Components links to `/products/general`; Automotive Components remains non-interactive until its page is ready.
+- The Contact Us page lives at `/support` and uses the `type` query parameter for General Inquiry, Request for Quotation, Technical Support, Quality / Complaint, Book An Appointment, and Anonymous layouts.
+- Book An Appointment adds location and preferred-date fields; Anonymous omits contact and business fields while keeping attachment and remarks.
 
 ## Known pitfalls
 
