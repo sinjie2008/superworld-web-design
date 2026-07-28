@@ -18,6 +18,9 @@
 - In the shared Our Products menu, General Components links to `/products/general`; Automotive Components remains non-interactive until its page is ready.
 - The Contact Us page lives at `/support` and uses the `type` query parameter for General Inquiry, Request for Quotation, Technical Support, Quality / Complaint, Book An Appointment, and Anonymous layouts.
 - Book An Appointment adds location and preferred-date fields; Anonymous omits contact and business fields while keeping attachment and remarks.
+- The Support page locations section is a responsive slider across all six company offices: three cards on desktop, two on tablet, and one on mobile. Prev/Next moves one card and disables at the ends.
+- Inquiry and Support text, date, and select controls share a 52 px standard height; selects use the same custom chevron with consistent right spacing.
+- Support product categories use a searchable, grouped multi-checkbox picker with subcategories. Selecting Other reveals a required free-text field.
 
 ## Known pitfalls
 

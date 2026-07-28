@@ -827,6 +827,25 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     "Anonymous"
   ];
 
+  const supportProductCategoryGroups = [
+    ["EMC Components", generalCategories["EMC Components"]],
+    ["Magnetic Components", generalCategories["Magnetic Components"]],
+    ["Transformers", generalCategories["Transformer"]],
+    ["Wireless Power Transfer", generalCategories["Wireless Power Transfer"]],
+    ["Automotive Components", [
+      "Automotive Chip Array Ferrite Bead",
+      "Automotive Ferrite Chip Bead",
+      "Automotive Ferrite Chip Bead (Large Current)",
+      "Automotive Semi-Shielded Power Inductor",
+      "Automotive Common Mode Choke",
+      "Automotive Molded Power Inductor",
+      "Automotive Planar Inductor",
+      "Automotive Transponder Coil",
+      "Automotive Receiver Coil",
+      "Automotive Transmitter Coil"
+    ]]
+  ];
+
   function supportRequestFromQuery() {
     const params = new URLSearchParams(location.search);
     const firstEntry = params.entries().next().value;
@@ -865,6 +884,47 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   function supportField(id,label,type="text",attributes="") {
     return `<div class="support-field"><label for="${id}">${label}</label><input id="${id}" name="${id}" type="${type}" ${attributes}></div>`;
+  }
+
+  function supportProductCategoryField() {
+    const groups = supportProductCategoryGroups.map(([group,items],groupIndex)=>{
+      const options = items.map((item,itemIndex)=>{
+        const id = `support-category-${groupIndex}-${itemIndex}`;
+        return `<label class="support-category-option" for="${id}" data-support-category-option>
+          <input id="${id}" name="support-product-categories" type="checkbox" value="${escapeHtml(item)}">
+          <span>${escapeHtml(item)}</span>
+        </label>`;
+      }).join("");
+      return `<section class="support-category-group" data-support-category-group>
+        <h3>${escapeHtml(group)}</h3>
+        ${options}
+      </section>`;
+    }).join("");
+    return `<div class="support-field support-product-category-field" data-support-category>
+      <span class="support-field-label" id="support-product-category-label">Product Category</span>
+      <button class="support-category-trigger" type="button" data-support-category-trigger aria-haspopup="true" aria-expanded="false" aria-controls="support-product-category-panel">
+        <span data-support-category-summary>Select product categories</span>
+      </button>
+      <div class="support-category-panel" id="support-product-category-panel" data-support-category-panel hidden>
+        <label for="support-product-category-search">Search product categories</label>
+        <input id="support-product-category-search" type="search" autocomplete="off" placeholder="Search category or subcategory" data-support-category-search>
+        <div class="support-category-options">
+          ${groups}
+          <section class="support-category-group support-category-other-group" data-support-category-group>
+            <h3>Other</h3>
+            <label class="support-category-option" for="support-category-other" data-support-category-option>
+              <input id="support-category-other" name="support-product-categories" type="checkbox" value="Other" data-support-category-other>
+              <span>Other</span>
+            </label>
+          </section>
+          <p class="support-category-empty" data-support-category-empty hidden>No matching product categories.</p>
+        </div>
+      </div>
+      <div class="support-category-other-field" data-support-category-other-field hidden>
+        <label for="support-category-other-text">Other product category</label>
+        <input id="support-category-other-text" name="support-product-category-other" type="text" placeholder="Please specify" data-support-category-other-input disabled>
+      </div>
+    </div>`;
   }
 
   function supportContactAndBusinessFields() {
@@ -934,33 +994,28 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   }
 
   function supportOfficeCards() {
-    return `<section class="support-locations" aria-labelledby="support-locations-heading">
+    const supportLocations = locationData.filter(item=>item.type==="office");
+    const cards = supportLocations.map((item,index)=>{
+      const isHeadOffice = index === 0;
+      return `<article class="support-location-card" data-support-location-card aria-label="${escapeHtml(item.title)}">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p>${escapeHtml(item.office)}<br>${escapeHtml(item.address)}</p>
+        <p><a href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a></p>
+        <p>${escapeHtml(item.contact)}</p>
+        ${item.fax?`<p>${escapeHtml(item.fax)}</p>`:""}
+        ${item.website?`<p><a href="https://${escapeHtml(item.website)}" target="_blank" rel="noopener">${escapeHtml(item.website)}</a></p>`:""}
+        ${isHeadOffice?`<p><a href="https://maps.google.com/?q=16+New+Industrial+Road+Singapore+536204" target="_blank" rel="noopener">Get Directions</a></p><p>${link(routes.support+"?type=Book%20An%20Appointment","Book an Appointment")}</p>`:""}
+      </article>`;
+    }).join("");
+    return `<section id="superworld_electronics_support_superworld_electronics_locations" class="support-locations" aria-labelledby="support-locations-heading">
       <h2 id="support-locations-heading">SUPERWORLD ELECTRONICS LOCATIONS</h2>
-      <div class="support-location-grid" data-support-location-grid>
-        <article class="support-location-card">
-          <h3>Head Office (Singapore)</h3>
-          <p>Superworld Electronics (S) Pte Ltd<br>16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204</p>
-          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
-          <p>(65) 6298 2866</p><p>(65) 6298 8900</p>
-          <p><a href="https://maps.google.com/?q=16+New+Industrial+Road+Singapore+536204" target="_blank" rel="noopener">Get Directions</a></p>
-          <p>${link(routes.support+"?type=Book%20An%20Appointment","Book an Appointment")}</p>
-        </article>
-        <article class="support-location-card">
-          <h3>Hong Kong</h3>
-          <p>Superworld Electronics (HK) Limited<br>Unit 8-9 1/F, Hope Sea Industrial Centre No. 26 Lam Hing Street, Kowloon Bay Kowloon, Hong Kong</p>
-          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
-          <p>(852) 2612 2969</p>
-        </article>
-        <article class="support-location-card">
-          <h3>Dongguan</h3>
-          <p>Superworld Electronics (Dongguan) Co., Ltd<br>No. 2 East Ring Street 5, Jitigang Village Huangjiang Town, Dongguan City Guangdong Province, China 523757</p>
-          <p><a href="mailto:sales@superworld.com.sg">sales@superworld.com.sg</a></p>
-          <p>(86) 769 8353 6633</p>
-        </article>
+      <div id="support-location-slider" class="support-location-grid" data-support-location-grid tabindex="0" aria-label="Superworld Electronics locations slider">
+        ${cards}
       </div>
       <div class="support-location-controls">
-        <button type="button" data-support-location-prev aria-label="Previous location"><span aria-hidden="true">‹</span> Prev</button>
-        <button type="button" data-support-location-next aria-label="Next location">Next <span aria-hidden="true">›</span></button>
+        <button type="button" data-support-location-prev aria-controls="support-location-slider" aria-label="Previous location"><span aria-hidden="true">‹</span> Prev</button>
+        <span class="support-location-status" data-support-location-status aria-live="polite"></span>
+        <button type="button" data-support-location-next aria-controls="support-location-slider" aria-label="Next location">Next <span aria-hidden="true">›</span></button>
       </div>
     </section>`;
   }
@@ -981,7 +1036,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
             <h2>Inquiry Details</h2>
             <div class="support-inquiry-panel">
               <div class="support-field"><label for="support-request-type">How can we help you?</label><select id="support-request-type" name="support-request-type" data-support-request-type>${supportSelectOptions(requestType)}</select></div>
-              <div class="support-field"><label for="support-product-category">Product Category</label><select id="support-product-category" name="support-product-category"><option value="">Select product category</option><option>EMC Components</option><option>Magnetic Components</option><option>Transformers</option><option>Wireless Power Transfer</option><option>Automotive Components</option></select></div>
+              ${supportProductCategoryField()}
             </div>
           </section>
           ${isAnonymous?"":supportContactAndBusinessFields()}
@@ -1316,6 +1371,75 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       history.replaceState({}, "", `${routes.support}?type=${encodeURIComponent(event.currentTarget.value)}`);
       render(false);
     });
+    const supportCategory=document.querySelector("[data-support-category]");
+    if(supportCategory){
+      const trigger=supportCategory.querySelector("[data-support-category-trigger]");
+      const panel=supportCategory.querySelector("[data-support-category-panel]");
+      const search=supportCategory.querySelector("[data-support-category-search]");
+      const summary=supportCategory.querySelector("[data-support-category-summary]");
+      const checkboxes=[...supportCategory.querySelectorAll("[data-support-category-option] input[type=checkbox]")];
+      const otherCheckbox=supportCategory.querySelector("[data-support-category-other]");
+      const otherField=supportCategory.querySelector("[data-support-category-other-field]");
+      const otherInput=supportCategory.querySelector("[data-support-category-other-input]");
+      const setCategoryOpen=open=>{
+        panel.hidden=!open;
+        trigger.setAttribute("aria-expanded",String(open));
+        supportCategory.classList.toggle("is-open",open);
+        if(open) window.requestAnimationFrame(()=>search.focus());
+      };
+      const updateCategorySummary=()=>{
+        const selected=checkboxes.filter(input=>input.checked).map(input=>input.value);
+        summary.textContent=selected.length===0
+          ?"Select product categories"
+          :selected.length<=2
+            ?selected.join(", ")
+            :`${selected.length} product categories selected`;
+        const showOther=Boolean(otherCheckbox?.checked);
+        if(otherField) otherField.hidden=!showOther;
+        if(otherInput){
+          otherInput.disabled=!showOther;
+          otherInput.required=showOther;
+        }
+      };
+      const filterCategories=()=>{
+        const query=search.value.trim().toLowerCase();
+        let visible=0;
+        supportCategory.querySelectorAll("[data-support-category-group]").forEach(group=>{
+          let groupVisible=0;
+          group.querySelectorAll("[data-support-category-option]").forEach(option=>{
+            const show=!query||option.textContent.toLowerCase().includes(query);
+            option.hidden=!show;
+            if(show){groupVisible+=1;visible+=1;}
+          });
+          group.hidden=groupVisible===0;
+        });
+        const empty=supportCategory.querySelector("[data-support-category-empty]");
+        if(empty) empty.hidden=visible!==0;
+      };
+      const handleCategoryDocumentClick=event=>{
+        if(!supportCategory.contains(event.target)) setCategoryOpen(false);
+      };
+      trigger.addEventListener("click",()=>setCategoryOpen(panel.hidden));
+      search.addEventListener("input",filterCategories);
+      supportCategory.addEventListener("keydown",event=>{
+        if(event.key==="Escape"&&!panel.hidden){
+          event.preventDefault();
+          setCategoryOpen(false);
+          trigger.focus();
+        }
+      });
+      checkboxes.forEach(checkbox=>checkbox.addEventListener("change",()=>{
+        updateCategorySummary();
+        if(checkbox===otherCheckbox&&checkbox.checked){
+          setCategoryOpen(false);
+          window.requestAnimationFrame(()=>otherInput?.focus());
+        }
+      }));
+      document.addEventListener("click",handleCategoryDocumentClick);
+      state.cleanups.push(()=>document.removeEventListener("click",handleCategoryDocumentClick));
+      updateCategorySummary();
+      filterCategories();
+    }
     const supportFile=document.querySelector("[data-support-file]");
     supportFile?.addEventListener("change",()=>{
       const file=supportFile.files?.[0];
@@ -1332,8 +1456,42 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     });
     document.querySelector("[data-support-form]")?.addEventListener("submit",(event)=>{event.preventDefault();navigate(routes.thanks);});
     const supportLocationGrid=document.querySelector("[data-support-location-grid]");
-    document.querySelector("[data-support-location-prev]")?.addEventListener("click",()=>supportLocationGrid?.scrollBy({left:-supportLocationGrid.clientWidth*.85,behavior:"smooth"}));
-    document.querySelector("[data-support-location-next]")?.addEventListener("click",()=>supportLocationGrid?.scrollBy({left:supportLocationGrid.clientWidth*.85,behavior:"smooth"}));
+    const supportLocationPrev=document.querySelector("[data-support-location-prev]");
+    const supportLocationNext=document.querySelector("[data-support-location-next]");
+    const supportLocationStatus=document.querySelector("[data-support-location-status]");
+    if(supportLocationGrid&&supportLocationPrev&&supportLocationNext){
+      const supportLocationCards=[...supportLocationGrid.querySelectorAll("[data-support-location-card]")];
+      const sliderMetrics=()=>{
+        const card=supportLocationCards[0];
+        const gap=parseFloat(getComputedStyle(supportLocationGrid).columnGap)||0;
+        const step=(card?.getBoundingClientRect().width||supportLocationGrid.clientWidth)+gap;
+        const visible=Math.max(1,Math.round((supportLocationGrid.clientWidth+gap)/step));
+        const maxScroll=Math.max(0,supportLocationGrid.scrollWidth-supportLocationGrid.clientWidth);
+        return {step,visible,maxScroll};
+      };
+      const updateSupportLocationControls=()=>{
+        const {step,visible,maxScroll}=sliderMetrics();
+        const first=Math.min(Math.max(0,Math.round(supportLocationGrid.scrollLeft/step)),Math.max(0,supportLocationCards.length-visible));
+        supportLocationPrev.disabled=supportLocationGrid.scrollLeft<=2;
+        supportLocationNext.disabled=supportLocationGrid.scrollLeft>=maxScroll-2;
+        if(supportLocationStatus) supportLocationStatus.textContent=`${first+1}–${Math.min(first+visible,supportLocationCards.length)} of ${supportLocationCards.length}`;
+      };
+      const moveSupportLocations=direction=>{
+        const {step}=sliderMetrics();
+        supportLocationGrid.scrollBy({left:step*direction,behavior:"smooth"});
+      };
+      const onSupportLocationScroll=()=>window.requestAnimationFrame(updateSupportLocationControls);
+      const onSupportLocationResize=()=>updateSupportLocationControls();
+      supportLocationPrev.addEventListener("click",()=>moveSupportLocations(-1));
+      supportLocationNext.addEventListener("click",()=>moveSupportLocations(1));
+      supportLocationGrid.addEventListener("scroll",onSupportLocationScroll,{passive:true});
+      window.addEventListener("resize",onSupportLocationResize,{passive:true});
+      state.cleanups.push(()=>{
+        supportLocationGrid.removeEventListener("scroll",onSupportLocationScroll);
+        window.removeEventListener("resize",onSupportLocationResize);
+      });
+      updateSupportLocationControls();
+    }
     const locationSearch=document.querySelector("[data-location-search]");
     const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
     const locationCards=[...document.querySelectorAll("[data-location-grid] .location-card")];
