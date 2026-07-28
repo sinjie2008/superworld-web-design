@@ -743,12 +743,20 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   ];
 
   function locationsPage() {
-    const locationCards = (items=locationData)=>items.map(item=>`<article class="location-card" data-location-type="${item.type}"><h3>${item.title}</h3><p>${item.office}<br>${item.address}</p><p><a href="mailto:${item.email}">${item.email}</a></p><p>${item.contact}</p>${item.fax?`<p>Fax: ${item.fax}</p>`:""}${item.website?`<p><a href="https://${item.website}" target="_blank" rel="noopener">${item.website}</a></p>`:""}</article>`).join("");
+    const locationCards = (items)=>items.map(item=>`<article class="location-card" data-location-type="${item.type}"><h3>${item.title}</h3><p>${item.office}<br>${item.address}</p><p><a href="mailto:${item.email}">${item.email}</a></p><p>${item.contact}</p>${item.fax?`<p>Fax: ${item.fax}</p>`:""}${item.website?`<p><a href="https://${item.website}" target="_blank" rel="noopener">${item.website}</a></p>`:""}</article>`).join("");
+    const locationGroups = [
+      ["office","OFFICE"],
+      ["agent","AGENT"],
+      ["distributor","DISTRIBUTOR"]
+    ].map(([type,label])=>`<section class="location-group" data-location-group data-location-type="${type}" aria-labelledby="location-group-${type}">
+      <h3 id="location-group-${type}" class="location-group-label">${label}</h3>
+      <div class="location-grid">${locationCards(locationData.filter(item=>item.type===type))}</div>
+    </section>`).join("");
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["ABOUT US",routes.company],["GLOBAL PRESENCE"]])}
       ${heroPanel("GLOBAL PRESENCE","Our global operations enable us to deliver consistent quality, engineering expertise, and scalable production to customers across key markets worldwide.")}
       <nav class="anchor-nav"><a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a></nav>
       <section id="regional" class="section"><div class="container"><div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map")}<div class="regions" style="margin-top:52px">${regionCards()}</div></div></section>
-      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations"><button class="is-active" type="button" data-location-filter="all" aria-pressed="true">ALL</button><button type="button" data-location-filter="office" aria-pressed="false">Office</button><button type="button" data-location-filter="agent" aria-pressed="false">Agent</button><button type="button" data-location-filter="distributor" aria-pressed="false">Distributor</button></div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-grid" data-location-grid>${locationCards()}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
+      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations"><button class="is-active" type="button" data-location-filter="all" aria-pressed="true">ALL</button><button type="button" data-location-filter="office" aria-pressed="false">Office</button><button type="button" data-location-filter="agent" aria-pressed="false">Agent</button><button type="button" data-location-filter="distributor" aria-pressed="false">Distributor</button></div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-groups" data-location-groups>${locationGroups}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
       </div></section>
     </main>`;
   }
@@ -1557,7 +1565,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     }
     const locationSearch=document.querySelector("[data-location-search]");
     const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
-    const locationCards=[...document.querySelectorAll("[data-location-grid] .location-card")];
+    const locationGroups=[...document.querySelectorAll("[data-location-group]")];
+    const locationCards=[...document.querySelectorAll("[data-location-groups] .location-card")];
     let activeLocationFilter="all";
     const applyLocationFilters=()=>{
       const query=locationSearch?.value.trim().toLowerCase()||"";
@@ -1568,6 +1577,10 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         const visible=typeMatches&&searchMatches;
         card.hidden=!visible;
         if(visible) visibleCount+=1;
+      });
+      locationGroups.forEach(group=>{
+        const hasVisibleCards=[...group.querySelectorAll(".location-card")].some(card=>!card.hidden);
+        group.hidden=!hasVisibleCards;
       });
       const empty=document.querySelector("[data-location-empty]");
       if(empty) empty.hidden=visibleCount!==0;
