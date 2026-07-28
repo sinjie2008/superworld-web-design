@@ -24,6 +24,7 @@
 - Selecting a Support product subcategory reveals an inline optional field for its series name or part number; clearing the checkbox hides and disables that field.
 - Support inquiry fields and the Contact/Business column rows align to shared vertical positions. Nested two-field groups use a 14 px row gap without last-child grid stretching, and both bordered detail panels share the same height.
 - The Global Presence `/locations` page defaults to the `ALL` filter and groups visible cards under `OFFICE`, `AGENT`, and `DISTRIBUTOR` labels. Search and category filters hide any group whose cards have no matches.
+- The `/locations` category filter is URL-addressable through `?category=office`, `?category=agent`, and `?category=distributor`; selecting `ALL` removes the parameter. Direct links and browser history restore the selected category.
 
 ## Known pitfalls
 

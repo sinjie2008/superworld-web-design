@@ -742,7 +742,14 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     {type:"distributor",title:"Distributor (Singapore)",office:"Supreme Components International (SCI)",address:"62 Jalan Eunos, Singapore 419591",email:"arvin@supremecomponents.com",contact:"+65 6848 1178",fax:"+65 6848 1176"}
   ];
 
+  const locationCategoryFromQuery = () => {
+    const category = new URLSearchParams(location.search).get("category");
+    return ["office","agent","distributor"].includes(category) ? category : "all";
+  };
+
   function locationsPage() {
+    const activeCategory = locationCategoryFromQuery();
+    const locationFilterButton = (value,label)=>`<button class="${activeCategory===value?"is-active":""}" type="button" data-location-filter="${value}" aria-pressed="${activeCategory===value}">${label}</button>`;
     const locationCards = (items)=>items.map(item=>`<article class="location-card" data-location-type="${item.type}"><h3>${item.title}</h3><p>${item.office}<br>${item.address}</p><p><a href="mailto:${item.email}">${item.email}</a></p><p>${item.contact}</p>${item.fax?`<p>Fax: ${item.fax}</p>`:""}${item.website?`<p><a href="https://${item.website}" target="_blank" rel="noopener">${item.website}</a></p>`:""}</article>`).join("");
     const locationGroups = [
       ["office","OFFICE"],
@@ -756,7 +763,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       ${heroPanel("GLOBAL PRESENCE","Our global operations enable us to deliver consistent quality, engineering expertise, and scalable production to customers across key markets worldwide.")}
       <nav class="anchor-nav"><a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a></nav>
       <section id="regional" class="section"><div class="container"><div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map")}<div class="regions" style="margin-top:52px">${regionCards()}</div></div></section>
-      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations"><button class="is-active" type="button" data-location-filter="all" aria-pressed="true">ALL</button><button type="button" data-location-filter="office" aria-pressed="false">Office</button><button type="button" data-location-filter="agent" aria-pressed="false">Agent</button><button type="button" data-location-filter="distributor" aria-pressed="false">Distributor</button></div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-groups" data-location-groups>${locationGroups}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
+      <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations">${locationFilterButton("all","ALL")}${locationFilterButton("office","Office")}${locationFilterButton("agent","Agent")}${locationFilterButton("distributor","Distributor")}</div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-groups" data-location-groups>${locationGroups}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
       </div></section>
     </main>`;
   }
@@ -1567,7 +1574,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const locationFilterButtons=[...document.querySelectorAll("[data-location-filter]")];
     const locationGroups=[...document.querySelectorAll("[data-location-group]")];
     const locationCards=[...document.querySelectorAll("[data-location-groups] .location-card")];
-    let activeLocationFilter="all";
+    let activeLocationFilter=locationCategoryFromQuery();
     const applyLocationFilters=()=>{
       const query=locationSearch?.value.trim().toLowerCase()||"";
       let visibleCount=0;
@@ -1585,6 +1592,15 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       const empty=document.querySelector("[data-location-empty]");
       if(empty) empty.hidden=visibleCount!==0;
     };
+    const updateLocationCategoryQuery=()=>{
+      const params=new URLSearchParams(location.search);
+      if(activeLocationFilter==="all") params.delete("category");
+      else params.set("category",activeLocationFilter);
+      const query=params.toString();
+      const nextUrl=`${location.pathname}${query?`?${query}`:""}${location.hash}`;
+      const currentUrl=`${location.pathname}${location.search}${location.hash}`;
+      if(nextUrl!==currentUrl) history.pushState({}, "", nextUrl);
+    };
     locationSearch?.addEventListener("input",applyLocationFilters);
     locationFilterButtons.forEach(btn=>btn.addEventListener("click",()=>{
       activeLocationFilter=btn.dataset.locationFilter;
@@ -1593,8 +1609,10 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         button.classList.toggle("is-active",active);
         button.setAttribute("aria-pressed",String(active));
       });
+      updateLocationCategoryQuery();
       applyLocationFilters();
     }));
+    applyLocationFilters();
     document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>{b.style.background="#fff";b.style.color="#111"});btn.style.background="#111";btn.style.color="#fff";}));
     const newsType=document.querySelector("[data-news-type]");
     const newsYear=document.querySelector("[data-news-year]");
