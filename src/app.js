@@ -597,7 +597,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS"]])}
       ${heroPanel("GENERAL COMPONENTS","Essential electronic parts that manage power, reduce electromagnetic interference (EMI), and support efficient signal transmission, ensuring reliable performance in electronic circuits.")}
       <nav class="anchor-nav">${families.map(f=>`<a href="#${f[1]}">${f[0]}</a>`).join("")}</nav>
-      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall")}<div class="family-icons">${f[3].map((x,j)=>`<div class="family-icon">${j===0&&i===0?`<div class="ph" style="display:grid;place-items:center">${a4kImage("product-thumb")}</div>`:ph()}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
+      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall")}<div class="family-icons">${f[3].map((x,j)=>i===0&&j===0?link(`${routes.emc}/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`,`${a4kImage("product-thumb")}<span>${x}</span>`,"family-icon"):`<div class="family-icon">${ph()}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
     </main>`;
   }
 

@@ -22,3 +22,5 @@
 - Keep the Specification Search and Inquiry query schema aligned; the Inquiry action must navigate to `/inquiry`, not open a `mailto:` URL.
 - When JavaScript or CSS changes, bump the asset query version in `src/worker.js`; otherwise returning visitors can receive the previous five-minute cached asset.
 - Keep the inline A4K table IDs and electrical values aligned with `src/spec-search/mock-data.json` when that mock data changes.
+
+- The General Components Chip Array Ferrite Bead card links to `/products/general/emc/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`; update the asset query version in `src/worker.js` whenever client assets change.
