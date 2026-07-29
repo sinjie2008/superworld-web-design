@@ -26,6 +26,8 @@ assert.equal(
 
 const appResponse = await workerModule.default.fetch(new Request("https://lo-wireframe.test/app.js"));
 const appSource = await appResponse.text();
+const stylesResponse = await workerModule.default.fetch(new Request("https://lo-wireframe.test/styles.css"));
+const stylesSource = await stylesResponse.text();
 assert.match(appSource, /\?system=server#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /\?system=router#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /\?system=settopbox#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
@@ -39,6 +41,10 @@ assert.match(appSource, /class="system-action-btn bundle-btn"[^>]*>View Bundle<\
 assert.match(appSource, /\?root=1&category=159&category=161&inquiry=1447&inquiry=1448/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
+assert.match(appSource, /class="series-chip" type="button" aria-expanded="false"/);
+assert.match(appSource, /Dimensions Range : LWH\(mm\)/);
+assert.match(appSource, /Click Here To learn More/);
+assert.match(stylesSource, /:has\(\.series-chip:hover\)/);
 assert.match(specSearchModuleSource, /function initialize\(\)\s*{\s*initialQuerySelection = parseQuerySelection\(window\.location\.search\);/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");

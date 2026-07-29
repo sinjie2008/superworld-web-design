@@ -491,11 +491,11 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   const communicationSystemOrder = ["server","router","settopbox"];
 
   function communicationSeriesChips(items) {
-    return items.map(item=>`<span class="series-chip">${item}</span>`).join("");
+    return items.map(item=>`<button class="series-chip" type="button" aria-expanded="false" aria-label="Show dimensions for ${item}">${item}</button>`).join("");
   }
 
   function communicationMappingRows(rows) {
-    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div></div>`).join("");
+    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div><div class="series-detail" aria-label="Series dimensions" hidden><strong>Dimensions Range : LWH(mm)</strong><span>xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx</span><a href="${routes.tools}" data-link>Click Here To learn More</a></div></div>`).join("");
   }
 
   function communicationCardMarkup(card,index) {
@@ -1172,6 +1172,14 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     if(!root||root.dataset.systemTabsReady==="true") return;
     root.dataset.systemTabsReady="true";
     const hasSystemTabs=Boolean(root.querySelector(".system-tabs-nav"));
+    const renderSeriesDetail=(row,activeChip)=>{
+      row.querySelectorAll(".series-chip").forEach(chip=>{
+        chip.classList.toggle("is-active",chip===activeChip);
+        chip.setAttribute("aria-expanded",String(chip.classList.contains("is-selected")));
+      });
+      const detail=row.querySelector(".series-detail");
+      if(detail) detail.hidden=!activeChip;
+    };
     const setCardState=(card,open)=>{
       const panel=card.querySelector(".subapp-panel");
       const trigger=card.querySelector(".subapp-trigger");
@@ -1228,6 +1236,15 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       }
     }
     root.addEventListener("click",event=>{
+      const seriesChip=event.target.closest(".series-chip");
+      if(seriesChip){
+        const row=seriesChip.closest(".mapping-row");
+        const selected=!seriesChip.classList.contains("is-selected");
+        row.querySelectorAll(".series-chip").forEach(chip=>chip.classList.remove("is-selected"));
+        if(selected) seriesChip.classList.add("is-selected");
+        renderSeriesDetail(row,selected?seriesChip:null);
+        return;
+      }
       const tab=event.target.closest(".system-tab-btn");
       if(tab){activateSystem(tab.dataset.system,true);return;}
       const hotspot=event.target.closest("[data-open-card]");
