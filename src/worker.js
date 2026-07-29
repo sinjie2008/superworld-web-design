@@ -117,7 +117,7 @@ export default {
       html
         .replace("/styles.css", "/styles.css?v=103")
         .replace("/spec-search.css", "/spec-search.css?v=98")
-        .replace("/spec-search.js", "/spec-search.js?v=91")
+        .replace("/spec-search.js", "/spec-search.js?v=92")
         .replace("/app.js", "/app.js?v=106"),
       { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } }
     );

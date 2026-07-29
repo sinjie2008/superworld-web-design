@@ -27,6 +27,7 @@
 - The `/locations` category filter is URL-addressable through `?category=office`, `?category=agent`, and `?category=distributor`; selecting `ALL` removes the parameter. Direct links and browser history restore the selected category.
 - Every application-market detail item displays a Learn More label centered below its separate image placeholder. AI, HPC & Emerging Tech links use `?system=server`, `?system=router`, and `?system=settopbox` to activate communication tabs. Automotive links use `?application=<slug>` to open and scroll to the matching automotive sub-application card without rendering or normalizing a `system` parameter. Other markets keep non-interactive labels until destinations exist.
 - All sub-application action links rendered inside `.subapp-actions` use the label `View Bundle` and navigate to Specification Search with `root=1`, categories `159` and `161`, and inquiry products `1447` and `1448`.
+- Specification Search reparses `window.location.search` on every `initialize()` call so first-time SPA navigation applies bundle query parameters immediately instead of reusing the query captured at the initial page load.
 
 ## Known pitfalls
 

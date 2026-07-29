@@ -6,10 +6,12 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const workerPath = resolve(projectRoot, "dist/server/index.js");
 const manifestPath = resolve(projectRoot, "dist/.openai/hosting.json");
+const specSearchModulePath = resolve(projectRoot, "src/spec-search/app.js");
 
-const [source, manifest] = await Promise.all([
+const [source, manifest, specSearchModuleSource] = await Promise.all([
   readFile(workerPath, "utf8"),
   readFile(manifestPath, "utf8"),
+  readFile(specSearchModulePath, "utf8"),
 ]);
 JSON.parse(manifest);
 
@@ -37,5 +39,6 @@ assert.match(appSource, /class="system-action-btn bundle-btn"[^>]*>View Bundle<\
 assert.match(appSource, /\?root=1&category=159&category=161&inquiry=1447&inquiry=1448/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
+assert.match(specSearchModuleSource, /function initialize\(\)\s*{\s*initialQuerySelection = parseQuerySelection\(window\.location\.search\);/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");

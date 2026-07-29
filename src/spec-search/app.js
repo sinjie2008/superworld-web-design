@@ -774,7 +774,7 @@ function syncQueryString() {
     window.history.replaceState(null, "", url.href);
 }
 
-const initialQuerySelection = parseQuerySelection(window.location.search);
+let initialQuerySelection = parseQuerySelection(window.location.search);
 
 const state = {
     roots: [],
@@ -1581,6 +1581,7 @@ async function loadProducts() {
 }
 
 function initialize() {
+    initialQuerySelection = parseQuerySelection(window.location.search);
     cacheDom();
     bindEvents();
     state.table.columns = defaultColumns();
