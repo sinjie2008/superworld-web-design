@@ -50,6 +50,7 @@ assert.match(appModuleSource, /setAttribute\("aria-expanded",String\(chip===acti
 assert.match(appModuleSource, /addEventListener\("pointerover"/);
 assert.match(appModuleSource, /addEventListener\("pointerleave",restorePinnedDetail\)/);
 assert.doesNotMatch(stylesSource, /\.mapping-row:hover \.series-detail\[hidden\]/);
+assert.match(stylesSource, /\.cta>\.button-group\{flex:0 0 auto;flex-wrap:nowrap\}/);
 assert.match(specSearchModuleSource, /function initialize\(\)\s*{\s*initialQuerySelection = parseQuerySelection\(window\.location\.search\);/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");
