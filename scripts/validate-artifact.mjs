@@ -22,4 +22,11 @@ assert.equal(
   `${pathToFileURL(workerPath)} must export default.fetch`,
 );
 
-console.log("Artifact is valid ESM and exports default.fetch");
+const appResponse = await workerModule.default.fetch(new Request("https://lo-wireframe.test/app.js"));
+const appSource = await appResponse.text();
+assert.match(appSource, /\?system=server#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
+assert.match(appSource, /\?system=router#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
+assert.match(appSource, /\?system=settopbox#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
+assert.match(appSource, /URLSearchParams\(location\.search\)\.get\("system"\)/);
+
+console.log("Artifact is valid ESM and includes communication system deep links");

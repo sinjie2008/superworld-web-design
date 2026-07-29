@@ -371,9 +371,9 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       {name:"TCU",components:[]},{name:"Sensing Camera",components:[]},{name:"Infotainment",components:[]},{name:"TPMS",components:[]},{name:"Headlamp",components:[]},{name:"Keyless Entry System",components:[]},{name:"Wireless Charging",components:[]},{name:"ADAS",components:[]}
     ],href:routes.automotive},
     {name:"AI, HPC & Emerging Tech",copy:"Reliable power, filtering, and signal support for next-generation systems.",items:[
-      {name:"AI/HPC Server",components:["CPU","DC-DC Converter","LAN Interface","Hard Disk Drive","Network Adapter"]},
-      {name:"Router",components:["AC-DC Converter","DC-DC Converter","LAN Interface","WiFi Module","Ethernet Interface"]},
-      {name:"Set Top Box",components:["Interface","DC-DC Converter","Signal Processor","RF Tuner"]}
+      {name:"AI/HPC Server",components:["CPU","DC-DC Converter","LAN Interface","Hard Disk Drive","Network Adapter"],href:`${routes.communication}?system=server#superworld_electronics_applications_communication_find_the_right_series_by_communication_system`},
+      {name:"Router",components:["AC-DC Converter","DC-DC Converter","LAN Interface","WiFi Module","Ethernet Interface"],href:`${routes.communication}?system=router#superworld_electronics_applications_communication_find_the_right_series_by_communication_system`},
+      {name:"Set Top Box",components:["Interface","DC-DC Converter","Signal Processor","RF Tuner"],href:`${routes.communication}?system=settopbox#superworld_electronics_applications_communication_find_the_right_series_by_communication_system`}
     ],href:routes.communication},
     {name:"Consumer",copy:"Compact solutions for high-volume, space-sensitive electronics.",items:[
       {name:"Speakers",components:["WiFi / Bluetooth","DC-DC Converter","Power Conditioning","Speaker, Headphone and Microphone"]},
@@ -404,7 +404,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<article class="market-card" data-market-card data-market-name="${m.name}">
       ${ph()}
       <div class="market-summary"><div class="market-summary-copy"><h3>${m.name}</h3><p>${m.copy}</p></div><button class="market-state-toggle" type="button" aria-expanded="false" aria-label="Open ${m.name} details"><span class="market-state-icon" aria-hidden="true"></span></button></div>
-      <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image" role="img" aria-label="Image placeholder for ${item.name}"></div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
+      <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image"${item.href?"":` role="img" aria-label="Image placeholder for ${item.name}"`}>${item.href?link(item.href,"Learn More","link-arrow"):""}</div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
       <div class="market-actions"><button class="market-toggle" type="button" aria-expanded="false">View Details</button>${link(m.href,"View More","button market-more-link")}</div>
     </article>`;
   }
@@ -1171,6 +1171,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const root=document.getElementById("systemTabsRoot");
     if(!root||root.dataset.systemTabsReady==="true") return;
     root.dataset.systemTabsReady="true";
+    const requestedSystem=new URLSearchParams(location.search).get("system");
+    const initialSystem=communicationSystemOrder.includes(requestedSystem)?requestedSystem:"server";
     const setCardState=(card,open)=>{
       const panel=card.querySelector(".subapp-panel");
       const trigger=card.querySelector(".subapp-trigger");
@@ -1181,7 +1183,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       trigger?.setAttribute("aria-expanded",String(open));
       if(icon) icon.textContent=open?"−":"+";
     };
-    const activateSystem=system=>{
+    const activateSystem=(system,updateQuery=false)=>{
       root.querySelectorAll(".system-tab-btn").forEach(button=>{
         const active=button.dataset.system===system;
         button.classList.toggle("active",active);
@@ -1192,10 +1194,22 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         panel.classList.toggle("active",active);
         panel.hidden=!active;
       });
+      if(updateQuery){
+        const params=new URLSearchParams(location.search);
+        params.set("system",system);
+        const nextUrl=`${location.pathname}?${params}${location.hash}`;
+        if(nextUrl!==`${location.pathname}${location.search}${location.hash}`) history.pushState({},"",nextUrl);
+      }
     };
+    activateSystem(initialSystem);
+    if(requestedSystem!==initialSystem){
+      const params=new URLSearchParams(location.search);
+      params.set("system",initialSystem);
+      history.replaceState({},"",`${location.pathname}?${params}${location.hash}`);
+    }
     root.addEventListener("click",event=>{
       const tab=event.target.closest(".system-tab-btn");
-      if(tab){activateSystem(tab.dataset.system);return;}
+      if(tab){activateSystem(tab.dataset.system,true);return;}
       const hotspot=event.target.closest("[data-open-card]");
       if(hotspot){
         event.preventDefault();
@@ -2486,6 +2500,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       if (updatedIds.has(currentTarget)) {
         history.replaceState(history.state, '', location.pathname + location.search + '#' + updatedIds.get(currentTarget));
       }
+      const hashTarget = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (hashTarget) hashTarget.scrollIntoView({block:'start', behavior:'instant'});
     }
   }
 

@@ -25,6 +25,7 @@
 - Support inquiry fields and the Contact/Business column rows align to shared vertical positions. Nested two-field groups use a 14 px row gap without last-child grid stretching, and both bordered detail panels share the same height.
 - The Global Presence `/locations` page defaults to the `ALL` filter and groups visible cards under `OFFICE`, `AGENT`, and `DISTRIBUTOR` labels. Search and category filters hide any group whose cards have no matches.
 - The `/locations` category filter is URL-addressable through `?category=office`, `?category=agent`, and `?category=distributor`; selecting `ALL` removes the parameter. Direct links and browser history restore the selected category.
+- Communication system tabs are URL-addressable through `?system=server`, `?system=router`, and `?system=settopbox`. Application-market Learn More links target the generated Find the Right Series section ID, tab clicks update the query, and missing or invalid values normalize to `server`.
 
 ## Known pitfalls
 
