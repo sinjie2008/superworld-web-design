@@ -495,7 +495,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   }
 
   function communicationMappingRows(rows) {
-    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div><div class="series-detail" aria-label="Series dimensions" hidden><strong>Dimensions Range : LWH(mm)</strong><span>xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx</span><a href="${routes.tools}" data-link>Click Here To learn More</a></div></div>`).join("");
+    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div><div class="series-detail" aria-label="Series dimensions" hidden><strong>Dimensions Range : LWH(mm)</strong><span>xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx</span><a href="${routes.tools}?root=1&category=159&category=161&inquiry=1447&inquiry=1448" data-link>Click Here To learn More</a></div></div>`).join("");
   }
 
   function communicationCardMarkup(card,index) {

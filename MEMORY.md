@@ -28,7 +28,7 @@
 - Every application-market detail item displays a Learn More label centered below its separate image placeholder. AI, HPC & Emerging Tech links use `?system=server`, `?system=router`, and `?system=settopbox` to activate communication tabs. Automotive links use `?application=<slug>` to open and scroll to the matching automotive sub-application card without rendering or normalizing a `system` parameter. Other markets keep non-interactive labels until destinations exist.
 - All sub-application action links rendered inside `.subapp-actions` use the label `View Bundle` and navigate to Specification Search with `root=1`, categories `159` and `161`, and inquiry products `1447` and `1448`.
 - Specification Search reparses `window.location.search` on every `initialize()` call so first-time SPA navigation applies bundle query parameters immediately instead of reusing the query captured at the initial page load.
-- Every shared application `series-chip` reveals a mapping-row dimension panel on hover or keyboard focus; clicking pins the panel until the chip is clicked again. The panel uses the wireframe range `xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx` and links to Specification Search.
+- Every shared application `series-chip` reveals a mapping-row dimension panel on hover or keyboard focus; the entire row keeps the panel open so its link remains reachable, and clicking pins it until the chip is clicked again. The panel uses the wireframe range `xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx` and links to Specification Search with `root=1`, categories `159` and `161`, and inquiry products `1447` and `1448`.
 
 ## Known pitfalls
 

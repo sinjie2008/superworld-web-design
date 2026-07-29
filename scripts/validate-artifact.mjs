@@ -6,11 +6,13 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const workerPath = resolve(projectRoot, "dist/server/index.js");
 const manifestPath = resolve(projectRoot, "dist/.openai/hosting.json");
+const appModulePath = resolve(projectRoot, "src/app.js");
 const specSearchModulePath = resolve(projectRoot, "src/spec-search/app.js");
 
-const [source, manifest, specSearchModuleSource] = await Promise.all([
+const [source, manifest, appModuleSource, specSearchModuleSource] = await Promise.all([
   readFile(workerPath, "utf8"),
   readFile(manifestPath, "utf8"),
+  readFile(appModulePath, "utf8"),
   readFile(specSearchModulePath, "utf8"),
 ]);
 JSON.parse(manifest);
@@ -43,8 +45,9 @@ assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
 assert.match(appSource, /class="series-chip" type="button" aria-expanded="false"/);
 assert.match(appSource, /Dimensions Range : LWH\(mm\)/);
-assert.match(appSource, /Click Here To learn More/);
-assert.match(stylesSource, /:has\(\.series-chip:hover\)/);
+assert.match(appModuleSource, /href="\$\{routes\.tools\}\?root=1&category=159&category=161&inquiry=1447&inquiry=1448" data-link>Click Here To learn More<\/a>/);
+assert.match(stylesSource, /\.mapping-row:hover \.series-detail\[hidden\]/);
+assert.match(stylesSource, /\.mapping-row:focus-within \.series-detail\[hidden\]/);
 assert.match(specSearchModuleSource, /function initialize\(\)\s*{\s*initialQuerySelection = parseQuerySelection\(window\.location\.search\);/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");
