@@ -115,7 +115,7 @@ export default {
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
     return new Response(
       html
-        .replace("/styles.css", "/styles.css?v=102")
+        .replace("/styles.css", "/styles.css?v=103")
         .replace("/spec-search.css", "/spec-search.css?v=98")
         .replace("/spec-search.js", "/spec-search.js?v=91")
         .replace("/app.js", "/app.js?v=103"),
