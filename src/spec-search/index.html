@@ -222,7 +222,7 @@
             border-radius: 8px;
         }
 
-        .facet-card h6 {
+        .facet-card h3 {
             margin: 0 0 8px;
             font-size: 14px;
             font-weight: 600;
@@ -510,7 +510,8 @@
             min-width: 132px;
         }
 
-        .product-cell a {
+        .product-cell a,
+        .product-cell .product-name {
             border-bottom: 1px solid currentColor;
             line-height: 1.2;
         }
@@ -648,9 +649,14 @@
         }
 
         .section-title {
+            margin: 0;
             font-size: var(--font-size-subheading, 18px);
             font-weight: 700;
             line-height: 1.25;
+        }
+
+        .results-title {
+            margin-bottom: var(--space-4, 16px);
         }
 
         .eyebrow,#status-message {
@@ -833,7 +839,7 @@
                 <div class="section-heading">
                     <div>
                         <div class="eyebrow">Root Selection</div>
-                        <div class="section-title" id="root-title">Choose starting category</div>
+                        <h2 class="section-title" id="root-title">Choose starting category</h2>
                     </div>
                     <span class="badge badge-primary" id="root-count">0 roots</span>
                 </div>
@@ -844,7 +850,7 @@
                 <div class="section-heading">
                     <div>
                         <div class="eyebrow">Product Categories</div>
-                        <div class="section-title" id="categories-title">Pick one or more</div>
+                        <h2 class="section-title" id="categories-title">Pick one or more</h2>
                     </div>
                     <span class="badge badge-secondary" id="category-count">0 selected</span>
                 </div>
@@ -855,7 +861,7 @@
                 <div class="section-heading">
                     <div>
                         <div class="eyebrow">Filters</div>
-                        <div class="section-title" id="filters-title">Series &amp; custom fields</div>
+                        <h2 class="section-title" id="filters-title">Series &amp; custom fields</h2>
                     </div>
                     <button class="btn btn-sm btn-outline-secondary" id="clear-filters" type="button">Clear</button>
                 </div>
@@ -864,7 +870,7 @@
             </section>
 
             <section class="section-block results-section" aria-labelledby="results-title">
-                <h2 class="visually-hidden" id="results-title">Products</h2>
+                <h2 class="section-title results-title" id="results-title">Products</h2>
 
                 <div class="results-toolbar" aria-label="Product result controls">
                     <label class="results-search-field" for="table-search">

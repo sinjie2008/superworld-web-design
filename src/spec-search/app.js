@@ -1034,7 +1034,7 @@ function renderCategories(message = "") {
     state.groups.forEach((group) => {
         const card = document.createElement("div");
         card.className = "facet-card";
-        const title = document.createElement("h6");
+        const title = document.createElement("h3");
         title.textContent = group.group;
         const list = document.createElement("div");
         list.className = "category-list";
@@ -1104,7 +1104,7 @@ function renderFacets() {
     state.facets.forEach((facet, facetIndex) => {
         const card = document.createElement("div");
         card.className = "facet-card";
-        const title = document.createElement("h6");
+        const title = document.createElement("h3");
         const displayLabel = displayFieldLabel(facet.label);
         title.textContent = displayLabel;
         const search = document.createElement("input");
@@ -1158,13 +1158,14 @@ function renderCell(cell, column, product) {
             image.className = "series-image";
             image.src = product.seriesImage;
             image.alt = product.series || "Series image";
+            image.width = 80;
+            image.height = 48;
             content.append(image);
         }
-        const link = document.createElement("a");
-        link.href = "#";
-        link.textContent = String(value);
-        link.addEventListener("click", (event) => event.preventDefault());
-        content.append(link);
+        const name = document.createElement("span");
+        name.className = "product-name";
+        name.textContent = String(value);
+        content.append(name);
         cell.append(content);
         return;
     }

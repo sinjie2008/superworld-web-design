@@ -51,6 +51,7 @@ cp "$project_root/src/spec-search/mock-data.js" "$generated_root/spec-search-moc
   --target=es2020 \
   --loader:.css=text \
   --loader:.txt=text \
+  --loader:.png=dataurl \
   --minify \
   --outfile="$project_root/worker/index.js"
 

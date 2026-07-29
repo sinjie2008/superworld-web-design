@@ -1,4 +1,5 @@
 import specSearchMarkup from "../.generated/spec-search-markup.txt";
+import { SITE_ORIGIN, SOCIAL_IMAGE_PATH, metadataForPath, structuredDataForPath } from "./seo.js";
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
   "&": "&amp;",
@@ -8,9 +9,9 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
   "'": "&#39;"
 })[character]);
 
-const placeholderImage = (imageName, width, height) => `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(imageName)}" width="${width}" height="${height}"/>`;
+const placeholderImage = (imageName, width, height, altText = imageName) => `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(altText)}" width="${width}" height="${height}"/>`;
 
-const ph = (className, imageName, width, height, label = imageName) => `<div class="ph${className ? ` ${className}` : ""}" aria-label="${escapeHtml(imageName)} placeholder">${placeholderImage(imageName, width, height, label)}</div>`;
+const ph = (className, imageName, width, height, label = imageName) => `<div class="ph${className ? ` ${className}` : ""}">${placeholderImage(imageName, width, height, label)}</div>`;
 
 (function clientApp() {
   const app = document.getElementById("app");
@@ -56,11 +57,11 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
 
   const safeDataUrl = (value, prefix) => typeof value === "string" && value.startsWith(prefix) && !/["<>\s]/.test(value) ? value : "";
 
-  const logo = (className = "") => `<img class="${className}" src="/assets/logo.webp" alt="Superworld Electronics">`;
-  const a4kImage = (className = "") => `<img class="${className}" src="/assets/a4k-product.webp" alt="A4K chip array ferrite bead">`;
+  const logo = (className = "") => `<img class="${className}" src="/assets/logo.webp" alt="Superworld Electronics" width="215" height="76">`;
+  const a4kImage = (className = "") => `<img class="${className}" src="/assets/a4k-product.webp" alt="A4K chip array ferrite bead" width="255" height="195">`;
   const link = (href, label, className = "") => `<a data-link class="${className}" href="${href}">${label}</a>`;
   const buttonLink = (href, label, className = "") => link(href, label, `button ${className}`);
-  const crumb = (items) => `<div class="container crumb">${items.map((item, i) => i === items.length - 1 ? `<span>${item[0]}</span>` : `${link(item[1], item[0])} &gt; `).join("")}</div>`;
+  const crumb = (items) => `<nav class="container crumb" aria-label="Breadcrumb">${items.map((item, i) => i === items.length - 1 ? `<span aria-current="page">${item[0]}</span>` : `${link(item[1], item[0])} &gt; `).join("")}</nav>`;
   const tags = (items) => `<div class="tag-row">${items.map((x) => `<span class="tag">${x}</span>`).join("")}</div>`;
   const pagination = () => `<div class="pagination">${[1,2,3,4,5].map(n => `<button type="button" data-page="${n}">${n}</button>`).join("")}</div>`;
   const heroPanel = (title, copy, tagItems = [], compact = false) => `
@@ -79,11 +80,12 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     return `<article class="card ${className}"><h3>${title}</h3><p>${copy}</p></article>`;
   }
 
-  function mediaCard(title, copy, label = "View More", href = "#", imageFit = "image-cover") {
+  function mediaCard(title, copy, label, href, imageFit = "image-cover") {
+    const linkLabel = /^(View More|Learn More)$/i.test(label) ? `${label}<span class="sr-only">: ${escapeHtml(title)}</span>` : label;
     return `<article class="media-card slide">
       ${ph(`soft ${imageFit}`, `${title} Image`, 320, 220, `${title}\nImage`)}
       <div class="media-card-body"><h3>${title}</h3><p>${copy}</p>
-      <div class="media-card-footer">${href === "#" ? `<button class="link-arrow" type="button">${label}</button>` : link(href, label, "link-arrow")}<span>17 December 2025</span></div></div>
+      <div class="media-card-footer">${link(href, linkLabel, "link-arrow")}<span>17 December 2025</span></div></div>
     </article>`;
   }
 
@@ -96,12 +98,12 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
 
   function header() {
     return `<header class="site-header">
-      <div class="utility"><div class="container">
+      <div class="utility"><nav class="container" aria-label="Utility navigation">
         <button type="button" data-menu="about">About <span class="menu-caret">⌄</span></button>
         ${link(routes.calendar, "Events", "nav-link")}
         <button type="button" data-menu="support">Support <span class="menu-caret">⌄</span></button>
         <button type="button" data-menu="language">EN <span class="menu-caret">⌄</span></button>
-      </div></div>
+      </nav></div>
       <div class="primary-nav"><div class="container">
         ${link(routes.home, logo(), "brand")}
         <button class="mobile-toggle" type="button" aria-label="Open navigation" aria-expanded="false">Menu</button>
@@ -112,41 +114,41 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
           <button class="nav-menu-button" type="button" data-menu="news">News</button>
         </nav>
       </div></div>
-      <div class="mega-panel" data-panel="about"><div class="container mega-inner simple">
+      <nav class="mega-panel" data-panel="about" aria-label="About navigation"><div class="container mega-inner simple">
         ${link(routes.company, "Our Company")}
         ${link(routes.achievements, "Key Achievements")}
         ${link(routes.quality, "Quality Standards")}
         ${link(routes.sustainability, "Sustainability")}
         ${link(routes.locations, "Global Presence")}
-      </div></div>
-      <div class="mega-panel" data-panel="support"><div class="container mega-inner simple">
+      </div></nav>
+      <nav class="mega-panel" data-panel="support" aria-label="Support navigation"><div class="container mega-inner simple">
         ${link(routes.support+"?type=Request%20for%20Quotation", "Request for Quotation")}
         ${link(routes.support+"?type=Technical%20Support", "Technical Support")}
         ${link(routes.support+"?type=Quality%20%2F%20Complaint", "Quality / Complaint")}
         ${link(routes.locations, "Service & Sales Offices")}
-      </div></div>
+      </div></nav>
       <div class="mega-panel" data-panel="language"><div class="container mega-inner languages">
-        <a href="#" data-language="English">English</a><a href="#" data-language="Chinese (Simplified)">Chinese (Simplified)</a>
-        <a href="#" data-language="Chinese (Traditional)">Chinese (Traditional)</a><a href="#" data-language="German">German</a>
-        <a href="#" data-language="Japanese">Japanese</a><a href="#" data-language="Korean">Korean</a>
+        <button type="button" data-language="English">English</button><button type="button" data-language="Chinese (Simplified)">Chinese (Simplified)</button>
+        <button type="button" data-language="Chinese (Traditional)">Chinese (Traditional)</button><button type="button" data-language="German">German</button>
+        <button type="button" data-language="Japanese">Japanese</button><button type="button" data-language="Korean">Korean</button>
       </div></div>
-      <div class="mega-panel" data-panel="products"><div class="container mega-inner simple">
+      <nav class="mega-panel" data-panel="products" aria-label="Product navigation"><div class="container mega-inner simple">
         ${link(routes.products, "All Products")}
         ${link(routes.general, "General Components")}
         <span aria-disabled="true">Automotive Components</span>
-      </div></div>
-      <div class="mega-panel" data-panel="news"><div class="container mega-inner news-mega">
-        <div class="mega-column"><h4>Company News</h4>
+      </div></nav>
+      <nav class="mega-panel" data-panel="news" aria-label="News navigation"><div class="container mega-inner news-mega">
+        <div class="mega-column"><p class="mega-heading">Company News</p>
           ${link(routes.news + "?category=announcements", "Announcements")}
           ${link(routes.news + "?category=csr", "CSR")}
           ${link(routes.news + "?category=business", "Business Updates")}
         </div>
-        <div class="mega-column"><h4>Events & Activities</h4>
+        <div class="mega-column"><p class="mega-heading">Events & Activities</p>
           ${link(routes.calendar, "Event Calendar")}
           ${link(routes.news + "?category=events", "Exhibitions & Trade Shows")}
           ${link(routes.news + "?category=events", "Corporate Events")}
         </div>
-        <div class="mega-column"><h4>Product News</h4>
+        <div class="mega-column"><p class="mega-heading">Product News</p>
           ${link(routes.news + "?category=product", "New Product Releases")}
           ${link(routes.news + "?category=latest", "Product Enhancements")}
           ${link(routes.news + "?category=eol", "End-of-Life (EOL) Notices")}
@@ -154,34 +156,34 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
         <div class="mega-news-slider" data-mega-news-slider>
           <button class="mega-news-control mega-news-prev" type="button" data-mega-news-prev aria-label="Previous news events"><span aria-hidden="true"></span></button>
           <div class="mega-news-window"><div class="mega-news-track">
-            <article class="mega-news-card">${ph("image-cover", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph("image-cover", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph("image-cover", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph("image-cover", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("image-cover", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More<span class=\"sr-only\"> about Electronica India</span>","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("image-cover", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More<span class=\"sr-only\"> about NEPCON Japan 2026</span>","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("image-cover", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More<span class=\"sr-only\"> about Electronica India</span>","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("image-cover", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More<span class=\"sr-only\"> about NEPCON Japan 2026</span>","mega-news-link")}</article>
           </div></div>
           <button class="mega-news-control mega-news-next" type="button" data-mega-news-next aria-label="Next news events"><span aria-hidden="true"></span></button>
         </div>
-      </div></div>
+      </div></nav>
     </header>`;
   }
 
   function footer() {
     return `<footer class="footer"><div class="container">
       <div class="footer-top"><div class="footer-brand">${logo()}</div><div class="socials"><span class="social">Chat</span><span class="social">in</span></div></div>
-      <div class="footer-grid">
+      <nav class="footer-grid" aria-label="Footer navigation">
         <div><h3>About</h3>${link(routes.company,"Our Company")}${link(routes.achievements,"Key Achievements")}${link(routes.quality,"Quality Standards")}${link(routes.sustainability,"Sustainability")}</div>
         <div><h3>Our Products</h3>${link(routes.general,"General")}${link(routes.products,"Automotive")}</div>
         <div><h3>Applications</h3>${link(routes.automotive,"Automotive")}${link(routes.communication,"AI, HPC & Emerging Tech")}${link(routes.applications,"Consumer")}${link(routes.applications,"Healthcare Devices")}${link(routes.applications,"Industrial & Energy")}${link(routes.applications,"Smart Home")}</div>
         <div><h3>News</h3>${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=brochures","Resources")}</div>
         <div><h3>Tools</h3>${link(routes.tools,"Specification Search")}</div>
         <div><h3>Contact Us</h3>${link(routes.support+"?type=Request%20for%20Quotation","Request for Quotation")}${link(routes.support+"?type=Technical%20Support","Technical Support")}${link(routes.support+"?type=Quality%20%2F%20Complaint","Quality / Complaint")}${link(routes.locations,"Service & Sales Offices")}</div>
-      </div>
+      </nav>
       <div class="footer-bottom"><span>Terms of Use | Privacy Policy</span><span>© Superworld Electronics (S) Pte Ltd. All Rights Reserved.</span></div>
     </div></footer>`;
   }
 
   function homePage() {
-    const heroSlides = [1,2,3].map((slide) => `<div class="slide">${ph("hero-ph image-cover", `Home Hero ${slide}`, 1440, 620, `Home Hero\n${slide}`)}</div>`);
+    const heroSlides = [1,2,3].map((slide) => `<div class="slide">${ph("hero-ph image-cover", `Home Hero ${slide}`, 1440, 620, "")}${slide === 1 ? `<div class="home-hero-copy"><h1>SUPERWORLD ELECTRONICS<br>COMPONENTS &amp; SOLUTIONS</h1><p>Component design, manufacturing, quality and application support for electronic systems.</p></div>` : ""}</div>`);
     const achievements = [
       ["SINGAPORE","Headquarter Office","Established 1993"],
       ["GLOBAL","Manufacturing & support","SG · MY · CN · TW · TH"],
@@ -197,13 +199,13 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       ["Wireless Power Transfer","Wireless charging-related solutions supporting evolving demand in modern electronics and mobility.",routes.general],
       ["Automotive Components","Reliable component solutions for connected vehicle electronics.",routes.products]
     ].map(x => mediaCard(x[0],x[1],"View More",x[2]));
-    const certs = Array.from({length:6},() => mediaCard("IATF 16949","Quality management certification.","Download","#","image-contain"));
+    const certs = Array.from({length:6},() => mediaCard("IATF 16949","Quality management certification.","View Certificate Details",routes.quality,"image-contain"));
     const news = Array.from({length:6},() => mediaCard("Our Johor Bahru facility is progressing","Business Updates","View More",routes.detail));
     return `<main id="main-content" class="page-main">
       <section class="home-hero">${carousel("home-hero",heroSlides,1,false,"home-hero-carousel")}</section>
-      <div class="container achievement-strip">${achievements.map(x=>`<div class="achievement"><h3>${x[0]}</h3><p>${x[1]}<br><small>${x[2]}</small></p></div>`).join("")}</div>
+      <div class="container achievement-strip">${achievements.map(x=>`<div class="achievement"><strong>${x[0]}</strong><p>${x[1]}<br><small>${x[2]}</small></p></div>`).join("")}</div>
       <section class="section"><div class="container">
-        <div class="section-heading"><h2>LATEST PRODUCT RELEASES</h2>${link(routes.news+"?category=product","View More","link-arrow")}</div>
+        <div class="section-heading"><h2>LATEST PRODUCT RELEASES</h2>${link(routes.news+"?category=product","View Product Releases","link-arrow")}</div>
         ${carousel("home-releases",releases,5)}
       </div></section>
       <section class="section-sm"><div class="container company-overview">
@@ -225,10 +227,10 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
         <div class="regions" style="margin-top:38px">${regionCards()}</div>
       </div></section>
       <section class="section section-rule"><div class="container">
-        <div class="section-heading"><h2>QUALITY CERTIFIED, PERFORMANCE ASSURED</h2>${link(routes.quality,"View More","link-arrow")}</div>${carousel("home-certs",certs,4)}
+        <div class="section-heading"><h2>QUALITY CERTIFIED, PERFORMANCE ASSURED</h2>${link(routes.quality,"View Quality Standards","link-arrow")}</div>${carousel("home-certs",certs,4)}
       </div></section>
       <section class="section section-rule"><div class="container">
-        <div class="section-heading"><h2>LATEST NEWS</h2>${link(routes.news,"View More","link-arrow")}</div>${carousel("home-news",news,4)}
+        <div class="section-heading"><h2>LATEST NEWS</h2>${link(routes.news,"View All News","link-arrow")}</div>${carousel("home-news",news,4)}
       </div></section>
     </main>`;
   }
@@ -268,7 +270,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
         <div class="grid grid-4" style="margin-top:24px"><div class="stat"><strong>4</strong><b>Core Product Lines</b></div><div class="stat"><strong>145</strong><b>Patents</b></div><div class="stat"><strong>3%</strong><b>R&D Investment Ratio</b></div><div class="stat"><strong>26%</strong><b>High-Reliability Market Exposure</b></div></div>
       </div></section>
       <section class="section"><div class="container"><div class="section-heading"><h2>PRODUCT LINES</h2><div class="button-group"><button>General</button><button>Automotive</button></div></div>
-        <div class="grid grid-4">${productLines.map(x=>`<article class="media-card">${ph("image-cover", `${x[0]} Product Line`, 320, 220, `${x[0]}\nProduct Line`)}<div class="media-card-body"><h3>${x[0]}</h3><p>${x[1]}</p>${link(routes.products,"View More","link-arrow")}</div></article>`).join("")}</div>
+        <div class="grid grid-4">${productLines.map(x=>`<article class="media-card">${ph("image-cover", `${x[0]} Product Line`, 320, 220, `${x[0]}\nProduct Line`)}<div class="media-card-body"><h3>${x[0]}</h3><p>${x[1]}</p>${link(routes.products,`View ${x[0]} Products`,"link-arrow")}</div></article>`).join("")}</div>
       </div></section>
       <section id="industries" class="section"><div class="container"><h2>INDUSTRIES</h2><p>Serving a broad range of electronics markets.</p>
         ${carousel("company-industries",["Automotive","Healthcare","Consumer","Industrial","Communication"].map(x=>`<div class="slide card">${ph("tall image-cover", `${x} Industry`, 320, 420, `${x}\nIndustry`)}<h3 style="margin-top:18px">${x}</h3></div>`),4)}
@@ -291,7 +293,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       ${heroPanel("ACHIEVEMENTS","A visual record of our commitment to excellence, innovation, and global supply chain reliability.",["Customer Recognition","Enterprise Achievement","Corporate Distinction"])}
       <nav class="anchor-nav"><a href="#customer-awards">CUSTOMER AWARDS</a><a href="#enterprise">SINGAPORE ENTERPRISE 50</a><a href="#distinguished">DISTINGUISHED AWARDS</a></nav>
       <section id="enterprise" class="section"><div class="container"><h2>SINGAPORE ENTERPRISE 50</h2><div class="award-grid enterprise-awards-grid">
-        <article class="award-card featured"><div class="award-featured-image" role="img" aria-label="Enterprise 50 award image placeholder, 320 by 400 pixels"><span>Image Placeholder</span><strong>320 × 400 px</strong></div><div class="award-featured-copy"><span>2012</span><h2>5 Years Award</h2><p>Consecutive Recognition Milestone</p></div></article>
+        <article class="award-card featured"><div class="award-featured-image" role="img" aria-label="Enterprise 50 award image placeholder, 320 by 400 pixels"><span>Image Placeholder</span><strong>320 × 400 px</strong></div><div class="award-featured-copy"><span>2012</span><h3>5 Years Award</h3><p>Consecutive Recognition Milestone</p></div></article>
         ${[["2012","03"],["2011","05"],["2010","24"],["2009","21"],["2007","39"]].map(x=>`<article class="award-card"><span>${x[0]}</span><div class="display" style="font-size:62px">${x[1]}</div><p>National Rank</p></article>`).join("")}
         <article class="award-card"><h3>Superworld Electronics<br>Growth Legacy</h3></article>
       </div></div></section>
@@ -364,7 +366,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
           <article class="integrity-principle-card"><strong>04</strong><p>Control of company<br>information</p></article>
           <article class="integrity-principle-card"><strong>05</strong><p>Recognize and<br>manage risk</p></article>
         </div>
-        <div class="misconduct-panel"><div class="misconduct-copy"><h2>Confidential Misconduct Reporting</h2><p>Superworld is dedicated to the highest moral and ethical standards.<br>Communicate concerns regarding ethical misconduct via our<br class="integrity-desktop-break"> confidential channels.</p></div><aside class="misconduct-contact" aria-label="Confidential misconduct reporting contact information"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></aside></div>
+        <div class="misconduct-panel"><div class="misconduct-copy"><h3>Confidential Misconduct Reporting</h3><p>Superworld is dedicated to the highest moral and ethical standards.<br>Communicate concerns regarding ethical misconduct via our<br class="integrity-desktop-break"> confidential channels.</p></div><aside class="misconduct-contact" aria-label="Confidential misconduct reporting contact information"><h3>CONTACT INFORMATION</h3><p>Hotline: +65 6298 2866 (Ext 223)<br>Email: adeline@superworld.com.sg</p></aside></div>
       </div></section>
     </main>`;
   }
@@ -404,11 +406,14 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   ];
 
   function marketCard(m) {
+    const marketPageLink = m.href === routes.applications
+      ? `<span class="button market-more-link" aria-disabled="true">More details unavailable</span>`
+      : link(m.href, `Explore ${m.name}`, "button market-more-link");
     return `<article class="market-card" data-market-card data-market-name="${m.name}">
       ${ph("image-cover", `${m.name} Application`, 360, 250, `${m.name}\nApplication`)}
       <div class="market-summary"><div class="market-summary-copy"><h3>${m.name}</h3><p>${m.copy}</p></div><button class="market-state-toggle" type="button" aria-expanded="false" aria-label="Open ${m.name} details"><span class="market-state-icon" aria-hidden="true"></span></button></div>
-      <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image"><div class="market-detail-image-placeholder" role="img" aria-label="Image placeholder for ${item.name}"></div>${item.href?link(item.href,"Learn More","link-arrow"):`<span class="link-arrow" aria-disabled="true">Learn More</span>`}</div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
-      <div class="market-actions"><button class="market-toggle" type="button" aria-expanded="false">View Details</button>${link(m.href,"View More","button market-more-link")}</div>
+      <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image"><div class="market-detail-image-placeholder" role="img" aria-label="Image placeholder for ${item.name}"></div>${item.href?link(item.href,`Explore ${item.name}`,"link-arrow"):`<span class="link-arrow" aria-disabled="true">Details unavailable</span>`}</div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
+      <div class="market-actions"><button class="market-toggle" type="button" aria-expanded="false">View Details</button>${marketPageLink}</div>
     </article>`;
   }
 
@@ -455,6 +460,8 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       image: "AI/HPC Server Application Image Placeholder",
       imageSrc: "/assets/server-map.webp",
       imageAlt: "AI and HPC server exploded diagram with six component hotspots",
+      imageWidth: 1240,
+      imageHeight: 570,
       caption: "1 CPU / GPU VRM / 2 AI Accelerator Module / 3 High-Current DC-DC / 4 High-Speed LAN / 5 NVMe Storage / 6 Network Adapter",
       hotspots: [["1","server-cpu","server-h1"],["2","server-gpu","server-h2"],["3","server-dcdc","server-h3"],["4","server-lan","server-h4"],["5","server-storage","server-h5"],["6","server-adapter","server-h6"]],
       cards: [
@@ -498,7 +505,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   }
 
   function communicationMappingRows(rows) {
-    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div><div class="series-detail" aria-label="Series dimensions" hidden><strong>Dimensions Range : LWH(mm)</strong><span>xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx</span><a href="${routes.tools}?root=1&category=159&category=161&inquiry=1447&inquiry=1448" data-link>Click Here To learn More</a></div></div>`).join("");
+    return rows.map(row=>`<div class="mapping-row"><div class="component-image-placeholder">IMAGE</div><div><div class="component-name">${row[0]}</div><div class="component-desc">${row[1]}</div></div><div class="series-chips">${communicationSeriesChips(row[2])}</div><div class="series-detail" aria-label="Series dimensions" hidden><strong>Dimensions Range : LWH(mm)</strong><span>xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx</span><a href="${routes.tools}?root=1&category=159&category=161&inquiry=1447&inquiry=1448" data-link>Search compatible products</a></div></div>`).join("");
   }
 
   function communicationCardMarkup(card,index) {
@@ -510,7 +517,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     const data=communicationSystemData[key];
     const active=key==="server";
     const hasImage=Boolean(data.imageSrc);
-    return `<section class="system-panel ${active?"active":""}" role="tabpanel" data-system-panel="${key}" ${active?"":"hidden"}><div class="system-hotspot-stage ${hasImage?"has-system-image":""}"><div class="hotspot-title">Hotspot Image — ${data.name}</div><div class="system-hotspot-image ${hasImage?"has-image":""}">${hasImage?`<img src="${data.imageSrc}" alt="${data.imageAlt}">`:data.image}</div>${data.hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${data.cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}<p class="hotspot-caption">${data.caption}</p></div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${data.cards.map(communicationCardMarkup).join("")}</div></section>`;
+    return `<section class="system-panel ${active?"active":""}" role="tabpanel" data-system-panel="${key}" ${active?"":"hidden"}><div class="system-hotspot-stage ${hasImage?"has-system-image":""}"><div class="hotspot-title">Hotspot Image — ${data.name}</div><div class="system-hotspot-image ${hasImage?"has-image":""}">${hasImage?`<img src="${data.imageSrc}" alt="${data.imageAlt}" width="${data.imageWidth}" height="${data.imageHeight}">`:data.image}</div>${data.hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${data.cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}<p class="hotspot-caption">${data.caption}</p></div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${data.cards.map(communicationCardMarkup).join("")}</div></section>`;
   }
 
   function communicationSystemTabsMarkup() {
@@ -536,7 +543,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       rows:automotiveMappingRows
     }));
     const hotspots=cards.map((card,index)=>[String(index+1),card.id,`automotive-h${index+1}`]);
-    return `<div id="systemTabsRoot" class="automotive-system-feature"><section class="system-panel active" role="tabpanel" data-system-panel="automotive"><div class="system-hotspot-stage has-system-image"><div class="system-hotspot-image has-image"><img src="/assets/automotive-map.webp" alt="Automotive application map"></div>${hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}</div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${cards.map(communicationCardMarkup).join("")}</div></section></div>`;
+    return `<div id="systemTabsRoot" class="automotive-system-feature"><section class="system-panel active" role="tabpanel" data-system-panel="automotive"><div class="system-hotspot-stage has-system-image"><div class="system-hotspot-image has-image"><img src="/assets/automotive-map.webp" alt="Automotive application map" width="1250" height="520"></div>${hotspots.map(h=>`<a class="hotspot-link ${h[2]}" href="#${h[1]}" data-open-card="${h[1]}" aria-label="Open ${cards.find(card=>card.id===h[1])?.name||"application"}">${h[0]}</a>`).join("")}</div><div class="accordion-toolbar"><button class="system-action-btn show-all-btn" type="button">Show All</button><button class="system-action-btn is-outline collapse-all-btn" type="button">Collapse All</button></div><div class="subapp-list">${cards.map(communicationCardMarkup).join("")}</div></section></div>`;
   }
 
   function accordionItem(item, index, kind) {
@@ -560,7 +567,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       ${automotive?`<section class="communication-route-section automotive-route-section"><div class="container"><div class="communication-route-panel"><div class="communication-route-copy"><h2>One clear route from vehicle<br> area to product family.</h2><p>Identify the automotive system, understand the circuit need, and access<br class="communication-route-break"> the relevant series bundle without reading repeated product lists.</p></div><div class="communication-route-metrics"><div class="stat"><strong>8</strong><b>Application Areas</b></div><div class="stat"><strong>10+</strong><b>Component Types</b></div><div class="stat"><strong>IATF 16949</strong><b>Design Focus</b></div><div class="stat"><strong>Global</strong><b>Selection Support</b></div></div></div></div></section>`:`<section class="communication-route-section"><div class="container"><div class="communication-route-panel"><div class="communication-route-copy"><h2>One clear route from system<br> area to product family.</h2><p>Identify the communication system, understand the circuit need, and access<br class="communication-route-break"> the relevant series bundle without reading repeated product lists.</p></div><div class="communication-route-metrics"><div class="stat"><strong>3</strong><b>System Groups</b></div><div class="stat"><strong>14</strong><b>Application Areas</b></div><div class="stat"><strong>AI / EMI</strong><b>Design Focus</b></div><div class="stat"><strong>Series</strong><b>Selection Support</b></div></div></div></div></section>`}
       <nav class="anchor-nav"><a href="#design-needs">${automotive?"AUTOMOTIVE ":""}DESIGN NEEDS</a><a href="#fit">APPLICATION FIT</a><a href="#confidence">QUALITY CONFIDENCE</a><a href="#journey">USER JOURNEY</a></nav>
       <section id="design-needs" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"WHAT THE PAGE SHOULD COMMUNICATE FIRST":"SUPPORT STABLE COMMUNICATION CIRCUIT DESIGN"}</h2><p>${automotive?"":"Reduce noise, support power conversion, and keep signal paths clean."}</p></div><div class="design-cards">
-        ${(automotive?[["Reduce electrical noise","Show how EMC components support cleaner power and signal paths."],["Stabilise power circuits","Position inductors and transformers around power conversion needs."],["Support compact modules","Connect product families to space-conscious automotive electronics."],["Build selection confidence","Link application choices to quality, testing, and enquiry support."]]:[["Control EMI & Signal noise","Support EMI suppression and noise filtering across LAN, Ethernet, RF, and interface circuits."],["Support AI power conversion","Provide suitable inductor and transformer options."],["Protect Data interfaces","Help users identify components for connected interface stability."],["Speed up series selection","Connect each device area to related component families."]]).map((x,i)=>`<article class="design-card"><h2>0${i+1}</h2><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}
+        ${(automotive?[["Reduce electrical noise","Show how EMC components support cleaner power and signal paths."],["Stabilise power circuits","Position inductors and transformers around power conversion needs."],["Support compact modules","Connect product families to space-conscious automotive electronics."],["Build selection confidence","Link application choices to quality, testing, and enquiry support."]]:[["Control EMI & Signal noise","Support EMI suppression and noise filtering across LAN, Ethernet, RF, and interface circuits."],["Support AI power conversion","Provide suitable inductor and transformer options."],["Protect Data interfaces","Help users identify components for connected interface stability."],["Speed up series selection","Connect each device area to related component families."]]).map((x,i)=>`<article class="design-card"><p class="design-card-number">0${i+1}</p><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}
       </div></div></section>
       <section id="fit" class="section section-rule"><div class="container"><div class="section-heading center"><h2>FIND THE RIGHT SERIES BY ${automotive?"AUTOMOTIVE":"COMMUNICATION"} SYSTEM</h2><p>Use the ${automotive?"vehicle":"system"} map to jump to a system. Expand a card only when needed.</p></div>${automotive?automotiveSystemFeatureMarkup():`<div id="systemTabsRoot">${communicationSystemTabsMarkup()}</div>`}</div></section>
       <section id="confidence" class="section section-rule"><div class="container"><div class="section-heading center"><h2>${automotive?"BUILT FOR AUTOMOTIVE-ORIENTED RELIABILITY EXPECTATIONS":"QUALITY SUPPORT FOR RELIABLE COMMUNICATION SYSTEMS."}</h2></div><div class="grid grid-3">
@@ -580,14 +587,14 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   };
 
   function productsPage() {
-    const chipArrayTarget = routes.emc+"/#superworld_electronics_products_general_emc_chip_array_ferrite_bead";
-    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${k==="EMC Components"?link(routes.emc+"/",k):k}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${k==="EMC Components"&&x==="Chip Array Ferrite Bead"?link(chipArrayTarget,x):x}</li>`).join("")}</ul></div>`).join("");
+    const chipArrayTarget = routes.emc+"#superworld_electronics_products_general_emc_chip_array_ferrite_bead";
+    const categoryColumns = Object.entries(generalCategories).map(([k,vals])=>`<div><h3>${k==="EMC Components"?link(routes.emc,k):k}</h3><ul>${vals.map(x=>`<li><span class="check-square"></span>${k==="EMC Components"&&x==="Chip Array Ferrite Bead"?link(chipArrayTarget,x):x}</li>`).join("")}</ul></div>`).join("");
     const releases = Array.from({length:6},()=>mediaCard("A4K Series","Chip Array Ferrite Bead","View More",routes.a4k));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS"]])}
       ${heroPanel("OUR PRODUCTS","Comprehensive range of general and automotive electronic components, including EMC, magnetic, transformer, and wireless power solutions, engineered for high efficiency and reliable performance.")}
-      <section id="superworld_electronics_products_general_components" class="section"><div class="container"><div class="section-heading"><h2>${link(routes.general,"GENERAL COMPONENTS")}</h2>${link(routes.general,"View More","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
-      <section id="superworld_electronics_products_automotive_components" class="section"><div class="container"><div class="section-heading"><h2>AUTOMOTIVE COMPONENTS</h2>${link(routes.products,"View More","link-arrow")}</div><div class="category-columns">${Object.entries(generalCategories).slice(0,3).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.slice(0,5).map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("")}</div></div></section>
-      <section class="section"><div class="container"><div class="section-heading"><h2>LATEST RELEASE</h2>${link(routes.news+"?category=product","View More","link-arrow")}</div>${carousel("product-releases",releases,4)}</div></section>
+      <section id="superworld_electronics_products_general_components" class="section"><div class="container"><div class="section-heading"><h2>${link(routes.general,"GENERAL COMPONENTS")}</h2>${link(routes.general,"View General Components","link-arrow")}</div><div class="category-columns">${categoryColumns}</div></div></section>
+      <section id="superworld_electronics_products_automotive_components" class="section"><div class="container"><div class="section-heading"><h2>AUTOMOTIVE COMPONENTS</h2>${link(routes.automotive,"Explore Automotive Applications","link-arrow")}</div><div class="category-columns">${Object.entries(generalCategories).slice(0,3).map(([k,vals])=>`<div><h3>${k}</h3><ul>${vals.slice(0,5).map(x=>`<li><span class="check-square"></span>${x}</li>`).join("")}</ul></div>`).join("")}</div></div></section>
+      <section class="section"><div class="container"><div class="section-heading"><h2>LATEST RELEASE</h2>${link(routes.news+"?category=product","View Product Releases","link-arrow")}</div>${carousel("product-releases",releases,4)}</div></section>
     </main>`;
   }
 
@@ -601,11 +608,15 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS"]])}
       ${heroPanel("GENERAL COMPONENTS","Essential electronic parts that manage power, reduce electromagnetic interference (EMI), and support efficient signal transmission, ensuring reliable performance in electronic circuits.")}
       <nav class="anchor-nav">${families.map(f=>`<a href="#${f[1]}">${f[0]}</a>`).join("")}</nav>
-      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall", `${f[0]} Product Family`, 1320, 420, `${f[0]}\nProduct Family`)}<div class="family-icons">${f[3].map((x,j)=>i===0&&j===0?link(`${routes.emc}/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`,`${a4kImage("product-thumb")}<span>${x}</span>`,"family-icon"):`<div class="family-icon">${ph("", `${x} Product`, 86, 66, `${x}\nProduct`)}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
+      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall", `${f[0]} Product Family`, 1320, 420, `${f[0]}\nProduct Family`)}<div class="family-icons">${f[3].map((x,j)=>i===0&&j===0?link(`${routes.emc}#superworld_electronics_products_general_emc_chip_array_ferrite_bead`,`${a4kImage("product-thumb")}<span>${x}</span>`,"family-icon"):`<div class="family-icon">${ph("", `${x} Product`, 86, 66, `${x}\nProduct`)}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
     </main>`;
   }
 
-  const productRows = (series, count = 4) => Array.from({length:count},(_,i)=>`<tr><td>${i===0&&series==="A4K"?a4kImage("product-thumb"):ph("", `${series}${i || ""} Product`, 86, 64, `${series}${i || ""}\nProduct`)}</td><td><a data-link href="${series==="A4K"?routes.a4k:"#"}"><u>${series}${i?i:""}</u></a></td><td>XXXXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td><button class="button small">Download</button></td></tr>`).join("");
+  const productRows = (series, count = 4) => Array.from({length:count},(_,i)=>{
+    const seriesName = `${series}${i ? i : ""}`;
+    const seriesMarkup = series === "A4K" ? link(routes.a4k, `<u>${seriesName}</u>`) : `<span class="product-series"><u>${seriesName}</u></span>`;
+    return `<tr><td>${i===0&&series==="A4K"?a4kImage("product-thumb"):ph("", `${seriesName} Product`, 86, 64, `${seriesName}\nProduct`)}</td><td>${seriesMarkup}</td><td>XXXXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td><button class="button small" type="button" aria-label="Download ${seriesName} specification">Download</button></td></tr>`;
+  }).join("");
 
   function emcPage() {
     const emcSections = [
@@ -622,7 +633,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   }
 
   function productDataRows(count=4) {
-    return Array.from({length:count},(_,i)=>`<tr><td><input type="checkbox" ${i===0?"checked":""}></td><td>${a4kImage("product-thumb")}<u>${i===0?"A4K300-RE-10":"XXXXXX"}</u></td><td>Chip Inductor</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td><button class="button small">Download</button></td></tr>`).join("");
+    return Array.from({length:count},(_,i)=>`<tr><td><input type="checkbox" aria-label="Select product row ${i+1}" ${i===0?"checked":""}></td><td>${a4kImage("product-thumb")}<u>${i===0?"A4K300-RE-10":"XXXXXX"}</u></td><td>Chip Inductor</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td>xxxxx</td><td><button class="button small" type="button" aria-label="Download specification for product row ${i+1}">Download</button></td></tr>`).join("");
   }
 
   const a4kParts = [
@@ -653,7 +664,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   }
 
   function specSearchPage() {
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["TOOLS"],["Specification Search"]])}
+    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["Specification Search"]])}
       <section id="superworld_electronics_tools_spec_search_specification_search" class="container" data-section-id-preserve>
         ${specSearchMarkup}
       </section>
@@ -669,8 +680,8 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       ["Program at Gladiolus Place","Corporate Social Responsibility"],
       ["New A4K Series Release","Latest Product News"],
       ["Electronica India Preview","Exhibitions & Trade Shows"]
-    ].map(x=>`<div class="slide"><article class="feature-news"><div class="ph feature-news-visual image-cover" role="img" aria-label="${escapeHtml(x[0])} feature placeholder">${placeholderImage(`${x[0]} Feature`, 660, 322, `${x[0]}\nFeature`)}<span class="tag">${x[1]}</span></div><div class="feature-news-content"><h2>${x[0]}</h2><p>Gladiolus Place is a non-profit Children’s Home, that provides a safe refuge for vulnerable teenage Girls aged 11-21 years old, ...</p>${link(routes.detail,"View More","link-arrow")}</div></article></div>`);
-    return `<div class="news-top">${carousel("news-feature",features,1,false,"news-feature-carousel")}<aside class="event-box"><h2>Event Calendar</h2><div class="event-list">${Array.from({length:5},()=>`<div class="event-row"><div class="event-date"><b>JAN</b><span>21</span></div><div><h4>NEPCON Japan 2026 - Tokyo</h4><p>Booth no : # E36 – 27</p></div></div>`).join("")}</div>${buttonLink(routes.calendar,"Full Schedule","wide")}</aside></div>`;
+    ].map(x=>`<div class="slide"><article class="feature-news"><div class="ph feature-news-visual image-cover">${placeholderImage(`${x[0]} Feature`, 660, 322, `${x[0]}\nFeature`)}<span class="tag">${x[1]}</span></div><div class="feature-news-content"><h2>${x[0]}</h2><p>Gladiolus Place is a non-profit Children’s Home, that provides a safe refuge for vulnerable teenage Girls aged 11-21 years old, ...</p>${link(routes.detail,`View More<span class="sr-only">: ${escapeHtml(x[0])}</span>`,"link-arrow")}</div></article></div>`);
+    return `<div class="news-top">${carousel("news-feature",features,1,false,"news-feature-carousel")}<aside class="event-box"><h2>Event Calendar</h2><div class="event-list">${Array.from({length:5},()=>`<div class="event-row"><div class="event-date"><b>JAN</b><span>21</span></div><div><h3>NEPCON Japan 2026 - Tokyo</h3><p>Booth no : # E36 – 27</p></div></div>`).join("")}</div>${buttonLink(routes.calendar,"Full Schedule","wide")}</aside></div>`;
   }
 
   function newsPage() {
@@ -696,11 +707,11 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       brochures: allNewsCards.filter(item=>item[0]==="Brochures")
     };
     const selectedCards = category==="all" ? allNewsCards : (categoryCards[category]||allNewsCards);
-    const cards = Array.from({length:8},(_,i)=>selectedCards[i%selectedCards.length]).map((item,i)=>`<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual image-cover" role="img" aria-label="${escapeHtml(item[1])} news placeholder">${placeholderImage(`${item[1]} News`, 300, 190, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail,"View More","link-arrow")}<span>17 December 2025</span></div></div></article>`);
-    const list = Array.from({length:5},()=>`<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image" role="img" aria-label="Molded Power Inductor placeholder">${placeholderImage("Molded Power Inductor", 140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category==="eol"?"End-of-Life":"Release Date"} : 15/04/2026</small></div>${link(routes.detail,`<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>`,"news-list-arrow-link")}</article>`).join("");
+    const cards = Array.from({length:8},(_,i)=>selectedCards[i%selectedCards.length]).map((item,i)=>`<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual image-cover">${placeholderImage(`${item[1]} News`, 300, 190, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail,`View More<span class="sr-only">: ${escapeHtml(item[1])}</span>`,"link-arrow")}<span>17 December 2025</span></div></div></article>`);
+    const list = Array.from({length:5},()=>`<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image">${placeholderImage("Molded Power Inductor", 140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category==="eol"?"End-of-Life":"Release Date"} : 15/04/2026</small></div>${link(routes.detail,`<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>`,"news-list-arrow-link")}</article>`).join("");
     const listMode = category === "product" || category === "eol";
     const categoryOptions = Object.entries(newsCategories).map(([value,name])=>`<option value="${value}" ${value===category?"selected":""}>${name}</option>`).join("");
-    return `<main id="main-content" class="page-main news-page">${crumb([["HOME",routes.home],["NEWS"]])}<section class="section-sm news-page-section"><div class="container news-page-container">${newsHero()}
+    return `<main id="main-content" class="page-main news-page">${crumb([["HOME",routes.home],["NEWS"]])}<section class="section-sm news-page-section"><div class="container news-page-container"><header class="page-intro"><h1>SUPERWORLD ELECTRONICS NEWS</h1><p>Product releases, business updates, events, announcements and resources.</p></header>${newsHero()}
       <nav class="anchor-nav">${[["Latest News","latest"],["Product News","product"],["Events & Activities","events"],["Company News","business"],["Resources","brochures"]].map(x=>link(routes.news+"?category="+x[1],x[0])).join("")}</nav>
       <div class="news-filters"><select aria-label="Category" data-news-type>${categoryOptions}</select><select aria-label="Year" data-news-year><option value="">Year</option><option value="2026">2026</option><option value="2025">2025</option></select><div class="news-search"><input type="search" aria-label="Search news" data-news-search autocomplete="off"><button type="button" data-news-search-button aria-label="Search news"><span class="news-search-icon" aria-hidden="true"></span></button></div></div>
       <div class="news-results">${listMode?`<div class="news-list">${list}</div>`:`<div class="news-grid">${cards.join("")}</div>`}<p class="news-empty" data-news-empty hidden>No news matches your search.</p>${pagination()}</div>
@@ -708,15 +719,15 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   }
 
   function eventCalendarPage() {
-    const rows = Array.from({length:6},(_,index)=>`<tr data-event-search-item data-event-year="2026"><td>${ph("", index < 3 ? "NEPCON Japan 2026 Event" : "Electronica India Event", 86, 64, index < 3 ? "NEPCON Japan 2026\nEvent" : "Electronica India\nEvent")}</td><td>${index<3?"21 Jan (Wed) – 23 Jan (Fri)":"15 Apr (Wed) – 17 Apr (Fri)"}</td><td><strong>${index<3?"Tokyo Big Sight, Japan":"Bangalore International Exhibition Centre, India"}</strong><br>${index<3?"# E36 – 27":"# Hall 2 – B18"}</td><td><button>Learn More</button></td><td><button>Learn More</button><br>Book an Appointment</td></tr>`).join("");
-    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["EVENT CALENDAR"]])}<section class="section-sm"><div class="container">${newsHero()}<nav class="anchor-nav">${link(routes.news,"Latest News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=brochures","Resources")}</nav><div class="news-filters"><select aria-label="Event category"><option>ALL</option></select><select aria-label="Event year" data-event-year-filter><option value="">Year</option><option value="2026">2026</option></select><div class="news-search"><input type="search" aria-label="Search events" data-event-search autocomplete="off"><button type="button" data-event-search-button aria-label="Search events"><span class="news-search-icon" aria-hidden="true"></span></button></div></div><div class="table-wrap" style="margin-top:56px"><table><thead><tr><th>Event</th><th>Date</th><th>Location, Booth No</th><th>Exhibition website</th><th>Our Expo Page</th></tr></thead><tbody>${rows}</tbody></table></div><p class="news-empty" data-event-empty hidden>No events match your search.</p>${pagination()}</div></section></main>`;
+    const rows = Array.from({length:6},(_,index)=>`<tr data-event-search-item data-event-year="2026"><td>${ph("", index < 3 ? "NEPCON Japan 2026 Event" : "Electronica India Event", 86, 64, index < 3 ? "NEPCON Japan 2026\nEvent" : "Electronica India\nEvent")}</td><td>${index<3?"21 Jan (Wed) – 23 Jan (Fri)":"15 Apr (Wed) – 17 Apr (Fri)"}</td><td><strong>${index<3?"Tokyo Big Sight, Japan":"Bangalore International Exhibition Centre, India"}</strong><br>${index<3?"# E36 – 27":"# Hall 2 – B18"}</td><td><button type="button">Exhibition Details</button></td><td><button type="button">Expo Details</button><br>Book an Appointment</td></tr>`).join("");
+    return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["EVENT CALENDAR"]])}<section class="section-sm"><div class="container"><header class="page-intro"><h1>EVENT CALENDAR</h1><p>Upcoming exhibitions, trade shows and event information.</p></header>${newsHero()}<nav class="anchor-nav">${link(routes.news,"Latest News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=brochures","Resources")}</nav><div class="news-filters"><select aria-label="Event category"><option>ALL</option></select><select aria-label="Event year" data-event-year-filter><option value="">Year</option><option value="2026">2026</option></select><div class="news-search"><input type="search" aria-label="Search events" data-event-search autocomplete="off"><button type="button" data-event-search-button aria-label="Search events"><span class="news-search-icon" aria-hidden="true"></span></button></div></div><div class="table-wrap" style="margin-top:56px"><table><thead><tr><th>Event</th><th>Date</th><th>Location, Booth No</th><th>Exhibition website</th><th>Our Expo Page</th></tr></thead><tbody>${rows}</tbody></table></div><p class="news-empty" data-event-empty hidden>No events match your search.</p>${pagination()}</div></section></main>`;
   }
 
   function newsDetailPage() {
     const related = Array.from({length:6},()=>mediaCard("Our Johor Bahru facility is progressing","Business Updates","View More",routes.detail));
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["ARTICLE"]])}
       ${heroPanel("Radial-Leaded Inductor :<br>Fully Automated Production Overview","",["Latest Product News"],true)}
-      <section class="section-sm"><div class="container"><div class="section-heading"><h3>17 December 2025</h3><div class="socials"><span>Share</span><span class="social">Chat</span><span class="social">in</span></div></div>
+      <section class="section-sm"><div class="container"><div class="section-heading"><time class="news-article-date" datetime="2025-12-17">17 December 2025</time><div class="socials"><span>Share</span><span class="social">Chat</span><span class="social">in</span></div></div>
         <p>Superworld Electronics produces Radial-Leaded Inductors through a fully automated, controlled process for high precision and consistent quality.</p><p>Automated winding, soldering, and electrical testing ensure reliability, supported by strict inspection. All products undergo in-house reliability tests such as vibration, thermal shock, and solderability to confirm durability.</p><p>Certified to IATF 16949, ISO 9001, ISO 50001:2018, and AEC-Q200, our inductors meet global standards for quality and traceability.</p>${ph("map", "Automated Inductor Production", 1320, 560, "Automated Inductor\nProduction")}<div style="height:30px"></div>${ph("map", "Reliability Testing Process", 1320, 560, "Reliability Testing\nProcess")}
         <p style="margin-top:60px">Superworld Electronics produces Radial-Leaded Inductors through a fully automated, controlled process for high precision and consistent quality.</p>
         <div class="table-wrap"><table><thead><tr><th></th><th>Product</th><th>Category</th><th>Length (mm)</th><th>Width (mm)</th><th>Height (mm)</th><th>Inductance (uH)</th><th>Impedance (Ω)</th><th>DCR (mΩ)</th><th>Isat (mA)</th><th>Irms (mA)</th><th>SPQ</th><th></th></tr></thead><tbody>${productDataRows()}</tbody></table></div>${pagination()}<div class="section-heading" style="margin-top:50px">${buttonLink(routes.news,"Back to News")}<div class="button-group"><button>PREV</button><button>NEXT</button></div></div>
@@ -1073,7 +1084,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
             <div class="support-field"><label class="sr-only" for="support-remarks">Overall remarks</label><textarea id="support-remarks" name="support-remarks" required></textarea></div>
           </section>
           <div class="support-form-actions">
-            <label class="support-consent"><input type="checkbox" required><span>Kindly consent to the terms and conditions. Click "Read More" for further comprehension.</span></label>
+            <label class="support-consent"><input type="checkbox" required><span>Kindly consent to the terms and conditions.</span></label>
             <button type="submit">Submit</button>
           </div>
         </form>
@@ -1088,7 +1099,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       const sku = escapeHtml(product.sku || product.name || product.series || "Product");
       const image = safeDataUrl(product.seriesImage, "data:image/");
       const pdf = safeDataUrl(product.pdfDownload, "data:application/pdf;base64,");
-      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}">` : ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product,"acf.length")} × ${value(product,"acf.width")} × ${value(product,"acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product,"series")}</p><p><strong>Category</strong><br>${value(product,"category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product,"acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product,"acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product,"acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product,"acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product,"acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
+      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}" width="140" height="96">` : ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product,"acf.length")} × ${value(product,"acf.width")} × ${value(product,"acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product,"series")}</p><p><strong>Category</strong><br>${value(product,"category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product,"acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product,"acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product,"acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product,"acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product,"acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
     }).join("");
     const pending = state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
     const summaryContent = pending
@@ -1097,7 +1108,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
         ? `<div class="inquiry-empty inquiry-error" role="alert">${escapeHtml(state.inquiryError)}</div>`
         : cartRows || `<div class="inquiry-empty"><h3>Your inquiry cart is empty.</h3>${buttonLink(routes.tools,"Search Products")}</div>`;
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["INQUIRY CART"]])}<section class="section-sm"><div class="container"><div class="section-heading"><h1>INQUIRY CART SUMMARY</h1><button type="button" data-back>Back</button></div><div class="inquiry-summary"><div class="inquiry-summary-header"><span aria-hidden="true"></span><h2>Product Details</h2><strong>Quantity</strong></div><div data-cart-container>${summaryContent}</div></div>
-      <section class="section inquiry-details"><h1>INQUIRY DETAILS</h1><form class="inquiry-form" data-inquiry-form><div class="form-columns"><div><h2>CONTACT DETAILS</h2><div class="field"><label for="fullname">Full Name</label><input id="fullname" name="fullname" required></div><div class="form-grid-2"><div class="field"><label>Job Title / Department</label><input name="job"></div><div class="field"><label>Phone Number</label><input name="phone" type="tel"></div></div><div class="field"><label>Business Email</label><input name="email" type="email" required></div></div><div><h2>BUSINESS / PROJECT INFO</h2><div class="form-grid-2"><div class="field"><label>Company Name</label><input name="company" required></div><div class="field"><label>Industry</label><input name="industry"></div><div class="field"><label>Country / Region</label><input name="country"></div><div class="field"><label>Project Timeline</label><select name="timeline"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option></select></div></div><div class="field"><label>Company Website</label><input name="website" type="url"></div></div></div><h2>OVERALL REMARKS</h2><div class="field"><textarea name="remarks"></textarea></div><div class="section-heading"><label><input type="checkbox" required> Kindly consent to the terms and conditions.<br>Click "Read More" for further comprehension.</label><button class="button wide" type="submit">Submit</button></div></form></section>
+      <section class="section inquiry-details"><h2>INQUIRY DETAILS</h2><form class="inquiry-form" data-inquiry-form><div class="form-columns"><div><h3>CONTACT DETAILS</h3><div class="field"><label for="fullname">Full Name</label><input id="fullname" name="fullname" autocomplete="name" required></div><div class="form-grid-2"><div class="field"><label for="inquiry-job">Job Title / Department</label><input id="inquiry-job" name="job" autocomplete="organization-title"></div><div class="field"><label for="inquiry-phone">Phone Number</label><input id="inquiry-phone" name="phone" type="tel" autocomplete="tel"></div></div><div class="field"><label for="inquiry-email">Business Email</label><input id="inquiry-email" name="email" type="email" autocomplete="email" required></div></div><div><h3>BUSINESS / PROJECT INFO</h3><div class="form-grid-2"><div class="field"><label for="inquiry-company">Company Name</label><input id="inquiry-company" name="company" autocomplete="organization" required></div><div class="field"><label for="inquiry-industry">Industry</label><input id="inquiry-industry" name="industry"></div><div class="field"><label for="inquiry-country">Country / Region</label><input id="inquiry-country" name="country" autocomplete="country-name"></div><div class="field"><label for="inquiry-timeline">Project Timeline</label><select id="inquiry-timeline" name="timeline"><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option></select></div></div><div class="field"><label for="inquiry-website">Company Website</label><input id="inquiry-website" name="website" type="url" autocomplete="url"></div></div></div><h3>OVERALL REMARKS</h3><div class="field"><label class="sr-only" for="inquiry-remarks">Overall remarks</label><textarea id="inquiry-remarks" name="remarks"></textarea></div><div class="section-heading"><label><input type="checkbox" required> I consent to the terms and conditions.</label><button class="button wide" type="submit">Submit</button></div></form></section>
     </div></section></main>`;
   }
 
@@ -1731,14 +1742,67 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     render(scrollTop);
   }
 
+  function syncPageMetadata() {
+    const metadata = metadataForPath(location.pathname);
+    const canonicalUrl = `${SITE_ORIGIN}${location.pathname.replace(/\/+$/, "") || "/"}`;
+    const socialImageUrl = `${SITE_ORIGIN}${SOCIAL_IMAGE_PATH}`;
+    const upsertMeta = (attribute, name, content) => {
+      let element = document.head.querySelector(`meta[${attribute}="${name}"]`);
+      if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute(attribute, name);
+        document.head.append(element);
+      }
+      element.setAttribute("content", content);
+    };
+
+    document.title = metadata.title;
+    upsertMeta("name", "description", metadata.description);
+    upsertMeta("name", "robots", metadata.index === false ? "noindex,follow" : "index,follow,max-image-preview:large");
+    upsertMeta("property", "og:title", metadata.title);
+    upsertMeta("property", "og:description", metadata.description);
+    upsertMeta("property", "og:type", "website");
+    upsertMeta("property", "og:url", canonicalUrl);
+    upsertMeta("property", "og:image", socialImageUrl);
+    upsertMeta("property", "og:image:width", "1200");
+    upsertMeta("property", "og:image:height", "630");
+    upsertMeta("property", "og:site_name", "Superworld Electronics");
+    upsertMeta("name", "twitter:card", "summary_large_image");
+    upsertMeta("name", "twitter:title", metadata.title);
+    upsertMeta("name", "twitter:description", metadata.description);
+    upsertMeta("name", "twitter:image", socialImageUrl);
+
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.append(canonical);
+    }
+    canonical.href = canonicalUrl;
+
+    const structuredData = structuredDataForPath(location.pathname);
+    let script = document.getElementById("page-structured-data");
+    if (!structuredData) {
+      script?.remove();
+      return;
+    }
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "page-structured-data";
+      script.type = "application/ld+json";
+      document.head.append(script);
+    }
+    script.textContent = JSON.stringify(structuredData);
+  }
+
   function render(scrollTop = true) {
     stopTimers();
     syncInquiryStateFromQuery();
     app.innerHTML = header() + pageForPath() + footer() + `<div class="wireframe-note">Black & white wireframe · Poppins headings · Inter body</div>`;
+    syncPageMetadata();
     setupInteractions();
     if (location.pathname === routes.tools) window.SpecSearchApp?.initialize();
     if (location.pathname === routes.inquiry) void loadInquiryProducts();
-    document.title = "Superworld Electronics — Wireframe";
     const hashTarget=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1))):null;
     if(hashTarget) hashTarget.scrollIntoView({block:"start",behavior:"instant"});
     else if (scrollTop) window.scrollTo({top:0,behavior:"instant"});
@@ -1775,7 +1839,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
   };
 
   const cardMarkup = ([title, copy, href]) =>
-    '<article class="media-card slide">' + ph("soft", title + " Image", 320, 220, title + "\nImage") + '<div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a></div></div></article>';
+    '<article class="media-card slide">' + ph("soft", title + " Image", 320, 220, title + "\nImage") + '<div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More<span class="sr-only">: ' + title + '</span></a></div></div></article>';
 
   function selectProductSet(type, carouselId) {
     const root = document.querySelector('[data-carousel="' + carouselId + '"]');
@@ -2198,7 +2262,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     if (layout.dataset.industryEnhanced === 'true') return;
     if (industrySelectorCleanup) industrySelectorCleanup();
     layout.dataset.industryEnhanced = 'true';
-    layout.innerHTML = '<div class="industry-slider" aria-live="polite"><div class="industry-slides">' + industrySelectorData.map((item) => '<div class="industry-slide"><div class="ph industry-image-ph image-cover" role="img" aria-label="' + item[0] + ' industry placeholder">' + placeholderImage(item[0] + " Industry", 560, 292, item[0] + "\nIndustry") + '</div></div>').join('') + '</div></div><div class="industry-list">' + industrySelectorData.map((item, index) => '<button class="industry-row' + (index === 0 ? ' is-active' : '') + '" type="button" data-industry-index="' + index + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><h3>' + item[0] + '</h3><p>' + item[1] + '</p><span class="industry-row-arrow" aria-hidden="true"></span></button>').join('') + '</div>';
+    layout.innerHTML = '<div class="industry-slider" aria-live="polite"><div class="industry-slides">' + industrySelectorData.map((item) => '<div class="industry-slide"><div class="ph industry-image-ph image-cover">' + placeholderImage(item[0] + " Industry", 560, 292, item[0] + "\nIndustry") + '</div></div>').join('') + '</div></div><div class="industry-list">' + industrySelectorData.map((item, index) => '<button class="industry-row' + (index === 0 ? ' is-active' : '') + '" type="button" data-industry-index="' + index + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><h3>' + item[0] + '</h3><p>' + item[1] + '</p><span class="industry-row-arrow" aria-hidden="true"></span></button>').join('') + '</div>';
 
     let current = 0;
     let timer = 0;
@@ -2240,7 +2304,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     const track = root.querySelector('.carousel-track');
     if (!track) return;
     root.dataset.certificationCardsEnhanced = 'true';
-    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="IATF 16949 certification placeholder">' + placeholderImage("IATF 16949 Certification", 300, 176, "IATF 16949\nCertification") + '<span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
+    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph">' + placeholderImage("IATF 16949 Certification", 300, 176, "IATF 16949\nCertification") + '<span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>View Certificate Details</a><span>17 December 2025</span></div></div></article>').join('');
     track.style.transform = 'translateX(0px)';
     const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
     if (viewMore) {
@@ -2295,7 +2359,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     const track = root.querySelector('.carousel-track');
     if (!track) return;
     root.dataset.newsCardsEnhanced = 'true';
-    track.innerHTML = Array.from({length:6}, () => '<article class="media-card home-news-card slide"><div class="ph home-news-visual image-cover" role="img" aria-label="Johor Bahru facility news placeholder">' + placeholderImage("Johor Bahru Facility News", 300, 220, "Johor Bahru Facility\nNews") + '<span class="home-news-tag">Business Updates</span></div><div class="home-news-content"><h3>Our Johor Bahru facility is progressing</h3><div class="home-news-footer"><a class="home-news-more" href="/news/radial-leaded-inductor" data-link>View More</a><span>17 December 2025</span></div></div></article>').join('');
+    track.innerHTML = Array.from({length:6}, () => '<article class="media-card home-news-card slide"><div class="ph home-news-visual image-cover">' + placeholderImage("Johor Bahru Facility News", 300, 220, "Johor Bahru Facility\nNews") + '<span class="home-news-tag">Business Updates</span></div><div class="home-news-content"><h3>Our Johor Bahru facility is progressing</h3><div class="home-news-footer"><a class="home-news-more" href="/news/radial-leaded-inductor" data-link>View More<span class="sr-only">: Our Johor Bahru facility is progressing</span></a><span>17 December 2025</span></div></div></article>').join('');
     track.style.transform = 'translateX(0px)';
     const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
     if (viewMore) {
@@ -2340,7 +2404,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     const map = document.createElement('div');
     map.className = 'regional-map';
     map.setAttribute('aria-label', 'Interactive regional support world map');
-    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics regional support locations">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' regional support" aria-pressed="false"></button>').join('') + '</div>';
+    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics regional support locations" width="800" height="400">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' regional support" aria-pressed="false"></button>').join('') + '</div>';
     placeholder.replaceWith(map);
 
     const stage = map.querySelector('.regional-map-stage');
@@ -2422,7 +2486,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     const map = document.createElement('div');
     map.className = 'regional-map company-regional-map';
     map.setAttribute('aria-label', 'Interactive global presence world map');
-    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics global presence">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-company-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' global presence" aria-pressed="false"></button>').join('') + '</div>';
+    map.innerHTML = '<div class="regional-map-stage"><img src="/assets/world-map.webp" alt="World map showing Superworld Electronics global presence" width="800" height="400">' + regionalMapPoints.map((point, index) => '<button class="regional-map-pin" type="button" style="--x:' + point[1] + '%;--y:' + point[2] + '%" data-company-region-pin="' + index + '" aria-label="Highlight ' + point[0] + ' global presence" aria-pressed="false"></button>').join('') + '</div>';
     placeholder.replaceWith(map);
 
     const pins = [...map.querySelectorAll('[data-company-region-pin]')];

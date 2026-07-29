@@ -4,8 +4,67 @@ import specSearchCss from "../.generated/spec-search.css";
 import specSearchJs from "../.generated/spec-search-app.txt";
 import specSearchMockData from "../.generated/spec-search-mock-data.txt";
 import specSearchMockDataScript from "../.generated/spec-search-mock-data-script.txt";
+import ogImageDataUrl from "../public/og.png";
+import { PAGE_METADATA, SITE_ORIGIN, SOCIAL_IMAGE_PATH, metadataForPath, normalizePathname, structuredDataForPath } from "./seo.js";
 
-const html = "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <meta name=\"description\" content=\"Superworld Electronics website wireframe prototype\">\n  <title>Superworld Electronics — Wireframe</title>\n  <link rel=\"stylesheet\" href=\"/styles.css\">\n  <link rel=\"stylesheet\" href=\"/spec-search.css\">\n</head>\n<body>\n  <a class=\"skip-link\" href=\"#main-content\">Skip to content</a>\n  <div id=\"app\"></div>\n  <script src=\"/spec-search.js\"></script>\n  <script type=\"module\" src=\"/app.js\"></script>\n</body>\n</html>";
+const escapeAttribute = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+})[character]);
+
+const renderHtml = (pathname) => {
+  const path = normalizePathname(pathname);
+  const metadata = metadataForPath(path);
+  const canonicalUrl = `${SITE_ORIGIN}${path}`;
+  const socialImageUrl = `${SITE_ORIGIN}${SOCIAL_IMAGE_PATH}`;
+  const structuredData = structuredDataForPath(path);
+  const jsonLd = structuredData
+    ? `<script id="page-structured-data" type="application/ld+json">${JSON.stringify(structuredData).replace(/</g, "\\u003c")}</script>`
+    : "";
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="${escapeAttribute(metadata.description)}">
+  <meta name="robots" content="${metadata.index === false ? "noindex,follow" : "index,follow,max-image-preview:large"}">
+  <title>${escapeAttribute(metadata.title)}</title>
+  <link rel="canonical" href="${canonicalUrl}">
+  <meta property="og:title" content="${escapeAttribute(metadata.title)}">
+  <meta property="og:description" content="${escapeAttribute(metadata.description)}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:image" content="${socialImageUrl}">
+  <meta property="og:image:width" content="1731">
+  <meta property="og:image:height" content="909">
+  <meta property="og:image:alt" content="Superworld Electronics components and solutions">
+  <meta property="og:site_name" content="Superworld Electronics">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeAttribute(metadata.title)}">
+  <meta name="twitter:description" content="${escapeAttribute(metadata.description)}">
+  <meta name="twitter:image" content="${socialImageUrl}">
+  ${jsonLd}
+  <link rel="stylesheet" href="/styles.css?v=112">
+  <link rel="stylesheet" href="/spec-search.css?v=100">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="app"><main id="main-content" class="page-main"><section class="section"><div class="container"><h1>${escapeAttribute(metadata.heading)}</h1><p>${escapeAttribute(metadata.description)}</p></div></section></main></div>
+  <script src="/spec-search.js?v=93"></script>
+  <script type="module" src="/app.js?v=115"></script>
+</body>
+</html>`;
+};
+
+const indexablePaths = Object.entries(PAGE_METADATA)
+  .filter(([, metadata]) => metadata.index !== false)
+  .map(([path]) => path);
+
+const robotsText = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_ORIGIN}/sitemap.xml\n`;
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexablePaths.map((path) => `  <url><loc>${SITE_ORIGIN}${path}</loc></url>`).join("\n")}\n</urlset>\n`;
 
 
 
@@ -112,14 +171,20 @@ export default {
     if (path === "/spec-search.js") return new Response(specSearchJs, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "public, max-age=300" } });
     if (path === "/spec-search/mock-data.json") return new Response(specSearchMockData, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
     if (path === "/spec-search/mock-data.js") return new Response(specSearchMockDataScript, { headers: { "content-type": "text/javascript; charset=utf-8", "cache-control": "no-store" } });
+    if (path === SOCIAL_IMAGE_PATH) return new Response(decodeBase64(ogImageDataUrl.slice(ogImageDataUrl.indexOf(",") + 1)), { headers: { "content-type": "image/png", "cache-control": "public, max-age=31536000, immutable" } });
     if (assetBase64[path]) return new Response(decodeBase64(assetBase64[path]), { headers: { "content-type": mime(path), "cache-control": "public, max-age=31536000, immutable" } });
-    return new Response(
-      html
-        .replace("/styles.css", "/styles.css?v=111")
-        .replace("/spec-search.css", "/spec-search.css?v=99")
-        .replace("/spec-search.js", "/spec-search.js?v=92")
-        .replace("/app.js", "/app.js?v=114"),
-      { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } }
-    );
+    if (path === "/robots.txt") return new Response(robotsText, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-cache" } });
+    if (path === "/sitemap.xml") return new Response(sitemapXml, { headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "no-cache" } });
+
+    const normalizedPath = normalizePathname(path);
+    if (path !== "/" && path.endsWith("/") && PAGE_METADATA[normalizedPath]) {
+      return Response.redirect(`${SITE_ORIGIN}${normalizedPath}${url.search}`, 308);
+    }
+
+    const pageExists = Boolean(PAGE_METADATA[normalizedPath]);
+    return new Response(renderHtml(normalizedPath), {
+      status: pageExists ? 200 : 404,
+      headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" }
+    });
   }
 };
