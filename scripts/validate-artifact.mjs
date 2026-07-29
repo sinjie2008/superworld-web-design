@@ -34,6 +34,7 @@ for (const application of ["tcu", "sensing-camera", "infotainment", "tpms", "hea
 assert.match(appSource, /get\("application"\)/);
 assert.match(appSource, /delete\("system"\)/);
 assert.match(appSource, /class="system-action-btn bundle-btn"[^>]*>View Bundle<\/a>/);
+assert.match(appSource, /\?root=1&category=159&category=161&inquiry=1447&inquiry=1448/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
 
