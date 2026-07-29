@@ -28,5 +28,6 @@ assert.match(appSource, /\?system=server#superworld_electronics_applications_com
 assert.match(appSource, /\?system=router#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /\?system=settopbox#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /URLSearchParams\(location\.search\)\.get\("system"\)/);
+assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");
