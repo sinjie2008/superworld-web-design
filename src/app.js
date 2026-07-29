@@ -8,10 +8,7 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
   "'": "&#39;"
 })[character]);
 
-const placeholderImage = (imageName, width, height, label = imageName) => {
-  const text = String(label).split("\n").map(encodeURIComponent).join("%0A");
-  return `<img src="https://placehold.co/${width}x${height}?text=${text}" alt="${escapeHtml(imageName)}" width="${width}" height="${height}"/>`;
-};
+const placeholderImage = (imageName, width, height) => `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(imageName)}" width="${width}" height="${height}"/>`;
 
 const ph = (className, imageName, width, height, label = imageName) => `<div class="ph${className ? ` ${className}` : ""}" aria-label="${escapeHtml(imageName)} placeholder">${placeholderImage(imageName, width, height, label)}</div>`;
 

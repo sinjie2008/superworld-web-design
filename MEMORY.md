@@ -30,7 +30,7 @@
 - Specification Search reparses `window.location.search` on every `initialize()` call so first-time SPA navigation applies bundle query parameters immediately instead of reusing the query captured at the initial page load.
 - Every shared application `series-chip` reveals a mapping-row dimension panel on hover or keyboard focus; the row keeps the panel open so its link remains reachable, and clicking pins it until the chip is clicked again. Visibility, active styling, and `aria-expanded` are controlled together: visible means `true`, hidden means `false`. The panel uses the wireframe range `xxxx × xxxx × xxxx ~ xxxx × xxxx × xxxx` and links to Specification Search with `root=1`, categories `159` and `161`, and inquiry products `1447` and `1448`.
 - Application detail CTA button groups stay on one horizontal row on desktop and may wrap only on narrow mobile layouts.
-- All empty `.ph` image placeholders use the shared `placeholderImage()` helper with context-specific `placehold.co` labels and dimensions; existing real images remain unchanged.
+- All empty `.ph` image placeholders use the shared `placeholderImage()` helper with dimension-only `https://placehold.co/{width}x{height}` URLs; meaningful context stays in `alt` text and existing real images remain unchanged.
 
 ## Known pitfalls
 
