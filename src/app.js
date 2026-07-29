@@ -1,5 +1,20 @@
 import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+})[character]);
+
+const placeholderImage = (imageName, width, height, label = imageName) => {
+  const text = String(label).split("\n").map(encodeURIComponent).join("%0A");
+  return `<img src="https://placehold.co/${width}x${height}?text=${text}" alt="${escapeHtml(imageName)}" width="${width}" height="${height}"/>`;
+};
+
+const ph = (className, imageName, width, height, label = imageName) => `<div class="ph${className ? ` ${className}` : ""}" aria-label="${escapeHtml(imageName)} placeholder">${placeholderImage(imageName, width, height, label)}</div>`;
+
 (function clientApp() {
   const app = document.getElementById("app");
   const state = {
@@ -37,14 +52,6 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     thanks: "/thank-you"
   };
 
-  const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[character]);
-
   const inquiryIdsFromQuery = () => Array.from(new Set(new URLSearchParams(location.search)
     .getAll("inquiry")
     .map(Number)
@@ -52,7 +59,6 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   const safeDataUrl = (value, prefix) => typeof value === "string" && value.startsWith(prefix) && !/["<>\s]/.test(value) ? value : "";
 
-  const ph = (className = "") => `<div class="ph ${className}" aria-label="Image placeholder"></div>`;
   const logo = (className = "") => `<img class="${className}" src="/assets/logo.webp" alt="Superworld Electronics">`;
   const a4kImage = (className = "") => `<img class="${className}" src="/assets/a4k-product.webp" alt="A4K chip array ferrite bead">`;
   const link = (href, label, className = "") => `<a data-link class="${className}" href="${href}">${label}</a>`;
@@ -78,7 +84,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   function mediaCard(title, copy, label = "View More", href = "#") {
     return `<article class="media-card slide">
-      ${ph("soft")}
+      ${ph("soft", `${title} Image`, 320, 220, `${title}\nImage`)}
       <div class="media-card-body"><h3>${title}</h3><p>${copy}</p>
       <div class="media-card-footer">${href === "#" ? `<button class="link-arrow" type="button">${label}</button>` : link(href, label, "link-arrow")}<span>17 December 2025</span></div></div>
     </article>`;
@@ -151,10 +157,10 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         <div class="mega-news-slider" data-mega-news-slider>
           <button class="mega-news-control mega-news-prev" type="button" data-mega-news-prev aria-label="Previous news events"><span aria-hidden="true"></span></button>
           <div class="mega-news-window"><div class="mega-news-track">
-            <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph()}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph()}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
-            <article class="mega-news-card">${ph()}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("", "Electronica India Event", 320, 130, "Electronica India\nEvent")}<strong>Electronica — India</strong><small>Bangalore International Exhibition Centre</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
+            <article class="mega-news-card">${ph("", "NEPCON Japan 2026 Event", 320, 130, "NEPCON Japan 2026\nEvent")}<strong>NEPCON Japan 2026</strong><small>Tokyo Big Sight, Japan</small>${link(routes.calendar,"Learn More","mega-news-link")}</article>
           </div></div>
           <button class="mega-news-control mega-news-next" type="button" data-mega-news-next aria-label="Next news events"><span aria-hidden="true"></span></button>
         </div>
@@ -178,7 +184,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   }
 
   function homePage() {
-    const heroSlides = [1,2,3].map(() => `<div class="slide">${ph("hero-ph")}</div>`);
+    const heroSlides = [1,2,3].map((slide) => `<div class="slide">${ph("hero-ph", `Home Hero ${slide}`, 1440, 620, `Home Hero\n${slide}`)}</div>`);
     const achievements = [
       ["SINGAPORE","Headquarter Office","Established 1993"],
       ["GLOBAL","Manufacturing & support","SG · MY · CN · TW · TH"],
@@ -206,19 +212,19 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       <section class="section-sm"><div class="container company-overview">
         <div><h2>COMPANY OVERVIEW</h2><p>A component partner supporting design, manufacturing, quality control, and customer enquiries.</p>
         <div class="company-values"><div class="company-value"><h3>Engineering</h3><p>Design support</p></div><div class="company-value"><h3>Production</h3><p>Process control</p></div><div class="company-value"><h3>Quality</h3><p>Testing support</p></div><div class="company-value"><h3>Service</h3><p>Global response</p></div></div>
-        ${link(routes.company,"View Our Company","link-arrow")}</div>${ph("tall")}
+        ${link(routes.company,"View Our Company","link-arrow")}</div>${ph("tall", "Company Overview", 800, 420, "Company\nOverview")}
       </div></section>
       <section class="section"><div class="container">
         <div class="section-heading"><h2>DISCOVER OUR CORE PRODUCT LINES</h2><div class="button-group"><button class="button small" type="button" data-product-tab="general" data-product-carousel="home-products">General</button><button class="button small" type="button" data-product-tab="automotive" data-product-carousel="home-products">Automotive</button></div></div>
         ${carousel("home-products",productLines,4)}
       </div></section>
       <section class="section"><div class="container">
-        <h2>INDUSTRIES WE SERVE</h2><div class="industries-layout">${ph("tall")}<div class="industry-list">
+        <h2>INDUSTRIES WE SERVE</h2><div class="industries-layout">${ph("tall", "Industries Overview", 560, 420, "Industries\nOverview")}<div class="industry-list">
           ${["Automotive","Communication","Consumer","Healthcare","Industrial & Energy","Smart Home"].map(x=>`<article class="industry-row"><h3>${x}</h3><p>Application-specific component support.</p></article>`).join("")}
         </div></div>
       </div></section>
       <section class="section"><div class="container">
-        <div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map")}
+        <div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map", "Regional Support Map", 1320, 560, "Regional Support\nMap")}
         <div class="regions" style="margin-top:38px">${regionCards()}</div>
       </div></section>
       <section class="section section-rule"><div class="container">
@@ -265,12 +271,12 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         <div class="grid grid-4" style="margin-top:24px"><div class="stat"><strong>4</strong><b>Core Product Lines</b></div><div class="stat"><strong>145</strong><b>Patents</b></div><div class="stat"><strong>3%</strong><b>R&D Investment Ratio</b></div><div class="stat"><strong>26%</strong><b>High-Reliability Market Exposure</b></div></div>
       </div></section>
       <section class="section"><div class="container"><div class="section-heading"><h2>PRODUCT LINES</h2><div class="button-group"><button>General</button><button>Automotive</button></div></div>
-        <div class="grid grid-4">${productLines.map(x=>`<article class="media-card">${ph()}<div class="media-card-body"><h3>${x[0]}</h3><p>${x[1]}</p>${link(routes.products,"View More","link-arrow")}</div></article>`).join("")}</div>
+        <div class="grid grid-4">${productLines.map(x=>`<article class="media-card">${ph("", `${x[0]} Product Line`, 320, 220, `${x[0]}\nProduct Line`)}<div class="media-card-body"><h3>${x[0]}</h3><p>${x[1]}</p>${link(routes.products,"View More","link-arrow")}</div></article>`).join("")}</div>
       </div></section>
       <section id="industries" class="section"><div class="container"><h2>INDUSTRIES</h2><p>Serving a broad range of electronics markets.</p>
-        ${carousel("company-industries",["Automotive","Healthcare","Consumer","Industrial","Communication"].map(x=>`<div class="slide card">${ph("tall")}<h3 style="margin-top:18px">${x}</h3></div>`),4)}
+        ${carousel("company-industries",["Automotive","Healthcare","Consumer","Industrial","Communication"].map(x=>`<div class="slide card">${ph("tall", `${x} Industry`, 320, 420, `${x}\nIndustry`)}<h3 style="margin-top:18px">${x}</h3></div>`),4)}
       </div></section>
-      <section id="global-presence" class="section section-rule"><div class="container split"><div><h2>GLOBAL PRESENCE</h2><p>Headquartered in Singapore with regional manufacturing and operations across Asia.</p><h3>REGIONAL FOOTPRINT</h3><p>Singapore · China · Malaysia · Taiwan · Thailand</p><h3>WORKING MODEL</h3><p>Development, manufacturing, and customer support aligned across locations.</p></div>${ph("map")}</div></section>
+      <section id="global-presence" class="section section-rule"><div class="container split"><div><h2>GLOBAL PRESENCE</h2><p>Headquartered in Singapore with regional manufacturing and operations across Asia.</p><h3>REGIONAL FOOTPRINT</h3><p>Singapore · China · Malaysia · Taiwan · Thailand</p><h3>WORKING MODEL</h3><p>Development, manufacturing, and customer support aligned across locations.</p></div>${ph("map", "Global Presence Map", 800, 450, "Global Presence\nMap")}</div></section>
       <section id="milestones" class="section section-rule"><div class="container"><div class="section-heading center"><h2>MILESTONES</h2><p>A timeline of important milestones that have shaped Superworld Electronics' journey and success.</p></div>
         <div class="timeline"><div class="timeline-row">${["2011 – 2014","2007 – 2010","2000 – 2006","1993 – 1999","1975"].map((x,i)=>`<div class="timeline-item ${i===2?"active":""}"><h3>${x}</h3><div class="timeline-circle"></div>${i===2?`<h3>Foundation</h3><p>Established Singapore Headquarters Office</p>`:""}</div>`).join("")}</div></div>
       </div></section>
@@ -331,7 +337,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       <section id="compliance" class="section quality-wireframe-section quality-compliance"><div class="container"><h2>COMPLIANCE & ENVIRONMENT</h2><p class="quality-section-intro">Committed to sustainability through global hazardous substance regulation compliance (RoHS/REACH) and transparent, ethical conflict-free mineral sourcing.</p><div class="quality-compliance-grid">${complianceCards}</div></div></section>
       <section class="section"><div class="container"><div class="section-heading center"><h2>IN-HOUSE VALIDATION CAPABILITIES</h2><p>Verifies component quality through reliability testing, magnetic analysis, and EMI / EMC validation.</p></div>
         <div class="lab-tabs"><button class="lab-tab is-active" type="button">01<br>RELIABILITY TEST SYSTEM</button><button class="lab-tab" type="button">02<br>MAGNETIC ANALYSIS</button><button class="lab-tab" type="button">03<br>EMI / EMC CENTER</button></div>
-        <div class="lab-view">${ph("tall")}<div class="lab-copy"><h3>COMPREHENSIVE RELIABILITY VERIFICATION SYSTEM</h3><p>Ensuring reliable, long-term performance of magnetic components in real-world operation.</p><hr><p>SYSTEM SECTIONS</p>${["Application Environment Simulation","Electrical & Functional Analysis","Composition Analysis","Failure Analysis","Environmental Endurance","Mechanical Analysis"].map(x=>`<p>${x}</p>`).join("")}<div class="button-group"><button>Prev</button><button class="wide">Play</button><button>Next</button></div></div></div>
+        <div class="lab-view">${ph("tall", "Reliability Verification Lab", 820, 420, "Reliability Verification\nLab")}<div class="lab-copy"><h3>COMPREHENSIVE RELIABILITY VERIFICATION SYSTEM</h3><p>Ensuring reliable, long-term performance of magnetic components in real-world operation.</p><hr><p>SYSTEM SECTIONS</p>${["Application Environment Simulation","Electrical & Functional Analysis","Composition Analysis","Failure Analysis","Environmental Endurance","Mechanical Analysis"].map(x=>`<p>${x}</p>`).join("")}<div class="button-group"><button>Prev</button><button class="wide">Play</button><button>Next</button></div></div></div>
       </div></section>
       <section id="certs" class="section section-rule quality-certificates"><div class="container"><div class="section-heading center"><h2>CERTIFICATION VAULT</h2><p>Official Accreditation Documents</p></div><form class="quality-certificate-search" role="search"><label for="quality-certificate-search-input">Search certificates</label><input id="quality-certificate-search-input" type="search" placeholder="Search certificate..." autocomplete="off" data-certificate-search></form><div class="quality-certificate-grid" data-certificate-grid>${certCards}</div><p class="quality-certificate-empty" data-certificate-empty hidden>No certificates found.</p><nav class="quality-certificate-pagination" aria-label="Certification pages">${[1,2,3,4,5].map((page) => `<button type="button" data-certificate-page="${page}"${page === 1 ? ' class="is-active" aria-current="page"' : ''}>${page}</button>`).join("")}</nav></div></section>
     </main>`;
@@ -341,7 +347,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR COMPANY",routes.company],["SUSTAINABILITY"]])}
       ${heroPanel("ESG Commitment &<br>Sustainability Strategy","At Superworld Electronics, we integrate Environmental, Social, and Governance (ESG) principles into our global manufacturing operations to drive ethical growth and long-term value.",["Environment","Social","Governance"])}
       <nav class="anchor-nav"><a href="#esg-vision">ESG VISION</a><a href="#superworld_electronics_company_sustainability_esg_and_sustainability_pillars">ESG & SUSTAINABILITY PILLARS</a><a href="#environment">ENVIRONMENTAL STEWARDSHIP</a><a href="#superworld_electronics_company_sustainability_integrity_and_accountability">INTEGRITY & ACCOUNTABILITY</a></nav>
-      <section id="esg-vision" class="section"><div class="container split"><div><h2>OUR ESG VISION</h2><p>We are evolving beyond traditional corporate citizenship to a robust ESG framework. Our goal is to ensure that every electronic component we produce contributes to a sustainable technological ecosystem.</p><p>Through transparent reporting and rigorous standards, we provide our global partners with confidence that their supply chain meets the highest ethical requirements.</p></div>${ph("tall")}</div></section>
+      <section id="esg-vision" class="section"><div class="container split"><div><h2>OUR ESG VISION</h2><p>We are evolving beyond traditional corporate citizenship to a robust ESG framework. Our goal is to ensure that every electronic component we produce contributes to a sustainable technological ecosystem.</p><p>Through transparent reporting and rigorous standards, we provide our global partners with confidence that their supply chain meets the highest ethical requirements.</p></div>${ph("tall", "ESG Vision", 800, 420, "ESG\nVision")}</div></section>
       <section id="superworld_electronics_company_sustainability_esg_and_sustainability_pillars" class="section esg-pillars-section"><div class="container"><div class="section-heading center"><h2>ESG & SUSTAINABILITY PILLARS</h2></div>
         <div class="esg-pillars-grid">
           <article class="esg-pillar-card"><h3>SOCIAL</h3><p class="esg-pillar-lead">Empowering People</p><div class="esg-pillar-copy"><p>Supporting growth &amp; inclusion with fair, Tripartite standards.</p><p>Active member of Responsible Business Alliance (RBA) to ensure worker rights.</p></div><div class="esg-pillar-tags" aria-label="Social standards"><span>Tripartite Standards</span><span>RBA Member</span></div></article>
@@ -350,7 +356,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         </div>
         ${carousel("esg-pillars",[1,2,3].map((item)=>`<div class="slide"><div class="esg-pillar-image" role="img" aria-label="ESG sustainability image placeholder ${item}"></div></div>`),1,false,"esg-pillars-carousel")}
       </div></section>
-      <section id="environment" class="section"><div class="container"><div class="split"><div><h2>ENVIRONMENTAL STEWARDSHIP</h2><p>Our manufacturing processes are designed to minimize ecological impact through precision engineering and resource optimization.</p></div><div class="grid grid-2">${card("Energy Efficiency","Transitioning to low-emission machinery and optimizing facility power consumption.")}${card("Waste Management","Comprehensive recycling protocols for manufacturing scrap and chemical byproducts.")}</div></div><div style="margin-top:32px">${carousel("environment-slider",[1,2,3].map(()=>`<div class="slide">${ph("map")}</div>`),1,false)}</div></div></section>
+      <section id="environment" class="section"><div class="container"><div class="split"><div><h2>ENVIRONMENTAL STEWARDSHIP</h2><p>Our manufacturing processes are designed to minimize ecological impact through precision engineering and resource optimization.</p></div><div class="grid grid-2">${card("Energy Efficiency","Transitioning to low-emission machinery and optimizing facility power consumption.")}${card("Waste Management","Comprehensive recycling protocols for manufacturing scrap and chemical byproducts.")}</div></div><div style="margin-top:32px">${carousel("environment-slider",[1,2,3].map((slide)=>`<div class="slide">${ph("map", `Environmental Stewardship ${slide}`, 1320, 560, `Environmental Stewardship\n${slide}`)}</div>`),1,false)}</div></div></section>
       <section id="superworld_electronics_company_sustainability_integrity_and_accountability" class="section integrity-accountability-section"><div class="container">
         <h2>INTEGRITY &amp; ACCOUNTABILITY</h2>
         <p class="integrity-intro">Superworld corporate affairs are managed to enhance long-term shareholder value through improved<br class="integrity-desktop-break"> performance and accountability. Our Company's mission is guided by five core governance principles:</p>
@@ -402,7 +408,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   function marketCard(m) {
     return `<article class="market-card" data-market-card data-market-name="${m.name}">
-      ${ph()}
+      ${ph("", `${m.name} Application`, 360, 250, `${m.name}\nApplication`)}
       <div class="market-summary"><div class="market-summary-copy"><h3>${m.name}</h3><p>${m.copy}</p></div><button class="market-state-toggle" type="button" aria-expanded="false" aria-label="Open ${m.name} details"><span class="market-state-icon" aria-hidden="true"></span></button></div>
       <div class="market-details"><div class="market-search"><input type="search" data-market-search aria-label="Search within ${m.name}" placeholder="Search ..." autocomplete="off"><button type="button" data-market-search-action aria-label="Focus ${m.name} search"><span class="market-search-icon" aria-hidden="true"></span></button></div><div class="market-detail-list">${m.items.map(item=>`<article class="market-detail-item" data-market-item><div class="market-detail-copy"><h4>${item.name}</h4>${item.components.length?`<ul>${item.components.map(component=>`<li>${component}</li>`).join("")}</ul>`:""}</div><div class="market-detail-image"><div class="market-detail-image-placeholder" role="img" aria-label="Image placeholder for ${item.name}"></div>${item.href?link(item.href,"Learn More","link-arrow"):`<span class="link-arrow" aria-disabled="true">Learn More</span>`}</div></article>`).join("")}</div><p class="market-no-results" data-market-no-results hidden>No matching application.</p></div>
       <div class="market-actions"><button class="market-toggle" type="button" aria-expanded="false">View Details</button>${link(m.href,"View More","button market-more-link")}</div>
@@ -422,8 +428,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       <nav class="anchor-nav"><a href="#markets">APPLICATION MARKETS</a><a href="#core-solutions">CORE SOLUTIONS ACROSS APPLICATIONS</a><a href="#system-design">HOW SUPERWORLD FITS INTO SYSTEM DESIGN</a><a href="#why">WHY WORK WITH SUPERWORLD</a></nav>
       <section id="markets" class="section"><div class="container"><div class="section-heading"><div><h2>APPLICATION MARKETS</h2><p>Explore the key markets we support and the system needs behind each application.</p></div><button type="button" data-market-all>View All</button></div><div class="market-grid">${applicationMarkets.map(marketCard).join("")}</div></div></section>
       <section id="core-solutions" class="section section-rule"><div class="container"><div class="section-heading"><div><h2>CORE SOLUTIONS ACROSS APPLICATIONS</h2><p>Our component capabilities support a wide range of system requirements across multiple markets.</p></div><div class="button-group"><button class="button small" type="button" data-product-tab="general" data-product-carousel="app-products">General</button><button class="button small" type="button" data-product-tab="automotive" data-product-carousel="app-products">Automotive</button></div></div>${carousel("app-products",productLines,4)}</div></section>
-      <section id="system-design" class="section section-rule"><div class="container"><div class="section-heading center"><h2>HOW SUPERWORLD FITS INTO SYSTEM DESIGN</h2><p>From input filtering to power conversion and connectivity, our solutions support key functions across modern electronic systems.</p></div><div class="flow">${[["Input / Interface","EMC filtering"],["Power Conversion","Inductors + transformers"],["Control Board","Stable signal support"],["Connectivity","LAN / wireless support"],["End Device Function","Application-specific output"]].map((x,i)=>`<article class="flow-card">${ph()}<div class="flow-card-copy"><h3>${x[0]}</h3><p>${x[1]}</p></div></article>${i<4?`<span class="flow-arrow" aria-hidden="true"></span>`:""}`).join("")}</div></div></section>
-      <section id="why" class="section section-rule"><div class="container"><div class="section-heading center"><h2>WHY WORK WITH SUPERWORLD</h2><p>A trusted partner for application-focused component solutions.</p></div><div class="grid grid-4">${["Application Breadth","Integrated Manufacturing","Quality & Reliability","Project Support"].map(x=>`<article class="media-card">${ph()}<div class="media-card-body"><h3>${x}</h3><p>Practical support for repeatable component selection and project delivery.</p></div></article>`).join("")}</div><div class="cta" style="margin-top:70px"><div><h2>NEED SUPPORT FOR A SPECIFIC APPLICATION?</h2><p>Keep the final section clean, visual, and action-driven.</p></div><div class="button-group">${buttonLink(routes.products,"View Products")}${buttonLink(routes.inquiry,"Contact Sales")}</div></div></div></section>
+      <section id="system-design" class="section section-rule"><div class="container"><div class="section-heading center"><h2>HOW SUPERWORLD FITS INTO SYSTEM DESIGN</h2><p>From input filtering to power conversion and connectivity, our solutions support key functions across modern electronic systems.</p></div><div class="flow">${[["Input / Interface","EMC filtering"],["Power Conversion","Inductors + transformers"],["Control Board","Stable signal support"],["Connectivity","LAN / wireless support"],["End Device Function","Application-specific output"]].map((x,i)=>`<article class="flow-card">${ph("", `${x[0]} System Stage`, 200, 100, `${x[0]}\nSystem Stage`)}<div class="flow-card-copy"><h3>${x[0]}</h3><p>${x[1]}</p></div></article>${i<4?`<span class="flow-arrow" aria-hidden="true"></span>`:""}`).join("")}</div></div></section>
+      <section id="why" class="section section-rule"><div class="container"><div class="section-heading center"><h2>WHY WORK WITH SUPERWORLD</h2><p>A trusted partner for application-focused component solutions.</p></div><div class="grid grid-4">${["Application Breadth","Integrated Manufacturing","Quality & Reliability","Project Support"].map(x=>`<article class="media-card">${ph("", `${x} Benefit`, 320, 220, `${x}\nBenefit`)}<div class="media-card-body"><h3>${x}</h3><p>Practical support for repeatable component selection and project delivery.</p></div></article>`).join("")}</div><div class="cta" style="margin-top:70px"><div><h2>NEED SUPPORT FOR A SPECIFIC APPLICATION?</h2><p>Keep the final section clean, visual, and action-driven.</p></div><div class="button-group">${buttonLink(routes.products,"View Products")}${buttonLink(routes.inquiry,"Contact Sales")}</div></div></div></section>
     </main>`;
   }
 
@@ -542,9 +548,9 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       : [["Molded Power Inductors","High-current VRM power support",["PBP","PIAQ","PICQ","PIFQ"]],["Trans-Inductor Voltage Regulator Inductor","Fast transient support",["SMF"]],["Power Bead","Power noise suppression",["SMC"]],["Planar Inductors","Converter support",["SPQ"]],["Ferrite Chip Beads","EMI suppression",["Z","Z Large Current"]]];
     return `<article class="accordion ${index===0?"is-open":""}">
       <button class="accordion-head" type="button" aria-expanded="${index===0}">
-        <strong>${String(index+1).padStart(2,"0")}</strong>${ph()}<span><h3>${item[0]}</h3><small>${item[1]}</small></span><span class="accordion-desc">${item[2]}</span><span class="button small">View Bundle</span><span class="accordion-symbol">${index===0?"−":"+"}</span>
+        <strong>${String(index+1).padStart(2,"0")}</strong>${ph("", `${item[0]} Application`, 120, 82, `${item[0]}\nApplication`)}<span><h3>${item[0]}</h3><small>${item[1]}</small></span><span class="accordion-desc">${item[2]}</span><span class="button small">View Bundle</span><span class="accordion-symbol">${index===0?"−":"+"}</span>
       </button>
-      <div class="accordion-panel"><div><h4>DESIGN NEED</h4><p>${kind==="automotive"?"EMI control and stable module power.":"High current density, fast transient response, EMI control, and thermal stability."}</p></div><div><h4>COMPONENT / SERIES MAPPING</h4>${series.map(s=>`<div class="series-row">${ph()}<div><strong>${s[0]}</strong><br><small>${s[1]}</small></div><div class="chips">${s[2].map(c=>`<span class="chip">${c}</span>`).join("")}</div></div>`).join("")}</div></div>
+      <div class="accordion-panel"><div><h4>DESIGN NEED</h4><p>${kind==="automotive"?"EMI control and stable module power.":"High current density, fast transient response, EMI control, and thermal stability."}</p></div><div><h4>COMPONENT / SERIES MAPPING</h4>${series.map(s=>`<div class="series-row">${ph("", `${s[0]} Component`, 110, 60, `${s[0]}\nComponent`)}<div><strong>${s[0]}</strong><br><small>${s[1]}</small></div><div class="chips">${s[2].map(c=>`<span class="chip">${c}</span>`).join("")}</div></div>`).join("")}</div></div>
     </article>`;
   }
 
@@ -598,11 +604,11 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["OUR PRODUCTS",routes.products],["GENERAL COMPONENTS"]])}
       ${heroPanel("GENERAL COMPONENTS","Essential electronic parts that manage power, reduce electromagnetic interference (EMI), and support efficient signal transmission, ensuring reliable performance in electronic circuits.")}
       <nav class="anchor-nav">${families.map(f=>`<a href="#${f[1]}">${f[0]}</a>`).join("")}</nav>
-      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall")}<div class="family-icons">${f[3].map((x,j)=>i===0&&j===0?link(`${routes.emc}/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`,`${a4kImage("product-thumb")}<span>${x}</span>`,"family-icon"):`<div class="family-icon">${ph()}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
+      ${families.map((f,i)=>`<section id="${f[1]}" class="product-family"><div class="container"><div class="section-heading center"><h2>${f[0]}</h2><p>${f[2]}</p></div>${ph("tall", `${f[0]} Product Family`, 1320, 420, `${f[0]}\nProduct Family`)}<div class="family-icons">${f[3].map((x,j)=>i===0&&j===0?link(`${routes.emc}/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`,`${a4kImage("product-thumb")}<span>${x}</span>`,"family-icon"):`<div class="family-icon">${ph("", `${x} Product`, 86, 66, `${x}\nProduct`)}<span>${x}</span></div>`).join("")}</div></div></section>`).join("")}
     </main>`;
   }
 
-  const productRows = (series, count = 4) => Array.from({length:count},(_,i)=>`<tr><td>${i===0&&series==="A4K"?a4kImage("product-thumb"):ph()}</td><td><a data-link href="${series==="A4K"?routes.a4k:"#"}"><u>${series}${i?i:""}</u></a></td><td>XXXXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td><button class="button small">Download</button></td></tr>`).join("");
+  const productRows = (series, count = 4) => Array.from({length:count},(_,i)=>`<tr><td>${i===0&&series==="A4K"?a4kImage("product-thumb"):ph("", `${series}${i || ""} Product`, 86, 64, `${series}${i || ""}\nProduct`)}</td><td><a data-link href="${series==="A4K"?routes.a4k:"#"}"><u>${series}${i?i:""}</u></a></td><td>XXXXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td>XXX - XXX</td><td><button class="button small">Download</button></td></tr>`).join("");
 
   function emcPage() {
     const emcSections = [
@@ -666,7 +672,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       ["Program at Gladiolus Place","Corporate Social Responsibility"],
       ["New A4K Series Release","Latest Product News"],
       ["Electronica India Preview","Exhibitions & Trade Shows"]
-    ].map(x=>`<div class="slide"><article class="feature-news"><div class="ph feature-news-visual" role="img" aria-label="Featured news image placeholder"><span class="tag">${x[1]}</span></div><div class="feature-news-content"><h2>${x[0]}</h2><p>Gladiolus Place is a non-profit Children’s Home, that provides a safe refuge for vulnerable teenage Girls aged 11-21 years old, ...</p>${link(routes.detail,"View More","link-arrow")}</div></article></div>`);
+    ].map(x=>`<div class="slide"><article class="feature-news"><div class="ph feature-news-visual" role="img" aria-label="${escapeHtml(x[0])} feature placeholder">${placeholderImage(`${x[0]} Feature`, 660, 322, `${x[0]}\nFeature`)}<span class="tag">${x[1]}</span></div><div class="feature-news-content"><h2>${x[0]}</h2><p>Gladiolus Place is a non-profit Children’s Home, that provides a safe refuge for vulnerable teenage Girls aged 11-21 years old, ...</p>${link(routes.detail,"View More","link-arrow")}</div></article></div>`);
     return `<div class="news-top">${carousel("news-feature",features,1,false,"news-feature-carousel")}<aside class="event-box"><h2>Event Calendar</h2><div class="event-list">${Array.from({length:5},()=>`<div class="event-row"><div class="event-date"><b>JAN</b><span>21</span></div><div><h4>NEPCON Japan 2026 - Tokyo</h4><p>Booth no : # E36 – 27</p></div></div>`).join("")}</div>${buttonLink(routes.calendar,"Full Schedule","wide")}</aside></div>`;
   }
 
@@ -693,8 +699,8 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       brochures: allNewsCards.filter(item=>item[0]==="Brochures")
     };
     const selectedCards = category==="all" ? allNewsCards : (categoryCards[category]||allNewsCards);
-    const cards = Array.from({length:8},(_,i)=>selectedCards[i%selectedCards.length]).map((item,i)=>`<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual" role="img" aria-label="Image placeholder for ${item[1]}"><span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail,"View More","link-arrow")}<span>17 December 2025</span></div></div></article>`);
-    const list = Array.from({length:5},()=>`<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image" role="img" aria-label="Molded Power Inductor image placeholder"></div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category==="eol"?"End-of-Life":"Release Date"} : 15/04/2026</small></div>${link(routes.detail,`<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>`,"news-list-arrow-link")}</article>`).join("");
+    const cards = Array.from({length:8},(_,i)=>selectedCards[i%selectedCards.length]).map((item,i)=>`<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual" role="img" aria-label="${escapeHtml(item[1])} news placeholder">${placeholderImage(`${item[1]} News`, 300, 190, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail,"View More","link-arrow")}<span>17 December 2025</span></div></div></article>`);
+    const list = Array.from({length:5},()=>`<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image" role="img" aria-label="Molded Power Inductor placeholder">${placeholderImage("Molded Power Inductor", 140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category==="eol"?"End-of-Life":"Release Date"} : 15/04/2026</small></div>${link(routes.detail,`<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>`,"news-list-arrow-link")}</article>`).join("");
     const listMode = category === "product" || category === "eol";
     const categoryOptions = Object.entries(newsCategories).map(([value,name])=>`<option value="${value}" ${value===category?"selected":""}>${name}</option>`).join("");
     return `<main id="main-content" class="page-main news-page">${crumb([["HOME",routes.home],["NEWS"]])}<section class="section-sm news-page-section"><div class="container news-page-container">${newsHero()}
@@ -705,7 +711,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   }
 
   function eventCalendarPage() {
-    const rows = Array.from({length:6},(_,index)=>`<tr data-event-search-item data-event-year="2026"><td>${ph()}</td><td>${index<3?"21 Jan (Wed) – 23 Jan (Fri)":"15 Apr (Wed) – 17 Apr (Fri)"}</td><td><strong>${index<3?"Tokyo Big Sight, Japan":"Bangalore International Exhibition Centre, India"}</strong><br>${index<3?"# E36 – 27":"# Hall 2 – B18"}</td><td><button>Learn More</button></td><td><button>Learn More</button><br>Book an Appointment</td></tr>`).join("");
+    const rows = Array.from({length:6},(_,index)=>`<tr data-event-search-item data-event-year="2026"><td>${ph("", index < 3 ? "NEPCON Japan 2026 Event" : "Electronica India Event", 86, 64, index < 3 ? "NEPCON Japan 2026\nEvent" : "Electronica India\nEvent")}</td><td>${index<3?"21 Jan (Wed) – 23 Jan (Fri)":"15 Apr (Wed) – 17 Apr (Fri)"}</td><td><strong>${index<3?"Tokyo Big Sight, Japan":"Bangalore International Exhibition Centre, India"}</strong><br>${index<3?"# E36 – 27":"# Hall 2 – B18"}</td><td><button>Learn More</button></td><td><button>Learn More</button><br>Book an Appointment</td></tr>`).join("");
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["EVENT CALENDAR"]])}<section class="section-sm"><div class="container">${newsHero()}<nav class="anchor-nav">${link(routes.news,"Latest News")}${link(routes.news+"?category=product","Product News")}${link(routes.news+"?category=events","Events & Activities")}${link(routes.news+"?category=business","Company News")}${link(routes.news+"?category=brochures","Resources")}</nav><div class="news-filters"><select aria-label="Event category"><option>ALL</option></select><select aria-label="Event year" data-event-year-filter><option value="">Year</option><option value="2026">2026</option></select><div class="news-search"><input type="search" aria-label="Search events" data-event-search autocomplete="off"><button type="button" data-event-search-button aria-label="Search events"><span class="news-search-icon" aria-hidden="true"></span></button></div></div><div class="table-wrap" style="margin-top:56px"><table><thead><tr><th>Event</th><th>Date</th><th>Location, Booth No</th><th>Exhibition website</th><th>Our Expo Page</th></tr></thead><tbody>${rows}</tbody></table></div><p class="news-empty" data-event-empty hidden>No events match your search.</p>${pagination()}</div></section></main>`;
   }
 
@@ -714,7 +720,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["NEWS",routes.news],["ARTICLE"]])}
       ${heroPanel("Radial-Leaded Inductor :<br>Fully Automated Production Overview","",["Latest Product News"],true)}
       <section class="section-sm"><div class="container"><div class="section-heading"><h3>17 December 2025</h3><div class="socials"><span>Share</span><span class="social">Chat</span><span class="social">in</span></div></div>
-        <p>Superworld Electronics produces Radial-Leaded Inductors through a fully automated, controlled process for high precision and consistent quality.</p><p>Automated winding, soldering, and electrical testing ensure reliability, supported by strict inspection. All products undergo in-house reliability tests such as vibration, thermal shock, and solderability to confirm durability.</p><p>Certified to IATF 16949, ISO 9001, ISO 50001:2018, and AEC-Q200, our inductors meet global standards for quality and traceability.</p>${ph("map")}<div style="height:30px"></div>${ph("map")}
+        <p>Superworld Electronics produces Radial-Leaded Inductors through a fully automated, controlled process for high precision and consistent quality.</p><p>Automated winding, soldering, and electrical testing ensure reliability, supported by strict inspection. All products undergo in-house reliability tests such as vibration, thermal shock, and solderability to confirm durability.</p><p>Certified to IATF 16949, ISO 9001, ISO 50001:2018, and AEC-Q200, our inductors meet global standards for quality and traceability.</p>${ph("map", "Automated Inductor Production", 1320, 560, "Automated Inductor\nProduction")}<div style="height:30px"></div>${ph("map", "Reliability Testing Process", 1320, 560, "Reliability Testing\nProcess")}
         <p style="margin-top:60px">Superworld Electronics produces Radial-Leaded Inductors through a fully automated, controlled process for high precision and consistent quality.</p>
         <div class="table-wrap"><table><thead><tr><th></th><th>Product</th><th>Category</th><th>Length (mm)</th><th>Width (mm)</th><th>Height (mm)</th><th>Inductance (uH)</th><th>Impedance (Ω)</th><th>DCR (mΩ)</th><th>Isat (mA)</th><th>Irms (mA)</th><th>SPQ</th><th></th></tr></thead><tbody>${productDataRows()}</tbody></table></div>${pagination()}<div class="section-heading" style="margin-top:50px">${buttonLink(routes.news,"Back to News")}<div class="button-group"><button>PREV</button><button>NEXT</button></div></div>
       </div></section><section class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LATEST NEWS</h2></div>${carousel("related-news",related,4)}</div></section>
@@ -762,7 +768,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     return `<main id="main-content" class="page-main">${crumb([["HOME",routes.home],["ABOUT US",routes.company],["GLOBAL PRESENCE"]])}
       ${heroPanel("GLOBAL PRESENCE","Our global operations enable us to deliver consistent quality, engineering expertise, and scalable production to customers across key markets worldwide.")}
       <nav class="anchor-nav"><a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a></nav>
-      <section id="regional" class="section"><div class="container"><div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map")}<div class="regions" style="margin-top:52px">${regionCards()}</div></div></section>
+      <section id="regional" class="section"><div class="container"><div class="section-heading center"><h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2><p>Manufacturing, engineering, sales, and logistics support across key markets.</p></div>${ph("map", "Regional Support Map", 1320, 560, "Regional Support\nMap")}<div class="regions" style="margin-top:52px">${regionCards()}</div></div></section>
       <section id="locations" class="section section-rule"><div class="container"><div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div><div class="section-heading location-controls"><div class="location-tabs" aria-label="Filter locations">${locationFilterButton("all","ALL")}${locationFilterButton("office","Office")}${locationFilterButton("agent","Agent")}${locationFilterButton("distributor","Distributor")}</div><input type="search" data-location-search aria-label="Search locations" placeholder="Search Locations ..."></div><div class="location-groups" data-location-groups>${locationGroups}</div><p class="location-empty" data-location-empty hidden>No locations match your selection.</p>
       </div></section>
     </main>`;
@@ -1085,7 +1091,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
       const sku = escapeHtml(product.sku || product.name || product.series || "Product");
       const image = safeDataUrl(product.seriesImage, "data:image/");
       const pdf = safeDataUrl(product.pdfDownload, "data:application/pdf;base64,");
-      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}">` : ph()}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product,"acf.length")} × ${value(product,"acf.width")} × ${value(product,"acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product,"series")}</p><p><strong>Category</strong><br>${value(product,"category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product,"acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product,"acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product,"acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product,"acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product,"acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
+      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}">` : ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product,"acf.length")} × ${value(product,"acf.width")} × ${value(product,"acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product,"series")}</p><p><strong>Category</strong><br>${value(product,"category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product,"acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product,"acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product,"acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product,"acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product,"acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
     }).join("");
     const pending = state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
     const summaryContent = pending
@@ -1772,7 +1778,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
   };
 
   const cardMarkup = ([title, copy, href]) =>
-    '<article class="media-card slide"><div class="ph soft"></div><div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a></div></div></article>';
+    '<article class="media-card slide">' + ph("soft", title + " Image", 320, 220, title + "\nImage") + '<div class="media-card-body"><h3>' + title + '</h3><p>' + copy + '</p><div class="media-card-footer"><a href="' + href + '" class="link-arrow" data-link>View More</a></div></div></article>';
 
   function selectProductSet(type, carouselId) {
     const root = document.querySelector('[data-carousel="' + carouselId + '"]');
@@ -2171,7 +2177,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     if (!track) return;
     root.dataset.releaseCardsEnhanced = 'true';
     track.innerHTML = Array.from({length:6}, () =>
-      '<a class="release-product-card slide" href="/products/general/emc/a4k" data-link aria-label="View A4K Series Chip Array Ferrite Bead"><div class="ph" aria-hidden="true"></div><div class="release-product-copy"><div><h3>A4K Series</h3><p>Chip Array Ferrite Bead</p></div><span class="release-product-arrow" aria-hidden="true"></span></div></a>'
+      '<a class="release-product-card slide" href="/products/general/emc/a4k" data-link aria-label="View A4K Series Chip Array Ferrite Bead"><div class="ph" aria-hidden="true">' + placeholderImage("A4K Series Product", 250, 194, "A4K Series\nProduct") + '</div><div class="release-product-copy"><div><h3>A4K Series</h3><p>Chip Array Ferrite Bead</p></div><span class="release-product-arrow" aria-hidden="true"></span></div></a>'
     ).join('');
     track.style.transform = 'translateX(0px)';
   }
@@ -2195,7 +2201,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     if (layout.dataset.industryEnhanced === 'true') return;
     if (industrySelectorCleanup) industrySelectorCleanup();
     layout.dataset.industryEnhanced = 'true';
-    layout.innerHTML = '<div class="industry-slider" aria-live="polite"><div class="industry-slides">' + industrySelectorData.map((item) => '<div class="industry-slide"><div class="ph industry-image-ph" role="img" aria-label="Image placeholder for ' + item[0] + '"><span>Image Placeholder</span><strong>' + item[0] + '</strong><small>560 × 292 px</small></div></div>').join('') + '</div></div><div class="industry-list">' + industrySelectorData.map((item, index) => '<button class="industry-row' + (index === 0 ? ' is-active' : '') + '" type="button" data-industry-index="' + index + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><h3>' + item[0] + '</h3><p>' + item[1] + '</p><span class="industry-row-arrow" aria-hidden="true"></span></button>').join('') + '</div>';
+    layout.innerHTML = '<div class="industry-slider" aria-live="polite"><div class="industry-slides">' + industrySelectorData.map((item) => '<div class="industry-slide"><div class="ph industry-image-ph" role="img" aria-label="' + item[0] + ' industry placeholder">' + placeholderImage(item[0] + " Industry", 560, 292, item[0] + "\nIndustry") + '</div></div>').join('') + '</div></div><div class="industry-list">' + industrySelectorData.map((item, index) => '<button class="industry-row' + (index === 0 ? ' is-active' : '') + '" type="button" data-industry-index="' + index + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><h3>' + item[0] + '</h3><p>' + item[1] + '</p><span class="industry-row-arrow" aria-hidden="true"></span></button>').join('') + '</div>';
 
     let current = 0;
     let timer = 0;
@@ -2237,7 +2243,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const track = root.querySelector('.carousel-track');
     if (!track) return;
     root.dataset.certificationCardsEnhanced = 'true';
-    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="Certification image placeholder"><span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
+    track.innerHTML = Array.from({length:6}, () => '<article class="certification-card slide"><div class="certification-visual"><div class="ph" role="img" aria-label="IATF 16949 certification placeholder">' + placeholderImage("IATF 16949 Certification", 300, 176, "IATF 16949\nCertification") + '<span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>Download</a><span>17 December 2025</span></div></div></article>').join('');
     track.style.transform = 'translateX(0px)';
     const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
     if (viewMore) {
@@ -2292,7 +2298,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const track = root.querySelector('.carousel-track');
     if (!track) return;
     root.dataset.newsCardsEnhanced = 'true';
-    track.innerHTML = Array.from({length:6}, () => '<article class="media-card home-news-card slide"><div class="ph home-news-visual" role="img" aria-label="News image placeholder"><span class="home-news-tag">Business Updates</span></div><div class="home-news-content"><h3>Our Johor Bahru facility is progressing</h3><div class="home-news-footer"><a class="home-news-more" href="/news/radial-leaded-inductor" data-link>View More</a><span>17 December 2025</span></div></div></article>').join('');
+    track.innerHTML = Array.from({length:6}, () => '<article class="media-card home-news-card slide"><div class="ph home-news-visual" role="img" aria-label="Johor Bahru facility news placeholder">' + placeholderImage("Johor Bahru Facility News", 300, 220, "Johor Bahru Facility\nNews") + '<span class="home-news-tag">Business Updates</span></div><div class="home-news-content"><h3>Our Johor Bahru facility is progressing</h3><div class="home-news-footer"><a class="home-news-more" href="/news/radial-leaded-inductor" data-link>View More</a><span>17 December 2025</span></div></div></article>').join('');
     track.style.transform = 'translateX(0px)';
     const viewMore = root.closest('section')?.querySelector('.section-heading .link-arrow');
     if (viewMore) {
