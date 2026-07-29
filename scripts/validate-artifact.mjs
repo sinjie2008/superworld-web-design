@@ -28,6 +28,11 @@ assert.match(appSource, /\?system=server#superworld_electronics_applications_com
 assert.match(appSource, /\?system=router#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /\?system=settopbox#superworld_electronics_applications_communication_find_the_right_series_by_communication_system/);
 assert.match(appSource, /URLSearchParams\(location\.search\)\.get\("system"\)/);
+for (const application of ["tcu", "sensing-camera", "infotainment", "tpms", "headlamp", "keyless-entry", "wireless-charging", "adas"]) {
+  assert.match(appSource, new RegExp(`\\?application=${application}`));
+}
+assert.match(appSource, /get\("application"\)/);
+assert.match(appSource, /delete\("system"\)/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
 

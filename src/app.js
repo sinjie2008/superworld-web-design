@@ -368,7 +368,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
 
   const applicationMarkets = [
     {name:"Automotive",copy:"Connected, sensing, control, and wireless vehicle electronics.",items:[
-      {name:"TCU",components:[]},{name:"Sensing Camera",components:[]},{name:"Infotainment",components:[]},{name:"TPMS",components:[]},{name:"Headlamp",components:[]},{name:"Keyless Entry System",components:[]},{name:"Wireless Charging",components:[]},{name:"ADAS",components:[]}
+      {name:"TCU",components:[],href:`${routes.automotive}?application=tcu`},{name:"Sensing Camera",components:[],href:`${routes.automotive}?application=sensing-camera`},{name:"Infotainment",components:[],href:`${routes.automotive}?application=infotainment`},{name:"TPMS",components:[],href:`${routes.automotive}?application=tpms`},{name:"Headlamp",components:[],href:`${routes.automotive}?application=headlamp`},{name:"Keyless Entry System",components:[],href:`${routes.automotive}?application=keyless-entry`},{name:"Wireless Charging",components:[],href:`${routes.automotive}?application=wireless-charging`},{name:"ADAS",components:[],href:`${routes.automotive}?application=adas`}
     ],href:routes.automotive},
     {name:"AI, HPC & Emerging Tech",copy:"Reliable power, filtering, and signal support for next-generation systems.",items:[
       {name:"AI/HPC Server",components:["CPU","DC-DC Converter","LAN Interface","Hard Disk Drive","Network Adapter"],href:`${routes.communication}?system=server#superworld_electronics_applications_communication_find_the_right_series_by_communication_system`},
@@ -1171,8 +1171,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const root=document.getElementById("systemTabsRoot");
     if(!root||root.dataset.systemTabsReady==="true") return;
     root.dataset.systemTabsReady="true";
-    const requestedSystem=new URLSearchParams(location.search).get("system");
-    const initialSystem=communicationSystemOrder.includes(requestedSystem)?requestedSystem:"server";
+    const hasSystemTabs=Boolean(root.querySelector(".system-tabs-nav"));
     const setCardState=(card,open)=>{
       const panel=card.querySelector(".subapp-panel");
       const trigger=card.querySelector(".subapp-trigger");
@@ -1201,11 +1200,32 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         if(nextUrl!==`${location.pathname}${location.search}${location.hash}`) history.pushState({},"",nextUrl);
       }
     };
-    activateSystem(initialSystem);
-    if(requestedSystem!==initialSystem){
+    if(hasSystemTabs){
+      const requestedSystem=new URLSearchParams(location.search).get("system");
+      const initialSystem=communicationSystemOrder.includes(requestedSystem)?requestedSystem:"server";
+      activateSystem(initialSystem);
+      if(requestedSystem!==initialSystem){
+        const params=new URLSearchParams(location.search);
+        params.set("system",initialSystem);
+        history.replaceState({},"",`${location.pathname}?${params}${location.hash}`);
+      }
+    }else{
       const params=new URLSearchParams(location.search);
-      params.set("system",initialSystem);
-      history.replaceState({},"",`${location.pathname}?${params}${location.hash}`);
+      const requestedApplication=params.get("application");
+      const requestedCard=requestedApplication?document.getElementById(`automotive-${requestedApplication}`):null;
+      const validCard=Boolean(requestedCard&&root.contains(requestedCard)&&requestedCard.matches(".subapp-card"));
+      if(validCard){
+        root.querySelectorAll(".subapp-card").forEach(card=>setCardState(card,card===requestedCard));
+        requestAnimationFrame(()=>requestedCard.scrollIntoView({behavior:"instant",block:"start"}));
+      }
+      const hadSystem=params.has("system");
+      const removedInvalidApplication=Boolean(requestedApplication&&!validCard);
+      params.delete("system");
+      if(removedInvalidApplication) params.delete("application");
+      if(hadSystem||removedInvalidApplication){
+        const query=params.toString();
+        history.replaceState({},"",`${location.pathname}${query?`?${query}`:""}${location.hash}`);
+      }
     }
     root.addEventListener("click",event=>{
       const tab=event.target.closest(".system-tab-btn");
