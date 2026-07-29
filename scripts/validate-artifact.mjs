@@ -46,8 +46,10 @@ assert.match(appSource, /aria-disabled="true">Learn More<\/span>/);
 assert.match(appSource, /class="series-chip" type="button" aria-expanded="false"/);
 assert.match(appSource, /Dimensions Range : LWH\(mm\)/);
 assert.match(appModuleSource, /href="\$\{routes\.tools\}\?root=1&category=159&category=161&inquiry=1447&inquiry=1448" data-link>Click Here To learn More<\/a>/);
-assert.match(stylesSource, /\.mapping-row:hover \.series-detail\[hidden\]/);
-assert.match(stylesSource, /\.mapping-row:focus-within \.series-detail\[hidden\]/);
+assert.match(appModuleSource, /setAttribute\("aria-expanded",String\(chip===activeChip\)\)/);
+assert.match(appModuleSource, /addEventListener\("pointerover"/);
+assert.match(appModuleSource, /addEventListener\("pointerleave",restorePinnedDetail\)/);
+assert.doesNotMatch(stylesSource, /\.mapping-row:hover \.series-detail\[hidden\]/);
 assert.match(specSearchModuleSource, /function initialize\(\)\s*{\s*initialQuerySelection = parseQuerySelection\(window\.location\.search\);/);
 
 console.log("Artifact is valid ESM and includes communication system deep links");

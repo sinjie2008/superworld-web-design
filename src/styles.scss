@@ -318,7 +318,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #systemTabsRoot .series-chip:hover,#systemTabsRoot .series-chip:focus-visible,#systemTabsRoot .series-chip.is-active{background:#111;color:#fff}
 #systemTabsRoot .series-detail{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:12px 14px;border:1px solid var(--line);background:#f6f6f6;font-size:12px}
 #systemTabsRoot .series-detail[hidden]{display:none}
-#systemTabsRoot .mapping-row:hover .series-detail[hidden],#systemTabsRoot .mapping-row:focus-within .series-detail[hidden]{display:grid}
 #systemTabsRoot .series-detail strong{font-family:$font-heading;font-size:12px}
 #systemTabsRoot .series-detail a{display:inline-flex;align-items:center;gap:10px;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 #systemTabsRoot .series-detail a::after{content:"";width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}

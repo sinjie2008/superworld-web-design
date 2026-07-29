@@ -1175,7 +1175,7 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
     const renderSeriesDetail=(row,activeChip)=>{
       row.querySelectorAll(".series-chip").forEach(chip=>{
         chip.classList.toggle("is-active",chip===activeChip);
-        chip.setAttribute("aria-expanded",String(chip.classList.contains("is-selected")));
+        chip.setAttribute("aria-expanded",String(chip===activeChip));
       });
       const detail=row.querySelector(".series-detail");
       if(detail) detail.hidden=!activeChip;
@@ -1235,6 +1235,21 @@ import specSearchMarkup from "../.generated/spec-search-markup.txt";
         history.replaceState({},"",`${location.pathname}${query?`?${query}`:""}${location.hash}`);
       }
     }
+    root.querySelectorAll(".mapping-row").forEach(row=>{
+      const restorePinnedDetail=()=>renderSeriesDetail(row,row.querySelector(".series-chip.is-selected"));
+      row.addEventListener("pointerover",event=>{
+        const chip=event.target.closest(".series-chip");
+        if(chip) renderSeriesDetail(row,chip);
+      });
+      row.addEventListener("pointerleave",restorePinnedDetail);
+      row.addEventListener("focusin",event=>{
+        const chip=event.target.closest(".series-chip");
+        if(chip) renderSeriesDetail(row,chip);
+      });
+      row.addEventListener("focusout",event=>{
+        if(!row.contains(event.relatedTarget)) restorePinnedDetail();
+      });
+    });
     root.addEventListener("click",event=>{
       const seriesChip=event.target.closest(".series-chip");
       if(seriesChip){
