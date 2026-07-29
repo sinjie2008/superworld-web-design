@@ -26,6 +26,7 @@
 - The Global Presence `/locations` page defaults to the `ALL` filter and groups visible cards under `OFFICE`, `AGENT`, and `DISTRIBUTOR` labels. Search and category filters hide any group whose cards have no matches.
 - The `/locations` category filter is URL-addressable through `?category=office`, `?category=agent`, and `?category=distributor`; selecting `ALL` removes the parameter. Direct links and browser history restore the selected category.
 - Every application-market detail item displays a Learn More label centered below its separate image placeholder. AI, HPC & Emerging Tech links use `?system=server`, `?system=router`, and `?system=settopbox` to activate communication tabs. Automotive links use `?application=<slug>` to open and scroll to the matching automotive sub-application card without rendering or normalizing a `system` parameter. Other markets keep non-interactive labels until destinations exist.
+- All sub-application action links rendered inside `.subapp-actions` use the consistent label `View Bundle`.
 
 ## Known pitfalls
 
