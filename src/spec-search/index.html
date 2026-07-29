@@ -7,13 +7,13 @@
     <style>
         :root {
             color-scheme: light;
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: Inter, Arial, sans-serif;
             font-synthesis: none;
-            --blue: #0d6efd;
-            --muted: #6c757d;
-            --border: #e6e9ef;
+            --blue: #111;
+            --muted: #666;
+            --border: #1d1d1d;
             --surface: #ffffff;
-            --page: #f7f8fb;
+            --page: #ffffff;
         }
 
         *,
@@ -613,6 +613,207 @@
 
             .pagination {
                 grid-column: 1;
+            }
+        }
+
+        /* Shared typography, spacing, and control mapping for the embedded tool. */
+        .content-column {
+            padding: var(--space-6, 24px);
+        }
+
+        .page-header {
+            gap: var(--space-4, 16px);
+            margin-bottom: var(--space-6, 24px);
+        }
+
+        h1 {
+            font-family: Poppins, Arial, sans-serif;
+            font-size: var(--font-size-page-title, 28px);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: normal;
+        }
+
+        .section-block {
+            padding: var(--space-6, 24px);
+            margin-bottom: var(--space-6, 24px);
+            border-color: var(--border);
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .section-heading {
+            align-items: flex-start;
+            gap: var(--space-3, 12px);
+        }
+
+        .section-title {
+            font-size: var(--font-size-subheading, 18px);
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .eyebrow,#status-message {
+            font-size: var(--font-size-caption, 12px);
+            line-height: 1.4;
+        }
+
+        .eyebrow {
+            margin-bottom: var(--space-1, 4px);
+            letter-spacing: .06em;
+        }
+
+        .badge,.chip {
+            border-radius: 0;
+            font-size: var(--font-size-caption, 12px);
+            line-height: 1.4;
+        }
+
+        .root-options,.category-groups,.facet-grid,.selected-filters {
+            gap: var(--space-3, 12px);
+            margin-top: var(--space-4, 16px);
+        }
+
+        .form-check {
+            align-items: center;
+            min-height: var(--touch-target, 44px);
+            gap: var(--space-2, 8px);
+        }
+
+        .form-check input,#results-table .inquiry-select-column input {
+            width: 20px;
+            height: 20px;
+            margin-top: 0;
+        }
+
+        .facet-card {
+            padding: var(--space-4, 16px);
+            border-color: var(--border);
+            border-radius: 0;
+            background: var(--surface);
+        }
+
+        .form-control,.form-select {
+            height: var(--control-height, 52px);
+            min-height: var(--control-height, 52px);
+            padding: 0 var(--space-4, 16px);
+            border-color: var(--border);
+            border-radius: 0;
+            font-family: Inter, Arial, sans-serif;
+            font-size: var(--font-size-body, 14px);
+            line-height: var(--line-height-body, 1.55);
+        }
+
+        .btn,.page-button,.sort-button {
+            min-height: var(--touch-target, 44px);
+            padding: 0 var(--space-4, 16px);
+            border-color: var(--border);
+            border-radius: 0;
+            font-family: Poppins, Arial, sans-serif;
+            font-size: var(--font-size-action, 13px);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .results-toolbar {
+            gap: var(--space-3, 12px);
+        }
+
+        .results-search-field,.results-page-size {
+            min-height: var(--control-height, 52px);
+            border-color: var(--border);
+        }
+
+        .results-search-field .form-control {
+            height: calc(var(--control-height, 52px) - 2px);
+            min-height: calc(var(--control-height, 52px) - 2px);
+        }
+
+        .results-instructions {
+            gap: var(--space-4, 16px);
+            margin: var(--space-3, 12px) 0 var(--space-5, 20px);
+        }
+
+        #results-table {
+            color: #111;
+            font-size: var(--font-size-body, 14px);
+        }
+
+        #results-table th,#results-table td {
+            padding: var(--space-3, 12px);
+            font-size: var(--font-size-body, 14px);
+            line-height: 1.4;
+        }
+
+        #results-table th {
+            font-size: var(--font-size-caption, 12px);
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .form-check label {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            min-height: var(--touch-target, 44px);
+        }
+
+        #results-table input[type="checkbox"] {
+            width: var(--touch-target, 44px);
+            height: var(--touch-target, 44px);
+            min-width: var(--touch-target, 44px);
+            min-height: var(--touch-target, 44px);
+            margin: 0;
+        }
+
+        #results-table tbody tr:hover,#results-table tbody tr.is-selected {
+            background: #f3f3f3;
+        }
+
+        .table-footer {
+            gap: var(--space-4, 16px);
+            margin-top: var(--space-5, 20px);
+            font-size: var(--font-size-body, 14px);
+        }
+
+        .page-button {
+            min-width: var(--touch-target, 44px);
+        }
+
+        .results-toolbar {
+            grid-template-columns: minmax(0, 1fr) auto auto auto;
+        }
+
+        .results-toolbar > * {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .results-search-field .form-control {
+            min-width: 0;
+        }
+
+        @media (max-width: 767.98px) {
+            .content-column,.section-block,.results-section {
+                padding: var(--space-4, 16px);
+            }
+
+            .section-heading {
+                gap: var(--space-4, 16px);
+            }
+
+            .results-toolbar {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .results-search-field,.results-search-button,.results-inquiry-button,.results-page-size {
+                width: 100%;
+            }
+
+            .content-column { font-size: 15px; }
+            .form-control,select {
+                font-size: 16px;
             }
         }
     </style>

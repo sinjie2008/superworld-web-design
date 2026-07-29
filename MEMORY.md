@@ -40,3 +40,12 @@
 - Keep the inline A4K table IDs and electrical values aligned with `src/spec-search/mock-data.json` when that mock data changes.
 
 - The General Components Chip Array Ferrite Bead card links to `/products/general/emc/#superworld_electronics_products_general_emc_chip_array_ferrite_bead`; update the asset query version in `src/worker.js` whenever client assets change.
+
+## Typography and spacing system
+
+- Shared type roles use Poppins for headings, navigation, and actions, and Inter for body copy, labels, form controls, and tables.
+- Responsive type tokens are: page title 28-42 px, section title 22-29 px, subheading 18-20 px, card title 14 px, body 14 px (15 px on narrow viewports), label 13 px, caption 12 px, action 13 px, and table content 14 px. Mobile text-entry controls use 16 px to avoid browser zoom and improve readability.
+- Shared spacing uses a 4 px base scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, and 80 px. Section spacing is responsive from 48-72 px, compact sections from 36-48 px, standard form controls are 52 px high, and interactive targets are at least 44 px.
+- Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, 52 px controls, and 44 px touch targets; wide result tables remain horizontally scrollable inside their container.
+- Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
+- Current cache query versions after the typography pass are `/styles.css?v=111` and `/spec-search.css?v=99`.
