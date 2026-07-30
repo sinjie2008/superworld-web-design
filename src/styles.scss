@@ -112,7 +112,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .mega-news-window{min-width:0;overflow:hidden}
 .mega-news-track{display:flex;gap:22px;transition:transform .3s ease}
 .mega-news-card{display:flex;min-width:0;flex:0 0 calc((100% - 22px)/2);flex-direction:column}
-.mega-news-card .ph{height:130px}
+.mega-news-card .ph{height:130px;min-height:0}
 .mega-news-card strong{display:block;margin-top:10px}
 .mega-news-card small{display:block;min-height:34px;margin-top:2px}
 .mega-news-link{display:inline-flex;align-items:center;align-self:flex-start;gap:9px;margin-top:7px;font-size:12px;font-weight:600}
