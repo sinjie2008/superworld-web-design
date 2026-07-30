@@ -1206,6 +1206,36 @@ table input[type=checkbox]{width:var(--touch-target);height:var(--touch-target);
   input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden]),select,textarea{font-size:16px}
 }
 
+.achievement-detail-section .achievement-detail-layout{grid-template-columns:1.3fr 1fr;gap:64px;margin-top:48px}
+.achievement-detail-section h2{margin:0;font-size:32px;line-height:1.2}
+.achievement-detail-section .achievement-list{padding-top:22px}
+.achievement-detail-section .achievement-list-item{margin-bottom:42px}
+.achievement-detail-section .achievement-list-item>span{font-size:14px;line-height:1.4}
+.achievement-detail-section .achievement-list-item h3{font-size:24px;line-height:1.2}
+.achievement-detail-section .achievement-list-item p{font-size:13px;line-height:1.45}
+.achievement-detail-section--distinguished .achievement-image-placeholder{aspect-ratio:540/620}
+.achievement-detail-section--customer .achievement-detail-layout{margin-top:0}
+.achievement-detail-section--customer .achievement-list{padding-top:0}
+.achievement-detail-section--customer .achievement-list h2{margin-bottom:42px}
+
+@media (max-width:820px){
+  .achievement-detail-section .achievement-detail-layout{grid-template-columns:1fr 1fr;gap:36px}
+  .achievement-detail-section h2{font-size:28px}
+  .achievement-detail-section .achievement-list{padding-top:8px}
+  .achievement-detail-section .achievement-list-item{margin-bottom:30px}
+  .achievement-detail-section .achievement-list-item h3{font-size:20px}
+  .achievement-detail-section--customer .achievement-detail-layout{margin-top:0}
+  .achievement-detail-section--customer .achievement-list{padding-top:0}
+}
+
+@media (max-width:560px){
+  .achievement-detail-section .achievement-detail-layout{grid-template-columns:1fr;gap:34px;margin-top:30px}
+  .achievement-detail-section h2{font-size:26px}
+  .achievement-detail-section .achievement-list-item h3{font-size:18px}
+  .achievement-detail-section .achievement-image-placeholder{grid-row:auto;aspect-ratio:540/670}
+  .achievement-detail-section--customer .achievement-detail-layout{margin-top:0}
+}
+
 /* Shared card typography roles. */
 :is(.card,[class*="-card"]) h3,
 #systemTabsRoot .subapp-card .subapp-title h3,

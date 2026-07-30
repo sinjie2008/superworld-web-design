@@ -41,6 +41,7 @@
 - Every shared `.hero-brand` renders a 560 × 320 dimension-only `placehold.co` image with 280w, 560w, 840w, and 1120w `srcset` candidates, contextual alt text, and a preserved 7:4 ratio. The company hero slider uses the same helper for all three slides.
 - The News feature carousel keeps 44 px dot buttons while rendering 8 px circles through `::before`; its `.carousel.news-feature-carousel` rules must outrank the later global carousel normalization. The News search places borders on its input and button rather than the grid wrapper so the control stays single-bordered.
 - Header News mega-menu event placeholders are 320 × 130 and explicitly reset `.ph` minimum height to zero; otherwise the shared 180 px placeholder minimum forces cropping and hides the dimension label.
+- The Achievements detail sections use a dedicated desktop hierarchy of 32 px section titles, 24 px award titles, 14 px years, and 13 px descriptions. Distinguished keeps its heading above the two-column grid with a 540:620 image frame; Customer places its heading inside the left column so it aligns with the 540:670 image frame. Both sections become text-first single columns at 560 px and below.
 
 ## Known pitfalls
 
@@ -59,4 +60,4 @@
 - Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, and 52 px controls. Category and facet `.form-check` rows and labels intentionally omit the 44 px minimum height and retain an 8 px inline gap; result-table inquiry checkboxes are 20 × 20 px, and wide tables remain horizontally scrollable inside their container.
 - Specification Search facet inputs share a `.facet-search` wrapper with a decorative CSS magnifier and 48 px right padding; every dynamically rendered Series/custom-field search uses this pattern without changing its filtering behavior.
 - Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
-- Current cache query versions are `/styles.css?v=119`, `/spec-search.css?v=104`, `/app.js?v=116`, and `/spec-search.js?v=94`.
+- Current cache query versions are `/styles.css?v=120`, `/spec-search.css?v=104`, `/app.js?v=117`, and `/spec-search.js?v=94`.

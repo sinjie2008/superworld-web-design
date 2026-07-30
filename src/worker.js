@@ -47,14 +47,14 @@ const renderHtml = (pathname) => {
   <meta name="twitter:description" content="${escapeAttribute(metadata.description)}">
   <meta name="twitter:image" content="${socialImageUrl}">
   ${jsonLd}
-  <link rel="stylesheet" href="/styles.css?v=119">
+  <link rel="stylesheet" href="/styles.css?v=120">
   <link rel="stylesheet" href="/spec-search.css?v=104">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
   <div id="app"><main id="main-content" class="page-main"><section class="section"><div class="container"><h1>${escapeAttribute(metadata.heading)}</h1><p>${escapeAttribute(metadata.description)}</p></div></section></main></div>
   <script src="/spec-search.js?v=94"></script>
-  <script type="module" src="/app.js?v=116"></script>
+  <script type="module" src="/app.js?v=117"></script>
 </body>
 </html>`;
 };
