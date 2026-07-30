@@ -232,38 +232,77 @@
         }
 
         .facet-search .form-control {
-            padding-right: 48px;
+            height: 40px;
+            min-height: 40px;
+            padding: 0 44px 0 12px;
         }
 
         .facet-search .form-control::-webkit-search-cancel-button {
             appearance: none;
         }
 
-        .facet-search::before,
-        .facet-search::after {
+        .facet-search-action {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: grid;
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            place-items: center;
+            padding: 0;
+            color: #111;
+            background: transparent;
+            border: 0;
+        }
+
+        .facet-search-action:hover {
+            color: #111;
+            background: #f3f3f3;
+        }
+
+        .facet-search-action::before,
+        .facet-search-action::after {
             content: "";
             position: absolute;
             pointer-events: none;
         }
 
-        .facet-search::before {
+        .facet-search-action::before {
             top: 50%;
-            right: 20px;
-            width: 9px;
-            height: 9px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
             border: 2px solid currentColor;
             border-radius: 50%;
-            transform: translateY(-62%);
+            transform: translate(-65%, -65%);
         }
 
-        .facet-search::after {
-            top: calc(50% + 4px);
-            right: 14px;
-            width: 8px;
+        .facet-search-action::after {
+            top: calc(50% + 3px);
+            left: calc(50% + 2px);
+            width: 7px;
             height: 2px;
             background: currentColor;
             transform: rotate(45deg);
             transform-origin: left center;
+        }
+
+        .facet-search-action.is-clear::before,
+        .facet-search-action.is-clear::after {
+            top: 50%;
+            left: 50%;
+            width: 14px;
+            height: 2px;
+            background: currentColor;
+            border: 0;
+            border-radius: 0;
+            transform: translate(-50%, -50%) rotate(45deg);
+            transform-origin: center;
+        }
+
+        .facet-search-action.is-clear::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
         }
 
         .category-list {

@@ -1114,7 +1114,11 @@ function renderFacets() {
         search.setAttribute("aria-label", `Search ${displayLabel}`);
         const searchField = document.createElement("div");
         searchField.className = "facet-search";
-        searchField.append(search);
+        const searchAction = document.createElement("button");
+        searchAction.type = "button";
+        searchAction.className = "facet-search-action";
+        searchAction.setAttribute("aria-label", `Search ${displayLabel}`);
+        searchField.append(search, searchAction);
         const list = document.createElement("ul");
         list.className = "facet-list";
         list.dataset.key = facet.key;
@@ -1138,11 +1142,22 @@ function renderFacets() {
             list.append(item);
         });
 
-        search.addEventListener("input", () => {
+        const filterFacetItems = () => {
             const term = search.value.toLocaleLowerCase().trim();
             list.querySelectorAll("li").forEach((item) => {
                 item.hidden = Boolean(term) && !item.textContent.toLocaleLowerCase().includes(term);
             });
+            const hasValue = Boolean(search.value);
+            searchAction.classList.toggle("is-clear", hasValue);
+            searchAction.setAttribute("aria-label", hasValue ? `Clear ${displayLabel} search` : `Search ${displayLabel}`);
+        };
+        search.addEventListener("input", filterFacetItems);
+        searchAction.addEventListener("click", () => {
+            if (search.value) {
+                search.value = "";
+                filterFacetItems();
+            }
+            search.focus();
         });
 
         card.append(title, searchField, list);
