@@ -136,7 +136,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .hero-panel.compact{min-height:290px}
 .hero-panel p{font-size:17px}
 .hero-brand{display:flex;justify-content:center;align-items:center}
-.hero-brand img{width:min(470px,100%)}
+.hero-brand img{width:min(470px,100%);height:auto}
 .communication-route-section{position:relative;z-index:3;margin-top:-68px;padding:0 0 44px}
 .communication-route-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);width:calc(100% - 60px);min-height:220px;margin-inline:auto;border:1px solid var(--line);background:#f4f4f4}
 .communication-route-copy{display:flex;flex-direction:column;justify-content:center;padding:28px 44px;border-right:1px solid var(--line)}
@@ -840,12 +840,11 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .hero-panel h1{font-size:clamp(24px,2.35vw,34px)}
 .hero-panel .tag-row{display:flex;flex-wrap:nowrap;gap:8px;max-width:100%;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
 .hero-panel .tag{flex:0 0 auto;padding:8px 10px;font-size:11px;white-space:nowrap}
-.hero-brand[data-hero-slider-enhanced="true"]{position:relative;display:block;min-height:280px;align-self:stretch;overflow:hidden}
+.hero-brand[data-hero-slider-enhanced="true"]{position:relative;display:block;width:100%;min-height:0;aspect-ratio:7/4;align-self:center;overflow:hidden}
 .hero-brand-slides,.hero-brand-slide{position:absolute;inset:0}
-.hero-brand-slide{border:1px solid #777;background:#fafafa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;opacity:0;transform:translateX(16px);transition:opacity .55s ease,transform .55s ease}
+.hero-brand-slide{border:1px solid #777;background:#fafafa;overflow:hidden;opacity:0;transform:translateX(16px);transition:opacity .55s ease,transform .55s ease}
 .hero-brand-slide.is-active{opacity:1;transform:none}
-.hero-brand-slide span{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-.hero-brand-slide strong{font-family:$font-heading;font-size:14px;font-weight:600}
+.hero-brand-slide img{width:100%;height:100%;object-fit:cover}
 .hero-brand-dots{position:absolute;right:22px;bottom:20px;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px}
 .hero-brand-dot{width:28px;height:7px;min-height:0;padding:0;border:1px solid var(--line);background:#fff}
 .hero-brand-dot:hover{background:#777;color:inherit}
@@ -1116,7 +1115,7 @@ html{scroll-padding-top:144px}
 @media (max-width:760px){.esg-pillars-section .section-heading h2{font-size:27px}.esg-pillars-grid{grid-template-columns:1fr;gap:18px}.esg-pillar-card{min-height:300px;padding:38px 24px 42px}.esg-pillars-carousel{width:100%;height:clamp(280px,58vw,440px);margin:22px auto 0}.esg-pillars-carousel .carousel-dot{width:28px}}
 @media (max-width:600px){.integrity-accountability-section{padding:54px 0 64px}.integrity-accountability-section > .container > h2{font-size:26px}.integrity-intro{margin-bottom:42px}.integrity-desktop-break{display:none}.integrity-principles-grid{grid-template-columns:1fr;gap:24px}.integrity-principle-card{min-height:96px}.integrity-principle-card strong{font-size:30px}.misconduct-panel{min-height:0;margin-top:52px;padding:32px 24px;gap:32px}.misconduct-copy h2{margin-bottom:22px;font-size:24px}.misconduct-copy p{font-size:15px}.misconduct-contact{min-height:0;padding:28px 22px}.misconduct-contact h3{font-size:20px}.misconduct-contact p{font-size:15px}}
 @media (max-width:680px){.quality-hero-panel{height:auto;grid-template-columns:1fr;padding:26px 22px}.quality-hero-brand{order:-1;transform:none}.quality-hero-copy{transform:none}.quality-hero-tags{overflow-x:auto;margin-top:24px}.quality-hero-copy h1{font-size:20px}}
-@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.hero-brand[data-hero-slider-enhanced="true"]{min-height:230px}.hero-brand-dots{right:16px;bottom:14px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:space-between;margin-top:-108px;padding-inline:4%}.milestone-detail{width:88vw;top:340px}.quality-section-header{gap:20px}.quality-section-header p{font-size:13px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.quality-qms-grid,.quality-compliance-grid{grid-template-columns:1fr}.quality-step-card{min-height:190px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
+@media (max-width:640px){.home-hero .carousel-window,.home-hero .slide{height:390px}.hero-brand[data-hero-slider-enhanced="true"]{min-height:0}.hero-brand-dots{right:16px;bottom:14px}.milestone-section .timeline{--milestone-visible:1}.milestone-controls{justify-content:space-between;margin-top:-108px;padding-inline:4%}.milestone-detail{width:88vw;top:340px}.quality-section-header{gap:20px}.quality-section-header p{font-size:13px}.quality-image-slider{height:340px}.quality-content-side{padding:24px 20px;min-height:480px}.quality-qms-grid,.quality-compliance-grid{grid-template-columns:1fr}.quality-step-card{min-height:190px}.industry-slider{height:260px}.industries-layout[data-industry-enhanced="true"] .industry-list{grid-template-columns:1fr}.footer-brand{width:190px}.socials{width:96px;height:47px}.regional-map{height:300px}.company-stat-secondary{grid-template-columns:1fr}}
 @media (max-width:420px){.quality-certificate-grid{grid-template-columns:1fr}}
 @media (max-width:760px){.communication-route-section{margin-top:-24px;padding-bottom:40px}.communication-route-panel{grid-template-columns:1fr;width:calc(100% - 20px);min-height:0}.communication-route-copy{padding:24px 26px;border-right:0;border-bottom:1px solid var(--line)}.communication-route-copy h2{font-size:24px}.communication-route-break{display:none}.communication-route-metrics .stat{min-height:84px;padding:16px 18px}.communication-route-metrics .stat strong{font-size:26px}#systemTabsRoot .system-hotspot-stage.has-system-image{aspect-ratio:2.16/1}}
 @media (max-width:480px){.communication-route-panel{width:100%}.communication-route-copy{padding:22px 20px}.communication-route-metrics .stat{padding:12px 14px}.communication-route-metrics .stat strong{font-size:21px}}

@@ -10,6 +10,7 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
 })[character]);
 
 const placeholderImage = (imageName, width, height, altText = imageName) => `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(altText)}" width="${width}" height="${height}"/>`;
+const heroBrandImage = (altText) => `<img src="https://placehold.co/560x320" srcset="https://placehold.co/280x160 280w, https://placehold.co/560x320 560w, https://placehold.co/840x480 840w, https://placehold.co/1120x640 1120w" sizes="(max-width: 820px) calc(100vw - 72px), 470px" alt="${escapeHtml(altText)}" width="560" height="320"/>`;
 
 const ph = (className, imageName, width, height, label = imageName) => `<div class="ph${className ? ` ${className}` : ""}">${placeholderImage(imageName, width, height, label)}</div>`;
 
@@ -72,7 +73,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
           <p>${copy}</p>
           ${tagItems.length ? tags(tagItems) : ""}
         </div>
-        <div class="hero-brand">${logo()}</div>
+        <div class="hero-brand">${heroBrandImage(title.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim() + " hero image")}</div>
       </div>
     </div>`;
 
@@ -2542,7 +2543,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     if (heroBrandCleanup) heroBrandCleanup();
     brand.dataset.heroSliderEnhanced = 'true';
     brand.setAttribute('aria-label', 'Company feature image slider');
-    brand.innerHTML = '<div class="hero-brand-slides">' + heroBrandSlides.map((slide, index) => '<div class="hero-brand-slide' + (index === 0 ? ' is-active' : '') + '" role="img" aria-label="Image placeholder for ' + slide + ', recommended size 560 by 320 pixels"><span>Image Placeholder</span><strong>560 × 320 px</strong></div>').join('') + '</div><div class="hero-brand-dots" role="group" aria-label="Choose company feature image">' + heroBrandSlides.map((slide, index) => '<button class="hero-brand-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-hero-brand-dot="' + index + '" aria-label="Show slide ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"></button>').join('') + '</div>';
+    brand.innerHTML = '<div class="hero-brand-slides">' + heroBrandSlides.map((slide, index) => '<div class="hero-brand-slide' + (index === 0 ? ' is-active' : '') + '" aria-hidden="' + (index === 0 ? 'false' : 'true') + '">' + heroBrandImage(slide) + '</div>').join('') + '</div><div class="hero-brand-dots" role="group" aria-label="Choose company feature image">' + heroBrandSlides.map((slide, index) => '<button class="hero-brand-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-hero-brand-dot="' + index + '" aria-label="Show slide ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"></button>').join('') + '</div>';
 
     const slides = [...brand.querySelectorAll('.hero-brand-slide')];
     const dots = [...brand.querySelectorAll('[data-hero-brand-dot]')];
@@ -2550,7 +2551,11 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
     let timer;
     const activate = (index) => {
       activeIndex = (index + slides.length) % slides.length;
-      slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === activeIndex));
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === activeIndex;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
       dots.forEach((dot, dotIndex) => {
         const active = dotIndex === activeIndex;
         dot.classList.toggle('is-active', active);

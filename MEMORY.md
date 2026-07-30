@@ -38,6 +38,7 @@
 - Social metadata uses the generated `/assets/og.png` card. Structured data is limited to content-backed Organization, WebSite, BreadcrumbList, Product, and ContactPage entities.
 - All page-level content boundaries derive from the shared `--container-width` token. Full-bleed visuals may span the viewport, but their readable content, top-level anchor navigation, confirmation panels, and every `.container` must stay within that boundary at desktop, tablet, and mobile widths.
 - The shared header logo always preserves its 215:76 aspect ratio. Mobile changes the `.brand` width to 178 px while `.brand img` uses automatic height, keeping the primary navigation at 72 px and leaving the Menu control inside the container.
+- Every shared `.hero-brand` renders a 560 × 320 dimension-only `placehold.co` image with 280w, 560w, 840w, and 1120w `srcset` candidates, contextual alt text, and a preserved 7:4 ratio. The company hero slider uses the same helper for all three slides.
 
 ## Known pitfalls
 
@@ -55,4 +56,4 @@
 - Shared spacing uses a 4 px base scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, and 80 px. Section spacing is responsive from 48-72 px, compact sections from 36-48 px, standard form controls are 52 px high, and interactive targets are at least 44 px.
 - Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, and 52 px controls. Category and facet `.form-check` rows intentionally omit the 44 px minimum height and retain an 8 px inline gap; wide result tables remain horizontally scrollable inside their container.
 - Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
-- Current cache query versions after the SEO pass are `/styles.css?v=116`, `/spec-search.css?v=102`, `/app.js?v=115`, and `/spec-search.js?v=93`.
+- Current cache query versions are `/styles.css?v=117`, `/spec-search.css?v=102`, `/app.js?v=116`, and `/spec-search.js?v=93`.
