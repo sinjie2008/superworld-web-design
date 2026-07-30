@@ -60,7 +60,7 @@ h1{font-size:var(--font-size-page-title);line-height:var(--line-height-display)}
 h2{font-size:var(--font-size-section-title);line-height:var(--line-height-heading)}
 h3{font-size:var(--font-size-subheading);line-height:var(--line-height-heading)}
 h4{font-size:var(--font-size-body-large);line-height:var(--line-height-heading)}
-p{max-width:72ch;margin-bottom:var(--space-4)}
+p{margin-bottom:var(--space-4)}
 button{min-height:var(--touch-target);border:1px solid var(--line);border-radius:0;padding:0 var(--space-5);cursor:pointer}
 button:hover,.button:hover{background:#111;color:#fff}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #111;outline-offset:3px}
