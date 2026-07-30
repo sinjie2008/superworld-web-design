@@ -834,6 +834,8 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .wireframe-note{display:none}
 .socials{width:108px;height:53px;background:url("/assets/social.webp") center/contain no-repeat}
 .socials .social{display:none}
+.news-share{display:flex;align-items:center;gap:var(--space-3)}
+.news-share .socials{flex:0 0 108px}
 .footer-brand{width:220px}
 .footer-brand img{width:100%}
 .section-heading.center p{margin-inline:auto}
