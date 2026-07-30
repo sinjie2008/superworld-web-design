@@ -462,8 +462,8 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .a4k-table-tools input{min-height:44px;border:1px solid var(--line);padding:12px 14px}
 .a4k-primary{background:#111!important;color:#fff!important}
 .a4k-primary:hover{background:#fff!important;color:#111!important}
-.a4k-page button:disabled{opacity:.35;cursor:not-allowed}
-.a4k-page button:disabled:hover{background:#fff;color:#111}
+:is(.a4k-page,[data-a4k-product-table]) button:disabled{opacity:.35;cursor:not-allowed}
+:is(.a4k-page,[data-a4k-product-table]) button:disabled:hover{background:#fff;color:#111}
 .a4k-table-wrap{overflow-x:auto;border:1px solid var(--line)}
 .a4k-table-wrap table{min-width:920px;border-style:hidden}
 .a4k-table-wrap th,.a4k-table-wrap td{text-align:left;padding:13px 12px;white-space:nowrap}
@@ -472,6 +472,7 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .a4k-select-cell input{width:17px;height:17px}
 .a4k-part-link{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .a4k-compare-bar{margin-top:14px;border:1px solid var(--line);background:#f6f6f6;padding:14px;display:flex;justify-content:space-between;gap:18px;align-items:center}
+.a4k-table-losses{margin-top:14px;border:1px solid var(--line);padding:14px;background:#fff}
 .a4k-two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .a4k-info-card,.a4k-diagram-card{border:1px solid var(--line);padding:20px}
 .a4k-info-card h3,.a4k-diagram-card h3{margin:0 0 10px}
