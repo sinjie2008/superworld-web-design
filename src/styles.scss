@@ -853,8 +853,8 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .hero-brand-dot{width:28px;height:7px;min-height:0;padding:0;border:1px solid var(--line);background:#fff}
 .hero-brand-dot:hover{background:#777;color:inherit}
 .hero-brand-dot.is-active{background:#111}
-.quality-hero-shell{width:min(1282px,calc(100% - 40px));margin-inline:auto}
-.quality-hero-panel{height:481px;border:1px solid var(--line);background:#fff;display:grid;grid-template-columns:1.65fr 1fr;gap:50px;align-items:start;padding:42px}
+.quality-hero-shell{width:var(--container-width);margin-inline:auto}
+.quality-hero-panel{height:410px;border:1px solid var(--line);background:#fff;display:grid;grid-template-columns:1.65fr 1fr;gap:50px;align-items:start;padding:42px}
 .quality-hero-copy{min-width:0}
 .quality-hero-copy h1{font-size:34px;line-height:1.32;margin:0 0 30px}
 .quality-hero-copy p{font-size:16px;line-height:1.35;margin:0}
@@ -866,7 +866,7 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 .quality-hero-tags strong{font-family:$font-heading;font-size:13px;line-height:1}
 .quality-hero-tags small{font-size:14px;line-height:1.15}
 .quality-hero-brand{display:flex;align-items:center;justify-content:center;margin-top:27px}
-.quality-hero-brand img{width:min(420px,100%);filter:none}
+.quality-hero-brand img{width:min(420px,100%);height:auto;filter:none}
 #superworld_electronics_company_milestones .section-heading.center{display:block;text-align:center}
 #superworld_electronics_company_milestones .section-heading.center p{display:inline-block;width:auto;max-width:none;margin:0}
 #superworld_electronics_company_global_presence .container.split{grid-template-columns:minmax(240px,.75fr) minmax(0,1.25fr);align-items:start;gap:clamp(40px,5vw,72px)}
