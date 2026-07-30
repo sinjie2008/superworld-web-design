@@ -1171,15 +1171,13 @@ function renderCell(cell, column, product) {
         cell.className = "product-column";
         const content = document.createElement("div");
         content.className = "product-cell";
-        if (isSafeResourceUrl(product.seriesImage, "data:image/")) {
-            const image = document.createElement("img");
-            image.className = "series-image";
-            image.src = product.seriesImage;
-            image.alt = product.series || "Series image";
-            image.width = 80;
-            image.height = 48;
-            content.append(image);
-        }
+        const image = document.createElement("img");
+        image.className = "series-image";
+        image.src = "https://placehold.co/80x48";
+        image.alt = product.series || "Series image";
+        image.width = 80;
+        image.height = 48;
+        content.append(image);
         const name = document.createElement("span");
         name.className = "product-name";
         name.textContent = String(value);
