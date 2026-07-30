@@ -47,8 +47,8 @@ const renderHtml = (pathname) => {
   <meta name="twitter:description" content="${escapeAttribute(metadata.description)}">
   <meta name="twitter:image" content="${socialImageUrl}">
   ${jsonLd}
-  <link rel="stylesheet" href="/styles.css?v=124">
-  <link rel="stylesheet" href="/spec-search.css?v=104">
+  <link rel="stylesheet" href="/styles.css?v=125">
+  <link rel="stylesheet" href="/spec-search.css?v=105">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
