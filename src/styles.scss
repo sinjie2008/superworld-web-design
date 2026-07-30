@@ -873,7 +873,7 @@ th,td{border:1px solid var(--line);padding:16px 14px;text-align:center;vertical-
 #superworld_electronics_company_global_presence .container.split > div:first-child h3{margin-top:38px;margin-bottom:10px}
 #superworld_electronics_company_global_presence .container.split > div:first-child p{margin-bottom:0}
 #superworld_electronics_company_global_presence .company-regional-map{width:100%;height:auto;min-height:0;aspect-ratio:16/9;align-self:start}
-#superworld_electronics_company_industries .carousel-window{padding-bottom:1px}
+.carousel-window:has(>.carousel-track>.slide:is(.card,.media-card,.release-product-card,.certification-card)){padding-bottom:1px}
 #superworld_electronics_company_industries .carousel-track{align-items:stretch}
 .company-stat-secondary{display:grid;grid-template-columns:1.35fr .78fr .94fr 1.42fr;gap:24px;margin-top:24px}
 #superworld_electronics_company_industries .slide.card{position:relative;aspect-ratio:1/1;height:auto;min-height:0;padding:0;overflow:hidden;border:1px solid var(--line)!important;background:#fafafa}
