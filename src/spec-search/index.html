@@ -228,6 +228,45 @@
             font-weight: 600;
         }
 
+        .facet-search {
+            position: relative;
+        }
+
+        .facet-search .form-control {
+            padding-right: 48px;
+        }
+
+        .facet-search .form-control::-webkit-search-cancel-button {
+            appearance: none;
+        }
+
+        .facet-search::before,
+        .facet-search::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .facet-search::before {
+            top: 50%;
+            right: 20px;
+            width: 9px;
+            height: 9px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            transform: translateY(-62%);
+        }
+
+        .facet-search::after {
+            top: calc(50% + 4px);
+            right: 14px;
+            width: 8px;
+            height: 2px;
+            background: currentColor;
+            transform: rotate(45deg);
+            transform-origin: left center;
+        }
+
         .category-list {
             display: flex;
             flex-direction: column;

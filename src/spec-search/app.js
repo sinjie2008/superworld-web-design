@@ -1112,6 +1112,9 @@ function renderFacets() {
         search.className = "form-control";
         search.placeholder = `Search ${displayLabel}...`;
         search.setAttribute("aria-label", `Search ${displayLabel}`);
+        const searchField = document.createElement("div");
+        searchField.className = "facet-search";
+        searchField.append(search);
         const list = document.createElement("ul");
         list.className = "facet-list";
         list.dataset.key = facet.key;
@@ -1142,7 +1145,7 @@ function renderFacets() {
             });
         });
 
-        card.append(title, search, list);
+        card.append(title, searchField, list);
         container.append(card);
     });
 }
