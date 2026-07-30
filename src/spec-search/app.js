@@ -1173,10 +1173,10 @@ function renderCell(cell, column, product) {
         content.className = "product-cell";
         const image = document.createElement("img");
         image.className = "series-image";
-        image.src = "https://placehold.co/80x48";
+        image.src = "https://placehold.co/80x80";
         image.alt = product.series || "Series image";
         image.width = 80;
-        image.height = 48;
+        image.height = 80;
         content.append(image);
         const name = document.createElement("span");
         name.className = "product-name";
