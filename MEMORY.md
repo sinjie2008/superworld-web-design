@@ -4,7 +4,7 @@
 
 - Project ID: `appgprj_6a573c28aa488191a3f5547d0918f47b`
 - Public site: `https://lo-wireframe.yoongsinjie.chatgpt.site`
-- Snapshot date: 2026-07-27
+- Snapshot date: 2026-07-30
 - Stack: static site build using esbuild and Sass.
 
 ## Durable decisions
@@ -25,6 +25,7 @@
 - Support inquiry fields and the Contact/Business column rows align to shared vertical positions. Nested two-field groups use a 14 px row gap without last-child grid stretching, and both bordered detail panels share the same height.
 - The Global Presence `/locations` page defaults to the `ALL` filter and groups visible cards under `OFFICE`, `AGENT`, and `DISTRIBUTOR` labels. Search and category filters hide any group whose cards have no matches.
 - The `/locations` category filter is URL-addressable through `?category=office`, `?category=agent`, and `?category=distributor`; selecting `ALL` removes the parameter. Direct links and browser history restore the selected category.
+- The `/locations` filter toolbar uses a dedicated two-column grid on desktop: four 96 px category buttons, a 24 px gap, a flexible search field, and 31 px symmetric vertical padding. At 760 px and below it stacks the tabs above search; at 560 px and below the tabs keep their 96 px width and scroll inside their own container without a visible scrollbar.
 - Every application-market detail item displays a descriptive `Explore <item>` link centered below its separate image placeholder when a destination exists. AI, HPC & Emerging Tech links use `?system=server`, `?system=router`, and `?system=settopbox` to activate communication tabs. Automotive links use `?application=<slug>` to open and scroll to the matching automotive sub-application card without rendering or normalizing a `system` parameter. Other markets show a non-interactive `Details unavailable` label until destinations exist.
 - All sub-application action links rendered inside `.subapp-actions` use the label `View Bundle` and navigate to Specification Search with `root=1`, categories `159` and `161`, and inquiry products `1447` and `1448`.
 - Specification Search reparses `window.location.search` on every `initialize()` call so first-time SPA navigation applies bundle query parameters immediately instead of reusing the query captured at the initial page load.
@@ -60,4 +61,4 @@
 - Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, and 52 px controls. Category and facet `.form-check` rows and labels intentionally omit the 44 px minimum height and retain an 8 px inline gap; result-table inquiry checkboxes are 20 × 20 px, and wide tables remain horizontally scrollable inside their container.
 - Specification Search facet inputs share a `.facet-search` wrapper with a decorative CSS magnifier and 48 px right padding; every dynamically rendered Series/custom-field search uses this pattern without changing its filtering behavior.
 - Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
-- Current cache query versions are `/styles.css?v=120`, `/spec-search.css?v=104`, `/app.js?v=117`, and `/spec-search.js?v=94`.
+- Current cache query versions are `/styles.css?v=121`, `/spec-search.css?v=104`, `/app.js?v=117`, and `/spec-search.js?v=94`.
