@@ -1067,7 +1067,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       <div class="container">
         <section class="support-hero">
           <div><h1>CONTACT US</h1><p>Get in touch with our team for product inquiries, quotations, or technical support.<br>We support your design and application needs with reliable magnetic solutions.</p></div>
-          <div class="support-hero-logo">${logo()}</div>
+          <div class="support-hero-logo">${placeholderImage("Support logo", 430, 152, "Superworld Electronics support image")}</div>
         </section>
         <form class="support-form" data-support-form>
           <section class="support-form-section">
