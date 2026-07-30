@@ -321,7 +321,7 @@ const ph = (className, imageName, width, height, label = imageName) => `<div cla
       ["CONFLICT MINERALS", "Ethical 3TG sourcing report.", "Download RMI Template", "/downloads/rmi-template.pdf", "Superworld-RMI-Template.pdf"]
     ].map((item) => `<article class="quality-compliance-card"><h3>${item[0]}</h3><p>${item[1]}</p><a class="quality-download-link" href="${item[3]}" download="${item[4]}">${item[2]}</a></article>`).join("");
     const certCards = Array.from({length:40},(_, index) => `<article class="quality-certificate-card" data-certificate-card${index >= 8 ? " hidden" : ""}>
-      <div class="quality-certificate-visual" role="img" aria-label="Certification image placeholder ${index + 1}"><span class="certification-tag">Certification</span></div>
+      <div class="quality-certificate-visual">${placeholderImage("IATF 16949 Certification", 300, 201, `IATF 16949 certification image ${index + 1}`)}<span class="certification-tag">Certification</span></div>
       <div class="quality-certificate-copy"><h3>IATF 16949</h3><p>Quality management certification.</p>
         <div class="quality-certificate-footer"><a class="quality-download-link" href="/downloads/iatf-16949-certificate.pdf" download="Superworld-IATF-16949-Certificate.pdf">Download</a><span>17 December 2025</span></div>
       </div>

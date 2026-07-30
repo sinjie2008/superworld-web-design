@@ -34,6 +34,7 @@
 - All empty `.ph` image placeholders use the shared `placeholderImage()` helper with dimension-only `https://placehold.co/{width}x{height}` URLs; meaningful context stays in `alt` text and existing real images remain unchanged.
 - The Support hero logo slot uses a 430 × 152 `https://placehold.co/` image, preserving the original 215:76 logo ratio while the existing CSS scales it within the container on smaller screens.
 - The Quality hero brand slot uses a 420 × 148 `https://placehold.co/` image. Its desktop shell uses `var(--container-width)` and its panel is 410 px high; at 680 px and below the existing `height:auto` rule keeps the stacked mobile layout content-driven.
+- Quality certificate cards render a real 300 × 201 `https://placehold.co/` `<img>` inside `.quality-certificate-visual`; the existing visual frame and Certification tag remain, and `object-fit:contain` keeps the placeholder dimensions readable at responsive card widths.
 - The Event Calendar route omits its `.page-intro`; the page starts with the shared news hero immediately after the breadcrumb while other routes keep their intro sections.
 - Image fitting is purpose-driven: banners, heroes, cards, thumbnails, and photographic placeholders use the reusable `image-cover` container class with hidden overflow; logos, certificates, full-product imagery, maps, and technical diagrams remain `contain`.
 - `src/seo.js` is the single metadata registry for all 20 canonical routes. The worker renders route-specific title, description, canonical, robots, Open Graph, Twitter, JSON-LD, and a crawlable heading fallback before client JavaScript runs.
@@ -71,4 +72,4 @@
 - Communication and automotive route sections use an 18 px desktop overlap below the hero; the existing 24 px mobile overlap remains at 760 px and below.
 - The Sustainability pillars section is a deliberate exception to the shared compact card typography: at desktop it uses a 1210 px three-column grid, responsive 30 px card titles, 28 px leads, 14-16 px body copy, and 13-16 px tags. Its centered 910:526 carousel overlaps the cards by 51 px; at 900 px and below the cards stack and the carousel no longer overlaps them.
 - Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
-- Current cache query versions are `/styles.css?v=129`, `/spec-search.css?v=106`, `/app.js?v=122`, and `/spec-search.js?v=95`.
+- Current cache query versions are `/styles.css?v=130`, `/spec-search.css?v=106`, `/app.js?v=123`, and `/spec-search.js?v=95`.

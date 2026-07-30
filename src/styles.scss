@@ -1051,6 +1051,7 @@ html{scroll-padding-top:144px}
 .quality-certificate-card{min-height:395px;border:1px solid var(--line);background:#fff;padding:0;display:flex;flex-direction:column}
 .quality-certificate-card[hidden]{display:none}
 .quality-certificate-visual{height:201px;margin:21px 14px 0;border:1px solid #777;background:#f7f7f7;position:relative}
+.quality-certificate-visual img{width:100%;height:100%;object-fit:contain}
 .quality-certificate-visual .certification-tag{left:6px;bottom:8px;padding:2px 6px;font-size:9px}
 .quality-certificate-copy{flex:1;padding:14px 20px 20px;display:flex;flex-direction:column}
 .quality-certificate-copy h3{font-size:16px;line-height:1.2;margin:0 0 7px}
