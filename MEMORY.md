@@ -65,5 +65,6 @@
 - Specification Search `.content-column` intentionally has no padding at any viewport width; its inner sections own the visible spacing so content is not inset twice.
 - Specification Search facet inputs share a `.facet-search` wrapper with a decorative CSS magnifier and 48 px right padding; every dynamically rendered Series/custom-field search uses this pattern without changing its filtering behavior.
 - Communication and automotive route sections use an 18 px desktop overlap below the hero; the existing 24 px mobile overlap remains at 760 px and below.
+- The Sustainability pillars section is a deliberate exception to the shared compact card typography: at desktop it uses a 1210 px three-column grid, responsive 30 px card titles, 28 px leads, 14-16 px body copy, and 13-16 px tags. Its centered 910:526 carousel overlaps the cards by 51 px; at 900 px and below the cards stack and the carousel no longer overlaps them.
 - Typography/spacing QA covers all 20 routes at 1440x1000, 1024x900, and 390x844. Dynamic checks include mobile navigation, carousels, Support category/form controls, and Specification Search category, facet, result-selection, and inquiry states.
-- Current cache query versions are `/styles.css?v=125`, `/spec-search.css?v=105`, `/app.js?v=118`, and `/spec-search.js?v=94`.
+- Current cache query versions are `/styles.css?v=126`, `/spec-search.css?v=105`, `/app.js?v=118`, and `/spec-search.js?v=94`.
