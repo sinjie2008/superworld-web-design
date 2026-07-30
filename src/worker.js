@@ -48,7 +48,7 @@ const renderHtml = (pathname) => {
   <meta name="twitter:image" content="${socialImageUrl}">
   ${jsonLd}
   <link rel="stylesheet" href="/styles.css?v=113">
-  <link rel="stylesheet" href="/spec-search.css?v=100">
+  <link rel="stylesheet" href="/spec-search.css?v=101">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
