@@ -92,6 +92,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .primary-nav{min-height:84px}
 .primary-nav .container{display:flex;align-items:center;justify-content:space-between;min-height:84px;gap:28px}
 .brand{display:block;width:215px;flex:0 0 215px}
+.brand img{width:100%;height:auto}
 .brand img,.hero-brand img{filter:grayscale(1) contrast(1.08)}
 .nav-list{display:flex;align-items:center;gap:38px}
 .nav-link,.nav-menu-button{border:0;background:none;padding:10px 0;font-size:17px;white-space:nowrap}
