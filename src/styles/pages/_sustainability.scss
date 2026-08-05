@@ -1,0 +1,254 @@
+@use "../base/scope";
+@use "../tokens" as *;
+@include scope.within {
+  #superworld_electronics_company_sustainability_esg_and_sustainability_pillars.esg-pillars-section {
+    padding: 64px 0 82px;
+    overflow: hidden
+  }
+
+  .esg-pillars-section .section-heading {
+    margin-bottom: 38px
+  }
+
+  #superworld_electronics_company_sustainability_esg_and_sustainability_pillars .section-heading h2 {
+    margin: 0;
+    font-size: clamp(27px,2.5vw,36px);
+    line-height: 1.15
+  }
+
+  .esg {
+    &-pillars-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: clamp(24px,2.65vw,38px);
+      width: min(1210px,100%);
+      margin-inline: auto
+    }
+
+    &-pillar-card {
+      min-height: 488px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 70px 22px 84px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start
+    }
+  }
+
+  #superworld_electronics_company_sustainability_esg_and_sustainability_pillars {
+    & .esg-pillar-card h3 {
+      width: 100%;
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: clamp(20px,2.1vw,30px);
+      line-height: 1.15
+    }
+
+    & .esg-pillar-lead {
+      width: 100%;
+      margin: 0 0 27px;
+      text-align: center;
+      font-size: clamp(18px,1.95vw,28px);
+      line-height: 1.25
+    }
+
+    & .esg-pillar-copy {
+      width: 100%;
+      font-size: clamp(14px,1.15vw,16px);
+      line-height: 1.35
+    }
+
+    & .esg-pillar-copy p {
+      margin: 0 0 21px;
+      font-size: inherit;
+      line-height: inherit
+    }
+  }
+
+  .esg {
+    &-pillar-copy p:last-child {
+      margin-bottom: 0
+    }
+
+    &-pillar-tags {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: auto;
+      white-space: nowrap
+    }
+  }
+
+  #superworld_electronics_company_sustainability_esg_and_sustainability_pillars .esg-pillar-tags span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 146px;
+    min-height: 44px;
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+    font-size: clamp(13px,1.1vw,16px);
+    line-height: 1.1
+  }
+
+  .esg {
+    &-pillars-carousel {
+      position: relative;
+      z-index: 3;
+      width: min(910px,75.2%);
+      height: auto;
+      aspect-ratio: 910/526;
+      margin: -51px auto 0;
+      background: #fff
+    }
+
+    &-pillars-carousel .carousel-window,&-pillars-carousel .carousel-track,&-pillars-carousel .slide,&-pillar-image {
+      height: 100%
+    }
+
+    &-pillars-carousel .carousel-window {
+      border: 1px solid var(--line);
+      background: #fff
+    }
+
+    &-pillars-carousel .carousel-track {
+      gap: 22px
+    }
+
+    &-pillars-carousel .slide {
+      min-width: 100%;
+      background: #fff
+    }
+
+    &-pillar-image {
+      width: 100%;
+      background: #fff
+    }
+
+    &-pillars-carousel > .carousel-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 21px;
+      z-index: 4;
+      display: flex!important;
+      width: auto;
+      margin: 0;
+      gap: 7px;
+      transform: translateX(-50%)
+    }
+
+    &-pillars-carousel .carousel-dot {
+      display: block;
+      width: 34px;
+      height: 9px;
+      min-height: 0;
+      border: 1px solid var(--line);
+      padding: 0;
+      background: #fff
+    }
+
+    &-pillars-carousel .carousel-dot.is-active {
+      background: #111
+    }
+  }
+
+  .integrity {
+    &-accountability-section {
+      padding: 72px 0 88px
+    }
+
+    &-accountability-section > .container > h2 {
+      margin: 0 0 28px;
+      font-size: 36px;
+      line-height: 1.15
+    }
+
+    &-intro {
+      max-width: 960px;
+      margin: 0 0 60px;
+      font-size: 18px;
+      line-height: 1.35
+    }
+
+    &-principles-grid {
+      display: grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap: 0;
+      width: min(1280px,100%)
+    }
+
+    &-principle-card {
+      min-height: 104px;
+      border: 0;
+      border-left: 2px solid var(--line);
+      background: #fff;
+      padding: 3px 0 0 20px
+    }
+
+    &-principle-card strong {
+      display: block;
+      margin-bottom: 15px;
+      font-family: $font-heading;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1
+    }
+
+    &-principle-card p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.35
+    }
+  }
+
+  .misconduct {
+    &-panel {
+      min-height: 324px;
+      margin-top: 80px;
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 50px;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 431px;
+      align-items: center;
+      gap: 72px
+    }
+
+    &-copy h2 {
+      margin: 0 0 34px;
+      font-size: 36px;
+      line-height: 1.15
+    }
+
+    &-copy p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.35
+    }
+
+    &-contact {
+      width: 431px;
+      min-height: 198px;
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 48px 40px;
+      align-self: center
+    }
+
+    &-contact h3 {
+      margin: 0 0 19px;
+      font-size: 27px;
+      line-height: 1.15;
+      white-space: nowrap
+    }
+
+    &-contact p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.45
+    }
+  }
+}

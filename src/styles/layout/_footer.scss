@@ -1,0 +1,75 @@
+@use "../base/scope";
+
+@include scope.within {
+  .footer {
+    margin-top: var(--space-10);
+    border-top: 1px solid var(--line);
+    padding: var(--space-12) 0 var(--space-6);
+
+    &-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 34px;
+
+      @media (max-width: 560px) {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    &-brand {
+      width: 220px;
+
+      img {
+        width: 100%;
+      }
+
+      @media (max-width: 640px) {
+        width: 190px;
+      }
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-8);
+      padding: var(--space-10) 0 var(--space-20);
+
+      h3 {
+        font-size: 17px;
+      }
+
+      a {
+        display: block;
+        padding: 3px 0;
+      }
+
+      @media (max-width: 1100px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 760px) {
+        padding-bottom: var(--space-12);
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 12px;
+
+      @media (max-width: 560px) {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+  }
+}

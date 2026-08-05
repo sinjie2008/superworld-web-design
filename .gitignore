@@ -2,3 +2,5 @@ dist/
 .generated/
 node_modules/
 site.tar.gz
+.codegraph
+.omo/

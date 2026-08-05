@@ -1,0 +1,39 @@
+@use "../base/scope";
+@use "../tokens" as *;
+
+@include scope.within {
+  input,
+  select,
+  textarea {
+    color: inherit;
+    background: #fff;
+    font-family: $font-body;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+
+    &:focus-visible {
+      outline: 3px solid #111;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 760px) {
+      font-size: 16px;
+    }
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+  select {
+    width: 100%;
+    height: var(--form-control-height);
+    min-height: var(--form-control-height);
+    padding: 0 var(--space-4);
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 144px;
+    padding: var(--space-4);
+    resize: vertical;
+  }
+
+}

@@ -1,0 +1,187 @@
+@use "../base/scope";
+@use "../tokens" as *;
+
+@include scope.within {
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .tag {
+    border: 1px solid var(--line);
+    padding: 9px 13px;
+    font-size: 13px;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    padding: var(--space-6);
+    background: #fff;
+
+    &.no-pad {
+      padding: 0;
+    }
+
+    h3,
+    h4 {
+      margin-bottom: 10px;
+    }
+  }
+
+  .media-card {
+    height: 100%;
+    border: 1px solid var(--line);
+    background: #fff;
+
+    .ph {
+      height: 220px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    &-body {
+      padding: var(--space-5);
+    }
+
+    &-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+      font-size: 13px;
+    }
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr) 28px) minmax(0, 1fr);
+    align-items: start;
+    gap: 18px;
+    min-height: 238px;
+    margin-top: 62px;
+    border: 1px solid var(--line);
+    padding: 0 22px;
+
+    &-card {
+      min-width: 0;
+      height: 225px;
+      margin-top: -30px;
+      border: 1px solid var(--line);
+      background: #fff;
+      text-align: center;
+
+      .ph {
+        height: 100px;
+        min-height: 0;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: #fafafa;
+      }
+
+      h3 {
+        margin: 0 0 10px;
+        font-size: var(--font-size-card-title);
+        font-weight: 600;
+        line-height: var(--line-height-heading);
+      }
+
+      p {
+        margin: 0;
+        font-size: var(--font-size-caption);
+        line-height: var(--line-height-compact);
+      }
+
+      @media (max-width: 820px) {
+        height: auto;
+        min-height: 225px;
+        margin-top: 0;
+      }
+    }
+
+    &-card-copy {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 123px;
+      padding: 16px 10px;
+    }
+
+    &-arrow {
+      width: 26px;
+      height: 26px;
+      margin-top: 58px;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      transform: rotate(45deg);
+
+      @media (max-width: 820px) {
+        justify-self: center;
+        margin: 10px 0;
+        transform: rotate(135deg);
+      }
+    }
+
+    @media (max-width: 820px) {
+      grid-template-columns: 1fr;
+      gap: 0;
+      min-height: 0;
+      margin-top: 34px;
+      padding: 24px;
+    }
+  }
+
+  :is(.card, [class*="-card"]) {
+    h3 {
+      font-family: $font-heading;
+      font-size: var(--font-size-card-title);
+      font-weight: 600;
+      line-height: var(--line-height-heading);
+    }
+
+    p:not(.design-card-number) {
+      font-size: var(--font-size-body);
+      line-height: var(--line-height-body);
+
+      @media (max-width: 820px) {
+        font-size: var(--font-size-body-large);
+      }
+    }
+
+    :is(.tag, [class*="-tag"], .chip, [class*="-chip"], .badge, [class*="-badge"]),
+    :is([class*="-tags"], [class*="-chips"], [class*="-badges"]) > * {
+      font-size: var(--font-size-label);
+      line-height: var(--line-height-compact);
+    }
+  }
+
+  #systemTabsRoot .subapp-card {
+    .subapp-title h3 {
+      font-family: $font-heading;
+      font-size: var(--font-size-card-title);
+      font-weight: 600;
+      line-height: var(--line-height-heading);
+    }
+
+    .series-chip {
+      font-size: var(--font-size-label);
+      line-height: var(--line-height-compact);
+    }
+
+    .panel-block p {
+      @media (max-width: 820px) {
+        font-size: var(--font-size-body-large);
+      }
+    }
+  }
+
+  #superworld_electronics_company_industries .slide.card h3 {
+    font-family: $font-heading;
+    font-size: var(--font-size-card-title);
+    font-weight: 600;
+    line-height: var(--line-height-heading);
+  }
+}

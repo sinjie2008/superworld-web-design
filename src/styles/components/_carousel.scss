@@ -1,0 +1,114 @@
+@use "../base/scope";
+
+@include scope.within {
+  .carousel {
+    position: relative;
+    --visible: 4;
+
+    &-window {
+      overflow: hidden;
+    }
+
+    &-track {
+      display: flex;
+      gap: 22px;
+      transition: transform .55s ease;
+      will-change: transform;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+
+    .slide {
+      flex: 0 0 calc((100% - (22px * (var(--visible) - 1))) / var(--visible));
+    }
+
+    &-controls {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--touch-target);
+        gap: 10px;
+        border: 0;
+        padding: 8px 10px;
+        background: #fff;
+
+        &:hover {
+          background: #111;
+        }
+      }
+
+      [data-prev]::before,
+      [data-next]::after {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-color: currentColor;
+      }
+
+      .carousel-dots {
+        position: absolute;
+        left: 50%;
+        width: auto;
+        justify-content: center;
+        transform: translateX(-50%);
+      }
+    }
+
+    &-dots {
+      display: none !important;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &-dot {
+      position: relative;
+      width: var(--touch-target);
+      height: var(--touch-target);
+      min-height: var(--touch-target);
+      border: 0;
+      padding: 0;
+      background: transparent;
+
+      &::before {
+        content: "";
+        display: block;
+        width: 34px;
+        height: 8px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      &.is-active {
+        background: transparent;
+
+        &::before {
+          background: #111;
+        }
+      }
+    }
+
+    > .carousel-dots {
+      width: 100%;
+      justify-content: center;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 820px) {
+      --visible: 2 !important;
+    }
+
+    @media (max-width: 560px) {
+      --visible: 1 !important;
+    }
+  }
+}

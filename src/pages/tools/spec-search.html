@@ -1,0 +1,111 @@
+<main id="main-content" class="page-main">
+  <nav class="container crumb" aria-label="Breadcrumb">
+    <a data-link class="" href="/">HOME</a> &gt;
+    <span aria-current="page">Specification Search</span>
+  </nav>
+  <section
+    id="superworld_electronics_tools_spec_search_specification_search"
+    class="container"
+    data-section-id-preserve
+  >
+    <div class="app-shell">
+      <div class="content-column">
+        <header class="page-header">
+          <div>
+            <h1>SPECIFICATION SEARCH</h1>
+          </div>
+        </header>
+
+        <div id="status-message" role="status" aria-live="polite" aria-busy="false"></div>
+
+        <section class="section-block" aria-labelledby="root-title">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Root Selection</div>
+              <h2 class="section-title" id="root-title">Choose starting category</h2>
+            </div>
+            <span class="badge badge-primary" id="root-count">0 roots</span>
+          </div>
+          <div class="root-options" id="root-category-options"></div>
+        </section>
+
+        <section class="section-block" aria-labelledby="categories-title">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Product Categories</div>
+              <h2 class="section-title" id="categories-title">Pick one or more</h2>
+            </div>
+            <span class="badge badge-secondary" id="category-count">0 selected</span>
+          </div>
+          <div class="category-groups" id="product-categories"></div>
+        </section>
+
+        <section class="section-block" aria-labelledby="filters-title">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Filters</div>
+              <h2 class="section-title" id="filters-title">Series &amp; custom fields</h2>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" id="clear-filters" type="button">
+              Clear
+            </button>
+          </div>
+          <div class="selected-filters" id="selected-filters"></div>
+          <div class="facet-grid" id="facet-container"></div>
+        </section>
+
+        <section class="section-block results-section" aria-labelledby="results-title">
+          <h2 class="section-title results-title" id="results-title">Products</h2>
+
+          <div class="results-toolbar" aria-label="Product result controls">
+            <label class="results-search-field" for="table-search">
+              <span>Search Terms:</span>
+              <input
+                class="form-control"
+                id="table-search"
+                type="search"
+                autocomplete="off"
+                aria-label="Search terms"
+              />
+            </label>
+            <button class="btn results-search-button" id="table-search-submit" type="button">
+              Search
+            </button>
+            <button class="btn results-inquiry-button" id="inquiry-button" type="button" disabled>
+              Inquiry
+            </button>
+            <label class="results-page-size">
+              <span>Show</span>
+              <select class="form-select" id="page-size" aria-label="Entries per page">
+                <option value="10" selected>10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span>entries</span>
+            </label>
+          </div>
+
+          <div class="results-instructions">
+            <p>
+              Choose the products you need, then submit your inquiry or download the specifications.
+            </p>
+            <span class="badge badge-info" id="result-count">0 items</span>
+          </div>
+
+          <div class="table-responsive">
+            <table id="results-table" aria-label="Product search results">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div id="table-info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries</div>
+            <nav class="pagination" id="pagination" aria-label="Product result pages"></nav>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,114 @@
+@use "../base/scope";
+@use "../tokens" as *;
+
+@include scope.within {
+  button {
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+    border: 1px solid var(--line);
+    border-radius: 0;
+    padding: 0 var(--space-5);
+    color: inherit;
+    background: #fff;
+    font-family: $font-heading;
+    font-size: var(--font-size-action);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .01em;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      background: #111;
+    }
+
+    &:focus-visible {
+      outline: 3px solid #111;
+      outline-offset: 3px;
+    }
+  }
+
+  a:focus-visible {
+    outline: 3px solid #111;
+    outline-offset: 3px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-target);
+    border: 1px solid var(--line);
+    padding: 0 var(--space-5);
+    background: #fff;
+    font-family: $font-heading;
+    font-size: var(--font-size-action);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .01em;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      background: #111;
+    }
+
+    &.small {
+      min-height: var(--touch-target);
+      padding: 0 var(--space-4);
+    }
+
+    &.wide {
+      min-width: 170px;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-left: 2px;
+      border-top: 2px solid currentColor;
+      border-right: 2px solid currentColor;
+      transform: rotate(45deg);
+    }
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    border: 1px solid var(--line);
+    padding: 42px;
+
+    > .button-group {
+      flex: 0 0 auto;
+      flex-wrap: nowrap;
+    }
+
+    @media (max-width: 560px) {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 28px 22px;
+
+      > .button-group {
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

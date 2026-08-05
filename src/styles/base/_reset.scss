@@ -1,0 +1,86 @@
+@use "scope";
+@use "../tokens" as *;
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 144px;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: $font-body;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+@include scope.within {
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .display,
+  .nav-link,
+  .button {
+    font-family: $font-heading;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin-top: 0;
+  }
+
+  h1 {
+    font-size: var(--font-size-page-title);
+    line-height: var(--line-height-display);
+  }
+
+  h2 {
+    font-size: var(--font-size-section-title);
+    line-height: var(--line-height-heading);
+  }
+
+  h3 {
+    font-size: var(--font-size-subheading);
+    line-height: var(--line-height-heading);
+  }
+
+  h4 {
+    font-size: var(--font-size-body-large);
+    line-height: var(--line-height-heading);
+  }
+
+  p {
+    margin-bottom: var(--space-4);
+  }
+}

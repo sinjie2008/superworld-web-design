@@ -1,0 +1,79 @@
+<main id="main-content" class="page-main support-page">
+  <nav class="container crumb" aria-label="Breadcrumb">
+    <a data-link class="" href="/">HOME</a> &gt; <span aria-current="page">CONTACT US</span>
+  </nav>
+  <div class="container">
+    <section class="support-hero">
+      <div>
+        <h1>CONTACT US</h1>
+        <p>
+          Get in touch with our team for product inquiries, quotations, or technical support.<br />We
+          support your design and application needs with reliable magnetic solutions.
+        </p>
+      </div>
+      <div class="support-hero-logo">
+        <img
+          src="https://placehold.co/430x152"
+          alt="Superworld Electronics support image"
+          width="430"
+          height="152"
+        />
+      </div>
+    </section>
+    <form class="support-form" data-support-form>
+      <section class="support-form-section">
+        <h2>Inquiry Details</h2>
+        <div class="support-inquiry-panel">
+          <div class="support-field">
+            <label for="support-request-type">How can we help you?</label
+            ><select
+              id="support-request-type"
+              name="support-request-type"
+              data-support-request-type
+            >
+              <!--APP_SLOT:SUPPORT_REQUEST_TYPE_OPTIONS-->
+            </select>
+          </div>
+          <!--APP_SLOT:SUPPORT_PRODUCT_CATEGORIES-->
+        </div>
+      </section>
+      <!--APP_SLOT:SUPPORT_CONTACT_BUSINESS_FIELDS-->
+      <section class="support-form-section">
+        <h2>Attachment</h2>
+        <label class="support-file-control" for="support-attachment">
+          <span data-support-file-name>No file selected</span>
+          <strong>Choose file</strong>
+        </label>
+        <input
+          class="sr-only"
+          id="support-attachment"
+          name="support-attachment"
+          type="file"
+          data-support-file
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+        />
+        <small class="support-help" data-support-file-status
+          >Maximum allowed file size is 6 MB</small
+        >
+      </section>
+
+      <!--APP_SLOT:SUPPORT_APPOINTMENT_FIELDS-->
+      <section class="support-form-section">
+        <h2>Overall remarks</h2>
+        <div class="support-field">
+          <label class="sr-only" for="support-remarks">Overall remarks</label
+          ><textarea id="support-remarks" name="support-remarks" required></textarea>
+        </div>
+      </section>
+      <div class="support-form-actions">
+        <label class="support-consent"
+          ><input type="checkbox" required /><span
+            >Kindly consent to the terms and conditions.</span
+          ></label
+        >
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+    <!--APP_SLOT:SUPPORT_OFFICE_CARDS-->
+  </div>
+</main>

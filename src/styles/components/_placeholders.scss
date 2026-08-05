@@ -1,0 +1,47 @@
+@use "../base/scope";
+
+@include scope.within {
+  .ph {
+    position: relative;
+    min-height: 180px;
+    border: 1px solid #777;
+    background: #fafafa;
+
+    > img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    &.image-cover {
+      overflow: hidden;
+
+      > img {
+        object-fit: cover;
+      }
+    }
+
+    &.image-contain > img {
+      object-fit: contain;
+    }
+
+    &.soft {
+      background: #f3f3f3;
+    }
+
+    &.tall {
+      min-height: 420px;
+    }
+
+    &.hero-ph {
+      min-height: 390px;
+    }
+
+    &.map {
+      min-height: 560px;
+    }
+  }
+}

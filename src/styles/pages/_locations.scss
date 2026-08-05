@@ -1,0 +1,101 @@
+@use "../base/scope";
+@use "../tokens" as *;
+@include scope.within {
+  .location {
+    &-controls {
+      display: grid;
+      grid-template-columns: max-content minmax(0,1fr);
+      align-items: start;
+      gap: 24px;
+      padding: 31px 0
+    }
+
+    &-controls [data-location-search] {
+      min-width: 320px;
+      border: 1px solid var(--line);
+      padding: 16px
+    }
+
+    &-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0
+    }
+
+    &-tabs button {
+      width: 96px;
+      min-width: 96px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: #fff;
+      color: #111;
+      font-size: 22px
+    }
+
+    &-tabs button:first-child {
+      border-left: 1px solid var(--line)
+    }
+
+    &-tabs button.is-active {
+      background: #111;
+      color: #fff
+    }
+
+    &-tabs button:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 3px
+    }
+
+    &-groups {
+      display: grid;
+      gap: 72px
+    }
+
+    &-group[hidden] {
+      display: none
+    }
+
+    &-group-label {
+      margin: 0 0 24px;
+      font-size: 20px;
+      letter-spacing: .02em
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 28px 20px
+    }
+
+    &-card {
+      border: 1px solid var(--line);
+      padding: 20px;
+      min-height: 270px
+    }
+
+    &-card h3 {
+      margin-bottom: 12px
+    }
+
+    &-card p {
+      margin-bottom: 12px
+    }
+
+    &-card[hidden],&-empty[hidden] {
+      display: none
+    }
+
+    &-card a {
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      overflow-wrap: anywhere
+    }
+
+    &-empty {
+      border: 1px solid var(--line);
+      padding: 28px;
+      text-align: center
+    }
+  }
+}

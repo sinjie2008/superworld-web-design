@@ -1,0 +1,98 @@
+<main id="main-content" class="page-main">
+  <nav class="container crumb" aria-label="Breadcrumb">
+    <a data-link class="" href="/">HOME</a> &gt; <span aria-current="page">INQUIRY CART</span>
+  </nav>
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-heading">
+        <h1>INQUIRY CART SUMMARY</h1>
+        <button type="button" data-back>Back</button>
+      </div>
+      <div class="inquiry-summary">
+        <div class="inquiry-summary-header">
+          <span aria-hidden="true"></span>
+          <h2>Product Details</h2>
+          <strong>Quantity</strong>
+        </div>
+        <div data-cart-container><!--APP_SLOT:INQUIRY_SUMMARY_CONTENT--></div>
+      </div>
+      <section class="section inquiry-details">
+        <h2>INQUIRY DETAILS</h2>
+        <form class="inquiry-form" data-inquiry-form>
+          <div class="form-columns">
+            <div>
+              <h3>CONTACT DETAILS</h3>
+              <div class="field">
+                <label for="fullname">Full Name</label
+                ><input id="fullname" name="fullname" autocomplete="name" required />
+              </div>
+              <div class="form-grid-2">
+                <div class="field">
+                  <label for="inquiry-job">Job Title / Department</label
+                  ><input id="inquiry-job" name="job" autocomplete="organization-title" />
+                </div>
+                <div class="field">
+                  <label for="inquiry-phone">Phone Number</label
+                  ><input id="inquiry-phone" name="phone" type="tel" autocomplete="tel" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="inquiry-email">Business Email</label
+                ><input
+                  id="inquiry-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <h3>BUSINESS / PROJECT INFO</h3>
+              <div class="form-grid-2">
+                <div class="field">
+                  <label for="inquiry-company">Company Name</label
+                  ><input
+                    id="inquiry-company"
+                    name="company"
+                    autocomplete="organization"
+                    required
+                  />
+                </div>
+                <div class="field">
+                  <label for="inquiry-industry">Industry</label
+                  ><input id="inquiry-industry" name="industry" />
+                </div>
+                <div class="field">
+                  <label for="inquiry-country">Country / Region</label
+                  ><input id="inquiry-country" name="country" autocomplete="country-name" />
+                </div>
+                <div class="field">
+                  <label for="inquiry-timeline">Project Timeline</label
+                  ><select id="inquiry-timeline" name="timeline">
+                    <option>1–3 months</option>
+                    <option>3–6 months</option>
+                    <option>6–12 months</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="inquiry-website">Company Website</label
+                ><input id="inquiry-website" name="website" type="url" autocomplete="url" />
+              </div>
+            </div>
+          </div>
+          <h3>OVERALL REMARKS</h3>
+          <div class="field">
+            <label class="sr-only" for="inquiry-remarks">Overall remarks</label
+            ><textarea id="inquiry-remarks" name="remarks"></textarea>
+          </div>
+          <div class="section-heading">
+            <label><input type="checkbox" required /> I consent to the terms and conditions.</label
+            ><button class="button wide" type="submit">Submit</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </section>
+</main>

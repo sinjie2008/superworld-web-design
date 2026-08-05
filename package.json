@@ -4,12 +4,21 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build --silent && node scripts/dev.mjs",
-    "build": "bash scripts/build.sh",
-    "validate": "node scripts/validate-artifact.mjs"
+    "build": "node scripts/build.mjs",
+    "format:html": "prettier --write \"src/pages/**/*.html\"",
+    "check:html": "prettier --check \"src/pages/**/*.html\"",
+    "validate": "npm run check:html --silent && node scripts/validate-artifact.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.6",
+    "prettier": "3.9.6",
     "sass": "^1.89.2"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "htmlWhitespaceSensitivity": "css",
+    "proseWrap": "preserve",
+    "endOfLine": "lf"
   },
   "displayName": "LO Wireframe"
 }

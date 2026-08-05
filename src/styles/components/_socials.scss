@@ -1,0 +1,31 @@
+@use "../base/scope";
+
+@include scope.within {
+  .socials {
+    display: flex;
+    width: 108px;
+    height: 53px;
+    gap: 12px;
+    background: url("/assets/social.webp") center / contain no-repeat;
+
+    .social {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      width: 96px;
+      height: 47px;
+    }
+  }
+
+  .social {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    place-items: center;
+    font-family: Poppins, Arial, sans-serif;
+    font-weight: 700;
+  }
+}

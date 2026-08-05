@@ -1,0 +1,95 @@
+$font-heading: Poppins, Arial, sans-serif;
+$font-body: Inter, Arial, sans-serif;
+
+@font-face {
+  font-family: Poppins;
+  src: url("/assets/poppins-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url("/assets/poppins-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url("/assets/poppins-700.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("/assets/inter-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("/assets/inter-500.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("/assets/inter-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  --ink: #111;
+  --paper: #fff;
+  --soft: #f6f6f6;
+  --soft-2: #ececec;
+  --muted: #666;
+  --line: #1d1d1d;
+  --max: 1320px;
+  --gutter: clamp(18px, 4vw, 64px);
+  --container-width: min(var(--max), calc(100% - (var(--gutter) * 2)));
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --font-size-page-title: clamp(28px, 3vw, 42px);
+  --font-size-section-title: clamp(22px, 2.1vw, 29px);
+  --font-size-subheading: clamp(18px, 1.4vw, 20px);
+  --font-size-card-title: 16px;
+  --font-size-body: 14px;
+  --font-size-body-large: 15px;
+  --font-size-label: 13px;
+  --font-size-caption: 12px;
+  --font-size-action: 13px;
+  --font-size-table: 14px;
+  --line-height-display: 1.12;
+  --line-height-heading: 1.25;
+  --line-height-body: 1.55;
+  --line-height-compact: 1.4;
+  --section-space: clamp(48px, 6vw, 72px);
+  --section-space-small: clamp(36px, 4vw, 48px);
+  --touch-target: 44px;
+  --form-control-height: 52px;
+
+  @media (max-width: 560px) {
+    --gutter: 18px;
+  }
+}

@@ -4,9 +4,11 @@ This site uses a framework-free SCSS and ES6+ JavaScript foundation.
 
 ## Source files
 
-- `src/styles.scss` — all visual styles and responsive rules.
-- `src/app.js` — all browser-side behavior written in framework-free ES6+ JavaScript and loaded as a module.
-- `src/worker.js` — the ES module Worker shell, HTML document, and embedded assets.
+- `src/app/` — browser features, site lifecycle modules, SEO metadata, and the Worker source.
+- `src/pages/` — route fragments and shared HTML layouts.
+- `src/styles.scss` and `src/styles/` — scoped SCSS entry point and partials.
+- `src/data/` — source data used by Specification Search.
+- `scripts/build.mjs` — cross-platform build entry point.
 - `worker/index.js` — generated deployment bundle; do not edit directly.
 
 ## Commands

@@ -1,0 +1,7 @@
+$scope_prefix: "#app" !default;
+
+@mixin within {
+  :where(#{$scope_prefix}) {
+    @content;
+  }
+}
