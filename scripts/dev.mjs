@@ -8,7 +8,7 @@ const valueAfter = (flag, fallback) => {
   return index >= 0 && args[index + 1] ? args[index + 1] : fallback;
 };
 
-const host = valueAfter("--host", "0.0.0.0");
+const host = valueAfter("--host", "127.0.0.1");
 const port = Number(valueAfter("--port", "4173"));
 const productApiBase = "http://localhost/Foundational-Electronics-Core-Systems/api/";
 

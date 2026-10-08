@@ -3,8 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run build --silent && node scripts/dev.mjs",
-    "build": "node scripts/build.mjs",
+    "dev": "npm run build:dev --silent && node scripts/dev.mjs",
+    "build": "node scripts/build.mjs --mode=prod",
+    "build:dev": "node scripts/build.mjs --mode=dev",
+    "build:prod": "node scripts/build.mjs --mode=prod",
+    "check:catalog-diagnostics": "node scripts/check-catalog-diagnostics.mjs",
     "format:html": "prettier --write \"src/pages/**/*.html\"",
     "check:html": "prettier --check \"src/pages/**/*.html\"",
     "validate": "npm run check:html --silent && node scripts/validate-artifact.mjs"

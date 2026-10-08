@@ -71,6 +71,7 @@ const requiredSourcePaths = [
   "src/app/product-api.js",
   "src/app/product-catalog.js",
   "src/app/product-pages.js",
+  "src/app/catalog-missing-diagnostics.js",
   "src/app/site/pages.js",
   "src/app/site/interactions.js",
   "src/app/site/enhancements.js",
@@ -135,6 +136,7 @@ const requiredSourcePaths = [
     "inquiry",
     "thank-you",
     "spec-search",
+    "catalog-diagnostics",
   ].map((name) => `src/styles/pages/_${name}.scss`),
 ];
 
@@ -212,6 +214,9 @@ const [
   readFile(resolve(projectRoot, "src/styles.scss"), "utf8"),
   readFile(resolve(projectRoot, "src/pages/layouts/document.html"), "utf8"),
 ]);
+const buildModeMatch = source.match(/^\/\* BUILD_MODE=(dev|prod) \*\//);
+assert.ok(buildModeMatch, "generated worker must include explicit build-mode metadata");
+const buildMode = buildModeMatch[1];
 const appModuleSource = appModuleSources.join("\n");
 const specSearchModuleSource = specSearchModuleSources.join("\n");
 const pageTemplateSource = pageTemplateSources.join("\n");
@@ -301,10 +306,10 @@ assert.doesNotMatch(
   /@import\b/,
   "styles.scss must use Sass modules instead of deprecated @import",
 );
-assert.match(documentLayoutSource, /\/styles\.css\?v=135/);
+assert.match(documentLayoutSource, /\/styles\.css\?v=136/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=109/);
 assert.match(documentLayoutSource, /\/spec-search\.js\?v=103/);
-assert.match(documentLayoutSource, /\/app\.js\?v=137/);
+assert.match(documentLayoutSource, /\/app\.js\?v=138/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
   cwd: projectRoot,
@@ -428,10 +433,10 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   );
   assert.doesNotMatch(html, /<!--APP_SLOT:/, `${route} must not expose unresolved document slots`);
   if (route === "/") {
-    assert.match(html, /\/styles\.css\?v=135/);
+    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-136" : "136"}`));
     assert.match(html, /\/spec-search\.css\?v=109/);
     assert.match(html, /\/spec-search\.js\?v=103/);
-    assert.match(html, /\/app\.js\?v=137/);
+    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-138" : "138"}`));
   }
   assert.equal(
     html.includes('content="noindex,follow"'),
@@ -478,5 +483,19 @@ const socialImageResponse = await workerModule.default.fetch(
 );
 assert.equal(socialImageResponse.status, 200);
 assert.equal(socialImageResponse.headers.get("content-type"), "image/png");
+
+if (buildMode === "prod") {
+  const diagnosticsCheckPath = resolve(projectRoot, "scripts/check-catalog-diagnostics.mjs");
+  const { stdout: diagnosticsCheckOutput } = await execFileAsync(
+    process.execPath,
+    [diagnosticsCheckPath],
+    { cwd: projectRoot },
+  );
+  assert.match(
+    diagnosticsCheckOutput,
+    /Production catalog diagnostics exclusion check passed/,
+    "production validation must check that diagnostic-only bytes are absent",
+  );
+}
 
 console.log(`Artifact and lifecycle checks passed for ${titles.size} routes`);

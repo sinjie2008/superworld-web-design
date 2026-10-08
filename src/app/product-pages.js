@@ -1,4 +1,5 @@
 import { productApi } from "./product-api.js";
+import { CatalogMissingDiagnostics } from "./catalog-missing-diagnostics.js";
 import {
   CatalogTreeStore,
   PRODUCT_ROUTES,
@@ -34,12 +35,6 @@ export const productFieldLabel = (field) =>
   String(field.label || field.key)
     .replace(/^Acf\s+/i, "")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
-
-function markMissing(element) {
-  if (!element) return;
-  element.classList.add("catalog-api-missing");
-  element.title = "Not provided by the product API";
-}
 
 function countSeries(node) {
   return node.type === "series"
@@ -108,9 +103,6 @@ function renderRoot(main, index) {
       })
       .join("");
   });
-  main.querySelectorAll(".carousel .media-card").forEach(markMissing);
-  markMissing(main.querySelector(".hero-panel p"));
-  markMissing(main.querySelector(".hero-brand"));
 }
 
 function renderGroup(main, index, route) {
@@ -121,8 +113,6 @@ function renderGroup(main, index, route) {
     { name: root.name },
   ]);
   main.querySelector(".hero-panel h1").textContent = root.name.toUpperCase();
-  markMissing(main.querySelector(".hero-panel p"));
-  markMissing(main.querySelector(".hero-brand"));
   const families = (root.children || []).filter((node) => node.type === "category");
   const sections = [...main.querySelectorAll("section.product-family")];
   const template = sections[0].cloneNode(true);
@@ -134,7 +124,6 @@ function renderGroup(main, index, route) {
     section.querySelector(".section-heading h2").textContent = family.name;
     section.querySelector(".section-heading p").textContent =
       `${countSeries(family)} current series`;
-    markMissing(section.querySelector(".ph.tall"));
     const defaultIcons = new Map(
       [...section.querySelectorAll(".family-icon")].map((icon) => [
         icon.querySelector("span")?.textContent.trim().toLowerCase(),
@@ -148,10 +137,9 @@ function renderGroup(main, index, route) {
         const media = defaultImage?.parentElement.classList.contains("ph")
           ? defaultImage.parentElement.cloneNode(true)
           : defaultImage?.cloneNode(true);
-        if (media) markMissing(media);
         const visual =
           media?.outerHTML ||
-          '<div class="ph catalog-api-missing" title="Not provided by the product API"><img src="https://placehold.co/86x66" alt="" width="86" height="66"></div>';
+          '<div class="ph"><img src="https://placehold.co/86x66" alt="" width="86" height="66"></div>';
         return `<a data-link class="family-icon" href="${escapeHtml(href)}#${escapeHtml(sectionAnchor(route.group, href.split("/").at(-1), category.slug))}">${visual}<span>${escapeHtml(category.name)}</span></a>`;
       })
       .join("");
@@ -175,8 +163,6 @@ function renderFamily(main, index, route) {
     { name: family.name },
   ]);
   main.querySelector(".hero-panel h1").textContent = family.name;
-  markMissing(main.querySelector(".hero-panel p"));
-  markMissing(main.querySelector(".hero-brand"));
   const categories = seriesCategories(family);
   const sections = [...main.querySelectorAll("section.section-sm")];
   const template = sections[0].cloneNode(true);
@@ -185,10 +171,6 @@ function renderFamily(main, index, route) {
     if (!sections[position]) main.append(section);
     section.id = sectionAnchor(route.group, route.family, category.slug);
     section.querySelector("h2").textContent = category.name;
-    markMissing(section.querySelector(".container > p"));
-    section.querySelectorAll("thead th").forEach((heading, index) => {
-      if (index >= 2 && index <= 5) markMissing(heading);
-    });
     const tbody = section.querySelector("tbody");
     const defaultRow = tbody.querySelector("tr").cloneNode(true);
     const defaultHref = defaultRow.querySelector("td:nth-child(2) a")?.getAttribute("href");
@@ -203,7 +185,6 @@ function renderFamily(main, index, route) {
             image.src = `https://placehold.co/${image.width || 255}x${image.height || 195}`;
             image.alt = `${node.name} image unavailable`;
           }
-          markMissing(image.parentElement);
         }
         const seriesCell = row.cells[1];
         let link = seriesCell.querySelector("a, .product-series");
@@ -224,13 +205,11 @@ function renderFamily(main, index, route) {
           seriesCell.append(partCount);
         }
         partCount.textContent = ` ${Number(node.partCount || 0)} parts`;
-        [...row.cells].slice(2, 6).forEach(markMissing);
         const download = row.cells[6].querySelector("button");
         if (download) {
           download.setAttribute("aria-label", `Download ${node.name} specification`);
           download.setAttribute("aria-disabled", "true");
         }
-        markMissing(download || row.cells[6]);
         return row;
       }),
     );
@@ -253,7 +232,7 @@ function activeFields(fields, parts, facets) {
       if (value !== null && value !== undefined && value !== "") populated.add(key);
     }),
   );
-  return fields.filter((field) => populated.has(field.key));
+  return fields.filter((field) => field.required === true || populated.has(field.key));
 }
 
 function facetRange(facets, key, unit, divisor = 1) {
@@ -280,14 +259,6 @@ function applyFamilyFacets(row, facets) {
     if (!value) return;
     const cell = row.cells[position + 2];
     cell.textContent = value;
-    if (position === 0 && !dimensions.every(Boolean)) markMissing(cell);
-    else {
-      cell.classList.remove("catalog-api-missing");
-      cell.removeAttribute("title");
-    }
-    const heading = row.closest("table").tHead.rows[0].cells[position + 2];
-    heading.classList.remove("catalog-api-missing");
-    heading.removeAttribute("title");
   });
 }
 
@@ -336,6 +307,10 @@ export class ProductPages {
   }
 
   cancel() {
+    if (__CATALOG_DIAGNOSTICS__) {
+      this.diagnostics?.destroy();
+      this.diagnostics = null;
+    }
     this.partsController?.abort();
     this.partsController = null;
     this.sectionScrollCleanup?.();
@@ -353,15 +328,26 @@ export class ProductPages {
     if (!match || !main) return;
     const scope = embedded ? main.querySelector("[data-a4k-product-table]") : main;
     if (!scope) return;
+    this.cancel();
+    if (__CATALOG_DIAGNOSTICS__) {
+      this.diagnostics = new CatalogMissingDiagnostics(main);
+      this.diagnostics.set(scope, { content: "Catalog data", status: "LOADING", source: "/api/tree", note: "Wait for the current request; no missing backend value has been established." });
+    }
     scope.setAttribute("aria-busy", "true");
     try {
       const index = await this.treeStore.load();
       if (signal?.aborted || !isCurrent()) return;
       const route = resolveCatalogRoute(index, match.path);
       if (!route?.nodes && !route?.node) throw new Error("Product route is unavailable.");
-      this.cancel();
+      if (__CATALOG_DIAGNOSTICS__) {
+        this.diagnostics.tree = index.tree;
+        this.diagnostics.node = route.node;
+        this.diagnostics.clear(scope);
+      }
       if (route.type === "series") {
+        if (__CATALOG_DIAGNOSTICS__) this.diagnostics.set(scope, { content: "Series data", node: route.node, status: "LOADING", source: `/api/series/${route.node.path}`, note: "Series, fields, parts, and facets are still loading." });
         await this.hydrateSeries(index, route, main, { signal, isCurrent, embedded });
+        if (__CATALOG_DIAGNOSTICS__) this.diagnostics.clear(scope);
       } else if (!embedded) {
         if (route.type === "root") renderRoot(main, index);
         else if (route.type === "group") renderGroup(main, index, route);
@@ -369,6 +355,7 @@ export class ProductPages {
           renderFamily(main, index, route);
           this.setupFamilyFacets(main, { signal, isCurrent });
         }
+        if (__CATALOG_DIAGNOSTICS__) this.diagnostics.layout(main, index, route);
       }
       if (signal?.aborted || !isCurrent()) return;
       scope.removeAttribute("aria-busy");
@@ -379,9 +366,9 @@ export class ProductPages {
           ?.scrollIntoView({ block: "start", behavior: "instant" });
     } catch (error) {
       if (signal?.aborted || !isCurrent() || error?.name === "AbortError") return;
-      console.error("Product catalog request failed", error);
       scope.removeAttribute("aria-busy");
-      markMissing(scope);
+      if (__CATALOG_DIAGNOSTICS__)
+        this.diagnostics.set(scope, { content: "Catalog data", node: this.diagnostics.node, status: "API_REQUEST_FAILED", source: this.diagnostics.node?.type === "series" ? `/api/resolve/${this.diagnostics.node.path}; /api/series/${this.diagnostics.node.path} (+ /fields, /parts, /facets)` : "/api/tree", note: "Check the network response, Laragon services, and /api/health. This is a technical failure, not evidence of missing content." });
       scope.setAttribute("aria-label", API_ERROR_MESSAGE);
     }
   }
@@ -412,17 +399,24 @@ export class ProductPages {
       try {
         let cached = this.familyFacetCache.get(path);
         if (!cached || Date.now() - cached.loadedAt >= 15000) {
-          const response = await this.api.facets(path, { signal: controller.signal });
+          const [response, fields] = await Promise.all([
+            this.api.facets(path, { signal: controller.signal }),
+            __CATALOG_DIAGNOSTICS__ ? this.api.fields(path, { signal: controller.signal }) : null,
+          ]);
           if (stopped || controller.signal.aborted || !isCurrent()) return;
           cached = { facets: response.facets || [], loadedAt: Date.now() };
+          if (__CATALOG_DIAGNOSTICS__) cached.fields = fields;
           this.familyFacetCache.set(path, cached);
           if (this.familyFacetCache.size > 64)
             this.familyFacetCache.delete(this.familyFacetCache.keys().next().value);
         }
-        if (!stopped && isCurrent() && row.isConnected) applyFamilyFacets(row, cached.facets);
+        if (!stopped && isCurrent() && row.isConnected) {
+          applyFamilyFacets(row, cached.facets);
+          if (__CATALOG_DIAGNOSTICS__) this.diagnostics.familyRanges(row, cached.fields, cached.facets);
+        }
       } catch (error) {
-        if (!stopped && error?.name !== "AbortError")
-          console.warn("Product ranges unavailable", error);
+        if (!stopped && isCurrent() && row.isConnected && error?.name !== "AbortError" && __CATALOG_DIAGNOSTICS__)
+          this.diagnostics.set(row.cells[2], { content: "Series ranges", status: "API_REQUEST_FAILED", node: this.diagnostics.findNode(path), source: `/api/series/${path}/facets or /fields`, note: "The range request failed. Existing values are retained; check the API connection." });
       } finally {
         row.removeAttribute("aria-busy");
         active -= 1;
@@ -448,6 +442,7 @@ export class ProductPages {
       queued.add(row);
       observer?.unobserve(row);
       row.setAttribute("aria-busy", "true");
+      if (__CATALOG_DIAGNOSTICS__) this.diagnostics.set(row.cells[2], { content: "Series ranges", status: "LOADING", node: this.diagnostics.findNode(row.dataset.catalogApiPath), source: `/api/series/${row.dataset.catalogApiPath}/facets` });
       queue.push(row);
       pump();
     };
@@ -511,10 +506,10 @@ export class ProductPages {
       main.querySelector(".a4k-heading-row h1 small").textContent = category?.name || family.name;
       main.querySelector(".a4k-heading-row .tag").textContent = family.name;
       const intro = main.querySelector(".a4k-intro p");
-      intro.textContent = `${detail.resource.name} is listed under ${category?.name || family.name} with ${detail.partCount} current parts.`;
-      markMissing(main.querySelector(".a4k-intro ul"));
-      markMissing(main.querySelector(".a4k-compliance"));
-      markMissing(main.querySelector(".a4k-product-media"));
+      const notes = detail.metadata?.find((field) => field.key === "series_notes")?.value;
+      intro.textContent = notes !== null && notes !== undefined && String(notes).trim() !== ""
+        ? String(notes)
+        : `${detail.resource.name} is listed under ${category?.name || family.name} with ${detail.partCount} current parts.`;
       if (route.node.slug !== "a4k-series") {
         const image = main.querySelector(".a4k-media-panel img");
         image.src = "https://placehold.co/255x195";
@@ -524,26 +519,15 @@ export class ProductPages {
         const value = main.querySelectorAll(".a4k-spec-mini > div b")[position];
         const range = facetRange(facetResponse.facets || [], key, "mm");
         if (range) value.textContent = range;
-        else markMissing(value);
       });
-      markMissing(main.querySelectorAll(".a4k-spec-mini > div b")[3]);
       const summary = main.querySelectorAll(".a4k-summary-grid > div b");
       summary[0].textContent = category?.name || family.name;
       const impedance = facetRange(facetResponse.facets || [], "acf.impedance", "Ω");
       if (impedance) summary[1].textContent = impedance;
-      else markMissing(summary[1]);
-      markMissing(summary[2]);
-      markMissing(summary[3]);
-      ["environmental", "physical", "tape-reel", "soldering", "downloads"].forEach((id) =>
-        markMissing(main.querySelector(`#${id}`)),
-      );
-      markMissing(main.querySelector("#performance-curves h3"));
-      markMissing(main.querySelector("#performance-curves p"));
       const datasheetDescription = main.querySelector("#downloads .a4k-download-grid article p");
       if (datasheetDescription)
         datasheetDescription.textContent = `Full ${detail.resource.name} technical specification.`;
       main.querySelectorAll('a[href^="/downloads/"]').forEach((link) => {
-        markMissing(link);
         link.setAttribute("aria-disabled", "true");
         link.removeAttribute("href");
         link.tabIndex = -1;
@@ -551,6 +535,7 @@ export class ProductPages {
       });
       this.setupPageControls(main);
     }
+    if (__CATALOG_DIAGNOSTICS__) this.diagnostics.series(main, detail, fields, facetResponse.facets || [], embedded);
     this.setupTable(main.querySelector("[data-a4k-product-table]"), {
       apiPath,
       rootId: crumbs[0]?.id,
@@ -563,6 +548,7 @@ export class ProductPages {
         selectedFields.some((field) => field.key === "acf.dcr") &&
         selectedFields.some((field) => field.key === "acf.irms"),
       name: detail.resource.name,
+      ...(__CATALOG_DIAGNOSTICS__ ? { node: detail.resource, metadata: detail.metadata } : {}),
     });
   }
 
@@ -685,7 +671,7 @@ export class ProductPages {
       if (defaultSelectedSkus.has(part.sku)) this.selectedParts.set(part.id, part);
     });
     table.querySelector("thead tr").innerHTML =
-      `<th class="a4k-select-cell">Inquire / Losses Compare</th><th>Part Number</th>${columns.map((field, index) => `<th ${field ? "" : 'class="catalog-api-missing" title="Not provided by the product API"'}>${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}</th>`).join("")}<th class="catalog-api-missing" title="Not provided by the product API">Download</th>`;
+      `<th class="a4k-select-cell">Inquire / Losses Compare</th><th>Part Number</th>${columns.map((field, index) => `<th>${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}</th>`).join("")}<th>Download</th>`;
     const syncSelection = () => {
       const selected = [...this.selectedParts.values()];
       selectedLabel.textContent = selected.map((part) => part.sku || part.id).join(", ") || "None";
@@ -694,9 +680,7 @@ export class ProductPages {
       });
       if (lossButton) {
         lossButton.disabled = !context.lossSupported || selected.length === 0;
-        if (!context.lossSupported) markMissing(lossButton);
       }
-      if (!context.lossSupported) markMissing(lossOutput);
     };
     const paint = (response) => {
       currentPage = response;
@@ -713,22 +697,24 @@ export class ProductPages {
                       ? extraFields
                           .map((extra) => {
                             const extraValue = part.values?.[extra.key];
-                            const missing =
-                              extraValue === null || extraValue === undefined || extraValue === "";
-                            return `<br><small data-product-field="${escapeHtml(extra.key)}" ${missing ? 'class="catalog-api-missing" title="Not provided by the product API"' : ""}>${escapeHtml(productFieldLabel(extra))}: ${displayValue(extraValue)}</small>`;
+                            return `<br><small data-product-field="${escapeHtml(extra.key)}">${escapeHtml(productFieldLabel(extra))}: ${displayValue(extraValue)}</small>`;
                           })
                           .join("")
                       : "";
-                  return `<td ${field ? `data-product-field="${escapeHtml(field.key)}"` : ""} ${present ? "" : 'class="catalog-api-missing" title="Not provided by the product API"'}>${present ? displayValue(value) : defaults[index + 2] || "—"}${extraValues}</td>`;
+                  return `<td ${field ? `data-product-field="${escapeHtml(field.key)}"` : ""}>${present ? displayValue(value) : defaults[index + 2] || "—"}${extraValues}</td>`;
                 })
                 .join("");
               const download = defaults.at(-1) || '<span class="button small">PDF</span>';
-              return `<tr data-a4k-row data-product-id="${part.id}" data-product-sku="${escapeHtml(part.sku)}"><td class="a4k-select-cell"><input type="checkbox" data-a4k-select aria-label="Select ${escapeHtml(part.sku)} for inquiry or loss analysis" ${this.selectedParts.has(part.id) ? "checked" : ""}></td><td><a class="a4k-part-link" href="#specifications">${escapeHtml(part.sku || part.name)}</a></td>${values}<td class="catalog-api-missing" title="Not provided by the product API">${download}</td></tr>`;
+              return `<tr data-a4k-row data-product-id="${part.id}" data-product-sku="${escapeHtml(part.sku)}"><td class="a4k-select-cell"><input type="checkbox" data-a4k-select aria-label="Select ${escapeHtml(part.sku)} for inquiry or loss analysis" ${this.selectedParts.has(part.id) ? "checked" : ""}></td><td><a class="a4k-part-link" href="#specifications">${escapeHtml(part.sku || part.name)}</a></td>${values}<td>${download}</td></tr>`;
             })
             .join("")
         : `<tr data-a4k-empty><td colspan="7">No matching parts.</td></tr>`;
       syncSelection();
       syncPagination();
+      if (__CATALOG_DIAGNOSTICS__) {
+        this.diagnostics.clear(wrapper);
+        this.diagnostics.table(table, { node: context.node, metadata: context.metadata, fields: context.fields, parts: response.parts, columns, defaultHeadings, apiPath: context.apiPath });
+      }
     };
     const loadPage = async (number) => {
       if (context.signal?.aborted || !context.isCurrent()) return;
@@ -738,6 +724,7 @@ export class ProductPages {
       const onAbort = () => controller.abort();
       context.signal?.addEventListener("abort", onAbort, { once: true });
       rows.setAttribute("aria-busy", "true");
+      if (__CATALOG_DIAGNOSTICS__) this.diagnostics.set(wrapper, { content: "Product parts", node: context.node, status: "LOADING", source: `/api/series/${context.apiPath}/parts` });
       syncPagination(true);
       try {
         const response = await this.api.parts(context.apiPath, {
@@ -752,8 +739,7 @@ export class ProductPages {
         if (controller.signal.aborted || !context.isCurrent()) return;
         pageSize = currentPage.pagination.per_page;
         pageSizeSelect.value = String(pageSize);
-        console.error("Product parts request failed", error);
-        markMissing(wrapper);
+        if (__CATALOG_DIAGNOSTICS__) this.diagnostics.set(wrapper, { content: "Product parts", node: context.node, status: "API_REQUEST_FAILED", source: `/api/series/${context.apiPath}/parts`, note: "Check the API connection. The previous table is retained; this is not a missing backend value." });
       } finally {
         context.signal?.removeEventListener("abort", onAbort);
         if (this.partsController === controller) {
