@@ -42,6 +42,7 @@ export function productColumns(products) {
     "seriesImage",
     "pdfDownload",
     "seriesId",
+    "seriesUrl",
     "categoryId",
     ...fixedSpecKeys,
   ]);
@@ -68,12 +69,12 @@ export function productColumns(products) {
 
   return [
     {
-      key: "series",
+      key: "name",
       title: "Product",
       sortable: true,
       searchable: true,
       kind: "product",
-      value: (row) => row.series || "",
+      value: (row) => row.name || "",
     },
     {
       key: "category",
@@ -142,6 +143,7 @@ export class SpecificationSearchRenderer {
     );
     const filtered = query
       ? this.state.products.filter((product) =>
+          String(product.series || "").toLocaleLowerCase().includes(query) ||
           searchableColumns.some((column) =>
             String(column.value(product)).toLocaleLowerCase().includes(query),
           ),
@@ -470,8 +472,9 @@ export class SpecificationSearchRenderer {
       image.width = 80;
       image.height = 80;
       content.append(image);
-      const name = document.createElement("span");
+      const name = document.createElement(product.seriesUrl ? "a" : "span");
       name.className = "product-name";
+      if (product.seriesUrl) name.href = product.seriesUrl;
       name.textContent = String(value);
       content.append(name);
       cell.append(content);
@@ -531,14 +534,29 @@ export class SpecificationSearchRenderer {
       ),
     );
     if (rowCount > 0) {
-      for (let page = 1; page <= pageCount; page += 1) {
+      const currentPage = this.state.table.page;
+      const pages = new Set([1, pageCount]);
+      const start = pageCount <= 7 ? 1 : Math.max(2, Math.min(currentPage - 1, pageCount - 3));
+      const end = pageCount <= 7 ? pageCount : Math.min(pageCount - 1, Math.max(currentPage + 1, 4));
+      for (let page = start; page <= end; page += 1) pages.add(page);
+
+      let previousPage = 0;
+      Array.from(pages).sort((left, right) => left - right).forEach((page) => {
+        if (previousPage && page - previousPage > 1) {
+          const ellipsis = document.createElement("span");
+          ellipsis.className = "page-ellipsis";
+          ellipsis.textContent = "…";
+          ellipsis.setAttribute("aria-hidden", "true");
+          container.append(ellipsis);
+        }
         container.append(
           this.makePageButton(String(page), page, {
-            active: page === this.state.table.page,
+            active: page === currentPage,
             signal,
           }),
         );
-      }
+        previousPage = page;
+      });
     }
     container.append(
       this.makePageButton(

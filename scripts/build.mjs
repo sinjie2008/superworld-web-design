@@ -55,19 +55,7 @@ run(esbuildCli, [
   "--minify",
   `--outfile=${resolve(generatedRoot, "spec-search-app.js")}`,
 ]);
-cpSync(
-  resolve(generatedRoot, "spec-search-app.js"),
-  resolve(generatedRoot, "spec-search-app.txt"),
-);
-cpSync(
-  resolve(projectRoot, "src/data/spec-search/mock-data.json"),
-  resolve(generatedRoot, "spec-search-mock-data.txt"),
-);
-cpSync(
-  resolve(projectRoot, "src/app/features/spec-search/mock-data.js"),
-  resolve(generatedRoot, "spec-search-mock-data-script.txt"),
-);
-
+cpSync(resolve(generatedRoot, "spec-search-app.js"), resolve(generatedRoot, "spec-search-app.txt"));
 run(esbuildCli, [
   resolve(projectRoot, "src/app/worker.js"),
   "--bundle",
@@ -83,10 +71,7 @@ run(esbuildCli, [
 ]);
 
 cpSync(resolve(projectRoot, "worker/index.js"), resolve(distRoot, "server/index.js"));
-cpSync(
-  resolve(projectRoot, ".openai/hosting.json"),
-  resolve(distRoot, ".openai/hosting.json"),
-);
+cpSync(resolve(projectRoot, ".openai/hosting.json"), resolve(distRoot, ".openai/hosting.json"));
 rmSync(generatedRoot, { recursive: true, force: true });
 
 console.log(`Built ${distRoot}`);

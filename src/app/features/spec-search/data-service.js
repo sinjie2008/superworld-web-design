@@ -1,4 +1,5 @@
 import { APP_CONFIG } from "./config.js";
+import { CatalogTreeStore, seriesUrl } from "../../product-catalog.js";
 import {
   createDataError,
   expectContract,
@@ -10,295 +11,50 @@ import {
   validateRootResponse,
 } from "./contracts.js";
 
-function validateMockData(data) {
-  expectContract(isPlainObject(data), "mockData", "object", data);
-  validateRootResponse(data.rootCategories);
-
-  expectContract(
-    isPlainObject(data.productCategoriesByRootId),
-    "mockData.productCategoriesByRootId",
-    "object",
-    data.productCategoriesByRootId,
-  );
-  Object.entries(data.productCategoriesByRootId).forEach(
-    ([rootId, response]) => {
-      expectContract(
-        /^\d+$/.test(rootId),
-        `mockData.productCategoriesByRootId.${rootId}`,
-        "numeric root ID",
-        rootId,
-      );
-      validateProductCategoryResponse(response);
-    },
-  );
-
-  validateProductResponse(data.products, { categoryIds: [], filters: {} });
-  validateProductResponse(data.emptyProducts, { categoryIds: [], filters: {} });
-  expectContract(
-    isPlainObject(data.error),
-    "mockData.error",
-    "object",
-    data.error,
-  );
-  validateErrorEnvelope(data.error.error, "mockData.error.error");
-
-  expectContract(
-    Array.isArray(data.facetDefinitions),
-    "mockData.facetDefinitions",
-    "array",
-    data.facetDefinitions,
-  );
-  const seenFacetKeys = new Set();
-  data.facetDefinitions.forEach((definition, index) => {
-    const path = `mockData.facetDefinitions[${index}]`;
-    expectContract(isPlainObject(definition), path, "object", definition);
-    expectContract(
-      typeof definition.key === "string" && definition.key.length > 0,
-      `${path}.key`,
-      "non-empty string",
-      definition.key,
-    );
-    expectContract(
-      typeof definition.label === "string" && definition.label.length > 0,
-      `${path}.label`,
-      "non-empty string",
-      definition.label,
-    );
-    expectContract(
-      !seenFacetKeys.has(definition.key),
-      `${path}.key`,
-      "unique facet key",
-      definition.key,
-    );
-    seenFacetKeys.add(definition.key);
-  });
-
-  return data;
+function abortedRequestError() {
+  return createDataError("aborted", "The API request was cancelled.");
 }
 
-async function requestMockData(
-  config,
-  signal,
-  windowObject,
-  documentObject,
-  fetchFunction,
-) {
-  expectContract(
-    typeof config.mockDataUrl === "string" && config.mockDataUrl.length > 0,
-    "config.mockDataUrl",
-    "non-empty string",
-    config.mockDataUrl,
-  );
+async function loadCatalogIndex(catalogTreeStore, signal) {
+  if (!signal) return catalogTreeStore.load();
+  if (signal.aborted) throw abortedRequestError();
 
-  if (windowObject.location.protocol === "file:") {
-    await new Promise((resolve, reject) => {
-      const script = documentObject.createElement("script");
-      script.src = new URL(
-        config.mockDataScriptUrl,
-        windowObject.location.href,
-      ).href;
-      const cleanup = () => signal?.removeEventListener("abort", abort);
-      const load = () => {
-        cleanup();
-        resolve();
-      };
-      const fail = () => {
-        cleanup();
-        reject(
-          createDataError(
-            "network",
-            `Unable to load ${config.mockDataScriptUrl}`,
-          ),
-        );
-      };
-      const abort = () => {
-        script.remove();
-        reject(new DOMException("Request aborted", "AbortError"));
-      };
-      script.addEventListener("load", load, { once: true });
-      script.addEventListener("error", fail, { once: true });
-      if (signal?.aborted) abort();
-      else {
-        signal?.addEventListener("abort", abort, { once: true });
-        documentObject.head.append(script);
-      }
-    });
-    return validateMockData(windowObject.SPEC_SEARCH_MOCK_DATA);
-  }
+  let abort;
+  const aborted = new Promise((_, reject) => {
+    abort = () => reject(abortedRequestError());
+    signal.addEventListener("abort", abort, { once: true });
+  });
 
-  let response;
   try {
-    response = await fetchFunction(
-      new URL(config.mockDataUrl, windowObject.location.href),
-      { cache: "no-store", signal },
-    );
-  } catch (error) {
-    throw createDataError(
-      "network",
-      `Unable to load ${config.mockDataUrl}`,
-      { cause: error },
-    );
+    return await Promise.race([catalogTreeStore.load(), aborted]);
+  } finally {
+    signal.removeEventListener("abort", abort);
   }
+}
 
-  if (!response.ok) {
-    throw createDataError(
-      "http",
-      `Unable to load ${config.mockDataUrl}: HTTP ${response.status}`,
-      {
-        status: response.status,
-      },
-    );
-  }
+function seriesUrlsById(index) {
+  const urls = new Map();
+  index.series.forEach((node) => {
+    urls.set(node.id, seriesUrl(index, node.path));
+  });
+  return urls;
+}
 
-  const text = await response.text();
-  if (text.trim().length === 0) {
-    throw createDataError(
-      "empty-response",
-      `${config.mockDataUrl} is empty`,
-    );
-  }
-
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch (error) {
-    throw createDataError(
-      "invalid-json",
-      `${config.mockDataUrl} contains invalid JSON`,
-      { cause: error },
-    );
-  }
-
-  return validateMockData(data);
+function addSeriesUrls(response, urls) {
+  return {
+    ...response,
+    data: {
+      ...response.data,
+      items: response.data.items.map((item) => ({
+        ...item,
+        seriesUrl: urls?.get(item.seriesId) ?? null,
+      })),
+    },
+  };
 }
 
 export function deepCopy(value) {
   return JSON.parse(JSON.stringify(value));
-}
-
-function mockDelay(signal, config, windowObject) {
-  return new Promise((resolve, reject) => {
-    if (signal && signal.aborted) {
-      reject(new DOMException("Request aborted", "AbortError"));
-      return;
-    }
-    const finish = () => {
-      signal?.removeEventListener("abort", abort);
-      resolve();
-    };
-    const abort = () => {
-      windowObject.clearTimeout(timer);
-      reject(new DOMException("Request aborted", "AbortError"));
-    };
-    const timer = windowObject.setTimeout(finish, config.mockLatencyMs);
-    signal?.addEventListener("abort", abort, { once: true });
-  });
-}
-
-function mockEnvelope(data, correlationId) {
-  return { success: true, data, correlationId };
-}
-
-export class MockDataProvider {
-  constructor(
-    config = APP_CONFIG,
-    windowObject = window,
-    documentObject = document,
-    fetchFunction = fetch,
-  ) {
-    this.config = config;
-    this.window = windowObject;
-    this.document = documentObject;
-    this.fetch = fetchFunction;
-    this.data = null;
-  }
-
-  loadData(signal) {
-    if (this.data) return Promise.resolve(this.data);
-    return requestMockData(
-      this.config,
-      signal,
-      this.window,
-      this.document,
-      this.fetch,
-    ).then((data) => {
-      this.data = data;
-      return data;
-    });
-  }
-
-  async getRootCategories({ signal } = {}) {
-    const [mockData] = await Promise.all([
-      this.loadData(signal),
-      mockDelay(signal, this.config, this.window),
-    ]);
-    return deepCopy(mockData.rootCategories);
-  }
-
-  async getProductCategories({ rootId, signal }) {
-    const [mockData] = await Promise.all([
-      this.loadData(signal),
-      mockDelay(signal, this.config, this.window),
-    ]);
-    const response =
-      mockData.productCategoriesByRootId[String(rootId)] ||
-      mockEnvelope({ groups: [] }, `mock-categories-${rootId}`);
-    return deepCopy(response);
-  }
-
-  async getFacets({ categoryIds, signal }) {
-    const [mockData] = await Promise.all([
-      this.loadData(signal),
-      mockDelay(signal, this.config, this.window),
-    ]);
-    const selected = new Set(categoryIds);
-    const products = mockData.products.data.items.filter((item) =>
-      selected.has(item.categoryId),
-    );
-    const facets = mockData.facetDefinitions
-      .map((definition) => {
-        const values = new Set();
-        products.forEach((product) => {
-          const value =
-            definition.key === "series"
-              ? product.series
-              : product[definition.key];
-          if (typeof value === "string") values.add(value);
-        });
-        return {
-          key: definition.key,
-          label: definition.label,
-          values: Array.from(values).sort((left, right) =>
-            left.localeCompare(right),
-          ),
-        };
-      })
-      .filter((facet) => facet.values.length > 0);
-
-    return mockEnvelope(
-      { facets },
-      `mock-facets-${categoryIds.join("-") || "empty"}`,
-    );
-  }
-
-  async getProducts({ categoryIds, filters, signal }) {
-    const [mockData] = await Promise.all([
-      this.loadData(signal),
-      mockDelay(signal, this.config, this.window),
-    ]);
-    const selected = new Set(categoryIds);
-    const items = mockData.products.data.items.filter((product) => {
-      if (!selected.has(product.categoryId)) return false;
-      return Object.entries(filters).every(([key, values]) => {
-        const productValue = key === "series" ? product.series : product[key];
-        return Array.isArray(values) && values.includes(productValue);
-      });
-    });
-    return mockEnvelope(
-      { items: deepCopy(items), total: items.length },
-      `mock-products-${categoryIds.join("-") || "empty"}`,
-    );
-  }
 }
 
 async function requestApi(
@@ -310,23 +66,18 @@ async function requestApi(
 ) {
   const endpoint = config.endpoints[endpointName];
   if (typeof endpoint !== "string" || endpoint.length === 0) {
-    throw createDataError(
-      "config",
-      `Missing endpoint configuration: ${endpointName}`,
-    );
+    throw createDataError("config", `Missing endpoint configuration: ${endpointName}`);
   }
 
   let url;
   try {
-    url = new URL(endpoint, config.apiBaseUrl);
+    url = new URL(endpoint, new URL(config.apiBaseUrl, windowObject.location.href));
   } catch (error) {
     throw createDataError("config", `Invalid API URL for ${endpointName}`);
   }
 
   if (query) {
-    Object.entries(query).forEach(([key, value]) =>
-      url.searchParams.set(key, String(value)),
-    );
+    Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, String(value)));
   }
 
   const controller = new AbortController();
@@ -363,9 +114,7 @@ async function requestApi(
     if (error && error.name === "AbortError") {
       throw createDataError(
         timedOut ? "timeout" : "aborted",
-        timedOut
-          ? "The API request timed out."
-          : "The API request was cancelled.",
+        timedOut ? "The API request timed out." : "The API request was cancelled.",
       );
     }
     throw createDataError("network", "The API could not be reached.", {
@@ -389,8 +138,7 @@ async function requestApi(
 
   if (!response.ok) {
     const apiError =
-      isPlainObject(payload) &&
-      Object.prototype.hasOwnProperty.call(payload, "error")
+      isPlainObject(payload) && Object.prototype.hasOwnProperty.call(payload, "error")
         ? validateErrorEnvelope(payload.error, `${endpointName}.error`)
         : null;
     const message =
@@ -417,21 +165,14 @@ async function requestApi(
     );
   }
   if (!jsonIsValid) {
-    throw createDataError(
-      "invalid-json",
-      `The ${endpointName} endpoint returned invalid JSON.`,
-    );
+    throw createDataError("invalid-json", `The ${endpointName} endpoint returned invalid JSON.`);
   }
 
   return payload;
 }
 
 export class ApiDataProvider {
-  constructor(
-    config = APP_CONFIG,
-    windowObject = window,
-    fetchFunction = fetch,
-  ) {
+  constructor(config = APP_CONFIG, windowObject = window, fetchFunction = fetch) {
     this.config = config;
     this.window = windowObject;
     this.fetch = fetchFunction;
@@ -445,17 +186,11 @@ export class ApiDataProvider {
   }
 
   getProductCategories({ rootId, signal }) {
-    return requestApi(
-      this.config,
-      this.window,
-      this.fetch,
-      "productCategories",
-      {
-        method: "GET",
-        query: { root_id: rootId },
-        signal,
-      },
-    );
+    return requestApi(this.config, this.window, this.fetch, "productCategories", {
+      method: "GET",
+      query: { root_id: rootId },
+      signal,
+    });
   }
 
   getFacets({ categoryIds, signal }) {
@@ -487,12 +222,7 @@ function normalizeRootId(rootId) {
 }
 
 function normalizeCategoryIds(categoryIds) {
-  expectContract(
-    Array.isArray(categoryIds),
-    "request.categoryIds",
-    "array",
-    categoryIds,
-  );
+  expectContract(Array.isArray(categoryIds), "request.categoryIds", "array", categoryIds);
   return Array.from(
     new Set(
       categoryIds.map((categoryId, index) => {
@@ -513,18 +243,8 @@ function normalizeFilters(filters) {
   expectContract(isPlainObject(filters), "request.filters", "object", filters);
   const normalized = {};
   Object.entries(filters).forEach(([key, values]) => {
-    expectContract(
-      key.length > 0,
-      "request.filters key",
-      "non-empty string",
-      key,
-    );
-    expectContract(
-      Array.isArray(values),
-      `request.filters.${key}`,
-      "string array",
-      values,
-    );
+    expectContract(key.length > 0, "request.filters key", "non-empty string", key);
+    expectContract(Array.isArray(values), `request.filters.${key}`, "string array", values);
     if (values.length === 0) return;
     normalized[key] = Array.from(
       new Set(
@@ -544,8 +264,9 @@ function normalizeFilters(filters) {
 }
 
 export class SpecificationSearchDataService {
-  constructor(provider) {
+  constructor(provider, catalogTreeStore = new CatalogTreeStore()) {
     this.provider = provider;
+    this.catalogTreeStore = catalogTreeStore;
   }
 
   async getRootCategories(input = {}) {
@@ -557,9 +278,7 @@ export class SpecificationSearchDataService {
       rootId: normalizeRootId(input.rootId),
       signal: input.signal,
     };
-    return validateProductCategoryResponse(
-      await this.provider.getProductCategories(normalized),
-    );
+    return validateProductCategoryResponse(await this.provider.getProductCategories(normalized));
   }
 
   async getFacets(input) {
@@ -576,9 +295,21 @@ export class SpecificationSearchDataService {
       filters: normalizeFilters(input.filters),
       signal: input.signal,
     };
-    return validateProductResponse(
+    const response = validateProductResponse(
       await this.provider.getProducts(normalized),
       normalized,
     );
+    if (response.data.items.length === 0) return response;
+
+    let urls = null;
+    try {
+      urls = seriesUrlsById(
+        await loadCatalogIndex(this.catalogTreeStore, normalized.signal),
+      );
+    } catch (error) {
+      if (normalized.signal?.aborted) throw error;
+    }
+
+    return addSeriesUrls(response, urls);
   }
 }

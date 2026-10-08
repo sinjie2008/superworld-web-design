@@ -2,8 +2,6 @@ import css from "../../.generated/styles.css";
 import appJs from "../../.generated/app.txt";
 import specSearchCss from "../../.generated/spec-search.css";
 import specSearchJs from "../../.generated/spec-search-app.txt";
-import specSearchMockData from "../../.generated/spec-search-mock-data.txt";
-import specSearchMockDataScript from "../../.generated/spec-search-mock-data-script.txt";
 import ogImageDataUrl from "../../public/og.png";
 import { PAGE_METADATA, SITE_ORIGIN, SOCIAL_IMAGE_PATH, seo } from "./seo.js";
 import documentTemplate from "../pages/layouts/document.html";
@@ -34,9 +32,7 @@ const renderHtml = (pathname) => {
     PAGE_TITLE: escapeAttribute(metadata.title),
     PAGE_DESCRIPTION: escapeAttribute(metadata.description),
     PAGE_ROBOTS:
-      metadata.index === false
-        ? "noindex,follow"
-        : "index,follow,max-image-preview:large",
+      metadata.index === false ? "noindex,follow" : "index,follow,max-image-preview:large",
     PAGE_CANONICAL_URL: escapeAttribute(canonicalUrl),
     SOCIAL_IMAGE_URL: escapeAttribute(socialImageUrl),
     STRUCTURED_DATA: jsonLd,
@@ -117,12 +113,7 @@ function createPlaceholderPdf(title) {
     pdf += index + 1 + " 0 obj\n" + object + "\nendobj\n";
   });
   const xrefOffset = pdf.length;
-  pdf +=
-    "xref\n0 " +
-    (objects.length + 1) +
-    "\n0000000000 65535 f" +
-    pdfSpace +
-    "\n";
+  pdf += "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f" + pdfSpace + "\n";
   offsets.slice(1).forEach((offset) => {
     pdf += String(offset).padStart(10, "0") + " 00000 n" + pdfSpace + "\n";
   });
@@ -177,8 +168,7 @@ export class SiteWorker {
       return new Response(createPlaceholderPdf(document.title), {
         headers: {
           "content-type": "application/pdf",
-          "content-disposition":
-            'attachment; filename="' + document.filename + '"',
+          "content-disposition": 'attachment; filename="' + document.filename + '"',
           "cache-control": "no-store",
         },
       });
@@ -211,30 +201,13 @@ export class SiteWorker {
           "cache-control": "public, max-age=300",
         },
       });
-    if (path === "/spec-search/mock-data.json")
-      return new Response(specSearchMockData, {
-        headers: {
-          "content-type": "application/json; charset=utf-8",
-          "cache-control": "no-store",
-        },
-      });
-    if (path === "/spec-search/mock-data.js")
-      return new Response(specSearchMockDataScript, {
-        headers: {
-          "content-type": "text/javascript; charset=utf-8",
-          "cache-control": "no-store",
-        },
-      });
     if (path === SOCIAL_IMAGE_PATH)
-      return new Response(
-        decodeBase64(ogImageDataUrl.slice(ogImageDataUrl.indexOf(",") + 1)),
-        {
-          headers: {
-            "content-type": "image/png",
-            "cache-control": "public, max-age=31536000, immutable",
-          },
+      return new Response(decodeBase64(ogImageDataUrl.slice(ogImageDataUrl.indexOf(",") + 1)), {
+        headers: {
+          "content-type": "image/png",
+          "cache-control": "public, max-age=31536000, immutable",
         },
-      );
+      });
     if (assetBase64[path])
       return new Response(decodeBase64(assetBase64[path]), {
         headers: {
@@ -258,14 +231,11 @@ export class SiteWorker {
       });
 
     const normalizedPath = seo.normalizePathname(path);
-    if (path !== "/" && path.endsWith("/") && PAGE_METADATA[normalizedPath]) {
-      return Response.redirect(
-        `${SITE_ORIGIN}${normalizedPath}${url.search}`,
-        308,
-      );
+    if (path !== "/" && path.endsWith("/") && seo.isKnownPath(normalizedPath)) {
+      return Response.redirect(`${SITE_ORIGIN}${normalizedPath}${url.search}`, 308);
     }
 
-    const pageExists = Boolean(PAGE_METADATA[normalizedPath]);
+    const pageExists = seo.isKnownPath(normalizedPath);
     return new Response(renderHtml(normalizedPath), {
       status: pageExists ? 200 : 404,
       headers: {

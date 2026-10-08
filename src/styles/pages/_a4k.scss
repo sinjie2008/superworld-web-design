@@ -405,6 +405,49 @@
       align-items: center
     }
 
+    &-table-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+      font-size: var(--font-size-body, 14px)
+    }
+
+    &-page-size,&-pagination {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      max-width: 100%
+    }
+
+    &-page-size select {
+      width: auto;
+      height: 44px;
+      min-height: 44px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: inherit;
+      font: inherit;
+      @media (max-width:760px) {
+        font-size: 16px
+      }
+    }
+
+    &-pagination button {
+      flex: 0 0 auto;
+      min-width: 44px;
+      min-height: 44px;
+      white-space: nowrap
+    }
+
+    &-pagination span {
+      white-space: nowrap
+    }
+
     &-table-losses {
       margin-top: 14px;
       border: 1px solid var(--line);

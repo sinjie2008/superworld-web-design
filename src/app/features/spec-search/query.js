@@ -37,9 +37,7 @@ export function parseQuerySelection(search) {
 }
 
 export function selectAvailableFilters(requestedFilters, facets) {
-  const available = new Map(
-    facets.map((facet) => [facet.key, new Set(facet.values)]),
-  );
+  const available = new Map(facets.map((facet) => [facet.key, new Set(facet.values)]));
   return Object.fromEntries(
     Object.entries(requestedFilters).flatMap(([key, values]) => {
       const options = available.get(key);
@@ -50,24 +48,14 @@ export function selectAvailableFilters(requestedFilters, facets) {
   );
 }
 
-export function buildQueryString(
-  rootId,
-  categoryIds,
-  filters,
-  inquiryProductIds = [],
-) {
+export function buildQueryString(rootId, categoryIds, filters, inquiryProductIds = []) {
   const params = new URLSearchParams();
-  if (Number.isInteger(rootId) && rootId > 0)
-    params.set("root", String(rootId));
-  categoryIds.forEach((categoryId) =>
-    params.append("category", String(categoryId)),
-  );
+  if (Number.isInteger(rootId) && rootId > 0) params.set("root", String(rootId));
+  categoryIds.forEach((categoryId) => params.append("category", String(categoryId)));
   Object.entries(filters).forEach(([key, values]) => {
     values.forEach((value) => params.append(`filter.${key}`, value));
   });
-  inquiryProductIds.forEach((productId) =>
-    params.append("inquiry", String(productId)),
-  );
+  inquiryProductIds.forEach((productId) => params.append("inquiry", String(productId)));
   return params.toString();
 }
 
@@ -89,18 +77,19 @@ export class SpecificationSearchQuery {
       this.state.filters,
       [...this.state.inquiryProductIds],
     );
-    return `/inquiry${queryString ? `?${queryString}` : ""}`;
+    const params = new URLSearchParams(queryString);
+    const productsById = new Map(this.state.products.map((product) => [product.id, product]));
+    this.state.inquiryProductIds.forEach((id) => {
+      const sku = productsById.get(id)?.sku;
+      if (sku) params.append("sku", sku);
+    });
+    return `/inquiry${params.size ? `?${params}` : ""}`;
   }
 
   sync() {
     const url = new URL(this.window.location.href);
     Array.from(url.searchParams.keys()).forEach((key) => {
-      if (
-        key === "root" ||
-        key === "category" ||
-        key === "inquiry" ||
-        key.startsWith("filter.")
-      ) {
+      if (key === "root" || key === "category" || key === "inquiry" || key.startsWith("filter.")) {
         url.searchParams.delete(key);
       }
     });

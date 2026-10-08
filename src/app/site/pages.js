@@ -8,10 +8,12 @@ import sustainability from "../../pages/company/sustainability.html";
 import applications from "../../pages/applications.html";
 import automotive from "../../pages/applications/automotive.html";
 import communication from "../../pages/applications/communication.html";
+import { matchProductRoute } from "../product-catalog.js";
+import { productFieldLabel } from "../product-pages.js";
 import products from "../../pages/products.html";
-import general from "../../pages/products/general.html";
-import emc from "../../pages/products/general/emc.html";
-import a4k from "../../pages/products/general/emc/a4k.html";
+import productGroup from "../../pages/products/general.html";
+import productFamily from "../../pages/products/general/emc.html";
+import productSeries from "../../pages/products/general/emc/a4k.html";
 import specSearch from "../../pages/tools/spec-search.html";
 import news from "../../pages/news.html";
 import calendar from "../../pages/news/event-calendar.html";
@@ -31,9 +33,6 @@ const pages = new Map([
   ["/applications/automotive", automotive],
   ["/applications/communication", communication],
   ["/products", products],
-  ["/products/general", general],
-  ["/products/general/emc", emc],
-  ["/products/general/emc/a4k", a4k],
   ["/tools/spec-search", specSearch],
   ["/news", news],
   ["/news/event-calendar", calendar],
@@ -45,8 +44,7 @@ const pages = new Map([
 ]);
 
 const slot = (name) => `<!--APP_SLOT:${name}-->`;
-const replaceSlot = (markup, name, value) =>
-  markup.split(slot(name)).join(value || "");
+const replaceSlot = (markup, name, value) => markup.split(slot(name)).join(value || "");
 
 const routes = {
   detail: "/news/radial-leaded-inductor",
@@ -65,20 +63,13 @@ const escapeHtml = (value) =>
         "'": "&#39;",
       })[character],
   );
-const safeDataUrl = (value, prefix) =>
-  typeof value === "string" &&
-  value.startsWith(prefix) &&
-  !/["<>\s]/.test(value)
-    ? value
-    : "";
 const placeholderImage = (width, height, alt) =>
   `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(alt)}" width="${width}" height="${height}"/>`;
 const ph = (className, imageName, width, height, label = imageName) =>
   `<div class="ph${className ? ` ${className}` : ""}">${placeholderImage(width, height, label)}</div>`;
 const link = (href, label, className = "") =>
   `<a data-link class="${className}" href="${href}">${label}</a>`;
-const buttonLink = (href, label, className = "") =>
-  link(href, label, `button ${className}`);
+const buttonLink = (href, label, className = "") => link(href, label, `button ${className}`);
 const pagination = () =>
   `<div class="pagination">${[1, 2, 3, 4, 5].map((page) => `<button type="button" data-page="${page}">${page}</button>`).join("")}</div>`;
 
@@ -105,11 +96,7 @@ const generalCategories = {
     "Transponder Coil",
     "Wire Wound Inductor",
   ],
-  Transformer: [
-    "Lan Transformer",
-    "Power Converter Transformer",
-    "Planar Transformer",
-  ],
+  Transformer: ["Lan Transformer", "Power Converter Transformer", "Planar Transformer"],
   "Wireless Power Transfer": [
     "Receiver Coil",
     "Transmitter Coil",
@@ -133,19 +120,10 @@ const newsCategories = {
 function newsSlots(search = globalThis.location?.search || "") {
   const category = new URLSearchParams(search).get("category") || "all";
   const allNewsCards = [
-    [
-      "Latest Product News",
-      "Radial-Leaded Inductor: Fully Automated Production Overview",
-    ],
+    ["Latest Product News", "Radial-Leaded Inductor: Fully Automated Production Overview"],
     ["Business Updates", "Our Johor Bahru facility is progressing"],
-    [
-      "Exhibitions & Trade Shows",
-      "NEPCON Japan 2026 Recap: Innovations, Insights & Trends",
-    ],
-    [
-      "Corporate Social Responsibility",
-      "Superworld Electronics’ CSR Program at Gladiolus Place",
-    ],
+    ["Exhibitions & Trade Shows", "NEPCON Japan 2026 Recap: Innovations, Insights & Trends"],
+    ["Corporate Social Responsibility", "Superworld Electronics’ CSR Program at Gladiolus Place"],
     ["Announcements", "Holiday closure notice"],
     ["Brochures", "Superworld Product Brochure"],
     ["Latest Product News", "New A4K Series Release"],
@@ -153,24 +131,15 @@ function newsSlots(search = globalThis.location?.search || "") {
   ];
   const categoryCards = {
     latest: allNewsCards.filter((item) => item[0] === "Latest Product News"),
-    events: allNewsCards.filter(
-      (item) => item[0] === "Exhibitions & Trade Shows",
-    ),
-    csr: allNewsCards.filter(
-      (item) => item[0] === "Corporate Social Responsibility",
-    ),
+    events: allNewsCards.filter((item) => item[0] === "Exhibitions & Trade Shows"),
+    csr: allNewsCards.filter((item) => item[0] === "Corporate Social Responsibility"),
     business: allNewsCards.filter((item) =>
-      [
-        "Business Updates",
-        "Corporate Social Responsibility",
-        "Announcements",
-      ].includes(item[0]),
+      ["Business Updates", "Corporate Social Responsibility", "Announcements"].includes(item[0]),
     ),
     announcements: allNewsCards.filter((item) => item[0] === "Announcements"),
     brochures: allNewsCards.filter((item) => item[0] === "Brochures"),
   };
-  const selectedCards =
-    category === "all" ? allNewsCards : categoryCards[category] || allNewsCards;
+  const selectedCards = category === "all" ? allNewsCards : categoryCards[category] || allNewsCards;
   const cards = Array.from(
     { length: 8 },
     (_, index) => selectedCards[index % selectedCards.length],
@@ -181,7 +150,7 @@ function newsSlots(search = globalThis.location?.search || "") {
   const list = Array.from(
     { length: 5 },
     () =>
-      `<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image">${placeholderImage(140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category === "eol" ? "End-of-Life" : "Release Date"} : 15/04/2026</small></div>${link(routes.detail, '<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>', "news-list-arrow-link")}</article>`,
+      `<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image">${placeholderImage(140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p class="catalog-api-missing" title="Not provided by the product API">Dimension Range : XXX - XXX</p><small>${category === "eol" ? "End-of-Life" : "Release Date"} : 15/04/2026</small></div>${link(routes.detail, '<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>', "news-list-arrow-link")}</article>`,
   ).join("");
   const results =
     category === "product" || category === "eol"
@@ -203,8 +172,7 @@ const locationData = [
     type: "office",
     title: "Head Office (Singapore)",
     office: "Superworld Electronics (S) Pte Ltd",
-    address:
-      "16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204",
+    address: "16 New Industrial Road, #06-01 To 08, Hudson TechnoCentre, Singapore 536204",
     email: "sales@superworld.com.sg",
     contact: "(65) 6298 2866",
     fax: "(65) 6298 8900",
@@ -240,8 +208,7 @@ const locationData = [
     type: "office",
     title: "Taiwan",
     office: "Superworld Electronics Co., Ltd",
-    address:
-      "5F No. 479 Zhongyang Road Xinzhuang District, New Taipei City Taiwan 24251",
+    address: "5F No. 479 Zhongyang Road Xinzhuang District, New Taipei City Taiwan 24251",
     email: "sales@superworld.com.sg",
     contact: "(886) 2 8521 1890",
     fax: "(886) 2 8521 1831",
@@ -250,8 +217,7 @@ const locationData = [
     type: "office",
     title: "Malaysia",
     office: "Superworld Electronics (M) Sdn. Bhd",
-    address:
-      "1-14-01C, Menara IJM Land No. 1 Lebuh Tunku Kudin 3 11700 Gelugor, Penang, Malaysia",
+    address: "1-14-01C, Menara IJM Land No. 1 Lebuh Tunku Kudin 3 11700 Gelugor, Penang, Malaysia",
     email: "sales@superworld.com.sg",
     contact: "(604) 287 3689",
   },
@@ -259,8 +225,7 @@ const locationData = [
     type: "agent",
     title: "Agent (Israel)",
     office: "Ziontronics Ltd",
-    address:
-      "10th Moshe Dayan St. Metropark Center Building C Petah Tikva 4951810 Israel",
+    address: "10th Moshe Dayan St. Metropark Center Building C Petah Tikva 4951810 Israel",
     email: "info@ziontronics.co.ilj",
     contact: "(972) 3649 8642",
   },
@@ -268,8 +233,7 @@ const locationData = [
     type: "agent",
     title: "Agent (China)",
     office: "SEMTEK Technology Trading(Hong Kong) Limited",
-    address:
-      "4/F, 4B, No.51, South 4th section of the second ring road, Wuhou Dist, ChengDu",
+    address: "4/F, 4B, No.51, South 4th section of the second ring road, Wuhou Dist, ChengDu",
     email: "steven.tang@semtek.cn",
     contact: "13193139115",
   },
@@ -277,8 +241,7 @@ const locationData = [
     type: "agent",
     title: "Agent (China)",
     office: "Shenzhen Lavincon Technology Ltd",
-    address:
-      "Rm807, Block B, Ipark Bg, No.26 Dengliang Rd, Nanshan ShenZhen, China",
+    address: "Rm807, Block B, Ipark Bg, No.26 Dengliang Rd, Nanshan ShenZhen, China",
     email: "landchan@kc-hk.com",
     contact: "+86-755-83662336 83668001",
   },
@@ -295,8 +258,7 @@ const locationData = [
     type: "agent",
     title: "Agent (Taiwan)",
     office: "Chuan Yuan Electronics Co., Ltd",
-    address:
-      "No. 176-1, Minguang Rd., Taoyuan Dist., Taoyuan City 33043 (R.O.C.)",
+    address: "No. 176-1, Minguang Rd., Taoyuan Dist., Taoyuan City 33043 (R.O.C.)",
     email: "angela@cye-co.com.tw",
     contact: "0935-551-771",
   },
@@ -330,8 +292,7 @@ const locationData = [
     type: "distributor",
     title: "Distributor (United Kingdom)",
     office: "Jauch Quartz UK Ltd",
-    address:
-      "Unit 4.7, Frimley 4 Business Park Frimley, Surrey, GU16 7SG, United Kingdom",
+    address: "Unit 4.7, Frimley 4 Business Park Frimley, Surrey, GU16 7SG, United Kingdom",
     email: "sales@jauch.com",
     contact: "+44-1276-6059-10",
   },
@@ -362,13 +323,9 @@ const locationData = [
   },
 ];
 
-const locationCategoryFromQuery = (
-  search = globalThis.location?.search || "",
-) => {
+const locationCategoryFromQuery = (search = globalThis.location?.search || "") => {
   const category = new URLSearchParams(search).get("category");
-  return ["office", "agent", "distributor"].includes(category)
-    ? category
-    : "all";
+  return ["office", "agent", "distributor"].includes(category) ? category : "all";
 };
 
 function locationSlots(search) {
@@ -608,9 +565,7 @@ function supportAppointmentFields() {
 }
 
 function supportOfficeCards() {
-  const supportLocations = locationData.filter(
-    (item) => item.type === "office",
-  );
+  const supportLocations = locationData.filter((item) => item.type === "office");
   const cards = supportLocations
     .map((item, index) => {
       const isHeadOffice = index === 0;
@@ -651,22 +606,23 @@ function supportSlots(search) {
 }
 
 function inquirySummaryContent(state) {
-  const value = (product, key) => escapeHtml(product[key] || "—");
   const cartRows = state.inquiryProducts
     .map((product, i) => {
-      const sku = escapeHtml(
-        product.sku || product.name || product.series || "Product",
-      );
-      const image = safeDataUrl(product.seriesImage, "data:image/");
-      const pdf = safeDataUrl(
-        product.pdfDownload,
-        "data:application/pdf;base64,",
-      );
-      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${image ? `<img src="${image}" alt="${sku}" width="140" height="96">` : ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-dimensions"><strong>L × W × H</strong><span>${value(product, "acf.length")} × ${value(product, "acf.width")} × ${value(product, "acf.height")} mm</span></p><p><strong>Series</strong><br>${value(product, "series")}</p><p><strong>Category</strong><br>${value(product, "category")}</p><dl class="cart-specs"><div><dt>Inductance (uH)</dt><dd>${value(product, "acf.inductance")}</dd></div><div><dt>Impedance (Ω)</dt><dd>${value(product, "acf.impedance")}</dd></div><div><dt>DCR (mΩ)</dt><dd>${value(product, "acf.dcr")}</dd></div><div><dt>Isat (mA)</dt><dd>${value(product, "acf.isat")}</dd></div><div><dt>Irms (mA)</dt><dd>${value(product, "acf.irms")}</dd></div><div><dt>Specification</dt><dd>${pdf ? `<a href="${pdf}" download="${sku}.pdf">Download</a>` : "—"}</dd></div></dl></div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
+      const sku = escapeHtml(product.sku || product.name || product.series || "Product");
+      const specifications = (product.fields || [])
+        .filter((field) => {
+          const value = product.values?.[field.key];
+          return value !== null && value !== undefined && value !== "";
+        })
+        .map(
+          (field) =>
+            `<div><dt>${escapeHtml(productFieldLabel(field))}</dt><dd>${escapeHtml(product.values[field.key])}</dd></div>`,
+        )
+        .join("");
+      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p><strong>Part ID</strong><br>${product.id}</p><p><strong>Series</strong><br>${escapeHtml(product.series || "—")}</p><p><strong>Category</strong><br>${escapeHtml(product.category || "—")}</p>${specifications ? `<dl class="cart-specs">${specifications}</dl>` : ""}</div></div><div class="cart-quantity"><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}">Remove</button></div></div>`;
     })
     .join("");
-  const pending =
-    state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
+  const pending = state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
   const summaryContent = pending
     ? `<div class="inquiry-empty" role="status">Loading selected products…</div>`
     : state.inquiryError
@@ -686,14 +642,19 @@ export class PageRegistry {
     if (path === "/news") return newsSlots(search);
     if (path === "/locations") return locationSlots(search);
     if (path === "/support") return supportSlots(search);
-    if (path === "/inquiry")
-      return { INQUIRY_SUMMARY_CONTENT: inquirySummaryContent(state) };
+    if (path === "/inquiry") return { INQUIRY_SUMMARY_CONTENT: inquirySummaryContent(state) };
     return {};
   }
 
   render(path, slots = {}) {
     path = path.replace(/\/+$/, "") || "/";
     let markup = this.templates.get(path);
+    if (!markup) {
+      const productRoute = matchProductRoute(path);
+      if (productRoute?.type === "group") markup = productGroup;
+      else if (productRoute?.type === "family") markup = productFamily;
+      else if (productRoute?.type === "series") markup = productSeries;
+    }
     if (!markup)
       return `<main id="main-content" class="page-main"><section class="section"><div class="container"><h1>Page not found</h1><a data-link class="button " href="/">Return Home</a></div></section></main>`;
     Object.entries(slots).forEach(([name, value]) => {

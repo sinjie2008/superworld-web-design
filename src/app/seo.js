@@ -1,3 +1,5 @@
+import { matchProductRoute } from "./product-catalog.js";
+
 export const SITE_ORIGIN = "https://lo-wireframe.yoongsinjie.chatgpt.site";
 export const SOCIAL_IMAGE_PATH = "/assets/og.png";
 
@@ -206,8 +208,7 @@ export const PAGE_METADATA = {
   },
   "/thank-you": {
     title: "Inquiry Received | Superworld Electronics",
-    description:
-      "Confirmation that Superworld Electronics received a submitted product inquiry.",
+    description: "Confirmation that Superworld Electronics received a submitted product inquiry.",
     heading: "Thank You for Your Inquiry",
     breadcrumbs: [
       ["Home", "/"],
@@ -246,9 +247,40 @@ export class SeoRegistry {
   }
 
   metadataForPath(pathname) {
-    return (
-      PAGE_METADATA[this.normalizePathname(pathname)] || NOT_FOUND_METADATA
-    );
+    const path = this.normalizePathname(pathname);
+    if (PAGE_METADATA[path]) return PAGE_METADATA[path];
+    const route = matchProductRoute(path);
+    if (!route) return NOT_FOUND_METADATA;
+    const label = (slug) =>
+      String(slug || "")
+        .replace(/--id-\d+$/, "")
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    const current =
+      route.type === "series"
+        ? label(route.slug)
+        : route.type === "family"
+          ? label(route.family)
+          : label(route.group);
+    const breadcrumbs = [
+      ["Home", "/"],
+      ["Products", "/products"],
+    ];
+    if (route.group) breadcrumbs.push([label(route.group), `/products/${route.group}`]);
+    if (route.family)
+      breadcrumbs.push([label(route.family), `/products/${route.group}/${route.family}`]);
+    if (route.type === "series") breadcrumbs.push([current, path]);
+    return {
+      title: `${current} Products | Superworld Electronics`,
+      description: `Browse ${current} product series and specifications from Superworld Electronics.`,
+      heading: current,
+      breadcrumbs,
+    };
+  }
+
+  isKnownPath(pathname) {
+    const path = this.normalizePathname(pathname);
+    return Boolean(PAGE_METADATA[path] || matchProductRoute(path));
   }
 
   structuredDataForPath(pathname) {
@@ -298,9 +330,7 @@ export class SeoRegistry {
       });
     }
 
-    return graph.length
-      ? { "@context": "https://schema.org", "@graph": graph }
-      : null;
+    return graph.length ? { "@context": "https://schema.org", "@graph": graph } : null;
   }
 }
 

@@ -1,18 +1,10 @@
 import { APP_CONFIG } from "./config.js";
 import { createDataError } from "./contracts.js";
-import {
-  ApiDataProvider,
-  deepCopy,
-  MockDataProvider,
-  SpecificationSearchDataService,
-} from "./data-service.js";
+import { ApiDataProvider, deepCopy, SpecificationSearchDataService } from "./data-service.js";
 import { SpecificationSearchDom } from "./dom.js";
 import { SpecificationSearchEvents } from "./events.js";
 import { SpecificationSearchQuery } from "./query.js";
-import {
-  defaultColumns,
-  SpecificationSearchRenderer,
-} from "./render.js";
+import { defaultColumns, SpecificationSearchRenderer } from "./render.js";
 import { SpecificationSearchRequests } from "./requests.js";
 import { SpecificationSearchState } from "./state.js";
 
@@ -22,27 +14,20 @@ export class SpecificationSearchApplication {
     this.window = dependencies.window ?? window;
     this.document = dependencies.document ?? document;
     this.state = dependencies.state ?? new SpecificationSearchState();
-    this.dom =
-      dependencies.dom ?? new SpecificationSearchDom(this.document);
-    this.query =
-      dependencies.query ??
-      new SpecificationSearchQuery(this.state, this.window);
+    this.dom = dependencies.dom ?? new SpecificationSearchDom(this.document);
+    this.query = dependencies.query ?? new SpecificationSearchQuery(this.state, this.window);
 
     this.provider =
-      dependencies.provider ??
-      dependencies.dataService?.provider ??
-      this.createProvider();
+      dependencies.provider ?? dependencies.dataService?.provider ?? this.createProvider();
     this.dataService =
-      dependencies.dataService ??
-      new SpecificationSearchDataService(this.provider);
+      dependencies.dataService ?? new SpecificationSearchDataService(this.provider);
 
     this.renderer =
       dependencies.renderer ??
       new SpecificationSearchRenderer(this.state, this.dom, this.query, {
         loadCategories: (...args) => this.requests.loadCategories(...args),
         loadProducts: (...args) => this.requests.loadProducts(...args),
-        handleCategoryChange: (...args) =>
-          this.events.handleCategoryChange(...args),
+        handleCategoryChange: (...args) => this.events.handleCategoryChange(...args),
       });
     this.requests =
       dependencies.requests ??
@@ -68,21 +53,10 @@ export class SpecificationSearchApplication {
 
   createProvider() {
     const fetchFunction = this.window.fetch.bind(this.window);
-    if (this.config.dataSource === "mock") {
-      return new MockDataProvider(
-        this.config,
-        this.window,
-        this.document,
-        fetchFunction,
-      );
-    }
     if (this.config.dataSource === "api") {
       return new ApiDataProvider(this.config, this.window, fetchFunction);
     }
-    throw createDataError(
-      "config",
-      `Unknown dataSource: ${this.config.dataSource}`,
-    );
+    throw createDataError("config", `Unknown dataSource: ${this.config.dataSource}`);
   }
 
   initialize() {
@@ -148,6 +122,5 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
     getState: () => application.getState(),
   });
 
-  if (document.getElementById("status-message"))
-    window.SpecSearchApp.initialize();
+  if (document.getElementById("status-message")) window.SpecSearchApp.initialize();
 }
