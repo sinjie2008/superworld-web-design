@@ -1032,11 +1032,50 @@
     }
   }
 
+  #main-content.quality-page .quality-certificate-search {
+    display: flex;
+    align-items: stretch;
+    width: min(100%, 560px);
+    margin: 0 auto 32px;
+    border: 1px solid var(--line);
+  }
+
   #main-content.quality-page .quality-certificate-search input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+
     @media (max-width: 560px) {
       height: 54px;
       padding-inline: 20px;
     }
+  }
+
+  #main-content.quality-page .quality-certificate-search button {
+    display: grid;
+    flex: 0 0 68px;
+    place-items: center;
+    width: 68px;
+    height: var(--form-control-height);
+    min-height: var(--form-control-height);
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--line);
+    background: #fff;
+    color: inherit;
+
+    @media (max-width: 560px) {
+      flex-basis: 54px;
+      width: 54px;
+      height: 54px;
+      min-height: 54px;
+    }
+  }
+
+  #main-content.quality-page .quality-certificate-search button svg {
+    display: block;
+    width: 24px;
+    height: 24px;
   }
 
   #main-content.quality-page .quality-hero-brand > picture {

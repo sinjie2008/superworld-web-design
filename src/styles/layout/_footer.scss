@@ -97,9 +97,10 @@
       padding-top: 20px;
       font-size: 12px;
 
-      @media (max-width: 560px) {
+      @media (max-width: 1024px) {
         align-items: center;
         flex-direction: column;
+        gap: 8px;
         text-align: center;
       }
     }

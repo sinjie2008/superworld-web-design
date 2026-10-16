@@ -495,7 +495,8 @@
 
     &-filters select {
       width: 100%;
-      min-height: 60px;
+      height: var(--form-control-height);
+      min-height: var(--form-control-height);
       appearance: none;
       border: 1px solid var(--line);
       padding: 12px 52px 12px 22px;
@@ -510,8 +511,10 @@
 
     &-search {
       display: grid;
-      grid-template-columns: 1fr 54px;
-      min-height: 60px;
+      grid-template-columns: minmax(0, 1fr) 52px;
+      min-width: 0;
+      height: var(--form-control-height);
+      min-height: var(--form-control-height);
       border: 0
     }
 
@@ -534,7 +537,8 @@
     &-search button {
       display: grid;
       place-items: center;
-      min-height: 58px;
+      height: var(--form-control-height);
+      min-height: var(--form-control-height);
       border: 1px solid var(--line);
       border-left: 0;
       padding: 0;
@@ -547,32 +551,11 @@
     }
 
     &-search-icon {
-      position: relative;
-      width: 25px;
-      height: 25px
-    }
-
-    &-search-icon::before {
-      content: "";
-      position: absolute;
-      left: 1px;
-      top: 1px;
-      width: 15px;
-      height: 15px;
-      border: 3px solid currentColor;
-      border-radius: 50%
-    }
-
-    &-search-icon::after {
-      content: "";
-      position: absolute;
-      left: 17px;
-      top: 18px;
-      width: 11px;
-      height: 3px;
+      display: block;
+      width: 24px;
+      height: 24px;
       background: currentColor;
-      transform: rotate(45deg);
-      transform-origin: left center
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='m15.1 15.1 5.4 5.4'/%3E%3C/svg%3E") center / contain no-repeat
     }
 
     &-results {
@@ -667,6 +650,19 @@
       background: #f3f3f3
     }
 
+    &-list-image > picture {
+      position: absolute;
+      inset: 0;
+      display: block
+    }
+
+    &-list-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
     &-list-copy {
       display: flex;
       flex-direction: column;
@@ -692,6 +688,10 @@
       justify-content: center;
       border-left: 1px solid var(--line);
       padding: 8px 20px
+    }
+
+    &-list-specifications {
+      display: contents
     }
 
     &-list-meta .tag {
@@ -956,8 +956,8 @@
       & .news-filters select,
       & .news-search,
       & .news-search button {
-        height: 48px;
-        min-height: 48px
+        height: var(--form-control-height);
+        min-height: var(--form-control-height)
       }
 
       & .news-results { margin-top: var(--space-12) }
@@ -1206,53 +1206,126 @@
         aspect-ratio: auto
       }
 
+      & .news-list {
+        margin-inline: var(--space-1)
+      }
+
       & .news-list-item {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: none;
-        min-height: 0;
-        padding: var(--space-4)
+        grid-template-columns: minmax(0, 1fr) 44px;
+        grid-template-rows: auto 16px minmax(44px, auto) minmax(80px, auto) auto 44px;
+        gap: var(--space-3) var(--space-2);
+        min-width: 0;
+        min-height: 480px;
+        border-color: #d9d9d9;
+        padding: calc(var(--space-4) - 1px);
+        text-align: left
       }
 
       & .news-list-image {
-        grid-column: 1;
-        grid-row: auto;
+        grid-column: 1 / -1;
+        grid-row: 1;
         height: auto;
-        aspect-ratio: 310 / 180;
-        margin: 0 0 var(--space-4)
+        aspect-ratio: 310 / 168;
+        margin: 0;
+        border: 1px solid #d9d9d9;
+        background: #f5f5f5
       }
 
       & .news-list-copy,
       & .news-list-meta {
-        display: flex;
+        display: contents
+      }
+
+      & .news-list-meta .tag {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        align-self: start;
+        width: 100%;
+        margin: 0;
+        color: #4a4a4a;
+        font-family: $font-heading;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 16px;
+        text-align: left
+      }
+
+      & .news-list-copy h3 {
         grid-column: 1;
+        grid-row: 3;
+        align-self: center;
+        margin: 0;
+        padding: 0;
+        color: #111;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+        text-align: left
+      }
+
+      & .news-list-copy p {
+        grid-column: 1 / -1;
+        grid-row: 4;
+        align-self: start;
+        margin: 0;
+        color: #4a4a4a;
+        font-size: 14px;
+        line-height: 20px
+      }
+
+      & .news-list-specifications {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-row: 5;
+        gap: var(--space-1)
+      }
+
+      & .news-list-meta h3,
+      & .news-list-meta p {
+        grid-column: auto;
         grid-row: auto;
-        border-top: 0;
-        border-left: 0;
-        padding: 0 0 var(--space-3)
+        margin: 0;
+        color: #4a4a4a;
+        font-family: $font-body;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        text-align: left
       }
 
-      & .news-list-copy {
-        border-bottom: 1px solid var(--line)
+      & .news-list-meta h3 {
+        font-family: $font-heading;
+        font-weight: 700
       }
 
-      & .news-list-copy > *,
-      & .news-list-meta > * {
-        grid-column: 1;
-        grid-row: auto
-      }
-
-      & .news-list-copy h3 { padding-right: 0 }
-
-      & .news-list-meta p { margin: 0 }
-
-      & .news-list-meta {
-        padding-top: var(--space-3)
+      & .news-list-meta small {
+        grid-column: 1 / -1;
+        grid-row: 6;
+        min-height: 44px;
+        border: 1px solid #d9d9d9;
+        color: #1a1a1a;
+        background: #f5f5f5;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center
       }
 
       & .news-list-arrow-link {
-        grid-column: 1;
-        grid-row: auto;
-        justify-self: end
+        grid-column: 2;
+        grid-row: 3;
+        align-self: center;
+        justify-self: end;
+        width: 44px;
+        height: 44px
+      }
+
+      & .news-list-arrow {
+        width: 8px;
+        height: 12px;
+        border: 0;
+        background: currentColor;
+        transform: none;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 12' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m1 1 5 5-5 5'/%3E%3C/svg%3E") center / contain no-repeat
       }
     }
   }

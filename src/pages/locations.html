@@ -143,12 +143,28 @@ Map"
             ›
           </button>
         </div>
-        <input
-          type="search"
-          data-location-search
-          aria-label="Search locations"
-          placeholder="Search Locations ..."
-        />
+        <label class="location-search-field">
+          <input
+            type="search"
+            data-location-search
+            aria-label="Search locations"
+            placeholder="Search Locations ..."
+          />
+          <svg
+            aria-hidden="true"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m15.5 15.5 5 5" />
+          </svg>
+        </label>
       </div>
       <div class="location-groups" data-location-groups><!--APP_SLOT:LOCATION_GROUPS--></div>
       <p class="location-empty" data-location-empty hidden>No locations match your selection.</p>

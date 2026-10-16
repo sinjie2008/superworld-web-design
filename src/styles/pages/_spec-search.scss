@@ -490,10 +490,32 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
       flex: 1;
       width: auto;
       min-width: 80px;
-      padding: 11px 14px 11px 8px;
+      padding: 11px 48px 11px 8px;
       border: 0;
       border-radius: 0;
       box-shadow: none;
+    }
+
+    &-search-control {
+      position: relative;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    &-search-control .form-control {
+      width: 100%;
+      min-width: 0;
+      padding-right: 48px;
+    }
+
+    &-search-control svg {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+      transform: translateY(-50%);
     }
 
     &-search-button {
@@ -1121,7 +1143,7 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
           height: 52px;
           min-height: 52px;
           border: 1px solid var(--border);
-          padding: 0 12px;
+          padding: 0 48px 0 12px;
         }
       }
     }

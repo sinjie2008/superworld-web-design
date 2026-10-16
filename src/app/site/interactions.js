@@ -645,15 +645,26 @@ class GeneralPageController {
         try { target = document.getElementById(decodeURIComponent(link.hash.slice(1))); } catch { return []; }
         return target && target.getClientRects().length ? [{ link, target }] : [];
       });
-      const setActive = (active) => {
+      const revealLink = (link) => {
+        if (!link || track.scrollWidth <= track.clientWidth) return;
+        const bounds = link.getBoundingClientRect();
+        const viewport = track.getBoundingClientRect();
+        const delta = bounds.left < viewport.left ? bounds.left - viewport.left : bounds.right > viewport.right ? bounds.right - viewport.right : 0;
+        if (delta) track.scrollBy({ left: delta, behavior: "instant" });
+      };
+      let activeLink = null;
+      const setActive = (active, forceReveal = false) => {
+        const changed = activeLink !== active;
+        activeLink = active;
         track.querySelectorAll("a").forEach(link => {
           const selected = link === active;
           link.classList.toggle("is-active", selected);
           if (selected) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
+        if (changed || forceReveal) revealLink(active);
       };
-      const syncActive = () => {
+      const syncActive = (forceReveal = false) => {
         const entries = linksAndSections();
         if (!entries.length) return;
         const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
@@ -662,7 +673,7 @@ class GeneralPageController {
         entries.forEach(({ link, target }) => {
           if (target.getBoundingClientRect().top <= line) active = link;
         });
-        setActive(active);
+        setActive(active, forceReveal);
       };
       const sync = () => {
         const maximum = track.scrollWidth - track.clientWidth;
@@ -680,7 +691,7 @@ class GeneralPageController {
       window.addEventListener("scroll", () => {
         if (!frame) frame = window.requestAnimationFrame(() => { frame = 0; syncActive(); });
       }, { ...options, passive: true });
-      window.addEventListener("resize", syncActive, options);
+      window.addEventListener("resize", () => syncActive(true), options);
       nav.addEventListener("click", (event) => {
         const link = event.target.closest('.anchor-nav-track a[href^="#"]');
         const entry = linksAndSections().find(item => item.link === link);
@@ -690,7 +701,7 @@ class GeneralPageController {
         const top = entry.target.getBoundingClientRect().top + window.scrollY - headerHeight - nav.getBoundingClientRect().height - 16;
         window.scrollTo({ top: Math.max(0, top), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
         if (location.hash !== link.hash) history.pushState(history.state, "", `${location.pathname}${location.search}${link.hash}`);
-        setActive(link);
+        setActive(link, true);
       }, options);
       const observer = new MutationObserver(() => { sync(); syncActive(); });
       observer.observe(track, { childList: true, subtree: true });
@@ -698,10 +709,7 @@ class GeneralPageController {
       track.addEventListener("focusin", (event) => {
         const link = event.target.closest("a");
         if (!link) return;
-        const bounds = link.getBoundingClientRect();
-        const viewport = track.getBoundingClientRect();
-        const delta = bounds.left < viewport.left ? bounds.left - viewport.left : bounds.right > viewport.right ? bounds.right - viewport.right : 0;
-        if (delta) track.scrollBy({ left: delta, behavior: "instant" });
+        revealLink(link);
       }, options);
       sync();
       syncActive();

@@ -521,6 +521,53 @@
     }
   }
 
+  #main-content.sustainability-page .environmental-carousel-shell {
+    @media (max-width: 560px) {
+      width: calc(100% - 8px);
+      margin-inline: auto;
+    }
+  }
+
+  #main-content.sustainability-page [data-carousel="environment-slider"] {
+    .ph > picture,
+    .ph > picture > img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .ph > picture > img {
+      object-fit: cover;
+    }
+
+    @media (max-width: 560px) {
+      height: 292px;
+
+      .carousel-window,
+      .carousel-track,
+      .slide,
+      .ph {
+        height: 100%;
+        min-height: 0;
+      }
+    }
+  }
+
+  #main-content.sustainability-page .misconduct-contact p {
+    @media (max-width: 1024px) {
+      display: grid;
+      gap: 16px;
+      font-size: 14px;
+      line-height: 20px;
+      overflow-wrap: anywhere;
+
+      > span {
+        display: block;
+        margin: 0;
+      }
+    }
+  }
+
   #main-content.sustainability-page .misconduct-copy > h3 {
     @media (max-width: 560px) {
       font-size: 26px;
@@ -843,18 +890,6 @@
         overflow-wrap: anywhere;
         font-size: 14px;
         line-height: 20px;
-      }
-
-      .misconduct-contact p > span {
-        display: block;
-      }
-
-      .misconduct-contact p > span + br {
-        display: none;
-      }
-
-      .misconduct-contact p > span:last-child {
-        margin-top: 16px;
       }
 
       .esg-pillars-carousel > .carousel-dots,

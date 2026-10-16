@@ -10,14 +10,31 @@
       padding: 31px 0
     }
 
-    &-controls [data-location-search] {
-      min-width: 320px;
-      border: 1px solid var(--line);
-      padding: 16px;
+    &-controls .location-search-field {
+      display: flex;
+      align-items: center;
+      min-width: 0;
       width: 100%;
       max-width: 408px;
       height: 56px;
+      border: 1px solid var(--line);
       justify-self: end
+    }
+
+    &-controls .location-search-field [data-location-search] {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 54px;
+      min-height: 54px;
+      padding: 0 16px;
+      border: 0
+    }
+
+    &-controls .location-search-field svg {
+      flex: 0 0 24px;
+      width: 24px;
+      height: 24px;
+      margin: 0 16px 0 8px
     }
 
     &-tab-rail {
@@ -122,7 +139,7 @@
       width: 100%
     }
 
-    .location-controls [data-location-search] {
+    .location-controls .location-search-field {
       height: 56px;
       min-height: 56px
     }
@@ -237,7 +254,7 @@
         padding: var(--space-5)
       }
 
-      & .location-controls [data-location-search] {
+      & .location-controls .location-search-field {
         box-sizing: border-box;
         width: 100%;
         min-width: 0
@@ -296,7 +313,7 @@
 
       & .location-tabs button:last-child { width: 104px; min-width: 104px }
 
-      & .location-controls [data-location-search] { max-width: none }
+      & .location-controls .location-search-field { max-width: none }
     }
 
     @media (max-width: 560px) {
@@ -315,6 +332,10 @@
       & .locations-regional > .container,
       & .locations-directory > .container {
         width: calc(100% - 40px)
+      }
+
+      & .locations-directory > .container > .section-heading.center {
+        margin-bottom: var(--space-4)
       }
 
       & .location-grid {
@@ -354,7 +375,7 @@
       }
 
       & .location-controls {
-        padding: var(--space-4) 0 var(--space-6)
+        padding: 0 0 var(--space-6)
       }
 
       & .location-tabs {
@@ -362,7 +383,7 @@
         min-width: 0
       }
 
-      & .location-controls [data-location-search] {
+      & .location-controls .location-search-field {
         width: 100%;
         min-width: 0
       }

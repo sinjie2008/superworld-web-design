@@ -358,7 +358,13 @@
       --milestone-visible: 5;
       overflow: hidden;
       min-height: 520px;
-      padding: 74px 0 150px
+      padding: 74px 0 150px;
+
+      @media (max-width: 640px) {
+        min-height: 0;
+        padding-bottom: 0;
+        touch-action: pan-y;
+      }
     }
 
     &-section .timeline::before {
@@ -374,12 +380,26 @@
       will-change: transform
     }
 
+    &-section .timeline-row.is-resetting {
+      &, .timeline-item, .timeline-item > h3, .timeline-circle, .timeline-circle::before {
+        transition: none;
+      }
+    }
+
     &-section .timeline-item {
       flex: 0 0 calc(100% / var(--milestone-visible));
       min-width: 0;
       padding: 0 14px;
       text-align: center;
-      transition: opacity .4s ease
+      transition: opacity .4s ease;
+
+      @media (max-width: 640px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-basis: min(230px, calc(100% - 80px));
+        padding-inline: 0;
+      }
     }
 
     &-section .timeline-item > h3 {
@@ -401,7 +421,18 @@
       justify-content: center;
       gap: 4px;
       text-align: center;
-      transition: width .55s ease,height .55s ease,border .55s ease,transform .55s ease
+      transition: width .55s ease,height .55s ease,border .55s ease,transform .55s ease;
+
+      @media (min-width: 641px) {
+        margin-inline: 0;
+        left: 50%;
+        translate: -50% 0;
+      }
+
+      @media (max-width: 640px) {
+        flex-shrink: 0;
+        margin-inline: 0;
+      }
     }
 
     &-section .timeline-circle::before {
@@ -510,6 +541,25 @@
       gap: 10px;
       border: 0;
       background: #fff
+    }
+
+    &-section .milestone-detail {
+      @media (max-width: 640px) {
+        position: static;
+        width: 100%;
+        min-height: 0;
+        transform: none;
+
+        p {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &-section .milestone-controls {
+      @media (max-width: 640px) {
+        margin-top: 24px;
+      }
     }
   }
 
@@ -1077,6 +1127,21 @@
       line-height: 1.2;
       font-weight: 600;
       margin: 14px 0;
+    }
+  }
+
+  #main-content.company-page .company-contact-cta {
+    @media (max-width: 560px) {
+      .button-group {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+      }
+
+      .button {
+        width: 100%;
+        min-width: 0;
+      }
     }
   }
 

@@ -803,6 +803,7 @@ class MilestoneController {
     this.locked = false;
     this.resetTimer = 0;
     this.autoTimer = 0;
+    this.positionFrame = 0;
   }
 
   initialize() {
@@ -829,10 +830,10 @@ class MilestoneController {
     if (timeline.dataset.milestoneEnhanced === "true") return;
     if (this.cleanup) this.cleanup();
 
-    timeline.closest("section")?.classList.add("milestone-section");
-    timeline.dataset.milestoneEnhanced = "true";
     const row = timeline.querySelector(".timeline-row");
     if (!row) return;
+    timeline.closest("section")?.classList.add("milestone-section");
+    timeline.dataset.milestoneEnhanced = "true";
     const repeated = MILESTONE_DATA.concat(MILESTONE_DATA, MILESTONE_DATA);
     row.innerHTML = repeated
       .map(
@@ -860,22 +861,21 @@ class MilestoneController {
       '<button type="button" data-milestone-prev aria-label="Previous milestone">Prev</button><button type="button" data-milestone-next aria-label="Next milestone">Next</button>';
     timeline.insertAdjacentElement("afterend", controls);
 
-    this.currentIndex = 7;
+    this.currentIndex = MILESTONE_DATA.length + Math.floor(MILESTONE_DATA.length / 2);
     this.locked = false;
     this.resetTimer = 0;
     const items = [...row.querySelectorAll(".timeline-item")];
 
     const position = (animate = true) => {
       if (!this.mounted || !timeline.isConnected) return;
-      const visible =
-        Number(
-          getComputedStyle(timeline).getPropertyValue("--milestone-visible"),
-        ) || 5;
-      const step = timeline.clientWidth / visible;
-      const centerSlot = Math.floor(visible / 2);
+      const activeItem = items[this.currentIndex];
+      const offset =
+        (timeline.clientWidth - activeItem.getBoundingClientRect().width) / 2 -
+        activeItem.offsetLeft;
+      cancelAnimationFrame(this.positionFrame);
+      row.classList.toggle("is-resetting", !animate);
       row.style.transition = animate ? "" : "none";
-      row.style.transform =
-        "translate3d(" + (centerSlot - this.currentIndex) * step + "px,0,0)";
+      row.style.transform = "translate3d(" + offset + "px,0,0)";
       items.forEach((item, index) => {
         const active = index === this.currentIndex;
         item.classList.toggle("active", active);
@@ -889,10 +889,17 @@ class MilestoneController {
         ];
       detailTitle.textContent = detail[1];
       detailCopy.textContent = detail[2];
-      if (!animate)
-        requestAnimationFrame(() => {
-          row.style.transition = "";
+      if (!animate) {
+        // Commit the loop position and active clone before transitions resume.
+        row.getBoundingClientRect();
+        this.positionFrame = requestAnimationFrame(() => {
+          if (this.mounted && timeline.isConnected) {
+            row.classList.remove("is-resetting");
+            row.style.transition = "";
+          }
+          this.positionFrame = 0;
         });
+      }
     };
 
     const move = (delta) => {
@@ -903,8 +910,10 @@ class MilestoneController {
       clearTimeout(this.resetTimer);
       this.resetTimer = setTimeout(() => {
         if (!this.mounted) return;
-        if (this.currentIndex >= 10) this.currentIndex -= 5;
-        if (this.currentIndex <= 4) this.currentIndex += 5;
+        if (this.currentIndex >= MILESTONE_DATA.length * 2)
+          this.currentIndex -= MILESTONE_DATA.length;
+        if (this.currentIndex < MILESTONE_DATA.length)
+          this.currentIndex += MILESTONE_DATA.length;
         position(false);
         this.locked = false;
       }, 700);
@@ -912,9 +921,48 @@ class MilestoneController {
 
     const previous = controls.querySelector("[data-milestone-prev]");
     const next = controls.querySelector("[data-milestone-next]");
-    previous.addEventListener("click", () => move(-1));
-    next.addEventListener("click", () => move(1));
-    this.autoTimer = setInterval(() => move(1), 4500);
+    const restartAuto = () => {
+      clearInterval(this.autoTimer);
+      this.autoTimer = setInterval(() => move(1), 4500);
+    };
+    const handlePrevious = () => {
+      move(-1);
+      restartAuto();
+    };
+    const handleNext = () => {
+      move(1);
+      restartAuto();
+    };
+    let pointerStart = null;
+    const handlePointerDown = (event) => {
+      if (event.pointerType === "mouse" || this.locked) return;
+      pointerStart = {
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+      };
+      timeline.setPointerCapture(event.pointerId);
+      clearInterval(this.autoTimer);
+    };
+    const handlePointerEnd = (event) => {
+      if (!pointerStart || pointerStart.id !== event.pointerId) return;
+      const distanceX = event.clientX - pointerStart.x;
+      const distanceY = event.clientY - pointerStart.y;
+      pointerStart = null;
+      if (
+        event.type === "pointerup" &&
+        Math.abs(distanceX) >= 40 &&
+        Math.abs(distanceX) > Math.abs(distanceY) * 1.2
+      )
+        move(distanceX < 0 ? 1 : -1);
+      restartAuto();
+    };
+    previous.addEventListener("click", handlePrevious);
+    next.addEventListener("click", handleNext);
+    timeline.addEventListener("pointerdown", handlePointerDown);
+    timeline.addEventListener("pointerup", handlePointerEnd);
+    timeline.addEventListener("pointercancel", handlePointerEnd);
+    restartAuto();
     const handleResize = () => position(false);
     window.addEventListener("resize", handleResize, { passive: true });
     position(false);
@@ -922,7 +970,18 @@ class MilestoneController {
     this.cleanup = () => {
       clearInterval(this.autoTimer);
       clearTimeout(this.resetTimer);
+      cancelAnimationFrame(this.positionFrame);
+      previous.removeEventListener("click", handlePrevious);
+      next.removeEventListener("click", handleNext);
+      timeline.removeEventListener("pointerdown", handlePointerDown);
+      timeline.removeEventListener("pointerup", handlePointerEnd);
+      timeline.removeEventListener("pointercancel", handlePointerEnd);
       window.removeEventListener("resize", handleResize);
+      row.classList.remove("is-resetting");
+      row.style.transition = "";
+      controls.remove();
+      activeDetail.remove();
+      delete timeline.dataset.milestoneEnhanced;
       this.cleanup = null;
     };
   }

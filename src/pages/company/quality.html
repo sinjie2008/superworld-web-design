@@ -217,14 +217,29 @@ Lab"
         <p>Official Accreditation Documents</p>
       </div>
       <form class="quality-certificate-search" role="search">
-        <label for="quality-certificate-search-input">Search certificates</label
+        <label class="sr-only" for="quality-certificate-search-input">Search certificates</label
         ><input
           id="quality-certificate-search-input"
           type="search"
           placeholder="Search certificate..."
           autocomplete="off"
           data-certificate-search
-        />
+        /><button type="submit" aria-label="Search certificates">
+          <svg
+            aria-hidden="true"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m15.5 15.5 5 5" />
+          </svg>
+        </button>
       </form>
       <div class="quality-certificate-grid" data-certificate-grid>
         <article class="quality-certificate-card" data-certificate-card>

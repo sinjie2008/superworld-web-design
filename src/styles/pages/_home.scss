@@ -21,6 +21,19 @@
       border-right: 0
     }
 
+    &-hero .ph picture {
+      position: absolute;
+      inset: 0;
+      display: block
+    }
+
+    &-hero .ph picture img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
     &-hero-copy {
       position: absolute;
       left: calc((100% - var(--container-width))/2);
