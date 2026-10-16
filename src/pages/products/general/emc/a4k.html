@@ -73,6 +73,14 @@
     </section>
     <div class="a4k-section-nav-wrap">
       <strong>Product Details</strong>
+      <button
+        class="a4k-nav-arrow"
+        type="button"
+        data-a4k-nav-step="-1"
+        aria-label="Previous product detail sections"
+      >
+        &#8249;
+      </button>
       <nav class="a4k-section-nav" aria-label="Product detail sections">
         <button class="is-active" type="button" data-a4k-section="overview">Introduction</button
         ><button class="" type="button" data-a4k-section="specifications">Specifications</button
@@ -83,6 +91,14 @@
         ><button class="" type="button" data-a4k-section="tape-reel">Tape & Reel</button
         ><button class="" type="button" data-a4k-section="soldering">Soldering / Washing</button>
       </nav>
+      <button
+        class="a4k-nav-arrow"
+        type="button"
+        data-a4k-nav-step="1"
+        aria-label="Next product detail sections"
+      >
+        &#8250;
+      </button>
     </div>
     <section class="a4k-section" id="specifications" data-section-id-preserve>
       <h2>Specifications</h2>
@@ -105,21 +121,23 @@
         </div>
         <p>Choose the products you need, then submit an inquiry or compare their losses.</p>
         <div class="a4k-table-wrap">
-          <table aria-label="A4K Series Electrical Characteristics">
-            <thead>
-              <tr>
-                <th class="a4k-select-cell">Inquire / Losses Compare</th>
-                <th>Part Number</th>
-                <th>Impedance Ω ±25%</th>
-                <th>Test Frequency</th>
-                <th>DCR Ω Max</th>
-                <th>Rated Current mA Max</th>
-                <th>Download</th>
+          <table role="table" aria-label="A4K Series Electrical Characteristics">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th role="columnheader" scope="col" class="a4k-select-cell">
+                  Inquire / Losses Compare
+                </th>
+                <th role="columnheader" scope="col">Part Number</th>
+                <th role="columnheader" scope="col">Impedance Ω ±25%</th>
+                <th role="columnheader" scope="col">Test Frequency</th>
+                <th role="columnheader" scope="col">DCR Ω Max</th>
+                <th role="columnheader" scope="col">Rated Current mA Max</th>
+                <th role="columnheader" scope="col">Download</th>
               </tr>
             </thead>
-            <tbody>
-              <tr data-a4k-row data-product-id="1449" data-product-sku="A4K300-RE-10">
-                <td class="a4k-select-cell">
+            <tbody role="rowgroup">
+              <tr role="row" data-a4k-row data-product-id="1449" data-product-sku="A4K300-RE-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
@@ -127,19 +145,21 @@
                     checked
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K300-RE-10</a></td>
-                <td>30</td>
-                <td>100 MHz</td>
-                <td>0.20</td>
-                <td>500</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K300-RE-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">30</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.20</td>
+                <td role="cell" data-label="Rated Current mA Max">500</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-row data-product-id="1451" data-product-sku="A4K600-RD-10">
-                <td class="a4k-select-cell">
+              <tr role="row" data-a4k-row data-product-id="1451" data-product-sku="A4K600-RD-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
@@ -147,95 +167,107 @@
                     checked
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K600-RD-10</a></td>
-                <td>60</td>
-                <td>100 MHz</td>
-                <td>0.25</td>
-                <td>400</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K600-RD-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">60</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.25</td>
+                <td role="cell" data-label="Rated Current mA Max">400</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-row data-product-id="1448" data-product-sku="A4K121-RD-10">
-                <td class="a4k-select-cell">
+              <tr role="row" data-a4k-row data-product-id="1448" data-product-sku="A4K121-RD-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
                     aria-label="Select A4K121-RD-10 for inquiry or loss analysis"
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K121-RD-10</a></td>
-                <td>120</td>
-                <td>100 MHz</td>
-                <td>0.30</td>
-                <td>350</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K121-RD-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">120</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.30</td>
+                <td role="cell" data-label="Rated Current mA Max">350</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-row data-product-id="1450" data-product-sku="A4K301-RC-10">
-                <td class="a4k-select-cell">
+              <tr role="row" data-a4k-row data-product-id="1450" data-product-sku="A4K301-RC-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
                     aria-label="Select A4K301-RC-10 for inquiry or loss analysis"
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K301-RC-10</a></td>
-                <td>300</td>
-                <td>100 MHz</td>
-                <td>0.40</td>
-                <td>250</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K301-RC-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">300</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.40</td>
+                <td role="cell" data-label="Rated Current mA Max">250</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-row data-product-id="1452" data-product-sku="A4K601-RB-10">
-                <td class="a4k-select-cell">
+              <tr role="row" data-a4k-row data-product-id="1452" data-product-sku="A4K601-RB-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
                     aria-label="Select A4K601-RB-10 for inquiry or loss analysis"
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K601-RB-10</a></td>
-                <td>600</td>
-                <td>100 MHz</td>
-                <td>0.50</td>
-                <td>200</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K601-RB-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">600</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.50</td>
+                <td role="cell" data-label="Rated Current mA Max">200</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-row data-product-id="1447" data-product-sku="A4K102-RB-10">
-                <td class="a4k-select-cell">
+              <tr role="row" data-a4k-row data-product-id="1447" data-product-sku="A4K102-RB-10">
+                <td role="cell" data-label="Inquire / Losses Compare" class="a4k-select-cell">
                   <input
                     type="checkbox"
                     data-a4k-select
                     aria-label="Select A4K102-RB-10 for inquiry or loss analysis"
                   />
                 </td>
-                <td><a class="a4k-part-link" href="#specifications">A4K102-RB-10</a></td>
-                <td>1000</td>
-                <td>100 MHz</td>
-                <td>0.75</td>
-                <td>150</td>
-                <td>
+                <td role="cell" data-label="Part Number">
+                  <a class="a4k-part-link" href="#specifications">A4K102-RB-10</a>
+                </td>
+                <td role="cell" data-label="Impedance Ω ±25%">1000</td>
+                <td role="cell" data-label="Test Frequency">100 MHz</td>
+                <td role="cell" data-label="DCR Ω Max">0.75</td>
+                <td role="cell" data-label="Rated Current mA Max">150</td>
+                <td role="cell" data-label="Download">
                   <a class="button small" href="/downloads/a4k-series-datasheet.pdf" download
                     >PDF</a
                   >
                 </td>
               </tr>
-              <tr data-a4k-empty hidden>
-                <td colspan="7">No A4K parts match your search.</td>
+              <tr role="row" data-a4k-empty hidden>
+                <td role="cell" data-label="Inquire / Losses Compare" colspan="7">
+                  No A4K parts match your search.
+                </td>
               </tr>
             </tbody>
           </table>

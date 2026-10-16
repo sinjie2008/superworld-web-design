@@ -13,7 +13,7 @@ const escapeHtml = (value) =>
 const placeholderImage = (imageName, width, height, altText = imageName) =>
   `<img src="https://placehold.co/${width}x${height}" alt="${escapeHtml(altText)}" width="${width}" height="${height}"/>`;
 const heroBrandImage = (altText) =>
-  `<img src="https://placehold.co/560x320" srcset="https://placehold.co/280x160 280w, https://placehold.co/560x320 560w, https://placehold.co/840x480 840w, https://placehold.co/1120x640 1120w" sizes="(max-width: 820px) calc(100vw - 72px), 470px" alt="${escapeHtml(altText)}" width="560" height="320"/>`;
+  `<picture><source media="(max-width: 1024px)" srcset="/assets/brand-responsive.png"/><img src="https://placehold.co/560x320" srcset="https://placehold.co/280x160 280w, https://placehold.co/560x320 560w, https://placehold.co/840x480 840w, https://placehold.co/1120x640 1120w" sizes="(max-width: 820px) calc(100vw - 72px), 470px" alt="${escapeHtml(altText)}" width="560" height="320"/></picture>`;
 const ph = (className, imageName, width, height, label = imageName) =>
   `<div class="ph${className ? ` ${className}` : ""}">${placeholderImage(imageName, width, height, label)}</div>`;
 
@@ -733,11 +733,12 @@ class ProductCarouselController {
       if (!this.mounted || !carousel.isConnected) return;
       this.activeIndex = Math.max(0, Math.min(this.activeIndex, maxIndex()));
       carousel.style.setProperty("--visible", String(visible()));
-      const gap = 22;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
       const width = carousel.querySelector(".carousel-window").clientWidth;
-      const cardWidth = (width - gap * (visible() - 1)) / visible();
+      const cardWidth = track.firstElementChild?.getBoundingClientRect().width || 0;
+      const offset = Math.min(this.activeIndex * (cardWidth + gap), Math.max(0, track.scrollWidth - width));
       track.style.transform =
-        "translateX(-" + this.activeIndex * (cardWidth + gap) + "px)";
+        "translateX(-" + offset + "px)";
     };
     const restart = () => {
       window.clearInterval(this.timer);

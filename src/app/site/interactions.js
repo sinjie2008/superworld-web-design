@@ -40,10 +40,11 @@ class CarouselWidget {
   update() {
     if (!this.mounted || !this.root.isConnected || !this.windowElement) return;
     this.index = Math.min(this.index, this.maxIndex());
-    const gap = 22;
-    const visible = this.visibleCount();
-    const cardWidth = (this.windowElement.clientWidth - gap * (visible - 1)) / visible;
-    this.track.style.transform = `translateX(-${this.index * (cardWidth + gap)}px)`;
+    const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
+    const cardWidth = this.slides[0]?.getBoundingClientRect().width || 0;
+    const maximum = Math.max(0, this.track.scrollWidth - this.windowElement.clientWidth);
+    const offset = Math.min(this.index * (cardWidth + gap), maximum);
+    this.track.style.transform = `translateX(-${offset}px)`;
     this.renderDots();
   }
 
@@ -65,7 +66,8 @@ class CarouselWidget {
   mount() {
     if (this.mounted || !this.track || this.slides.length < 2) return this;
     this.mounted = true;
-    this.configuredVisible = Number(getComputedStyle(this.root).getPropertyValue("--visible")) || 1;
+    this.configuredVisible = Number(this.root.style.getPropertyValue("--visible"))
+      || Number(getComputedStyle(this.root).getPropertyValue("--visible")) || 1;
     this.abortController = new AbortController();
     const options = { signal: this.abortController.signal };
     this.root.querySelector("[data-prev]")?.addEventListener("click", this.handlePrevious, options);
@@ -374,38 +376,62 @@ class HeaderController {
 
   setupHeaderNavigation() {
     const state = this;
-    document.querySelector(".mobile-toggle")?.addEventListener("click", (e) => {
-      const header = document.querySelector(".site-header");
-      header.classList.toggle("mobile-open");
-      e.currentTarget.setAttribute(
-        "aria-expanded",
-        String(header.classList.contains("mobile-open")),
-      );
-    });
-    document.querySelectorAll("[data-menu]").forEach((btn) =>
+    const header = document.querySelector(".site-header");
+    if (!header) return;
+    const toggle = header.querySelector(".mobile-toggle");
+    const buttons = [...header.querySelectorAll("[data-menu]")];
+    const abortController = new AbortController();
+    const options = { signal: abortController.signal };
+    state.cleanups.push(() => abortController.abort());
+    const closeMegaPanels = () => {
+      header.querySelectorAll(".mega-panel").forEach((panel) => panel.classList.remove("is-open"));
+      buttons.forEach((button) => button.setAttribute("aria-expanded", "false"));
+    };
+    const setMobileOpen = (open) => {
+      header.classList.toggle("mobile-open", open);
+      toggle?.setAttribute("aria-expanded", String(open));
+      toggle?.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      if (!open) closeMegaPanels();
+    };
+    toggle?.addEventListener("click", () => {
+      setMobileOpen(!header.classList.contains("mobile-open"));
+    }, options);
+    buttons.forEach((btn) => {
+      const panel = header.querySelector(`[data-panel="${btn.dataset.menu}"]`);
+      if (panel) {
+        panel.id = `header-menu-${btn.dataset.menu}`;
+        btn.setAttribute("aria-controls", panel.id);
+        btn.setAttribute("aria-expanded", "false");
+      }
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        const name = btn.dataset.menu;
-        const panel = document.querySelector(`[data-panel="${name}"]`);
-        document.querySelectorAll(".mega-panel").forEach((p) => {
-          if (p !== panel) p.classList.remove("is-open");
-        });
-        panel?.classList.toggle("is-open");
-        if (panel?.classList.contains("is-open"))
+        const wasOpen = panel?.classList.contains("is-open");
+        closeMegaPanels();
+        if (panel && !wasOpen) {
+          panel.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
           panel
             .querySelector("[data-mega-news-slider]")
             ?.dispatchEvent(new CustomEvent("mega:open"));
-      }),
-    );
-    const closeMegaPanels = () =>
-      document
-        .querySelectorAll(".mega-panel")
-        .forEach((panel) => panel.classList.remove("is-open"));
-    document.addEventListener("click", closeMegaPanels, { once: true });
-    state.cleanups.push(() => document.removeEventListener("click", closeMegaPanels));
-    document
-      .querySelectorAll(".mega-panel")
-      .forEach((p) => p.addEventListener("click", (e) => e.stopPropagation()));
+        }
+      }, options);
+    });
+    document.addEventListener("click", (event) => {
+      if (!header.contains(event.target)) setMobileOpen(false);
+    }, options);
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const expandedButton = buttons.find((button) => button.getAttribute("aria-expanded") === "true");
+      if (header.classList.contains("mobile-open")) {
+        setMobileOpen(false);
+        toggle?.focus();
+      } else if (expandedButton) {
+        closeMegaPanels();
+        expandedButton.focus();
+      }
+    }, options);
+    const compactNavigation = window.matchMedia("(max-width: 820px)");
+    compactNavigation.addEventListener("change", () => setMobileOpen(false), options);
     this.sliders = [...document.querySelectorAll("[data-mega-news-slider]")].map(
       (root) => new MegaNewsSliderWidget(root),
     );
@@ -416,7 +442,7 @@ class HeaderController {
         alert(
           `${a.dataset.language} is shown as a wireframe option. Translation will be added in the content phase.`,
         );
-      }),
+      }, options),
     );
   }
 
@@ -518,6 +544,42 @@ class GeneralPageController {
     });
   }
 
+  setupAnchorNavigation() {
+    const controller = new AbortController();
+    const options = { signal: controller.signal };
+    this.cleanups.push(() => controller.abort());
+    document.querySelectorAll(".anchor-nav").forEach((nav) => {
+      const track = nav.querySelector(".anchor-nav-track");
+      if (!track) return;
+      const previous = nav.querySelector("[data-anchor-prev]");
+      const next = nav.querySelector("[data-anchor-next]");
+      const sync = () => {
+        const maximum = track.scrollWidth - track.clientWidth;
+        if (previous) previous.disabled = track.scrollLeft <= 1;
+        if (next) next.disabled = track.scrollLeft >= maximum - 1;
+      };
+      const advance = (direction) => {
+        track.scrollBy({ left: direction * Math.max(184, track.clientWidth * 0.8), behavior: "smooth" });
+      };
+      previous?.addEventListener("click", () => advance(-1), options);
+      next?.addEventListener("click", () => advance(1), options);
+      track.addEventListener("scroll", sync, options);
+      window.addEventListener("resize", sync, options);
+      const observer = new MutationObserver(sync);
+      observer.observe(track, { childList: true, subtree: true });
+      this.cleanups.push(() => observer.disconnect());
+      track.addEventListener("focusin", (event) => {
+        const link = event.target.closest("a");
+        if (!link) return;
+        const bounds = link.getBoundingClientRect();
+        const viewport = track.getBoundingClientRect();
+        const delta = bounds.left < viewport.left ? bounds.left - viewport.left : bounds.right > viewport.right ? bounds.right - viewport.right : 0;
+        if (delta) track.scrollBy({ left: delta, behavior: "instant" });
+      }, options);
+      sync();
+    });
+  }
+
   setupGeneralControls() {
     document.querySelectorAll(".accordion-head").forEach((btn) =>
       btn.addEventListener("click", () => {
@@ -592,6 +654,7 @@ class GeneralPageController {
     this.setupMarketCards();
     this.setupGeneralControls();
     this.setupPagination();
+    this.setupAnchorNavigation();
     return this;
   }
 

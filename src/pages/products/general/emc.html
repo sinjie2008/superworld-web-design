@@ -1,4 +1,4 @@
-<main id="main-content" class="page-main">
+<main id="main-content" class="page-main product-family-page">
   <nav class="container crumb" aria-label="Breadcrumb">
     <a data-link class="" href="/">HOME</a> &gt;
     <a data-link class="" href="/products">OUR PRODUCTS</a> &gt;
@@ -17,29 +17,54 @@
         </p>
       </div>
       <div class="hero-brand">
-        <img
-          src="https://placehold.co/560x320"
-          srcset="
-            https://placehold.co/280x160   280w,
-            https://placehold.co/560x320   560w,
-            https://placehold.co/840x480   840w,
-            https://placehold.co/1120x640 1120w
-          "
-          sizes="(max-width: 820px) calc(100vw - 72px), 470px"
-          alt="EMC Components hero image"
-          width="560"
-          height="320"
-        />
+        <picture>
+          <source media="(max-width: 1024px)" srcset="/assets/brand-responsive.png" />
+          <img
+            src="https://placehold.co/560x320"
+            srcset="
+              https://placehold.co/280x160   280w,
+              https://placehold.co/560x320   560w,
+              https://placehold.co/840x480   840w,
+              https://placehold.co/1120x640 1120w
+            "
+            sizes="(max-width: 820px) calc(100vw - 72px), 470px"
+            alt="EMC Components hero image"
+            width="560"
+            height="320"
+          />
+        </picture>
       </div>
     </div>
   </div>
   <nav class="anchor-nav">
-    <a href="#superworld_electronics_products_general_emc_chip_array_ferrite_bead"
-      >Chip Array Ferrite Bead</a
-    ><a href="#superworld_electronics_products_general_emc_chip_inductor">Chip Inductor</a
-    ><a href="#superworld_electronics_products_general_emc_ferrite_bead_assembly"
-      >Ferrite Bead Assembly</a
-    ><a href="#superworld_electronics_products_general_emc_ferrite_chip_bead">Ferrite Chip Bead</a>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-prev
+      aria-label="Previous sections"
+      aria-controls="section-navigation"
+    >
+      ‹
+    </button>
+    <div class="anchor-nav-track" id="section-navigation">
+      <a href="#superworld_electronics_products_general_emc_chip_array_ferrite_bead"
+        >Chip Array Ferrite Bead</a
+      ><a href="#superworld_electronics_products_general_emc_chip_inductor">Chip Inductor</a
+      ><a href="#superworld_electronics_products_general_emc_ferrite_bead_assembly"
+        >Ferrite Bead Assembly</a
+      ><a href="#superworld_electronics_products_general_emc_ferrite_chip_bead"
+        >Ferrite Chip Bead</a
+      >
+    </div>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-next
+      aria-label="Next sections"
+      aria-controls="section-navigation"
+    >
+      ›
+    </button>
   </nav>
   <section
     id="superworld_electronics_products_general_emc_chip_array_ferrite_bead"
@@ -52,21 +77,21 @@
         time.
       </p>
       <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Series</th>
-              <th>Dimension</th>
-              <th>Impedance Range (ohm)</th>
-              <th>DCR Range (ohm)</th>
-              <th>Current Range (mA)</th>
-              <th>Specification</th>
+        <table role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Product</th>
+              <th role="columnheader" scope="col">Series</th>
+              <th role="columnheader" scope="col">Dimension</th>
+              <th role="columnheader" scope="col">Impedance Range (ohm)</th>
+              <th role="columnheader" scope="col">DCR Range (ohm)</th>
+              <th role="columnheader" scope="col">Current Range (mA)</th>
+              <th role="columnheader" scope="col">Specification</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <img
                   class="product-thumb"
                   src="/assets/a4k-product.webp"
@@ -75,14 +100,14 @@
                   height="195"
                 />
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <a data-link class="" href="/products/general/emc/a4k"><u>A4K</u></a>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download A4K specification">
                   Download
                 </button>
@@ -101,21 +126,21 @@
         profile, high current capability.
       </p>
       <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Series</th>
-              <th>Dimension</th>
-              <th>Impedance Range (ohm)</th>
-              <th>DCR Range (ohm)</th>
-              <th>Current Range (mA)</th>
-              <th>Specification</th>
+        <table role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Product</th>
+              <th role="columnheader" scope="col">Series</th>
+              <th role="columnheader" scope="col">Dimension</th>
+              <th role="columnheader" scope="col">Impedance Range (ohm)</th>
+              <th role="columnheader" scope="col">DCR Range (ohm)</th>
+              <th role="columnheader" scope="col">Current Range (mA)</th>
+              <th role="columnheader" scope="col">Specification</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -126,21 +151,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>C</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download C specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -151,21 +176,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>C1</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download C1 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -176,21 +201,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>C2</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download C2 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -201,14 +226,14 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>C3</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download C3 specification">
                   Download
                 </button>
@@ -230,21 +255,21 @@ Product"
         noise.
       </p>
       <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Series</th>
-              <th>Dimension</th>
-              <th>Impedance Range (ohm)</th>
-              <th>DCR Range (ohm)</th>
-              <th>Current Range (mA)</th>
-              <th>Specification</th>
+        <table role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Product</th>
+              <th role="columnheader" scope="col">Series</th>
+              <th role="columnheader" scope="col">Dimension</th>
+              <th role="columnheader" scope="col">Impedance Range (ohm)</th>
+              <th role="columnheader" scope="col">DCR Range (ohm)</th>
+              <th role="columnheader" scope="col">Current Range (mA)</th>
+              <th role="columnheader" scope="col">Specification</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -255,21 +280,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -280,21 +305,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z1</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z1 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -305,14 +330,14 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z2</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z2 specification">
                   Download
                 </button>
@@ -328,21 +353,21 @@ Product"
       <h2>Ferrite Chip Bead</h2>
       <p>Multilayer construction, ideal for power lines, general and high-speed signal lines.</p>
       <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Series</th>
-              <th>Dimension</th>
-              <th>Impedance Range (ohm)</th>
-              <th>DCR Range (ohm)</th>
-              <th>Current Range (mA)</th>
-              <th>Specification</th>
+        <table role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Product</th>
+              <th role="columnheader" scope="col">Series</th>
+              <th role="columnheader" scope="col">Dimension</th>
+              <th role="columnheader" scope="col">Impedance Range (ohm)</th>
+              <th role="columnheader" scope="col">DCR Range (ohm)</th>
+              <th role="columnheader" scope="col">Current Range (mA)</th>
+              <th role="columnheader" scope="col">Specification</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -353,21 +378,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -378,21 +403,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z1</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z1 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -403,21 +428,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z2</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z2 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -428,21 +453,21 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z3</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z3 specification">
                   Download
                 </button>
               </td>
             </tr>
-            <tr>
-              <td>
+            <tr role="row">
+              <td role="cell" data-label="Product">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -453,14 +478,14 @@ Product"
                   />
                 </div>
               </td>
-              <td>
+              <td role="cell" data-label="Series">
                 <span class="product-series"><u>Z4</u></span>
               </td>
-              <td>XXXXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>XXX - XXX</td>
-              <td>
+              <td role="cell" data-label="Dimension">XXXXX</td>
+              <td role="cell" data-label="Impedance Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="DCR Range (ohm)">XXX - XXX</td>
+              <td role="cell" data-label="Current Range (mA)">XXX - XXX</td>
+              <td role="cell" data-label="Specification">
                 <button class="button small" type="button" aria-label="Download Z4 specification">
                   Download
                 </button>

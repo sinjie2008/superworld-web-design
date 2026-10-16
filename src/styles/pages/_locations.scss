@@ -98,4 +98,136 @@
       text-align: center
     }
   }
+
+  .locations-page {
+    @media (max-width: 1024px) {
+      & .locations-regional > .container,
+      & .locations-directory > .container {
+        width: calc(100% - 48px)
+      }
+
+      & .locations-regional .map {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 720 / 280;
+        margin-top: var(--space-8)
+      }
+
+      & .locations-regional .regions {
+        gap: var(--space-8) var(--space-4)
+      }
+
+      & .locations-regional .region {
+        border: 0;
+        padding: 0;
+        background: transparent
+      }
+
+      & .locations-regional .region h3 {
+        margin-bottom: var(--space-2);
+        font-size: 18px;
+        font-weight: 600
+      }
+
+      & .locations-regional .region p {
+        font-size: 14px;
+        line-height: 1.4
+      }
+      & .regions {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      & .location-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-5)
+      }
+
+      & .location-card {
+        min-width: 0;
+        min-height: 0;
+        padding: var(--space-5)
+      }
+
+      & .location-controls [data-location-search] {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0
+      }
+
+      & .location-controls {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-3);
+        padding: var(--space-6) 0
+      }
+
+      & .location-tabs {
+        width: 100%;
+        min-width: 0
+      }
+
+      & .location-tabs button {
+        flex-shrink: 0;
+        padding-inline: var(--space-3);
+        font-size: 14px;
+        white-space: nowrap
+      }
+    }
+
+    @media (max-width: 560px) {
+      & .locations-regional > .container,
+      & .locations-directory > .container {
+        width: calc(100% - 40px)
+      }
+
+      & .location-grid {
+        grid-template-columns: minmax(0, 1fr)
+      }
+
+      & .locations-regional .regions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-8) var(--space-4);
+        margin-top: var(--space-12) !important
+      }
+
+      & .locations-regional .region {
+        padding: var(--space-3)
+      }
+
+      & .locations-regional .region h3 {
+        font-size: 14px;
+        line-height: 1.4
+      }
+
+      & .locations-regional .region p {
+        margin-bottom: 0;
+        line-height: 1.4
+      }
+
+      & .locations-regional .map {
+        aspect-ratio: 350 / 180
+      }
+
+      & .region {
+        min-width: 0
+      }
+
+      & .location-controls {
+        padding: var(--space-4) 0 var(--space-6)
+      }
+
+      & .location-tabs {
+        width: 100%;
+        min-width: 0
+      }
+
+      & .location-controls [data-location-search] {
+        width: 100%;
+        min-width: 0
+      }
+
+      & .location-card {
+        padding: var(--space-5)
+      }
+    }
+  }
 }

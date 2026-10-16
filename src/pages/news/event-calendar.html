@@ -1,4 +1,4 @@
-<main id="main-content" class="page-main">
+<main id="main-content" class="page-main news-page event-calendar-page">
   <nav class="container crumb" aria-label="Breadcrumb">
     <a data-link class="" href="/">HOME</a> &gt; <a data-link class="" href="/news">NEWS</a> &gt;
     <span aria-current="page">EVENT CALENDAR</span>
@@ -130,11 +130,31 @@ Feature"
         </aside>
       </div>
       <nav class="anchor-nav">
-        <a data-link class="" href="/news">Latest News</a
-        ><a data-link class="" href="/news?category=product">Product News</a
-        ><a data-link class="" href="/news?category=events">Events & Activities</a
-        ><a data-link class="" href="/news?category=business">Company News</a
-        ><a data-link class="" href="/news?category=brochures">Resources</a>
+        <button
+          class="anchor-nav-control"
+          type="button"
+          data-anchor-prev
+          aria-label="Previous sections"
+          aria-controls="section-navigation"
+        >
+          ‹
+        </button>
+        <div class="anchor-nav-track" id="section-navigation">
+          <a data-link class="" href="/news">Latest News</a
+          ><a data-link class="" href="/news?category=product">Product News</a
+          ><a data-link class="" href="/news?category=events">Events & Activities</a
+          ><a data-link class="" href="/news?category=business">Company News</a
+          ><a data-link class="" href="/news?category=brochures">Resources</a>
+        </div>
+        <button
+          class="anchor-nav-control"
+          type="button"
+          data-anchor-next
+          aria-label="Next sections"
+          aria-controls="section-navigation"
+        >
+          ›
+        </button>
       </nav>
       <div class="news-filters">
         <select aria-label="Event category">
@@ -154,7 +174,7 @@ Feature"
           </button>
         </div>
       </div>
-      <div class="table-wrap" style="margin-top: 56px">
+      <div class="table-wrap news-event-table" style="margin-top: 56px">
         <table>
           <thead>
             <tr>
@@ -167,7 +187,7 @@ Feature"
           </thead>
           <tbody>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -177,14 +197,24 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">NEPCON Japan 2026</h3>
               </td>
-              <td>21 Jan (Wed) – 23 Jan (Fri)</td>
-              <td><strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27</td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Date">21 Jan (Wed) – 23 Jan (Fri)</td>
+              <td data-label="Location, Booth No">
+                <strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27
+              </td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -194,14 +224,24 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">NEPCON Japan 2026</h3>
               </td>
-              <td>21 Jan (Wed) – 23 Jan (Fri)</td>
-              <td><strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27</td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Date">21 Jan (Wed) – 23 Jan (Fri)</td>
+              <td data-label="Location, Booth No">
+                <strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27
+              </td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -211,14 +251,24 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">NEPCON Japan 2026</h3>
               </td>
-              <td>21 Jan (Wed) – 23 Jan (Fri)</td>
-              <td><strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27</td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Date">21 Jan (Wed) – 23 Jan (Fri)</td>
+              <td data-label="Location, Booth No">
+                <strong>Tokyo Big Sight, Japan</strong><br /># E36 – 27
+              </td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -228,17 +278,25 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">Electronica India</h3>
               </td>
-              <td>15 Apr (Wed) – 17 Apr (Fri)</td>
-              <td>
+              <td data-label="Date">15 Apr (Wed) – 17 Apr (Fri)</td>
+              <td data-label="Location, Booth No">
                 <strong>Bangalore International Exhibition Centre, India</strong><br /># Hall 2 –
                 B18
               </td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -248,17 +306,25 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">Electronica India</h3>
               </td>
-              <td>15 Apr (Wed) – 17 Apr (Fri)</td>
-              <td>
+              <td data-label="Date">15 Apr (Wed) – 17 Apr (Fri)</td>
+              <td data-label="Location, Booth No">
                 <strong>Bangalore International Exhibition Centre, India</strong><br /># Hall 2 –
                 B18
               </td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
             <tr data-event-search-item data-event-year="2026">
-              <td>
+              <td data-label="Event">
                 <div class="ph">
                   <img
                     src="https://placehold.co/86x64"
@@ -268,14 +334,22 @@ Event"
                     height="64"
                   />
                 </div>
+                <h3 class="news-event-name">Electronica India</h3>
               </td>
-              <td>15 Apr (Wed) – 17 Apr (Fri)</td>
-              <td>
+              <td data-label="Date">15 Apr (Wed) – 17 Apr (Fri)</td>
+              <td data-label="Location, Booth No">
                 <strong>Bangalore International Exhibition Centre, India</strong><br /># Hall 2 –
                 B18
               </td>
-              <td><button type="button">Exhibition Details</button></td>
-              <td><button type="button">Expo Details</button><br />Book an Appointment</td>
+              <td data-label="Exhibition website">
+                <button type="button">Exhibition Details</button>
+              </td>
+              <td data-label="Our Expo Page">
+                <button type="button">Expo Details</button
+                ><a data-link class="news-event-appointment" href="/support?type=appointment"
+                  >Book an Appointment</a
+                >
+              </td>
             </tr>
           </tbody>
         </table>

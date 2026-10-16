@@ -476,7 +476,14 @@ export class SpecificationSearchRenderer {
       name.className = "product-name";
       if (product.seriesUrl) name.href = product.seriesUrl;
       name.textContent = String(value);
-      content.append(name);
+      const copy = document.createElement("div");
+      copy.className = "product-copy";
+      const label = document.createElement("span");
+      label.className = "result-cell-label";
+      label.setAttribute("aria-hidden", "true");
+      label.textContent = column.title;
+      copy.append(label, name);
+      content.append(copy);
       cell.append(content);
       return;
     }
@@ -491,8 +498,16 @@ export class SpecificationSearchRenderer {
       }
       return;
     }
-    cell.textContent =
+    const label = document.createElement("span");
+    label.className = "result-cell-label";
+    label.setAttribute("aria-hidden", "true");
+    label.textContent = column.title;
+    const displayedValue = document.createElement("span");
+    displayedValue.className = "result-cell-value";
+    displayedValue.textContent =
       value === undefined || value === null ? "" : String(value);
+    if (column.key !== "category") cell.classList.add("result-spec-cell");
+    cell.append(label, displayedValue);
   }
 
   makePageButton(
@@ -580,28 +595,41 @@ export class SpecificationSearchRenderer {
 
   renderTable() {
     const signal = this.listenerSignal("table");
+    const activeElement = this.dom.document.activeElement;
+    const activeSortKey = this.dom.tableHead.contains(activeElement)
+      ? activeElement.closest("th")?.dataset.column
+      : null;
+    const activePageLabel = this.dom.pagination.contains(activeElement)
+      ? activeElement.getAttribute("aria-label") || activeElement.textContent
+      : null;
     const { filtered, pageRows, pageCount, startIndex } =
       this.deriveTableRows();
     this.dom.tableHead.replaceChildren();
     this.dom.tableBody.replaceChildren();
 
     const headerRow = document.createElement("tr");
+    headerRow.setAttribute("role", "row");
     const selectHeader = document.createElement("th");
+    selectHeader.scope = "col";
+    selectHeader.setAttribute("role", "columnheader");
     selectHeader.className = "inquiry-select-column";
     const selectLabel = document.createElement("span");
     selectLabel.className = "visually-hidden";
     selectLabel.textContent = "Select for inquiry";
     selectHeader.append(selectLabel);
     headerRow.append(selectHeader);
-    this.state.table.columns.forEach((column) => {
+    this.state.table.columns.forEach((column, index) => {
       const header = document.createElement("th");
+      header.id = `result-column-${index}`;
+      header.scope = "col";
+      header.setAttribute("role", "columnheader");
       header.dataset.column = column.key;
       if (column.sortable) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "sort-button";
         const isSorted = this.state.table.sortKey === column.key;
-        button.setAttribute(
+        header.setAttribute(
           "aria-sort",
           isSorted
             ? this.state.table.sortDirection === "asc"
@@ -609,6 +637,7 @@ export class SpecificationSearchRenderer {
               : "descending"
             : "none",
         );
+        button.setAttribute("aria-label", `Sort by ${column.title}`);
         const text = document.createElement("span");
         text.textContent = column.title;
         const icon = document.createElement("span");
@@ -645,7 +674,10 @@ export class SpecificationSearchRenderer {
 
     if (pageRows.length === 0) {
       const row = document.createElement("tr");
+      row.setAttribute("role", "row");
+      row.className = "results-empty-row";
       const cell = document.createElement("td");
+      cell.setAttribute("role", "cell");
       cell.className = "empty-cell";
       cell.colSpan = this.state.table.columns.length + 1;
       cell.textContent = "No products found.";
@@ -654,7 +686,9 @@ export class SpecificationSearchRenderer {
     } else {
       pageRows.forEach((product) => {
         const row = document.createElement("tr");
+        row.setAttribute("role", "row");
         const selectCell = document.createElement("td");
+        selectCell.setAttribute("role", "cell");
         selectCell.className = "inquiry-select-column";
         const selectInput = document.createElement("input");
         selectInput.type = "checkbox";
@@ -676,10 +710,15 @@ export class SpecificationSearchRenderer {
           },
           { signal },
         );
-        selectCell.append(selectInput);
+        const selectTarget = document.createElement("label");
+        selectTarget.className = "result-selection";
+        selectTarget.append(selectInput);
+        selectCell.append(selectTarget);
         row.append(selectCell);
-        this.state.table.columns.forEach((column) => {
+        this.state.table.columns.forEach((column, index) => {
           const cell = document.createElement("td");
+          cell.setAttribute("role", "cell");
+          cell.setAttribute("headers", `result-column-${index}`);
           cell.dataset.column = column.key;
           this.renderCell(cell, column, product);
           row.append(cell);
@@ -701,6 +740,19 @@ export class SpecificationSearchRenderer {
     this.dom["table-info"].textContent =
       `Showing ${visibleStart} to ${visibleEnd} of ${filtered.length} entries${filteredSuffix}`;
     this.renderPagination(pageCount, filtered.length);
+    if (activeSortKey) {
+      [...this.dom.tableHead.querySelectorAll("th")]
+        .find((header) => header.dataset.column === activeSortKey)
+        ?.querySelector("button")?.focus({ preventScroll: true });
+    } else if (activePageLabel) {
+      const pageButtons = [...this.dom.pagination.querySelectorAll("button")];
+      const matchingButton = pageButtons.find((button) =>
+        (button.getAttribute("aria-label") || button.textContent) === activePageLabel);
+      const focusTarget = matchingButton && !matchingButton.disabled
+        ? matchingButton
+        : pageButtons.find((button) => button.classList.contains("active"));
+      focusTarget?.focus({ preventScroll: true });
+    }
   }
 
   renderResults() {

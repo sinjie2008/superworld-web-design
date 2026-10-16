@@ -56,6 +56,8 @@ $font-body: Inter, Arial, sans-serif;
   --soft-2: #ececec;
   --muted: #666;
   --line: #1d1d1d;
+  --color-brand-blue: #4077be;
+  --color-brand-navy: #203362;
   --max: 1320px;
   --gutter: clamp(18px, 4vw, 64px);
   --container-width: min(var(--max), calc(100% - (var(--gutter) * 2)));
@@ -89,7 +91,11 @@ $font-body: Inter, Arial, sans-serif;
   --touch-target: 44px;
   --form-control-height: 52px;
 
+  @media (max-width: 1024px) {
+    --gutter: 32px;
+  }
+
   @media (max-width: 560px) {
-    --gutter: 18px;
+    --gutter: 20px;
   }
 }

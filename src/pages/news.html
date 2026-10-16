@@ -132,11 +132,31 @@ Feature"
         </aside>
       </div>
       <nav class="anchor-nav">
-        <a data-link class="" href="/news?category=latest">Latest News</a
-        ><a data-link class="" href="/news?category=product">Product News</a
-        ><a data-link class="" href="/news?category=events">Events & Activities</a
-        ><a data-link class="" href="/news?category=business">Company News</a
-        ><a data-link class="" href="/news?category=brochures">Resources</a>
+        <button
+          class="anchor-nav-control"
+          type="button"
+          data-anchor-prev
+          aria-label="Previous sections"
+          aria-controls="section-navigation"
+        >
+          ‹
+        </button>
+        <div class="anchor-nav-track" id="section-navigation">
+          <a data-link class="" href="/news?category=latest">Latest News</a
+          ><a data-link class="" href="/news?category=product">Product News</a
+          ><a data-link class="" href="/news?category=events">Events & Activities</a
+          ><a data-link class="" href="/news?category=business">Company News</a
+          ><a data-link class="" href="/news?category=brochures">Resources</a>
+        </div>
+        <button
+          class="anchor-nav-control"
+          type="button"
+          data-anchor-next
+          aria-label="Next sections"
+          aria-controls="section-navigation"
+        >
+          ›
+        </button>
       </nav>
       <div class="news-filters">
         <select aria-label="Category" data-news-type>

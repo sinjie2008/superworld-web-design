@@ -221,4 +221,439 @@
     grid-template-columns: 1fr 1fr;
     gap: 24px
   }
+
+  .cart-quantity-label {
+    display: none;
+  }
+
+  .inquiry-page {
+    > .crumb {
+      @media (max-width: 1024px) {
+        padding: 24px 0 12px;
+        line-height: 16px;
+      }
+
+      @media (max-width: 560px) {
+        padding: 16px 0 40px;
+        line-height: 32px;
+      }
+    }
+
+    > .section-sm {
+      @media (max-width: 1024px) {
+        padding-top: 0;
+      }
+    }
+
+    .inquiry-title {
+      @media (max-width: 1024px) {
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 32px;
+      }
+
+      @media (max-width: 560px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      h1 {
+        @media (max-width: 1024px) {
+          margin: 0;
+          font-size: 28px;
+          line-height: 1.4;
+        }
+
+        @media (max-width: 560px) {
+          font-size: 24px;
+        }
+      }
+
+      button {
+        @media (max-width: 1024px) {
+          min-width: 88px;
+          min-height: 44px;
+        }
+      }
+    }
+
+    .inquiry-summary {
+      @media (max-width: 1024px) {
+        border: 0;
+      }
+    }
+
+    .inquiry-summary-header {
+      @media (max-width: 1024px) {
+        display: block;
+        min-height: 0;
+        margin-bottom: 24px;
+        border: 0;
+      }
+
+      h2 {
+        @media (max-width: 1024px) {
+          padding: 0;
+          font-size: 22px;
+          line-height: 28px;
+        }
+      }
+
+      strong {
+        @media (max-width: 1024px) {
+          display: none;
+        }
+      }
+    }
+
+    [data-cart-container] {
+      @media (max-width: 1024px) {
+        display: grid;
+        gap: 24px;
+      }
+
+      @media (max-width: 560px) {
+        gap: 16px;
+      }
+    }
+
+    .cart-row {
+      @media (max-width: 1024px) {
+        position: relative;
+        grid-template-columns: minmax(0, 1fr) 132px;
+        gap: 20px;
+        border: 1px solid var(--line);
+        padding: 16px;
+      }
+
+      @media (max-width: 560px) {
+        display: block;
+      }
+    }
+
+    .cart-number {
+      @media (max-width: 1024px) {
+        position: absolute;
+        top: 24px;
+        left: 176px;
+        display: grid;
+        width: 24px;
+        height: 24px;
+        border: 1px solid var(--line);
+        padding: 0;
+        place-items: center;
+        font-size: 14px;
+      }
+
+      @media (max-width: 560px) {
+        top: 28px;
+        left: 100px;
+      }
+
+      @media (min-width: 561px) and (max-width: 700px) {
+        left: 128px;
+      }
+    }
+
+    .cart-product {
+      @media (max-width: 1024px) {
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 12px 20px;
+        align-content: start;
+        padding: 0;
+      }
+
+      @media (max-width: 700px) {
+        grid-template-columns: 140px minmax(0, 1fr);
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: 64px minmax(0, 1fr);
+      }
+
+      > .ph {
+        @media (max-width: 1024px) {
+          grid-column: 1;
+          grid-row: 1;
+          width: 140px;
+          height: 96px;
+          border: 0;
+        }
+
+        @media (max-width: 560px) {
+          width: 64px;
+          height: 72px;
+        }
+      }
+
+      h3 {
+        @media (max-width: 1024px) {
+          grid-column: 1;
+          grid-row: 2;
+          margin: 0;
+          font-size: 14px;
+          line-height: 20px;
+          overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 560px) {
+          grid-column: 2;
+          grid-row: 1;
+          padding-top: 40px;
+        }
+      }
+
+      p {
+        @media (max-width: 1024px) {
+          margin: 0;
+          font-size: 12px;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+      }
+    }
+
+    .cart-product-copy {
+      @media (max-width: 1024px) {
+        display: contents;
+      }
+    }
+
+    .cart-part-id, .cart-series {
+      @media (max-width: 1024px) {
+        grid-column: 1;
+      }
+
+      @media (max-width: 560px) {
+        grid-row: 2;
+      }
+    }
+
+    .cart-part-id {
+      @media (max-width: 560px) {
+        grid-column: 1;
+      }
+    }
+
+    .cart-series {
+      @media (max-width: 560px) {
+        grid-column: 2;
+      }
+    }
+
+    .cart-product-data {
+      @media (max-width: 1024px) {
+        grid-column: 2;
+        grid-row: 1 / span 4;
+        min-width: 0;
+      }
+
+      @media (max-width: 560px) {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+    }
+
+    .cart-category {
+      @media (max-width: 1024px) {
+        padding: 8px 12px;
+        background: var(--soft);
+      }
+    }
+
+    .cart-specs {
+      @media (max-width: 1024px) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        margin: 12px 0 0;
+      }
+
+      @media (min-width: 561px) and (max-width: 1024px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      div {
+        @media (max-width: 1024px) {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          align-items: center;
+          min-height: 40px;
+          gap: 12px;
+          border: 0;
+          padding: 8px 12px;
+          font-size: 12px;
+          overflow-wrap: anywhere;
+        }
+
+        @media (min-width: 561px) and (max-width: 1024px) {
+          display: block;
+          padding: 0;
+        }
+
+        &:nth-child(odd) {
+          @media (max-width: 1024px) {
+            background: var(--soft);
+          }
+
+          @media (min-width: 561px) and (max-width: 1024px) {
+            background: transparent;
+          }
+        }
+      }
+
+      dt {
+        @media (max-width: 1024px) {
+          font-weight: 400;
+        }
+      }
+
+      dd {
+        @media (min-width: 561px) and (max-width: 1024px) {
+          margin-top: 4px;
+          text-align: left;
+        }
+      }
+    }
+
+    .cart-quantity {
+      @media (max-width: 1024px) {
+        grid-column: 2;
+        grid-row: 1;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 12px;
+        border: 0;
+        padding: 0;
+      }
+
+      @media (max-width: 560px) {
+        display: grid;
+        grid-template-columns: 132px minmax(0, 1fr);
+        gap: 8px 12px;
+        margin-top: 16px;
+      }
+    }
+
+    .cart-quantity-label {
+      @media (max-width: 1024px) {
+        display: block;
+        font-size: 12px;
+      }
+
+      @media (max-width: 560px) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .quantity {
+      @media (max-width: 1024px) {
+        display: grid;
+        grid-template-columns: repeat(3, 44px);
+      }
+
+      button, output {
+        @media (max-width: 1024px) {
+          width: 44px;
+          min-width: 0;
+          height: 48px;
+          padding: 0;
+        }
+      }
+    }
+
+    .cart-remove {
+      @media (max-width: 1024px) {
+        min-height: 48px;
+        border: 1px solid var(--line);
+        text-decoration: none;
+      }
+    }
+
+    .inquiry-details {
+      @media (max-width: 1024px) {
+        padding-top: 32px;
+      }
+
+      > h2 {
+        @media (max-width: 1024px) {
+          margin-bottom: 24px;
+          font-size: 22px;
+          line-height: 28px;
+        }
+      }
+    }
+
+    .inquiry-form {
+      @media (max-width: 1024px) {
+        border: 0;
+        padding: 0;
+      }
+
+      h3 {
+        @media (max-width: 1024px) {
+          font-size: 16px;
+          line-height: 24px;
+        }
+      }
+
+      > .section-heading {
+        @media (max-width: 1024px) {
+          flex-direction: row;
+          align-items: center;
+        }
+
+        @media (max-width: 560px) {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 24px;
+        }
+
+        label {
+          @media (max-width: 1024px) {
+            gap: 8px;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    .form-columns {
+      @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      > div {
+        @media (max-width: 1024px) {
+          min-width: 0;
+          border: 1px solid var(--line);
+          padding: 16px;
+        }
+      }
+    }
+
+    .form-grid-2 {
+      @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .field {
+      @media (max-width: 1024px) {
+        min-width: 0;
+        margin-bottom: 16px;
+      }
+    }
+  }
 }

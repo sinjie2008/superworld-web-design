@@ -1,4 +1,4 @@
-<main id="main-content" class="page-main">
+<main id="main-content" class="page-main quality-page">
   <nav class="container crumb" aria-label="Breadcrumb">
     <a data-link class="" href="/">HOME</a> &gt;
     <a data-link class="" href="/company">OUR COMPANY</a> &gt;
@@ -19,18 +19,42 @@
         </div>
       </div>
       <div class="quality-hero-brand">
-        <img
-          src="https://placehold.co/420x148"
-          alt="Superworld Electronics quality image"
-          width="420"
-          height="148"
-        />
+        <picture>
+          <source media="(max-width: 1024px)" srcset="/assets/brand-responsive.png" />
+          <img
+            src="https://placehold.co/420x148"
+            alt="Superworld Electronics quality image"
+            width="420"
+            height="148"
+          />
+        </picture>
       </div>
     </div>
   </div>
   <nav class="anchor-nav">
-    <a href="#qms">QUALITY MANAGEMENT SYSTEM</a><a href="#reliability">RELIABILITY TEST STANDARDS</a
-    ><a href="#compliance">COMPLIANCE & ENVIRONMENT</a><a href="#certs">CERTIFICATION VAULT</a>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-prev
+      aria-label="Previous sections"
+      aria-controls="section-navigation"
+    >
+      ‹
+    </button>
+    <div class="anchor-nav-track" id="section-navigation">
+      <a href="#qms">QUALITY MANAGEMENT SYSTEM</a
+      ><a href="#reliability">RELIABILITY TEST STANDARDS</a
+      ><a href="#compliance">COMPLIANCE & ENVIRONMENT</a><a href="#certs">CERTIFICATION VAULT</a>
+    </div>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-next
+      aria-label="Next sections"
+      aria-controls="section-navigation"
+    >
+      ›
+    </button>
   </nav>
   <section id="qms" class="section quality-wireframe-section quality-qms">
     <div class="container">

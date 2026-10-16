@@ -12,4 +12,40 @@
     gap: 70px;
     padding: clamp(50px,8vw,120px)
   }
+
+  .thanks-page .thanks {
+    @media (max-width: 1024px) {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      min-height: 0;
+      gap: 32px;
+      border: 0;
+      padding: 32px 48px;
+    }
+
+    @media (max-width: 560px) {
+      padding: 32px 0;
+    }
+
+    h1 {
+      @media (max-width: 1024px) {
+        max-width: 548px;
+        margin: 0;
+        font-size: 72px;
+        line-height: 1.08;
+      }
+
+      @media (max-width: 560px) {
+        font-size: 36px;
+        line-height: 1.2;
+      }
+    }
+
+    p {
+      @media (max-width: 1024px) {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-<main id="main-content" class="page-main">
+<main id="main-content" class="page-main locations-page">
   <nav class="container crumb" aria-label="Breadcrumb">
     <a data-link class="" href="/">HOME</a> &gt;
     <a data-link class="" href="/company">ABOUT US</a> &gt;
@@ -32,9 +32,29 @@
     </div>
   </div>
   <nav class="anchor-nav">
-    <a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-prev
+      aria-label="Previous sections"
+      aria-controls="section-navigation"
+    >
+      ‹
+    </button>
+    <div class="anchor-nav-track" id="section-navigation">
+      <a href="#regional">REGIONAL SUPPORT</a><a href="#locations">OUR LOCATIONS</a>
+    </div>
+    <button
+      class="anchor-nav-control"
+      type="button"
+      data-anchor-next
+      aria-label="Next sections"
+      aria-controls="section-navigation"
+    >
+      ›
+    </button>
   </nav>
-  <section id="regional" class="section">
+  <section id="regional" class="section locations-regional">
     <div class="container">
       <div class="section-heading center">
         <h2>REGIONAL SUPPORT FOR GLOBAL CUSTOMERS</h2>
@@ -93,7 +113,7 @@ Map"
       </div>
     </div>
   </section>
-  <section id="locations" class="section section-rule">
+  <section id="locations" class="section section-rule locations-directory">
     <div class="container">
       <div class="section-heading center"><h2>SUPERWORLD ELECTRONICS LOCATIONS</h2></div>
       <div class="section-heading location-controls">

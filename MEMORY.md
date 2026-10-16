@@ -103,7 +103,7 @@
 - SiteApplication calls `window.SpecSearchApp.initialize()` after every route render, including non-Spec routes, so the facade also releases Spec Search listeners, cached DOM, renderer listeners, and active requests on unload.
 - `scripts/validate-artifact.mjs` runs `src/app/features/spec-search/lifecycle-check.mjs`; that behavioral check covers repeated initialize/destroy listener counts, stale DOM invalidation, request abort, and the frozen facade keys. Generated artifacts remain build-only; never edit `worker/index.js`, `dist/**`, or `.generated/**` by hand.
 - The esbuild `--minify` flag minifies the JavaScript wrapper but preserves HTML imported through `--loader:.html=text`; keep that flag enabled while maintaining readable, non-minified HTML in `src/pages/`.
-- Current production cache query versions are `/styles.css?v=136`, `/spec-search.css?v=109`, `/app.js?v=138`, and `/spec-search.js?v=103`. Development builds compile the document to `v=dev-136` / `v=dev-138` for the two mode-dependent assets.
+- Current production cache query versions are `/styles.css?v=139`, `/spec-search.css?v=110`, `/app.js?v=141`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-139` / `v=dev-141` for the two mode-dependent assets.
 
 ## Local restoration
 
@@ -114,3 +114,19 @@
 - Hosted configuration at restoration time has no production environment variables and no D1 or R2 binding.
 - npm 11 may warn that `@parcel/watcher` and `esbuild` install scripts are pending approval; the current install, build, validation, and preview still succeed without changing that policy.
 - GitHub mirror: `https://github.com/sinjie2008/superworld-web-design.git`; keep the Sites repository as `origin` and use a separate `github` remote for mirror pushes.
+
+## Penpot tablet and mobile implementation (2026-10-15)
+
+- Responsive references are the 27 boards in each of `04 Tablet Design` (768px) and `05 Mobile Design` (390px), mapped to the existing routes and query states. Keep each layout in its owning HTML section/renderer and SCSS partial; never create parallel mobile pages or duplicate interactive controls.
+- `prepareSectionIds()` rewrites section IDs during mount. Responsive selectors must use stable owning section classes or the final generated IDs; source shorthand IDs such as `#what-drives-us` will not match the live DOM.
+- Specification Search keeps its single semantic results table and shared state. At <=1024px the same tbody rows become two-column cards, and <=560px one column. Column header sorting remains available in a local scroll strip; numeric/category labels, header associations and explicit table roles keep the rearranged view accessible. Sorting/page-size/pagination retain selection; API category/facet reloads retain their existing reset behavior. Missing API PDF URLs stay unavailable.
+- Inquiry uses the same cart renderer and controls at all widths. Tablet separates identity, specifications and quantity; mobile stacks the same fields. Inquiry and Contact forms intentionally navigate to `/thank-you` only; do not add form submission APIs.
+- Shared section navigation uses one `.anchor-nav-track` and two scroll controls. The controls and their listeners belong to `GeneralPageController` and are cleaned up on route unload. Header menu listeners also share an AbortController, with Escape/focus restoration and breakpoint cleanup.
+- Responsive brand artwork is a read-only 3x PNG export of the Penpot vector logo, stored at `src/assets/brand-responsive.png` and served by the frontend worker. `<picture>` selects it only below 1025px; the original desktop imagery remains. The original `/assets/logo.webp` is baked grayscale, not a color asset.
+- Cache version changes must be synchronized in `src/pages/layouts/document.html`, `scripts/build.mjs`, `scripts/validate-artifact.mjs`, and `scripts/check-catalog-diagnostics.mjs`; those scripts assert literal versions.
+- Chrome window resize clamps narrow windows at 500px. Use device viewport emulation and verify both innerWidth and document.clientWidth for 390/320px checks. A mobile min-height plus aspect-ratio can expand the layout viewport; fixed-width-contained system images avoid this.
+- Preview imports the built worker once. After a build, restart only the known preview process with `node scripts/dev.mjs` to retain the production artifact; `npm run dev` rebuilds with diagnostics enabled.
+
+- Runtime product hydration updates only `.anchor-nav-track`; replacing the entire navigation would discard scroll controls and listeners. Carousel offsets measure the rendered slide width and actual gap, then clamp to remaining track content, so responsive preview cards never scroll into blank space.
+- Responsive preview cards use `min(300px, 100%)` so the same 300px design card fits 320px viewports. Full-width news event regions expand relative to their container instead of `100vw`, which includes a desktop scrollbar and caused 8px overflow at 1024px.
+- Final responsive verification covered all 20 registered routes at 1440, 1024, 820, 768, 560, 430, 390 and 320px, plus the nine Penpot News/Contact query states at 768/390px. Production build, HTML/artifact/lifecycle validation and live API flows passed; external evidence is in the task's `responsive-qa/implementation-report.md`, not a permanent repository test suite.

@@ -10,17 +10,35 @@
   <div class="primary-nav">
     <div class="container">
       <a data-link class="brand" href="/"
-        ><img class="" src="/assets/logo.webp" alt="Superworld Electronics" width="215" height="76"
-      /></a>
+        ><picture
+          ><source media="(max-width: 1024px)" srcset="/assets/brand-responsive.png" />
+          <img
+            class=""
+            src="/assets/logo.webp"
+            alt="Superworld Electronics"
+            width="215"
+            height="76" /></picture
+      ></a>
       <button
         class="mobile-toggle"
         type="button"
         aria-label="Open navigation"
         aria-expanded="false"
+        aria-controls="primary-navigation"
       >
-        Menu
+        <svg
+          aria-hidden="true"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <path d="M2 5h20M2 12h20M2 19h20" />
+        </svg>
       </button>
-      <nav class="nav-list" aria-label="Main navigation">
+      <nav id="primary-navigation" class="nav-list" aria-label="Main navigation">
         <button class="nav-menu-button" type="button" data-menu="products">
           Our Products <span class="menu-caret">⌄</span>
         </button>

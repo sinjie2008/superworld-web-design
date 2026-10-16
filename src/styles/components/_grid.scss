@@ -71,6 +71,81 @@
     gap: 0;
     padding: 34px 0;
 
+    &-track {
+      display: contents;
+    }
+
+    & > .anchor-nav-control {
+      display: none;
+    }
+
+    &-track > :last-child {
+      border-right: 0;
+    }
+
+    &:has(> .anchor-nav-track) {
+      @media (max-width: 1024px) {
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) 48px;
+        gap: 8px;
+        overflow: visible;
+        padding: 32px 0;
+      }
+    }
+
+    @at-root {
+      @include scope.within {
+        #main-content .anchor-nav:has(> .anchor-nav-track) {
+          @media (max-width: 1024px) {
+            display: grid;
+            grid-template-columns: 48px minmax(0, 1fr) 48px;
+            gap: 8px;
+            overflow: visible;
+          }
+        }
+      }
+    }
+
+    & .anchor-nav-track {
+      @media (max-width: 1024px) {
+        display: flex;
+        min-width: 0;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      a {
+        @media (max-width: 1024px) {
+          flex: 0 0 auto;
+          min-width: 184px;
+          min-height: 48px;
+          max-width: 100%;
+          border: 1px solid var(--line);
+          padding: 8px 12px;
+          white-space: normal;
+          text-align: center;
+          font-size: 12px;
+        }
+      }
+    }
+
+    & > .anchor-nav-control {
+      @media (max-width: 1024px) {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--line);
+        padding: 0;
+        place-items: center;
+        font-size: 28px;
+      }
+    }
+
     a,
     button {
       display: inline-flex;

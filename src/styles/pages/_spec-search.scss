@@ -1,5 +1,12 @@
 $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" !default;
 #{$scope_prefix} {
+  @media (max-width: 1024px) {
+    width: min(var(--max), calc(100% - 48px));
+  }
+
+  @media (max-width: 560px) {
+    width: calc(100% - 40px);
+  }
   --blue: #111;
   --muted: #666;
   --border: #1d1d1d;
@@ -618,7 +625,8 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
       font-size: 12px;
     }
 
-    &-button[aria-sort="ascending"] .sort-icon,&-button[aria-sort="descending"] .sort-icon {
+    @at-root #{$scope_prefix} #results-table th[aria-sort="ascending"] .sort-icon,
+      #{$scope_prefix} #results-table th[aria-sort="descending"] .sort-icon {
       color: #7d8590;
     }
   }
@@ -1008,6 +1016,378 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
   .form-control, select {
     @media (max-width: 767.98px) {
       font-size: 16px;
+    }
+  }
+
+  .result-cell-label {
+    display: none;
+  }
+
+  .result-selection {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 1024px) {
+      width: 44px;
+      height: 44px;
+      margin-left: -10px;
+      cursor: pointer;
+    }
+  }
+
+  .section-block {
+    @media (max-width: 1024px) {
+      border: 0;
+      padding: 0;
+      margin-bottom: 24px;
+    }
+
+    &[aria-labelledby="root-title"] {
+      @media (max-width: 1024px) {
+        border: 1px solid var(--border);
+        padding: 16px;
+      }
+    }
+  }
+
+  .section-heading {
+    @media (max-width: 1024px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      @media (max-width: 1024px) {
+        align-self: flex-start;
+        width: auto;
+      }
+    }
+  }
+
+  .category-groups, .facet-grid {
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      overflow: visible;
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .root-options {
+    @media (max-width: 560px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+
+  .results {
+    &-toolbar {
+      @media (min-width: 561px) and (max-width: 1024px) {
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
+        align-items: end;
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 8px;
+      }
+    }
+
+    &-search-field {
+      @media (max-width: 1024px) {
+        display: grid;
+        gap: 4px;
+        border: 0;
+      }
+
+      @media (max-width: 560px) {
+        grid-column: 1 / -1;
+      }
+
+      > span {
+        @media (max-width: 1024px) {
+          padding-left: 0;
+          font-weight: 600;
+        }
+      }
+
+      .form-control {
+        @media (max-width: 1024px) {
+          width: 100%;
+          height: 52px;
+          min-height: 52px;
+          border: 1px solid var(--border);
+          padding: 0 12px;
+        }
+      }
+    }
+
+    &-search-button, &-inquiry-button {
+      @media (max-width: 1024px) {
+        min-width: 0;
+        min-height: 48px;
+      }
+    }
+
+    &-page-size {
+      @media (max-width: 1024px) {
+        width: auto;
+      }
+
+      @media (max-width: 560px) {
+        grid-column: 1 / -1;
+        justify-self: end;
+        min-height: 44px;
+        border: 0;
+        padding: 0;
+      }
+    }
+
+    &-instructions {
+      @media (max-width: 1024px) {
+        align-items: flex-start;
+      }
+    }
+  }
+
+  .table-responsive {
+    @media (max-width: 1024px) {
+      overflow: visible;
+    }
+  }
+
+  #results-table {
+    @media (max-width: 1024px) {
+      display: block;
+      min-width: 0;
+      border: 0;
+    }
+
+    thead {
+      @media (max-width: 1024px) {
+        display: block;
+        margin-bottom: 16px;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+      }
+
+      tr {
+        @media (max-width: 1024px) {
+          display: flex;
+          gap: 8px;
+          padding-bottom: 4px;
+        }
+      }
+
+      th {
+        @media (max-width: 1024px) {
+          display: block;
+          flex: 0 0 auto;
+          height: auto;
+          border: 0;
+          padding: 0;
+          background: transparent;
+        }
+
+        &.inquiry-select-column, &[data-column="pdfDownload"] {
+          @media (max-width: 1024px) {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            min-width: 0;
+            overflow: hidden;
+            clip-path: inset(50%);
+          }
+        }
+      }
+
+      .sort-button {
+        @media (max-width: 1024px) {
+          border: 1px solid var(--border);
+          padding: 0 12px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    tbody {
+      @media (max-width: 1024px) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      @media (max-width: 560px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      tr {
+        @media (max-width: 1024px) {
+          display: grid;
+          grid-template-columns: 80px minmax(0, 1fr) 24px;
+          grid-template-rows: minmax(40px, auto) minmax(40px, auto);
+          align-content: start;
+          align-items: start;
+          column-gap: 12px;
+          min-width: 0;
+          border: 1px solid var(--border);
+          padding: 16px;
+        }
+
+        &.results-empty-row {
+          @media (max-width: 1024px) {
+            display: block;
+            grid-column: 1 / -1;
+          }
+        }
+      }
+
+      td {
+        @media (max-width: 1024px) {
+          min-width: 0;
+          border: 0;
+          padding: 0;
+          font-size: 12px;
+          line-height: 1.4;
+          text-align: left;
+          white-space: normal;
+          overflow-wrap: anywhere;
+        }
+
+        &.product-column {
+          @media (max-width: 1024px) {
+            display: contents;
+          }
+        }
+
+        &.inquiry-select-column {
+          @media (max-width: 1024px) {
+            grid-column: 3;
+            grid-row: 1 / span 2;
+            align-self: center;
+            width: 24px;
+          }
+        }
+
+        &[data-column="category"] {
+          @media (max-width: 1024px) {
+            grid-column: 2;
+            grid-row: 2;
+            padding-bottom: 16px;
+          }
+        }
+
+        &.result-spec-cell {
+          @media (max-width: 1024px) {
+            display: flex;
+            grid-column: 1 / -1;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 40px;
+            padding: 8px 12px;
+          }
+
+          &:nth-child(even) {
+            @media (max-width: 1024px) {
+              background: #f6f6f6;
+            }
+          }
+        }
+
+        &[data-column="pdfDownload"] {
+          @media (max-width: 1024px) {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+          }
+
+          &:empty {
+            @media (max-width: 1024px) {
+              display: none;
+            }
+          }
+
+          .btn {
+            @media (max-width: 1024px) {
+              width: 100%;
+              min-height: 48px;
+            }
+          }
+        }
+      }
+    }
+
+    .product-cell {
+      @media (max-width: 1024px) {
+        display: contents;
+      }
+    }
+
+    .product-copy {
+      @media (max-width: 1024px) {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+      }
+    }
+
+    .series-image {
+      @media (max-width: 1024px) {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        align-self: center;
+        margin: 0;
+      }
+    }
+
+    .product-name {
+      @media (max-width: 1024px) {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+
+    .result-cell-label {
+      @media (max-width: 1024px) {
+        display: block;
+      }
+    }
+
+    .product-copy .result-cell-label, td[data-column="category"] .result-cell-label {
+      @media (max-width: 1024px) {
+        margin-bottom: 4px;
+        color: var(--muted);
+      }
+    }
+
+    .result-cell-value {
+      @media (max-width: 1024px) {
+        display: block;
+        text-align: right;
+      }
+    }
+
+    td[data-column="category"] .result-cell-value {
+      @media (max-width: 1024px) {
+        text-align: left;
+      }
+    }
+  }
+
+  .table-footer {
+    @media (max-width: 1024px) {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+    }
+
+    .pagination {
+      @media (max-width: 1024px) {
+        grid-column: 1;
+      }
     }
   }
 }

@@ -666,4 +666,432 @@
       box-shadow: inset 4px 0 0 #111
     }
   }
+
+  #main-content.company-page .hero-panel,
+  #main-content.achievements-page .hero-panel {
+    @media (max-width: 820px) {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: 28px;
+      padding: 32px;
+      min-height: 0;
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+      padding: 22px 20px;
+    }
+  }
+
+  #main-content.company-page .hero-panel .tag-row {
+    @media (max-width: 560px) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      overflow: visible;
+      padding-bottom: 0;
+      margin-top: 22px;
+    }
+  }
+
+  #main-content.company-page .hero-panel .tag {
+    @media (max-width: 560px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 8px 10px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.2;
+      white-space: normal;
+    }
+  }
+
+  #main-content.company-page .hero-panel .hero-brand,
+  #main-content.achievements-page .hero-panel .hero-brand {
+    @media (max-width: 820px) {
+      order: 0;
+    }
+
+    @media (max-width: 560px) {
+      order: -1;
+    }
+  }
+
+  #main-content.company-page .hero-panel .hero-brand[data-hero-slider-enhanced="true"] {
+    @media (max-width: 1024px) {
+      aspect-ratio: auto;
+      height: 116px;
+      overflow: visible;
+    }
+
+    @media (max-width: 560px) {
+      display: contents;
+    }
+
+    .hero-brand-slides {
+      @media (max-width: 1024px) {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      @media (max-width: 560px) {
+        grid-column: 1;
+        grid-row: 1;
+        height: 100px;
+      }
+    }
+
+    .hero-brand-slide {
+      @media (max-width: 1024px) {
+        border: 0;
+        background: transparent;
+      }
+    }
+
+    .hero-brand-slide picture, .hero-brand-slide img {
+      @media (max-width: 1024px) {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .hero-brand-dots {
+      @media (max-width: 1024px) {
+        right: 0;
+        bottom: -40px;
+        left: 0;
+      }
+
+      @media (max-width: 560px) {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  #main-content.company-page .company-values-section .grid-3 {
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  #main-content.company-page .company-values-section .grid-3 > :last-child {
+    @media (max-width: 820px) and (min-width: 561px) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  #main-content.company-page .company-profile-section .stat-grid {
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  #main-content.company-page .product-line-grid {
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 560px) {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+  }
+
+  #main-content.company-page .product-line-grid > .media-card {
+    @media (max-width: 560px) {
+      flex: 0 0 min(86%, 320px);
+      scroll-snap-align: start;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .enterprise-awards-grid {
+    @media (max-width: 560px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      grid-auto-rows: 168px;
+      gap: 14px;
+      margin-top: 18px;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .enterprise-awards-grid .award-card {
+    @media (max-width: 560px) {
+      min-height: 0;
+      padding: 16px;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .enterprise-awards-grid .award-card.featured {
+    @media (max-width: 560px) {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      min-height: 360px;
+      padding: 0;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .award-featured-image {
+    @media (max-width: 560px) {
+      height: 220px;
+      min-height: 220px;
+      margin: 0;
+      border: 0;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .award-featured-copy {
+    @media (max-width: 560px) {
+      padding: 0 24px 20px;
+    }
+  }
+
+  #main-content.achievements-page .achievement-detail-section--distinguished .achievement-detail-layout,
+  #main-content.achievements-page .achievement-detail-section--customer .achievement-detail-layout {
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 36px;
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 34px;
+      margin-top: 30px;
+    }
+  }
+
+  #main-content.achievements-page .achievement-detail-section--distinguished .achievement-image-placeholder,
+  #main-content.achievements-page .achievement-detail-section--customer .achievement-image-placeholder {
+    @media (max-width: 560px) {
+      grid-row: auto;
+    }
+  }
+  #main-content.company-page .company-values-section .container.split {
+    @media (max-width: 820px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+  }
+
+  #main-content.company-page .company-values-section .grid-3 {
+    @media (max-width: 820px) {
+      gap: 24px;
+    }
+
+    @media (max-width: 560px) {
+      gap: 14px;
+    }
+  }
+
+  #main-content.company-page .company-values-section .card {
+    @media (max-width: 820px) {
+      min-height: 148px;
+      padding: 20px;
+    }
+
+    @media (max-width: 560px) {
+      min-height: 134px;
+    }
+  }
+
+  #main-content.company-page .company-values-section .card h3 {
+    @media (max-width: 820px) {
+      font-size: 22px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 560px) {
+      font-size: 20px;
+    }
+  }
+
+  #main-content.company-page .company-profile-section .company-stat-secondary {
+    @media (max-width: 560px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+  }
+
+  #main-content.company-page .company-profile-section .stat-grid {
+    @media (max-width: 560px) {
+      gap: 14px;
+    }
+  }
+
+  #main-content.company-page .company-profile-section .stat {
+    @media (max-width: 560px) {
+      min-height: 150px;
+      padding: 20px 14px;
+    }
+  }
+
+  #main-content.company-page .company-profile-section .stat strong {
+    @media (max-width: 560px) {
+      font-size: 30px;
+      line-height: 1.2;
+    }
+  }
+
+  #main-content.company-page h2,
+  #main-content.achievements-page h2 {
+    @media (max-width: 820px) {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+  }
+
+  #main-content.company-page .product-line-grid > .media-card {
+    @media (max-width: 560px) {
+      flex-basis: min(300px, 100%);
+    }
+  }
+
+  #main-content.company-page [data-carousel="company-industries"] .slide {
+    @media (max-width: 560px) {
+      flex-basis: min(300px, 100%);
+    }
+  }
+
+  #main-content.company-page [data-carousel="company-industries"] .carousel-controls {
+    @media (max-width: 820px) {
+      justify-content: space-between;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .award-card .display {
+    @media (max-width: 560px) {
+      font-size: 50px !important;
+      font-weight: 400;
+      margin: 10px 0 20px;
+    }
+  }
+
+  #main-content.achievements-page .achievement-detail-section .achievement-list {
+    @media (max-width: 560px) {
+      padding-top: 0;
+    }
+  }
+
+  #main-content.company-page .hero-brand > picture,
+  #main-content.achievements-page .hero-brand > picture {
+    display: contents;
+
+    @media (max-width: 1024px) {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  #main-content.company-page .hero-brand > picture img,
+  #main-content.achievements-page .hero-brand > picture img {
+    @media (max-width: 1024px) {
+      width: min(280px, 100%);
+      height: auto;
+      aspect-ratio: 215 / 76;
+      object-fit: contain;
+      filter: none;
+    }
+
+    @media (max-width: 560px) {
+      width: min(270px, 100%);
+    }
+  }
+
+  #main-content.company-page .hero-panel > div:first-child p,
+  #main-content.achievements-page .hero-panel > div:first-child p {
+    @media (max-width: 560px) {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+  }
+
+  #main-content.achievements-page .hero-panel .tag-row {
+    @media (max-width: 560px) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+      padding-bottom: 0;
+      overflow: visible;
+    }
+  }
+
+  #main-content.achievements-page .hero-panel .tag {
+    @media (max-width: 560px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: normal;
+    }
+  }
+
+  #main-content.company-page .company-product-carousel .slide {
+    @media (max-width: 820px) {
+      flex-basis: min(300px, 100%);
+    }
+  }
+
+  #main-content.company-page .company-product-carousel .carousel-controls {
+    @media (max-width: 820px) {
+      justify-content: space-between;
+    }
+  }
+
+  #main-content.company-page .company-product-carousel .media-card > .ph {
+    @media (max-width: 560px) {
+      height: 150px;
+      min-height: 0;
+    }
+  }
+
+  #main-content.company-page .company-product-carousel .media-card-body {
+    @media (max-width: 560px) {
+      min-height: 218px;
+      padding: 18px 12px;
+    }
+  }
+
+  #main-content.company-page .company-product-carousel .media-card-body h3 {
+    @media (max-width: 560px) {
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+  }
+
+  #main-content.achievements-page .enterprise-awards-section .award-featured-copy h3 {
+    @media (max-width: 560px) {
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 600;
+      margin: 14px 0;
+    }
+  }
+
 }

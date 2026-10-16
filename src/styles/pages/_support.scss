@@ -465,4 +465,192 @@
       vertical-align: -2px
     }
   }
+
+  .support-page {
+    @media (max-width: 1024px) {
+      & > .container,
+      & > .crumb {
+        width: calc(100% - 40px)
+      }
+
+      & .support-hero {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+        min-height: 200px;
+        gap: var(--space-6);
+        padding: var(--space-8);
+        margin-bottom: 0
+      }
+
+      & .support-hero h1 {
+        font-size: 28px;
+        font-weight: 600
+      }
+
+      & .support-hero p {
+        margin-top: var(--space-4);
+        font-size: 14px;
+        line-height: 1.4
+      }
+
+      & .support-hero-logo {
+        order: 0
+      }
+      & .support-hero-logo picture {
+        display: block;
+        width: 100%
+      }
+
+      & .support-hero-logo img {
+        filter: none;
+        object-fit: contain
+      }
+
+      & .support-form-section {
+        margin-top: var(--space-8)
+      }
+
+      & .support-form-section > h2 {
+        margin-bottom: var(--space-5);
+        font-size: 20px;
+        font-weight: 600
+      }
+
+      & .support-inquiry-panel,
+      & .support-field-panel {
+        border: 0;
+        padding: 0
+      }
+
+      & .support-inquiry-panel {
+        gap: var(--space-5) var(--space-4)
+      }
+
+      & .support-details-columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-8);
+        margin-top: var(--space-16)
+      }
+
+      & .support-detail-column > h2 {
+        margin-bottom: var(--space-4);
+        font-size: 20px;
+        font-weight: 600
+      }
+
+      & .support-field {
+        gap: var(--space-2);
+        margin-bottom: var(--space-4)
+      }
+
+      & .support-field label,
+      & .support-field-label {
+        font-weight: 500
+      }
+
+      & .support-two-fields {
+        column-gap: var(--space-4);
+        row-gap: var(--space-4)
+      }
+
+      & .support-field-panel > .support-two-fields {
+        margin-bottom: var(--space-4)
+      }
+
+      & .support-field:last-child,
+      & .support-two-fields > .support-field,
+      & .support-inquiry-panel > .support-field {
+        margin-bottom: 0
+      }
+
+      & .support-hero p {
+        font-weight: 400
+      }
+    }
+
+    @media (max-width: 820px) {
+      & .support-hero {
+        min-height: 0;
+        gap: var(--space-6);
+        padding: var(--space-8)
+      }
+
+      & .support-hero-logo img {
+        max-width: 430px
+      }
+    }
+
+    @media (max-width: 560px) {
+      & .support-hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-4);
+        padding: var(--space-5);
+        margin-bottom: 0;
+        text-align: center
+      }
+
+      & .support-hero-logo {
+        order: -1
+      }
+
+      & .support-hero-logo img {
+        display: block;
+        width: min(100%, 270px);
+        margin-inline: auto
+      }
+
+      & .support-hero h1 {
+        font-weight: 700
+      }
+
+      & .support-hero p {
+        margin-top: var(--space-4);
+        font-size: 16px
+      }
+
+      & .support-form-section {
+        margin-top: var(--space-8)
+      }
+
+      & .support-inquiry-panel,
+      & .support-appointment-card {
+        min-width: 0;
+        padding: 0
+      }
+
+      & .support-inquiry-panel {
+        gap: var(--space-5)
+      }
+
+      & .support-two-fields {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-4)
+      }
+
+      & .support-category-option-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-2)
+      }
+
+      & .support-category-detail input {
+        font-size: 16px
+      }
+
+      & .support-appointment-grid {
+        gap: var(--space-5)
+      }
+
+      & .support-form-actions {
+        gap: var(--space-4)
+      }
+
+      & .support-consent {
+        align-items: flex-start;
+        line-height: var(--line-height-body)
+      }
+
+      & .support-consent input {
+        flex: 0 0 24px
+      }
+    }
+  }
 }

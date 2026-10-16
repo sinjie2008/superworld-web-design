@@ -6,32 +6,49 @@
     border-top: 1px solid var(--line);
     padding: var(--space-12) 0 var(--space-6);
 
-    &-top {
+    @media (max-width: 1024px) {
+      padding-top: 40px;
+    }
+
+    .footer-top {
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--line);
       padding-bottom: 34px;
 
       @media (max-width: 560px) {
-        align-items: flex-start;
-        flex-direction: column;
+        gap: 16px;
+        padding-bottom: 26px;
       }
     }
 
-    &-brand {
+    .footer-brand {
       width: 220px;
 
       img {
         width: 100%;
+        @media (max-width: 1024px) {
+          height: auto;
+        }
+      }
+
+      picture {
+        display: block;
+      }
+
+      @media (max-width: 1024px) {
+        width: 178px;
       }
 
       @media (max-width: 640px) {
-        width: 190px;
+        width: min(178px, 52%);
+        flex: 0 1 178px;
       }
     }
 
-    &-grid {
+    .footer-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: var(--space-8);
@@ -55,19 +72,31 @@
       }
 
       @media (max-width: 560px) {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px 12px;
+
+        h3 {
+          font-size: 16px;
+        }
+
+        a {
+          padding-block: 7px;
+          font-size: 14px;
+          overflow-wrap: anywhere;
+        }
       }
     }
 
-    &-bottom {
+    .footer-bottom {
       display: flex;
       justify-content: space-between;
       gap: 20px;
       font-size: 12px;
 
       @media (max-width: 560px) {
-        align-items: flex-start;
+        align-items: center;
         flex-direction: column;
+        text-align: center;
       }
     }
 

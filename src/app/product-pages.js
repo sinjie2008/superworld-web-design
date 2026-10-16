@@ -145,7 +145,7 @@ function renderGroup(main, index, route) {
       .join("");
   });
   sections.slice(families.length).forEach((section) => section.remove());
-  main.querySelector("nav.anchor-nav").innerHTML = families
+  main.querySelector("nav.anchor-nav .anchor-nav-track").innerHTML = families
     .map(
       (family) =>
         `<a href="#${escapeHtml(groupSectionAnchor(route.group, familyUrl(index, family.path).split("/").at(-1)))}">${escapeHtml(family.name)}</a>`,
@@ -172,11 +172,27 @@ function renderFamily(main, index, route) {
     section.id = sectionAnchor(route.group, route.family, category.slug);
     section.querySelector("h2").textContent = category.name;
     const tbody = section.querySelector("tbody");
+    const familyTable = tbody.closest("table");
+    familyTable.setAttribute("role", "table");
+    familyTable.setAttribute("aria-label", `${category.name} series`);
+    familyTable.querySelector("thead").setAttribute("role", "rowgroup");
+    tbody.setAttribute("role", "rowgroup");
+    const familyHeadings = [...familyTable.querySelectorAll("th")].map((heading) => {
+      heading.setAttribute("role", "columnheader");
+      heading.scope = "col";
+      return heading.textContent.trim();
+    });
+    familyTable.querySelector("thead tr").setAttribute("role", "row");
     const defaultRow = tbody.querySelector("tr").cloneNode(true);
     const defaultHref = defaultRow.querySelector("td:nth-child(2) a")?.getAttribute("href");
     tbody.replaceChildren(
       ...series.map((node) => {
         const row = defaultRow.cloneNode(true);
+        row.setAttribute("role", "row");
+        [...row.cells].forEach((cell, cellIndex) => {
+          cell.setAttribute("role", "cell");
+          cell.dataset.label = familyHeadings[cellIndex];
+        });
         const href = seriesUrl(index, node.path);
         row.dataset.catalogApiPath = node.path;
         const image = row.querySelector("td:first-child img");
@@ -215,7 +231,7 @@ function renderFamily(main, index, route) {
     );
   });
   sections.slice(categories.length).forEach((section) => section.remove());
-  main.querySelector("nav.anchor-nav").innerHTML = categories
+  main.querySelector("nav.anchor-nav .anchor-nav-track").innerHTML = categories
     .map(
       ({ category }) =>
         `<a href="#${escapeHtml(sectionAnchor(route.group, route.family, category.slug))}">${escapeHtml(category.name)}</a>`,
@@ -570,6 +586,14 @@ export class ProductPages {
     const sectionButtons = [...main.querySelectorAll("[data-a4k-section]")];
     const sectionNav = main.querySelector(".a4k-section-nav");
     const sectionNavWrap = main.querySelector(".a4k-section-nav-wrap");
+    main.querySelectorAll("[data-a4k-nav-step]").forEach((button) =>
+      button.addEventListener("click", () => {
+        sectionNav?.scrollBy({
+          left: Number(button.dataset.a4kNavStep) * Math.max(184, sectionNav.clientWidth * 0.8),
+          behavior: "smooth",
+        });
+      }),
+    );
     let activeSectionId = "overview";
     const activateSection = (sectionId, center = false) => {
       activeSectionId = sectionId;
@@ -646,6 +670,10 @@ export class ProductPages {
       footer.querySelector("[data-catalog-next]").disabled = busy || page >= lastPage;
     };
     table.setAttribute("aria-label", `${context.name} Electrical Characteristics`);
+    table.setAttribute("role", "table");
+    table.querySelector("thead").setAttribute("role", "rowgroup");
+    table.querySelector("thead tr").setAttribute("role", "row");
+    rows.setAttribute("role", "rowgroup");
     wrapper.dataset.catalogApiPath = context.apiPath;
     const defaultHeadings = [...table.querySelectorAll("thead th")]
       .slice(2, 6)
@@ -671,7 +699,7 @@ export class ProductPages {
       if (defaultSelectedSkus.has(part.sku)) this.selectedParts.set(part.id, part);
     });
     table.querySelector("thead tr").innerHTML =
-      `<th class="a4k-select-cell">Inquire / Losses Compare</th><th>Part Number</th>${columns.map((field, index) => `<th>${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}</th>`).join("")}<th>Download</th>`;
+      `<th class="a4k-select-cell" role="columnheader" scope="col">Inquire / Losses Compare</th><th role="columnheader" scope="col">Part Number</th>${columns.map((field, index) => `<th role="columnheader" scope="col">${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}</th>`).join("")}<th role="columnheader" scope="col">Download</th>`;
     const syncSelection = () => {
       const selected = [...this.selectedParts.values()];
       selectedLabel.textContent = selected.map((part) => part.sku || part.id).join(", ") || "None";
@@ -682,6 +710,10 @@ export class ProductPages {
         lossButton.disabled = !context.lossSupported || selected.length === 0;
       }
     };
+    const summaryImage = wrapper.closest("main")?.querySelector(".a4k-media-panel img");
+    const cardImage = summaryImage
+      ? `<img class="a4k-part-image" src="${escapeHtml(summaryImage.getAttribute("src"))}" alt="" width="80" height="80">`
+      : "";
     const paint = (response) => {
       currentPage = response;
       rows.innerHTML = response.parts.length
@@ -701,14 +733,14 @@ export class ProductPages {
                           })
                           .join("")
                       : "";
-                  return `<td ${field ? `data-product-field="${escapeHtml(field.key)}"` : ""}>${present ? displayValue(value) : defaults[index + 2] || "—"}${extraValues}</td>`;
+                  return `<td role="cell" data-label="${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}" ${field ? `data-product-field="${escapeHtml(field.key)}"` : ""}><span class="a4k-cell-value">${present ? displayValue(value) : defaults[index + 2] || "—"}${extraValues}</span></td>`;
                 })
                 .join("");
               const download = defaults.at(-1) || '<span class="button small">PDF</span>';
-              return `<tr data-a4k-row data-product-id="${part.id}" data-product-sku="${escapeHtml(part.sku)}"><td class="a4k-select-cell"><input type="checkbox" data-a4k-select aria-label="Select ${escapeHtml(part.sku)} for inquiry or loss analysis" ${this.selectedParts.has(part.id) ? "checked" : ""}></td><td><a class="a4k-part-link" href="#specifications">${escapeHtml(part.sku || part.name)}</a></td>${values}<td>${download}</td></tr>`;
+              return `<tr role="row" data-a4k-row data-product-id="${part.id}" data-product-sku="${escapeHtml(part.sku)}"><td role="cell" class="a4k-select-cell"><input type="checkbox" data-a4k-select aria-label="Select ${escapeHtml(part.sku)} for inquiry or loss analysis" ${this.selectedParts.has(part.id) ? "checked" : ""}></td><td role="cell" data-label="Product">${cardImage}<a class="a4k-part-link" href="#specifications">${escapeHtml(part.sku || part.name)}</a></td>${values}<td role="cell" data-label="Download">${download}</td></tr>`;
             })
             .join("")
-        : `<tr data-a4k-empty><td colspan="7">No matching parts.</td></tr>`;
+        : `<tr role="row" data-a4k-empty><td role="cell" colspan="7">No matching parts.</td></tr>`;
       syncSelection();
       syncPagination();
       if (__CATALOG_DIAGNOSTICS__) {

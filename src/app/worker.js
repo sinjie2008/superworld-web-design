@@ -3,6 +3,7 @@ import appJs from "../../.generated/app.txt";
 import specSearchCss from "../../.generated/spec-search.css";
 import specSearchJs from "../../.generated/spec-search-app.txt";
 import ogImageDataUrl from "../../public/og.png";
+import responsiveBrandDataUrl from "../assets/brand-responsive.png";
 import { PAGE_METADATA, SITE_ORIGIN, SOCIAL_IMAGE_PATH, seo } from "./seo.js";
 import documentTemplate from "../pages/layouts/document.html";
 
@@ -198,6 +199,13 @@ export class SiteWorker {
       return new Response(specSearchJs, {
         headers: {
           "content-type": "text/javascript; charset=utf-8",
+          "cache-control": "public, max-age=300",
+        },
+      });
+    if (path === "/assets/brand-responsive.png")
+      return new Response(decodeBase64(responsiveBrandDataUrl.slice(responsiveBrandDataUrl.indexOf(",") + 1)), {
+        headers: {
+          "content-type": "image/png",
           "cache-control": "public, max-age=300",
         },
       });
