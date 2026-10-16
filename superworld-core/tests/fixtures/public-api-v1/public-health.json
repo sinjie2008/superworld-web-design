@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "data": {
+    "status": "ok",
+    "database": "connected",
+    "writeOperations": false
+  },
+  "correlationId": "synthetic-correlation-001"
+}

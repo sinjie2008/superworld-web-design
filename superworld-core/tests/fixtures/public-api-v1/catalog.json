@@ -1,0 +1,156 @@
+{
+  "provenance": {
+    "kind": "synthetic contract fixtures",
+    "backendCommit": "c10faf4b5314668f7695a9c138a8e9333bee469d",
+    "liveDatabaseRead": false,
+    "note": "All identifiers, names, values and correlation IDs in these fixtures are invented."
+  },
+  "endpoints": {
+    "public.root": {
+      "method": "GET",
+      "path": "/api/",
+      "response": "public-root.json"
+    },
+    "public.health": {
+      "method": "GET",
+      "path": "/api/health",
+      "response": "public-health.json"
+    },
+    "public.tree": {
+      "method": "GET",
+      "path": "/api/tree",
+      "response": "public-tree.json"
+    },
+    "public.resolve.series": {
+      "method": "GET",
+      "path": "/api/resolve/general/emc/ax-10",
+      "response": "public-resolve-series.json"
+    },
+    "public.category": {
+      "method": "GET",
+      "path": "/api/categories/general/emc",
+      "response": "public-category.json"
+    },
+    "public.series": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10",
+      "response": "public-series.json"
+    },
+    "public.fields": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10/fields",
+      "response": "public-fields.json"
+    },
+    "public.parts.page1": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10/parts?page=1&per_page=1",
+      "response": "public-parts-page-1.json"
+    },
+    "public.parts.page2": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10/parts?page=2&per_page=1",
+      "response": "public-parts-page-2.json"
+    },
+    "public.facets.empty": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10/facets",
+      "response": "public-facets-empty.json",
+      "scenario": "Series has definitions but no products."
+    },
+    "public.search": {
+      "method": "GET",
+      "path": "/api/search?q=SYN-AX10",
+      "response": "public-search.json"
+    },
+    "public.error.notFound": {
+      "method": "GET",
+      "path": "/api/resolve/general/missing",
+      "response": "public-error-not-found.json",
+      "status": 404
+    },
+    "public.error.invalidQuery": {
+      "method": "GET",
+      "path": "/api/series/general/emc/ax-10/parts?filter%5Bunknown_field%5D=x",
+      "response": "public-error-invalid-query.json",
+      "status": 422
+    },
+    "public.error.methodNotAllowed": {
+      "method": "POST",
+      "path": "/api/tree",
+      "response": "public-error-method-not-allowed.json",
+      "status": 405
+    },
+    "spec.rootCategories": {
+      "method": "GET",
+      "path": "/api/spec-search/root-categories.php",
+      "response": "spec-roots.json"
+    },
+    "spec.productCategories": {
+      "method": "GET",
+      "path": "/api/spec-search/product-categories.php?root_id=10",
+      "response": "spec-groups.json"
+    },
+    "spec.facets": {
+      "method": "POST",
+      "path": "/api/spec-search/facets.php",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "category_ids": [
+            20
+          ]
+        }
+      },
+      "response": "spec-facets.json"
+    },
+    "spec.products": {
+      "method": "POST",
+      "path": "/api/spec-search/products.php",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "category_ids": [
+            20
+          ],
+          "filters": {
+            "series": [
+              "AX-10"
+            ],
+            "dcr": [
+              "12.5"
+            ]
+          }
+        }
+      },
+      "response": "spec-products.json"
+    },
+    "spec.products.empty": {
+      "method": "POST",
+      "path": "/api/spec-search/products.php",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "category_ids": [],
+          "filters": {}
+        }
+      },
+      "response": "spec-products-empty.json"
+    },
+    "spec.error.internal": {
+      "method": "POST",
+      "path": "/api/spec-search/products.php",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "category_ids": [
+            999
+          ],
+          "filters": {}
+        }
+      },
+      "response": "spec-error-internal.json",
+      "status": 500,
+      "scenario": "Illustrative error envelope; these request values do not imply an error on a live backend."
+    }
+  }
+}

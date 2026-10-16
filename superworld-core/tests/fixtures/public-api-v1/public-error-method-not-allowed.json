@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "errorCode": "METHOD_NOT_ALLOWED",
+  "message": "Only GET is supported.",
+  "details": {},
+  "correlationId": "synthetic-correlation-001"
+}

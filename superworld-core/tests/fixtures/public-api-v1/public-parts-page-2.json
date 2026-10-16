@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "data": {
+    "series": {
+      "id": 30,
+      "parentId": 20,
+      "name": "AX-10",
+      "type": "series",
+      "slug": "ax-10",
+      "path": "general/emc/ax-10",
+      "displayOrder": 1
+    },
+    "fields": [
+      {
+        "id": 301,
+        "key": "dcr",
+        "label": "DCR (mΩ)",
+        "type": "number",
+        "defaultValue": null,
+        "sortOrder": 1,
+        "required": true
+      },
+      {
+        "id": 302,
+        "key": "irms",
+        "label": "Irms (A)",
+        "type": "number",
+        "defaultValue": null,
+        "sortOrder": 2,
+        "required": false
+      }
+    ],
+    "parts": [
+      {
+        "id": 402,
+        "sku": "SYN-AX10-02",
+        "name": "Synthetic part two",
+        "description": "Synthetic fixture row two.",
+        "values": {
+          "dcr": "18.0",
+          "irms": "1.5"
+        }
+      }
+    ],
+    "pagination": {
+      "page": 2,
+      "per_page": 1,
+      "total": 2,
+      "last_page": 2
+    }
+  },
+  "correlationId": "synthetic-correlation-001"
+}

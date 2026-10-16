@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "data": {
+    "query": "SYN-AX10",
+    "nodes": [],
+    "parts": [
+      {
+        "id": 401,
+        "sku": "SYN-AX10-01",
+        "name": "Synthetic part one",
+        "description": "Synthetic fixture row one.",
+        "series": {
+          "id": 30,
+          "parentId": 20,
+          "name": "AX-10",
+          "type": "series",
+          "slug": "ax-10",
+          "path": "general/emc/ax-10",
+          "displayOrder": 1
+        }
+      }
+    ]
+  },
+  "correlationId": "synthetic-correlation-001"
+}

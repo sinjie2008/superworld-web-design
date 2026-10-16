@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 10,
+      "parentId": null,
+      "name": "General",
+      "type": "category",
+      "slug": "general",
+      "path": "general",
+      "displayOrder": 1,
+      "children": [
+        {
+          "id": 20,
+          "parentId": 10,
+          "name": "EMC",
+          "type": "category",
+          "slug": "emc",
+          "path": "general/emc",
+          "displayOrder": 1,
+          "children": [
+            {
+              "id": 30,
+              "parentId": 20,
+              "name": "AX-10",
+              "type": "series",
+              "slug": "ax-10",
+              "path": "general/emc/ax-10",
+              "displayOrder": 1,
+              "children": [],
+              "partCount": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "correlationId": "synthetic-correlation-001"
+}

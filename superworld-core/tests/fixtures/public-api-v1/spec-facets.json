@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "data": {
+    "facets": [
+      {
+        "key": "series",
+        "label": "Series",
+        "values": [
+          "AX-10"
+        ]
+      },
+      {
+        "key": "dcr",
+        "label": "DCR (mΩ)",
+        "values": [
+          "12.5",
+          "18.0"
+        ]
+      },
+      {
+        "key": "irms",
+        "label": "Irms (A)",
+        "values": [
+          "1.5",
+          "2.0"
+        ]
+      }
+    ]
+  },
+  "correlationId": "synthetic-correlation-001"
+}

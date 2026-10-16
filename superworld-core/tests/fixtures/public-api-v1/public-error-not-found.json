@@ -1,0 +1,9 @@
+{
+  "success": false,
+  "errorCode": "NOT_FOUND",
+  "message": "Public catalog path not found.",
+  "details": {
+    "path": "general/missing"
+  },
+  "correlationId": "synthetic-correlation-001"
+}

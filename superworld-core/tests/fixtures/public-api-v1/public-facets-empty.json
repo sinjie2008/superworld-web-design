@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "data": {
+    "series": {
+      "id": 30,
+      "parentId": 20,
+      "name": "AX-10",
+      "type": "series",
+      "slug": "ax-10",
+      "path": "general/emc/ax-10",
+      "displayOrder": 1
+    },
+    "totalParts": 0,
+    "facets": [
+      {
+        "key": "dcr",
+        "label": "DCR (mΩ)",
+        "type": "number",
+        "values": []
+      },
+      {
+        "key": "irms",
+        "label": "Irms (A)",
+        "type": "number",
+        "values": []
+      }
+    ]
+  },
+  "correlationId": "synthetic-correlation-001"
+}

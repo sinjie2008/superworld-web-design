@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "categories": [
+      {
+        "id": 10,
+        "name": "Synthetic General"
+      }
+    ]
+  },
+  "correlationId": "synthetic-correlation-001"
+}

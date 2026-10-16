@@ -1,0 +1,30 @@
+{
+  "key": "group_superworld_event",
+  "title": "Superworld Event Details",
+  "fields": [
+    {
+      "key": "field_superworld_event_date",
+      "label": "Event date",
+      "name": "event_date",
+      "type": "date_picker",
+      "instructions": "Date associated with this event.",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": { "width": "", "class": "", "id": "" },
+      "display_format": "d/m/Y",
+      "return_format": "Y-m-d",
+      "first_day": 1
+    }
+  ],
+  "location": [
+    [{ "param": "post_type", "operator": "==", "value": "sw_event" }]
+  ],
+  "menu_order": 1,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "Event-specific date field."
+}

@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": 401,
+        "sku": "SYN-AX10-01",
+        "name": "Synthetic part one",
+        "series": "AX-10",
+        "seriesId": 30,
+        "category": "Synthetic Inductors",
+        "categoryId": 20,
+        "seriesImage": "",
+        "pdfDownload": "",
+        "dcr": "12.5",
+        "irms": "2.0"
+      }
+    ],
+    "total": 1
+  },
+  "correlationId": "synthetic-correlation-001"
+}

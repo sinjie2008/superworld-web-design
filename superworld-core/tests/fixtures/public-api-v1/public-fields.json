@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 301,
+      "key": "dcr",
+      "label": "DCR (mΩ)",
+      "type": "number",
+      "defaultValue": null,
+      "sortOrder": 1,
+      "required": true
+    },
+    {
+      "id": 302,
+      "key": "irms",
+      "label": "Irms (A)",
+      "type": "number",
+      "defaultValue": null,
+      "sortOrder": 2,
+      "required": false
+    }
+  ],
+  "correlationId": "synthetic-correlation-001"
+}

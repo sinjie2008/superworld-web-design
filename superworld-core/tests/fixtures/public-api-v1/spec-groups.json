@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": {
+    "groups": [
+      {
+        "group": "Synthetic EMC",
+        "categories": [
+          {
+            "id": 20,
+            "name": "Synthetic Inductors"
+          }
+        ]
+      }
+    ]
+  },
+  "correlationId": "synthetic-correlation-001"
+}

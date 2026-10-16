@@ -1,0 +1,16 @@
+{
+  "name": "superworld-core-assets",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/js/*.test.js",
+    "package": "python3 tools/package.py"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.6",
+    "jsdom": "26.1.0",
+    "playwright-core": "1.56.1",
+    "sass": "1.89.2"
+  }
+}

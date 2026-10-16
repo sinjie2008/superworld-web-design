@@ -1,5 +1,13 @@
 # LO Wireframe Project Memory
 
+## WordPress foundation branch
+
+- `codex/product-api-integration` remains the standalone visual/behavior source; `codex/wordpress-elementor-foundation` owns the isolated `superworld-core/` plugin. Initial upstream SHA is `921e44e098419baa5a6f1b463355f44cb50617d1`; record future synchronization in `docs/UPSTREAM_SYNC.md` before claiming a new baseline.
+- The read-only backend contract is `Foundational-Electronics-Core-Systems`, branch `plan/public-product-api-v1`, SHA `c10faf4b5314668f7695a9c138a8e9333bee469d`. Use the standalone PHP MVC Public Product API directly; no Laravel, product CPT duplication, import or schema change belongs to this foundation.
+- Public API errors are flat (`errorCode`, `message`, `details`); Specification Search errors use nested `error`. Spec facets/products use POST JSON. Keep exact paths and field keys. Upstream public responses currently send `no-store`, which the plugin respects.
+- WordPress components do not import the SPA router. Plugin assets/build/test dependencies remain under `superworld-core/`; native Elementor owns marketing layout, while shortcodes own dynamic subcomponents. Fixture mode is explicit and non-production only. Never silently substitute synthetic parts for live API failures.
+- Production readiness, actual editor/MCP verification and Tailscale live results must be read from `docs/TESTING.md`; a working offline foundation is not a completed site migration.
+
 ## Project snapshot
 
 - Project ID: `appgprj_6a573c28aa488191a3f5547d0918f47b`

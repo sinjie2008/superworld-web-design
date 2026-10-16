@@ -1,0 +1,9 @@
+{
+  "success": false,
+  "errorCode": "INVALID_QUERY",
+  "message": "Unknown filter field.",
+  "details": {
+    "field": "unknown_field"
+  },
+  "correlationId": "synthetic-correlation-001"
+}
