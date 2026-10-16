@@ -92,7 +92,7 @@ function renderRoot(main, index) {
     const action = section.querySelector(".section-heading .link-arrow");
     if (action) {
       action.href = `/products/${group}`;
-      action.textContent = `View ${root.name}`;
+      action.textContent = "View More";
     }
     section.querySelector(".category-columns").innerHTML = (root.children || [])
       .filter((family) => family.type === "category")

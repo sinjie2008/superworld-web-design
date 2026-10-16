@@ -16,9 +16,18 @@ class CarouselWidget {
     this.handleNext = () => this.move(1);
     this.handleDots = this.handleDots.bind(this);
     this.update = this.update.bind(this);
+    this.trackObserver = null;
+    this.swipeStart = null;
+    this.suppressClick = false;
+    this.pointerPaused = false;
   }
 
   visibleCount() {
+    const cardWidth = this.slides[0]?.getBoundingClientRect().width || 0;
+    const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
+    if (cardWidth && this.windowElement?.clientWidth) {
+      return Math.max(1, Math.floor((this.windowElement.clientWidth + gap + 1) / (cardWidth + gap)));
+    }
     if (window.innerWidth <= 560) return 1;
     if (window.innerWidth <= 820) return Math.min(2, this.configuredVisible);
     return this.configuredVisible;
@@ -30,11 +39,17 @@ class CarouselWidget {
 
   renderDots() {
     if (!this.dots) return;
-    this.dots.innerHTML = Array.from(
-      { length: this.maxIndex() + 1 },
-      (_, index) =>
-        `<button class="carousel-dot ${index === this.index ? "is-active" : ""}" type="button" data-dot="${index}" aria-label="Go to slide ${index + 1}"></button>`,
-    ).join("");
+    const count = this.maxIndex() + 1;
+    if (this.dots.children.length !== count) {
+      this.dots.innerHTML = Array.from(
+        { length: count },
+        (_, index) => `<button class="carousel-dot" type="button" data-dot="${index}" aria-label="Go to slide ${index + 1}"></button>`,
+      ).join("");
+    }
+    [...this.dots.children].forEach((button, index) => {
+      button.classList.toggle("is-active", index === this.index);
+      button.setAttribute("aria-pressed", String(index === this.index));
+    });
   }
 
   update() {
@@ -45,15 +60,27 @@ class CarouselWidget {
     const maximum = Math.max(0, this.track.scrollWidth - this.windowElement.clientWidth);
     const offset = Math.min(this.index * (cardWidth + gap), maximum);
     this.track.style.transform = `translateX(-${offset}px)`;
+    const previous = this.root.querySelector("[data-prev]");
+    const next = this.root.querySelector("[data-next]");
+    if (previous) previous.disabled = this.index === 0;
+    if (next) next.disabled = this.index === this.maxIndex();
     this.renderDots();
   }
 
-  move(delta) {
+  move(delta, loop = false) {
     if (!this.mounted) return;
-    this.index += delta;
-    if (this.index > this.maxIndex()) this.index = 0;
-    if (this.index < 0) this.index = this.maxIndex();
+    const count = this.maxIndex() + 1;
+    const next = this.index + delta;
+    this.index = loop ? (next + count) % count : Math.max(0, Math.min(next, count - 1));
     this.update();
+  }
+
+  startAuto() {
+    window.clearInterval(this.timer);
+    this.timer = 0;
+    if (!this.mounted || this.reducedMotion.matches || this.pointerPaused || document.hidden
+      || this.root.contains(document.activeElement) || this.maxIndex() === 0) return;
+    this.timer = window.setInterval(() => this.move(1, true), 4500);
   }
 
   handleDots(event) {
@@ -73,12 +100,55 @@ class CarouselWidget {
     this.root.querySelector("[data-prev]")?.addEventListener("click", this.handlePrevious, options);
     this.root.querySelector("[data-next]")?.addEventListener("click", this.handleNext, options);
     this.dots?.addEventListener("click", this.handleDots, options);
-    window.addEventListener("resize", this.update, {
+    this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    this.root.addEventListener("pointerenter", () => {
+      this.pointerPaused = true;
+      this.startAuto();
+    }, options);
+    this.root.addEventListener("pointerleave", () => {
+      this.pointerPaused = false;
+      this.startAuto();
+    }, options);
+    this.root.addEventListener("focusin", () => this.startAuto(), options);
+    this.root.addEventListener("focusout", (event) => {
+      if (!this.root.contains(event.relatedTarget)) window.queueMicrotask(() => this.startAuto());
+    }, options);
+    this.reducedMotion.addEventListener("change", () => this.startAuto(), options);
+    document.addEventListener("visibilitychange", () => this.startAuto(), options);
+    this.windowElement.addEventListener("pointerdown", (event) => {
+      if (event.pointerType !== "touch") return;
+      this.swipeStart = { x: event.clientX, y: event.clientY };
+    }, options);
+    this.windowElement.addEventListener("pointerup", (event) => {
+      const start = this.swipeStart;
+      this.swipeStart = null;
+      if (!start) return;
+      const distance = event.clientX - start.x;
+      if (Math.abs(distance) > 48 && Math.abs(distance) > Math.abs(event.clientY - start.y) * 1.3) {
+        this.suppressClick = true;
+        this.move(distance < 0 ? 1 : -1);
+      }
+    }, options);
+    this.windowElement.addEventListener("pointercancel", () => { this.swipeStart = null; }, options);
+    this.windowElement.addEventListener("click", (event) => {
+      if (!this.suppressClick) return;
+      this.suppressClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    }, { ...options, capture: true });
+    this.trackObserver = new MutationObserver(() => {
+      this.slides = [...this.track.querySelectorAll(".slide")];
+      this.index = 0;
+      this.update();
+      this.startAuto();
+    });
+    this.trackObserver.observe(this.track, { childList: true });
+    window.addEventListener("resize", () => { this.update(); this.startAuto(); }, {
       passive: true,
       signal: this.abortController.signal,
     });
-    this.timer = window.setInterval(() => this.move(1), 4500);
     this.update();
+    this.startAuto();
     return this;
   }
 
@@ -88,6 +158,8 @@ class CarouselWidget {
     window.clearInterval(this.timer);
     this.timer = 0;
     this.abortController?.abort();
+    this.trackObserver?.disconnect();
+    this.trackObserver = null;
     this.abortController = null;
     return this;
   }
@@ -383,15 +455,28 @@ class HeaderController {
     const abortController = new AbortController();
     const options = { signal: abortController.signal };
     state.cleanups.push(() => abortController.abort());
+    header.classList.toggle("is-overlay", Boolean(document.querySelector(".home-page")));
+    const syncHeader = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > 24);
+      document.getElementById("app")?.style.setProperty("--site-header-height", `${header.getBoundingClientRect().height}px`);
+    };
+    window.addEventListener("scroll", syncHeader, { ...options, passive: true });
+    const headerObserver = new ResizeObserver(syncHeader);
+    headerObserver.observe(header);
+    state.cleanups.push(() => headerObserver.disconnect());
+    const syncMenuSurface = () => header.classList.toggle("has-open-menu",
+      header.classList.contains("mobile-open") || buttons.some(button => button.getAttribute("aria-expanded") === "true"));
     const closeMegaPanels = () => {
       header.querySelectorAll(".mega-panel").forEach((panel) => panel.classList.remove("is-open"));
       buttons.forEach((button) => button.setAttribute("aria-expanded", "false"));
+      syncMenuSurface();
     };
     const setMobileOpen = (open) => {
       header.classList.toggle("mobile-open", open);
       toggle?.setAttribute("aria-expanded", String(open));
       toggle?.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
       if (!open) closeMegaPanels();
+      syncMenuSurface();
     };
     toggle?.addEventListener("click", () => {
       setMobileOpen(!header.classList.contains("mobile-open"));
@@ -410,6 +495,7 @@ class HeaderController {
         if (panel && !wasOpen) {
           panel.classList.add("is-open");
           btn.setAttribute("aria-expanded", "true");
+          syncMenuSurface();
           panel
             .querySelector("[data-mega-news-slider]")
             ?.dispatchEvent(new CustomEvent("mega:open"));
@@ -432,6 +518,7 @@ class HeaderController {
     }, options);
     const compactNavigation = window.matchMedia("(max-width: 820px)");
     compactNavigation.addEventListener("change", () => setMobileOpen(false), options);
+    syncHeader();
     this.sliders = [...document.querySelectorAll("[data-mega-news-slider]")].map(
       (root) => new MegaNewsSliderWidget(root),
     );
@@ -553,6 +640,30 @@ class GeneralPageController {
       if (!track) return;
       const previous = nav.querySelector("[data-anchor-prev]");
       const next = nav.querySelector("[data-anchor-next]");
+      const linksAndSections = () => [...track.querySelectorAll('a[href^="#"]')].flatMap(link => {
+        let target;
+        try { target = document.getElementById(decodeURIComponent(link.hash.slice(1))); } catch { return []; }
+        return target && target.getClientRects().length ? [{ link, target }] : [];
+      });
+      const setActive = (active) => {
+        track.querySelectorAll("a").forEach(link => {
+          const selected = link === active;
+          link.classList.toggle("is-active", selected);
+          if (selected) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      };
+      const syncActive = () => {
+        const entries = linksAndSections();
+        if (!entries.length) return;
+        const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+        const line = headerHeight + nav.getBoundingClientRect().height + 32;
+        let active = entries[0].link;
+        entries.forEach(({ link, target }) => {
+          if (target.getBoundingClientRect().top <= line) active = link;
+        });
+        setActive(active);
+      };
       const sync = () => {
         const maximum = track.scrollWidth - track.clientWidth;
         if (previous) previous.disabled = track.scrollLeft <= 1;
@@ -565,9 +676,25 @@ class GeneralPageController {
       next?.addEventListener("click", () => advance(1), options);
       track.addEventListener("scroll", sync, options);
       window.addEventListener("resize", sync, options);
-      const observer = new MutationObserver(sync);
+      let frame = 0;
+      window.addEventListener("scroll", () => {
+        if (!frame) frame = window.requestAnimationFrame(() => { frame = 0; syncActive(); });
+      }, { ...options, passive: true });
+      window.addEventListener("resize", syncActive, options);
+      nav.addEventListener("click", (event) => {
+        const link = event.target.closest('.anchor-nav-track a[href^="#"]');
+        const entry = linksAndSections().find(item => item.link === link);
+        if (!entry) return;
+        event.preventDefault();
+        const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+        const top = entry.target.getBoundingClientRect().top + window.scrollY - headerHeight - nav.getBoundingClientRect().height - 16;
+        window.scrollTo({ top: Math.max(0, top), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+        if (location.hash !== link.hash) history.pushState(history.state, "", `${location.pathname}${location.search}${link.hash}`);
+        setActive(link);
+      }, options);
+      const observer = new MutationObserver(() => { sync(); syncActive(); });
       observer.observe(track, { childList: true, subtree: true });
-      this.cleanups.push(() => observer.disconnect());
+      this.cleanups.push(() => { observer.disconnect(); window.cancelAnimationFrame(frame); });
       track.addEventListener("focusin", (event) => {
         const link = event.target.closest("a");
         if (!link) return;
@@ -577,7 +704,30 @@ class GeneralPageController {
         if (delta) track.scrollBy({ left: delta, behavior: "instant" });
       }, options);
       sync();
+      syncActive();
     });
+  }
+
+  setupLocationNavigation() {
+    const track = document.querySelector("#location-category-filters");
+    const previous = document.querySelector("[data-location-prev]");
+    const next = document.querySelector("[data-location-next]");
+    if (!track || !previous || !next) return;
+    const controller = new AbortController();
+    const options = { signal: controller.signal };
+    const sync = () => {
+      previous.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+    };
+    const advance = direction => track.scrollBy({ left: direction * Math.max(160, track.clientWidth * .75), behavior: "smooth" });
+    previous.addEventListener("click", () => advance(-1), options);
+    next.addEventListener("click", () => advance(1), options);
+    track.addEventListener("scroll", sync, { ...options, passive: true });
+    window.addEventListener("resize", sync, options);
+    const observer = new ResizeObserver(sync);
+    observer.observe(track);
+    this.cleanups.push(() => { controller.abort(); observer.disconnect(); });
+    sync();
   }
 
   setupGeneralControls() {
@@ -655,6 +805,7 @@ class GeneralPageController {
     this.setupGeneralControls();
     this.setupPagination();
     this.setupAnchorNavigation();
+    this.setupLocationNavigation();
     return this;
   }
 

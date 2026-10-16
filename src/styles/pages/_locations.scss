@@ -5,7 +5,7 @@
     &-controls {
       display: grid;
       grid-template-columns: max-content minmax(0,1fr);
-      align-items: start;
+      align-items: center;
       gap: 24px;
       padding: 31px 0
     }
@@ -13,7 +13,19 @@
     &-controls [data-location-search] {
       min-width: 320px;
       border: 1px solid var(--line);
-      padding: 16px
+      padding: 16px;
+      width: 100%;
+      max-width: 408px;
+      height: 56px;
+      justify-self: end
+    }
+
+    &-tab-rail {
+      min-width: 0
+    }
+
+    &-tab-control {
+      display: none
     }
 
     &-tabs {
@@ -23,13 +35,18 @@
     }
 
     &-tabs button {
-      width: 96px;
+      width: auto;
       min-width: 96px;
+      min-height: 48px;
+      flex: 0 0 auto;
       border: 0;
       border-right: 1px solid var(--line);
       background: #fff;
       color: #111;
-      font-size: 22px
+      font-size: 22px;
+      padding: 8px 24px;
+      overflow-wrap: normal;
+      white-space: nowrap
     }
 
     &-tabs button:first-child {
@@ -100,7 +117,72 @@
   }
 
   .locations-page {
+    .hero-brand picture {
+      display: block;
+      width: 100%
+    }
+
+    .location-controls [data-location-search] {
+      height: 56px;
+      min-height: 56px
+    }
+
+    .locations-regional .regions {
+      margin-top: 52px
+    }
+
+    .locations-regional .regions[data-region-map-enhanced="true"] .region {
+      min-width: 0;
+      border: 0;
+      padding: 0;
+      outline: 1px solid transparent;
+      outline-offset: 8px;
+      box-shadow: none;
+      transition: outline-color .2s ease, background .2s ease
+    }
+
+    .locations-regional .regions[data-region-map-enhanced="true"] .region:is(:hover, .is-active) {
+      outline-color: #111
+    }
+
     @media (max-width: 1024px) {
+      & > .container {
+        width: calc(100% - 64px)
+      }
+
+      & .hero-panel {
+        grid-template-columns: minmax(0, 1.5667fr) minmax(0, 1fr);
+        gap: var(--space-6);
+        min-height: 180px;
+        padding: var(--space-8)
+      }
+
+      & .hero-panel h1 {
+        margin-bottom: var(--space-4);
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.4
+      }
+
+      & .hero-panel p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4
+      }
+
+      & .hero-brand picture {
+        display: block;
+        width: 100%
+      }
+
+      & .hero-panel .hero-brand { order: 0 }
+
+      & .hero-brand img {
+        width: 100%;
+        height: auto;
+        object-fit: contain
+      }
+
       & .locations-regional > .container,
       & .locations-directory > .container {
         width: calc(100% - 48px)
@@ -113,8 +195,15 @@
         margin-top: var(--space-8)
       }
 
+      & .locations-regional .regional-map {
+        height: auto;
+        aspect-ratio: 720 / 286;
+        margin-top: var(--space-6)
+      }
+
       & .locations-regional .regions {
-        gap: var(--space-8) var(--space-4)
+        gap: var(--space-6) var(--space-4);
+        margin-top: var(--space-10)
       }
 
       & .locations-regional .region {
@@ -160,20 +249,69 @@
         padding: var(--space-6) 0
       }
 
+      & .location-tab-rail {
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) 48px;
+        align-items: center;
+        gap: var(--space-2)
+      }
+
+      & .location-tab-control {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        min-height: 48px;
+        padding: 0;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #111;
+        font-size: 28px
+      }
+
+      & .location-tab-control:disabled {
+        color: #888
+      }
+
       & .location-tabs {
         width: 100%;
-        min-width: 0
+        min-width: 0;
+        gap: var(--space-2);
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-behavior: smooth
       }
+
+      & .location-tabs::-webkit-scrollbar { display: none }
 
       & .location-tabs button {
         flex-shrink: 0;
+        width: 80px;
+        min-width: 80px;
+        border: 1px solid var(--line);
         padding-inline: var(--space-3);
         font-size: 14px;
         white-space: nowrap
       }
+
+      & .location-tabs button:last-child { width: 104px; min-width: 104px }
+
+      & .location-controls [data-location-search] { max-width: none }
     }
 
     @media (max-width: 560px) {
+      & > .container { width: calc(100% - 40px) }
+
+      & .hero-panel {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-4);
+        padding: var(--space-5);
+        text-align: center
+      }
+
+      & .hero-panel .hero-brand { order: -1 }
+      & .hero-brand picture { width: min(100%, 270px) }
+
       & .locations-regional > .container,
       & .locations-directory > .container {
         width: calc(100% - 40px)
@@ -186,7 +324,7 @@
       & .locations-regional .regions {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--space-8) var(--space-4);
-        margin-top: var(--space-12) !important
+        margin-top: var(--space-12)
       }
 
       & .locations-regional .region {
@@ -204,6 +342,10 @@
       }
 
       & .locations-regional .map {
+        aspect-ratio: 350 / 180
+      }
+
+      & .locations-regional .regional-map {
         aspect-ratio: 350 / 180
       }
 

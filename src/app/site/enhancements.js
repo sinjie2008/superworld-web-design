@@ -303,7 +303,7 @@ const HERO_BRAND_SLIDES = [
 const cardMarkup = ([title, copy, href]) => {
   return (
     '<article class="media-card slide">' +
-    ph("soft", title + " Image", 320, 220, title + "\nImage") +
+    ph("soft image-cover", title + " Image", 320, 220, title + "\nImage") +
     '<div class="media-card-body"><h3>' +
     title +
     "</h3><p>" +
@@ -365,14 +365,14 @@ const prepareCertificationCards = () => {
   track.innerHTML = Array.from(
     { length: 6 },
     () =>
-      '<article class="certification-card slide"><div class="certification-visual"><div class="ph">' +
+      '<article class="certification-card slide"><div class="certification-visual"><div class="ph image-cover">' +
       placeholderImage(
         "IATF 16949 Certification",
         300,
-        176,
+        220,
         "IATF 16949\nCertification",
       ) +
-      '<span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>View Certificate Details</a><span>17 December 2025</span></div></div></article>',
+      '<span class="certification-tag">Certification</span></div></div><div class="certification-content"><h3>IATF 16949</h3><p>Quality management certification.</p><div class="certification-footer"><a class="certification-download" href="/company/quality" data-link>View More<span class="sr-only">: IATF 16949 certificate details</span></a><span>17 December 2025</span></div></div></article>',
   ).join("");
   track.style.transform = "translateX(0px)";
   const viewMore = root
@@ -598,6 +598,7 @@ const prepareStaticEnhancements = () => {
     if (
       !dots.closest(".home-hero") &&
       !dots.closest(".esg-pillars-carousel") &&
+      !dots.closest('[data-carousel="environment-slider"]') &&
       !dots.closest(".news-feature-carousel")
     )
       dots.remove();
@@ -723,6 +724,8 @@ class ProductCarouselController {
     originalGrid.replaceWith(carousel);
 
     const track = carousel.querySelector(".carousel-track");
+    const previous = carousel.querySelector("[data-company-prev]");
+    const next = carousel.querySelector("[data-company-next]");
     this.productType = "general";
     this.activeIndex = 0;
     this.timer = 0;
@@ -739,10 +742,12 @@ class ProductCarouselController {
       const offset = Math.min(this.activeIndex * (cardWidth + gap), Math.max(0, track.scrollWidth - width));
       track.style.transform =
         "translateX(-" + offset + "px)";
+      previous.disabled = this.activeIndex === 0;
+      next.disabled = this.activeIndex === maxIndex();
     };
     const restart = () => {
       window.clearInterval(this.timer);
-      if (!this.mounted) return;
+      if (!this.mounted || maxIndex() === 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       this.timer = window.setInterval(() => {
         this.activeIndex = this.activeIndex >= maxIndex() ? 0 : this.activeIndex + 1;
         update();
@@ -763,9 +768,7 @@ class ProductCarouselController {
       restart();
     };
     const move = (delta) => {
-      this.activeIndex += delta;
-      if (this.activeIndex > maxIndex()) this.activeIndex = 0;
-      if (this.activeIndex < 0) this.activeIndex = maxIndex();
+      this.activeIndex = Math.max(0, Math.min(this.activeIndex + delta, maxIndex()));
       update();
       restart();
     };

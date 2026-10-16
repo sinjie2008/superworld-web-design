@@ -333,20 +333,6 @@
     }
   }
 
-  .carousel {
-    &-controls [data-prev]::before {
-      border-left: 2px solid;
-      border-bottom: 2px solid;
-      transform: rotate(45deg)
-    }
-
-    &-controls [data-next]::after {
-      border-right: 2px solid;
-      border-top: 2px solid;
-      transform: rotate(45deg)
-    }
-  }
-
   .button.is-active {
     background: #111;
     color: #fff
@@ -1091,6 +1077,273 @@
       line-height: 1.2;
       font-weight: 600;
       margin: 14px 0;
+    }
+  }
+
+  @media (min-width: 561px) and (max-width: 1024px) {
+    #main-content.company-page .company-profile-section {
+      padding-block: 32px;
+
+      h2 {
+        min-height: 52px;
+        margin-bottom: 8px;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .container > p {
+        margin-bottom: 24px;
+        font-size: 16px;
+        line-height: 20px;
+      }
+
+      .stat-grid, .company-stat-secondary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .stat-grid > .stat:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .stat {
+        min-height: 192px;
+        justify-content: flex-start;
+        padding: calc(20px - 1px);
+      }
+
+      .stat strong {
+        display: block;
+        width: 100%;
+        min-height: 56px;
+        margin-bottom: 8px;
+        font-size: 36px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .stat b {
+        margin-bottom: 8px;
+        font-size: 15px;
+        line-height: 18px;
+      }
+
+      .stat span {
+        font-size: 14px;
+        line-height: 1.2;
+      }
+
+      .stat-grid > .stat:first-child strong {
+        min-height: 64px;
+        font-size: 42px;
+      }
+
+      .stat-grid > .stat:first-child b,
+      .stat-grid > .stat:first-child span {
+        font-size: 17px;
+        line-height: 21px;
+      }
+
+      .company-stat-secondary strong {
+        min-height: 52px;
+        font-size: 34px;
+      }
+    }
+
+    #main-content.company-page .company-presence-section {
+      padding-block: 32px;
+      border-top: 0;
+
+      .container.split {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding-top: 24px;
+        border-top: 3px solid var(--line);
+      }
+
+      .company-presence-copy {
+        display: contents;
+      }
+
+      .company-presence-intro {
+        grid-row: 1;
+      }
+
+      h2 {
+        min-height: 52px;
+        margin-bottom: 8px;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.2;
+      }
+
+      .company-regional-map, .ph.map {
+        grid-row: 2;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 704 / 389.2;
+      }
+
+      .company-presence-details {
+        display: grid;
+        grid-row: 3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .company-presence-copy .company-presence-details h3 {
+        margin: 0 0 8px;
+        font-family: $font-body;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 29px;
+      }
+    }
+
+    #main-content.company-page .company-contact-cta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 184px;
+      gap: 32px;
+      min-height: 238px;
+      padding: 32px;
+
+      h2 {
+        margin-bottom: 16px;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.333333;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .button-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .button {
+        width: 184px;
+        min-height: 48px;
+        padding: 12px;
+        font-family: $font-body;
+        font-size: 11px;
+        line-height: 14px;
+      }
+    }
+
+    #main-content.achievements-page .enterprise-awards-section {
+      padding-block: 28px 36px;
+
+      h2 {
+        min-height: 43px;
+        margin-bottom: 0;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.25;
+      }
+
+      .enterprise-awards-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: 228px 168px 168px;
+        gap: 16px 20px;
+        margin-top: 17px;
+      }
+
+      .award-card {
+        justify-content: flex-start;
+        min-height: 0;
+        padding: 12px 16px 16px;
+      }
+
+      .award-card > span {
+        height: 24px;
+        font-size: 14px;
+        line-height: 24px;
+      }
+
+      .award-card:nth-child(2) > span {
+        font-size: 18px;
+      }
+
+      .award-card .display {
+        margin: 7px 0 5px;
+        font-family: $font-body;
+        font-size: 48px !important;
+        font-weight: 400;
+        line-height: 64px;
+      }
+
+      .award-card > p {
+        font-size: 13px;
+        line-height: 20px;
+      }
+
+      .award-card > h3 {
+        margin-block: auto;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      .award-card:last-child > h3 {
+        display: grid;
+        grid-template-rows: 44px 40px;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .award-card:last-child > h3 br {
+        display: none;
+      }
+
+      .award-card:last-child > h3 span:last-child {
+        font-size: 13px;
+      }
+
+      .award-card.featured {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        min-height: 220px;
+        height: 220px;
+        align-self: start;
+        padding: 24px 24px 16px;
+      }
+
+      .award-featured-image {
+        display: none;
+      }
+
+      .award-featured-copy > span {
+        display: block;
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .award-featured-copy h3 {
+        margin: 6px 0 8px;
+        font-family: $font-body;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 36px;
+      }
+
+      .award-featured-copy p {
+        font-size: 14px;
+        line-height: 24px;
+      }
     }
   }
 

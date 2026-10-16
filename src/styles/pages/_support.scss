@@ -468,6 +468,78 @@
 
   .support-page {
     @media (max-width: 1024px) {
+      & .support-locations {
+        margin-top: var(--space-20)
+      }
+
+      & .support-location-grid {
+        --support-location-gap: 16px;
+        margin-top: var(--space-6)
+      }
+
+      & .support-location-card {
+        flex: 0 0 min(320px, 100%);
+        min-width: 0;
+        min-height: 432px;
+        padding: var(--space-5)
+      }
+
+      & .support-location-card h3 {
+        font-size: 20px;
+        font-weight: 600
+      }
+
+      & .support-location-card p {
+        font-size: 14px;
+        line-height: 1.4;
+        overflow-wrap: anywhere
+      }
+
+      & .support-location-card a[href*="maps.google"],
+      & .support-location-card a[href*="type=Book"] {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        border: 1px solid var(--line);
+        padding: var(--space-3) var(--space-4);
+        text-decoration: none
+      }
+
+      & .support-location-controls button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-3);
+        width: 120px;
+        min-height: 48px;
+        border: 1px solid var(--line);
+        padding: var(--space-3);
+        font-size: 14px
+      }
+
+      & .support-location-controls span {
+        width: 8px;
+        height: 12px;
+        overflow: hidden;
+        font-size: 0
+      }
+
+      & .support-location-controls span::before {
+        content: "";
+        display: block;
+        width: 8px;
+        height: 8px;
+        margin-top: 2px;
+        border-top: 1px solid currentColor;
+        border-right: 1px solid currentColor;
+        transform: rotate(45deg)
+      }
+
+      & .support-location-controls [data-support-location-prev] span::before {
+        margin-left: 2px;
+        transform: rotate(-135deg)
+      }
+
       & > .container,
       & > .crumb {
         width: calc(100% - 40px)

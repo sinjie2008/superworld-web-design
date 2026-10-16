@@ -306,10 +306,10 @@ assert.doesNotMatch(
   /@import\b/,
   "styles.scss must use Sass modules instead of deprecated @import",
 );
-assert.match(documentLayoutSource, /\/styles\.css\?v=139/);
+assert.match(documentLayoutSource, /\/styles\.css\?v=146/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=110/);
 assert.match(documentLayoutSource, /\/spec-search\.js\?v=105/);
-assert.match(documentLayoutSource, /\/app\.js\?v=141/);
+assert.match(documentLayoutSource, /\/app\.js\?v=148/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
   cwd: projectRoot,
@@ -387,7 +387,7 @@ assert.match(
   pageTemplateSource,
   /class="system-action-btn bundle-btn"[^>]*>\s*View Bundle<\/a\s*>/,
 );
-assert.doesNotMatch(appSource, /\?root=1&category=159&category=161&inquiry=1447&inquiry=1448/);
+assert.doesNotMatch(appSource, /\?root=1&category=159&category=161&inquiry=1467&inquiry=1468/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
 assert.match(appSource, /aria-disabled="true"\s*>\s*Details unavailable<\/span\s*>/);
 assert.match(pageTemplateSource, /class="series-chip"\s+type="button"\s+aria-expanded="false"/);
@@ -433,10 +433,10 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   );
   assert.doesNotMatch(html, /<!--APP_SLOT:/, `${route} must not expose unresolved document slots`);
   if (route === "/") {
-    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-139" : "139"}`));
+    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-146" : "146"}`));
     assert.match(html, /\/spec-search\.css\?v=110/);
     assert.match(html, /\/spec-search\.js\?v=105/);
-    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-141" : "141"}`));
+    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-148" : "148"}`));
   }
   assert.equal(
     html.includes('content="noindex,follow"'),

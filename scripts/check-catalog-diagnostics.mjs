@@ -107,8 +107,8 @@ for (const route of Object.keys(PAGE_METADATA)) {
   assert.equal(response.status, 200, `${route} must remain available from the production worker`);
   const html = await response.text();
   assertNoDiagnosticBytes(route, html);
-  assert.match(html, /\/styles\.css\?v=139(?:["'\s])/);
-  assert.match(html, /\/app\.js\?v=141(?:["'\s])/);
+  assert.match(html, /\/styles\.css\?v=146(?:["'\s])/);
+  assert.match(html, /\/app\.js\?v=148(?:["'\s])/);
   assert.doesNotMatch(html, /\?v=dev-/);
   cleanRouteHtml.set(route, html);
 }

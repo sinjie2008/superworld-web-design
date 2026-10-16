@@ -1,6 +1,10 @@
 @use "../base/scope";
 @use "../tokens" as *;
 @include scope.within {
+  .esg-tablet-break {
+    display: none;
+  }
+
   #superworld_electronics_company_sustainability_esg_and_sustainability_pillars.esg-pillars-section {
     padding: 64px 0 82px;
     overflow: hidden
@@ -522,6 +526,392 @@
       font-size: 26px;
       line-height: 1.1;
       margin-bottom: 28px;
+    }
+  }
+
+  @media (min-width: 561px) and (max-width: 1024px) {
+    #main-content.sustainability-page {
+      --esg-surface: #f5f5f5;
+      --esg-divider: #d9d9d9;
+
+      .esg-vision-section,
+      .esg-pillars-section,
+      .environmental-stewardship-section,
+      .integrity-accountability-section {
+        padding-block: 48px;
+      }
+
+      .esg-vision-section h2,
+      .esg-pillars-section .section-heading h2,
+      .environmental-stewardship-section h2,
+      .integrity-accountability-section > .container > h2 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 40px;
+        text-align: left;
+      }
+
+      .esg-vision-section .container.split {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 32px;
+      }
+
+      .esg-vision-text {
+        display: contents;
+      }
+
+      .esg-vision-section h2 {
+        grid-column: 1 / -1;
+      }
+
+      .esg-vision-copy p {
+        margin: 0 0 16px;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .esg-vision-copy p:last-child {
+        margin-bottom: 0;
+      }
+
+      .esg-vision-section .ph {
+        height: 280px;
+        min-height: 0;
+      }
+
+      .esg-pillars-section .section-heading {
+        display: block;
+        margin-bottom: 32px;
+      }
+
+      .esg-pillars-section .section-heading h2 {
+        text-align: center;
+      }
+
+      .esg-tablet-break {
+        display: inline;
+      }
+
+      .esg-pillars-section .esg-pillars-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+        width: 100%;
+      }
+
+      .esg-pillars-section .esg-pillar-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+        gap: 12px;
+        min-height: 392px;
+        padding: calc(var(--space-6) - 1px);
+      }
+
+      .esg-pillars-section .esg-pillar-card h3 {
+        margin: 0;
+        font-family: $font-body;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 19px;
+        text-align: left;
+        color: var(--color-brand-navy);
+      }
+
+      .esg-pillars-section .esg-pillar-card:first-child h3 {
+        color: var(--color-brand-blue);
+      }
+
+      .esg-pillars-section .esg-pillar-lead {
+        margin: 0;
+        font-family: $font-heading;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.3;
+        text-align: left;
+      }
+
+      .esg-pillars-section .esg-pillar-copy p {
+        margin: 0 0 12px;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .esg-pillars-section .esg-pillar-copy p:last-child {
+        margin-bottom: 0;
+      }
+
+      .esg-pillars-section .esg-pillar-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+        margin-top: 0;
+      }
+
+      .esg-pillars-section .esg-pillar-tags span {
+        flex: 0 1 132px;
+        min-width: 0;
+        min-height: 48px;
+        padding: 6px 0;
+        font-family: $font-heading;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+
+      .esg-pillars-section .esg-pillar-card:last-child {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 32px;
+        min-height: 280px;
+      }
+
+      .esg-pillars-section .esg-pillar-card:last-child h3,
+      .esg-pillars-section .esg-pillar-card:last-child .esg-pillar-lead {
+        grid-column: 1 / -1;
+      }
+
+      .esg-pillars-section .esg-pillar-card:last-child .esg-pillar-tags {
+        align-self: start;
+        padding-left: 22px;
+      }
+
+      .esg-pillars-section .esg-pillars-carousel {
+        --visible: 1 !important;
+        width: 100%;
+        height: 360px;
+        aspect-ratio: auto;
+        margin-top: 32px;
+      }
+
+      .esg-pillars-carousel .esg-pillar-image {
+        background: var(--esg-surface);
+      }
+
+      .environmental-stewardship-section .split {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+      }
+
+      .environmental-stewardship-section .split > div:first-child > p {
+        min-height: 47px;
+        margin: 32px 0 0;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .environmental-stewardship-section .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+      }
+
+      .environmental-stewardship-section .card {
+        min-height: 216px;
+        padding: calc(var(--space-6) - 1px);
+      }
+
+      .environmental-stewardship-section .card h3 {
+        margin-bottom: 16px;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 32px;
+        color: var(--color-brand-navy);
+      }
+
+      .environmental-stewardship-section .card p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      [data-carousel="environment-slider"] {
+        --visible: 1 !important;
+        height: 360px;
+      }
+
+      [data-carousel="environment-slider"] .carousel-window,
+      [data-carousel="environment-slider"] .carousel-track,
+      [data-carousel="environment-slider"] .slide,
+      [data-carousel="environment-slider"] .ph {
+        height: 100%;
+        min-height: 0;
+      }
+
+      .integrity-accountability-section > .container > h2 {
+        margin-bottom: 32px;
+      }
+
+      .integrity-intro {
+        min-height: 93px;
+        margin-bottom: 32px;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .integrity-desktop-break {
+        display: inline;
+      }
+
+      .integrity-principles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 32px;
+        width: 100%;
+      }
+
+      .integrity-principle-card {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: center;
+        gap: 0;
+        min-height: 136px;
+        border: 1px solid var(--line);
+        padding: calc(var(--space-6) - 1px);
+      }
+
+      .integrity-principle-card:last-child {
+        grid-column: 1 / -1;
+        min-height: 120px;
+      }
+
+      .integrity-principle-card strong {
+        margin: 0;
+        font-family: $font-body;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 34px;
+        color: var(--color-brand-navy);
+      }
+
+      .integrity-principle-card p {
+        min-height: 64px;
+        margin: 0;
+        border-left: 1px solid var(--esg-divider);
+        padding: 10px 0 10px 16px;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .misconduct-panel {
+        grid-template-columns: minmax(0, 1fr) 248px;
+        gap: 32px;
+        min-height: 304px;
+        margin-top: 96px;
+        border-width: 1px;
+        padding: calc(var(--space-10) - 1px) calc(var(--space-8) - 1px);
+      }
+
+      .misconduct-copy {
+        padding: 4px 8px;
+      }
+
+      .misconduct-copy > h3 {
+        margin: 0 0 24px;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+
+      .misconduct-copy p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .misconduct-contact {
+        width: 100%;
+        min-height: 224px;
+        border-width: 1px;
+        padding: calc(var(--space-6) - 1px);
+        background: var(--esg-surface);
+      }
+
+      .misconduct-contact h3 {
+        margin: 0 0 16px;
+        font-family: $font-body;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 19px;
+        white-space: normal;
+        color: var(--color-brand-navy);
+      }
+
+      .misconduct-contact p {
+        overflow-wrap: anywhere;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .misconduct-contact p > span {
+        display: block;
+      }
+
+      .misconduct-contact p > span + br {
+        display: none;
+      }
+
+      .misconduct-contact p > span:last-child {
+        margin-top: 16px;
+      }
+
+      .esg-pillars-carousel > .carousel-dots,
+      [data-carousel="environment-slider"] > .carousel-dots {
+        position: absolute;
+        inset: auto 0 -16px;
+        z-index: 4;
+        display: flex !important;
+        justify-content: center;
+        width: 100%;
+        margin: 0;
+        gap: 0;
+        transform: none;
+      }
+
+      .esg-pillars-carousel .carousel-dot,
+      [data-carousel="environment-slider"] .carousel-dot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        min-height: 44px;
+        border: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      .esg-pillars-carousel .carousel-dot::before,
+      [data-carousel="environment-slider"] .carousel-dot::before {
+        width: 8px;
+        height: 8px;
+        border: 0;
+        border-radius: 50%;
+        background: #d1d5db;
+      }
+
+      .esg-pillars-carousel .carousel-dot.is-active::before,
+      [data-carousel="environment-slider"] .carousel-dot.is-active::before {
+        background: var(--color-brand-navy);
+      }
+    }
+  }
+
+  @media (min-width: 561px) and (max-width: 700px) {
+    #main-content.sustainability-page .misconduct-panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #main-content.sustainability-page .esg-pillars-section .esg-pillar-card,
+    #main-content.sustainability-page .environmental-stewardship-section .card {
+      padding: 20px 16px;
+    }
+
+    #main-content.sustainability-page .esg-pillars-section .esg-pillar-lead,
+    #main-content.sustainability-page .environmental-stewardship-section .card h3 {
+      font-size: 22px;
     }
   }
 

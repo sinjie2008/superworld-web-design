@@ -1542,6 +1542,16 @@
     }
   }
 
+  #main-content.automotive-application-page {
+    .application-confidence .grid-3,
+    .application-journey > .container > .grid-4 {
+      @media (min-width: 561px) and (max-width: 1024px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+    }
+  }
+
   .application-detail-page #systemTabsRoot {
     .system-tabs-nav {
       @media (max-width: 1024px) {

@@ -7,10 +7,12 @@
 
     &-window {
       overflow: hidden;
+      touch-action: pan-y;
     }
 
     &-track {
       display: flex;
+      align-items: stretch;
       gap: 22px;
       transition: transform .55s ease;
       will-change: transform;
@@ -47,12 +49,26 @@
       }
 
       [data-prev]::before,
-      [data-next]::after {
+      [data-next]::after,
+      [data-company-prev]::before,
+      [data-company-next]::after {
         content: "";
         display: inline-block;
         width: 8px;
         height: 8px;
-        border-color: currentColor;
+        border: 0;
+        border-top: 1px solid currentColor;
+        border-right: 1px solid currentColor;
+      }
+
+      [data-prev]::before,
+      [data-company-prev]::before {
+        transform: rotate(-135deg);
+      }
+
+      [data-next]::after,
+      [data-company-next]::after {
+        transform: rotate(45deg);
       }
 
       .carousel-dots {

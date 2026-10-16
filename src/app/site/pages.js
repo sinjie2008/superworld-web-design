@@ -145,12 +145,12 @@ function newsSlots(search = globalThis.location?.search || "") {
     (_, index) => selectedCards[index % selectedCards.length],
   ).map(
     (item) =>
-      `<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual image-cover">${placeholderImage(300, 190, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail, `View More<span class="sr-only">: ${escapeHtml(item[1])}</span>`, "link-arrow")}<span>17 December 2025</span></div></div></article>`,
+      `<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual image-cover">${placeholderImage(300, 220, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail, `View More<span class="sr-only">: ${escapeHtml(item[1])}</span>`, "link-arrow")}<span>17 December 2025</span></div></div></article>`,
   );
   const list = Array.from(
     { length: 5 },
     () =>
-      `<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image">${placeholderImage(140, 108, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category === "eol" ? "End-of-Life" : "Release Date"} : 15/04/2026</small></div>${link(routes.detail, '<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>', "news-list-arrow-link")}</article>`,
+      `<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image image-cover">${placeholderImage(248, 134, "Molded Power\nInductor")}</div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p><small>${category === "eol" ? "End-of-Life" : "Release Date"} : 15/04/2026</small></div>${link(routes.detail, '<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>', "news-list-arrow-link")}</article>`,
   ).join("");
   const results =
     category === "product" || category === "eol"
@@ -609,17 +609,20 @@ function inquirySummaryContent(state) {
   const cartRows = state.inquiryProducts
     .map((product, i) => {
       const sku = escapeHtml(product.sku || product.name || product.series || "Product");
-      const specifications = (product.fields || [])
+      const populatedFields = (product.fields || [])
         .filter((field) => {
           const value = product.values?.[field.key];
           return value !== null && value !== undefined && value !== "";
-        })
-        .map(
+        });
+      const isDimension = (field) => /^(length|width|height|diameter|dimension)\b/i.test(productFieldLabel(field));
+      const fieldMarkup = (field) => `<div><dt>${escapeHtml(productFieldLabel(field))}</dt><dd>${escapeHtml(product.values[field.key])}</dd></div>`;
+      const dimensions = populatedFields.filter(isDimension).map(fieldMarkup).join("");
+      const specifications = populatedFields.filter(field => !isDimension(field)).map(
           (field) =>
             `<div><dt>${escapeHtml(productFieldLabel(field))}</dt><dd>${escapeHtml(product.values[field.key])}</dd></div>`,
         )
         .join("");
-      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${ph("", `${sku} Product`, 140, 96, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-part-id"><strong>Part ID</strong><br>${product.id}</p><p class="cart-series"><strong>Series</strong><br>${escapeHtml(product.series || "—")}</p><div class="cart-product-data"><p class="cart-category"><strong>Category</strong><br>${escapeHtml(product.category || "—")}</p>${specifications ? `<dl class="cart-specs">${specifications}</dl>` : ""}</div></div></div><div class="cart-quantity"><span class="cart-quantity-label">Quantity</span><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}" aria-label="Remove ${sku} from inquiry">Remove</button></div></div>`;
+      return `<div class="cart-row" data-cart-row="${i}"><div class="cart-number">${i + 1}</div><div class="cart-product">${ph("", `${sku} Product`, 154, 86, `${sku}\nProduct`)}<div class="cart-product-copy"><h3>${sku}</h3><p class="cart-part-id"><strong>Part ID</strong><br>${product.id}</p><p class="cart-series"><strong>Series</strong><br>${escapeHtml(product.series || "—")}</p>${dimensions ? `<dl class="cart-dimensions">${dimensions}</dl>` : ""}<div class="cart-product-data"><p class="cart-category"><strong>Category</strong><br>${escapeHtml(product.category || "—")}</p>${specifications ? `<dl class="cart-specs">${specifications}</dl>` : ""}<div class="cart-spec-actions"><button class="button small" type="button" disabled aria-label="Data sheet unavailable for ${sku}">Data Sheet unavailable</button></div></div></div></div><div class="cart-quantity"><span class="cart-quantity-label">Quantity</span><div class="quantity"><button type="button" data-qty="${i}" data-delta="1" aria-label="Increase quantity for ${sku}">+</button><output aria-label="Quantity for ${sku}">${state.cart[i]}</output><button type="button" data-qty="${i}" data-delta="-1" aria-label="Decrease quantity for ${sku}">−</button></div><button class="cart-remove" type="button" data-remove="${i}" aria-label="Remove ${sku} from inquiry">Remove</button></div></div>`;
     })
     .join("");
   const pending = state.inquiryQueryKey && state.inquiryResolvedKey !== state.inquiryQueryKey;
