@@ -162,9 +162,7 @@ Feature"
         <select aria-label="Category" data-news-type>
           <!--APP_SLOT:NEWS_CATEGORY_OPTIONS--></select
         ><select aria-label="Year" data-news-year>
-          <option value="">Year</option>
-          <option value="2026">2026</option>
-          <option value="2025">2025</option>
+          <!--APP_SLOT:NEWS_YEAR_OPTIONS-->
         </select>
         <div class="news-search">
           <input
@@ -172,12 +170,13 @@ Feature"
             aria-label="Search news"
             data-news-search
             autocomplete="off"
+            value="<!--APP_SLOT:NEWS_SEARCH_VALUE-->"
           /><button type="button" data-news-search-button aria-label="Search news">
             <span class="news-search-icon" aria-hidden="true"></span>
           </button>
         </div>
       </div>
-      <div class="news-results"><!--APP_SLOT:NEWS_RESULTS--></div>
+      <div class="news-results" id="news-results"><!--APP_SLOT:NEWS_RESULTS--></div>
     </div>
   </section>
 </main>

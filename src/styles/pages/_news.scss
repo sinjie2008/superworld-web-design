@@ -782,6 +782,15 @@
     & button {
       padding: 8px 12px
     }
+
+    &[data-news-pagination] button[aria-current="page"] {
+      background: #111;
+      color: #fff;
+    }
+
+    &[data-news-pagination][hidden] {
+      display: none;
+    }
   }
 
   .news {

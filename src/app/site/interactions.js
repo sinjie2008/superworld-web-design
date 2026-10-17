@@ -1,3 +1,6 @@
+import { newsStateFromSearch, newsUrl, queryNews } from "../news-catalog.js";
+import { renderNewsCategoryOptions, renderNewsResults, renderNewsYearOptions } from "./pages.js";
+
 const COMMUNICATION_SYSTEM_ORDER = Object.freeze(["server", "router", "settopbox"]);
 
 class CarouselWidget {
@@ -1261,104 +1264,124 @@ class NewsEventFiltersController {
     this.cleanups = [];
     this.timers = [];
     this.mounted = false;
+    this.newsResult = null;
+    this.newsFrame = 0;
+  }
+
+  revealNewsNavigation(link = this.newsActiveLink) {
+    const track = this.newsTrack;
+    if (!link || !track || track.scrollWidth <= track.clientWidth) return;
+    const linkBounds = link.getBoundingClientRect();
+    const trackBounds = track.getBoundingClientRect();
+    const delta = linkBounds.left + linkBounds.width / 2 - trackBounds.left - trackBounds.width / 2;
+    if (Math.abs(delta) > 1) track.scrollBy({ left: delta, behavior: "instant" });
+  }
+
+  syncNewsCategoryNavigation() {
+    if (!this.newsTrack) return;
+    const isCalendar = location.pathname.replace(/\/$/, "") === "/news/event-calendar";
+    const group = isCalendar ? "events" : this.newsResult?.state.group || newsStateFromSearch(location.search).group;
+    this.newsTrack.querySelectorAll("a").forEach((link) => {
+      const targetGroup = newsStateFromSearch(new URL(link.href, location.href).search).group;
+      const selected = targetGroup === group;
+      link.classList.toggle("is-active", selected);
+      if (selected) {
+        link.setAttribute("aria-current", "page");
+        this.newsActiveLink = link;
+      }
+      else link.removeAttribute("aria-current");
+      if (!isCalendar) {
+        link.setAttribute("href", newsUrl(location.search, { group: targetGroup, subcategory: "" }, { resetPage: true }) + location.hash);
+      }
+    });
+    this.revealNewsNavigation();
   }
 
   setupNewsCategoryNavigation() {
-    const track = document.querySelector(".news-page .anchor-nav-track");
-    if (!track) return;
-
-    const controller = new AbortController();
-    const options = { signal: controller.signal };
-    let frame = 0;
-    const categoryFor = (pathname, search) => {
-      if (pathname.replace(/\/$/, "") === "/news/event-calendar") return "events";
-      const category = new URLSearchParams(search).get("category") || "all";
-      if (category === "brochures") return "brochures";
-      if (["business", "csr", "announcements"].includes(category)) return "business";
-      if (["product", "eol"].includes(category)) return "product";
-      if (category === "events") return "events";
-      return "latest";
-    };
-    const activeCategory = categoryFor(window.location.pathname, window.location.search);
-    const links = [...track.querySelectorAll("a")];
-    const activeLink = links.find((link) => {
-      const target = new URL(link.href, window.location.href);
-      return categoryFor(target.pathname, target.search) === activeCategory;
-    });
-    links.forEach((link) => {
-      const selected = link === activeLink;
-      link.classList.toggle("is-active", selected);
-      if (selected) link.setAttribute("aria-current", "page");
-      else link.removeAttribute("aria-current");
-    });
-
-    const reveal = (link) => {
-      if (!link || track.scrollWidth <= track.clientWidth) return;
-      const linkBounds = link.getBoundingClientRect();
-      const trackBounds = track.getBoundingClientRect();
-      const delta =
-        linkBounds.left + linkBounds.width / 2 - trackBounds.left - trackBounds.width / 2;
-      if (Math.abs(delta) > 1) track.scrollBy({ left: delta, behavior: "instant" });
-    };
-    const scheduleReveal = () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        reveal(activeLink);
+    this.newsTrack = document.querySelector(".news-page .anchor-nav-track");
+    if (!this.newsTrack) return;
+    this.newsController = new AbortController();
+    const options = { signal: this.newsController.signal };
+    window.addEventListener("resize", () => {
+      window.cancelAnimationFrame(this.newsFrame);
+      this.newsFrame = window.requestAnimationFrame(() => {
+        this.newsFrame = 0;
+        this.revealNewsNavigation();
       });
-    };
-
-    window.addEventListener("resize", scheduleReveal, options);
-    track.addEventListener(
-      "focusin",
-      (event) => reveal(event.target.closest("a")),
-      options,
-    );
+    }, options);
+    this.newsTrack.addEventListener("focusin", (event) => this.revealNewsNavigation(event.target.closest("a")), options);
     this.cleanups.push(() => {
-      controller.abort();
-      if (frame) window.cancelAnimationFrame(frame);
+      this.newsController.abort();
+      window.cancelAnimationFrame(this.newsFrame);
+      this.newsResult = null;
+      this.newsTrack = null;
+      this.newsActiveLink = null;
     });
-    reveal(activeLink);
+    this.syncNewsCategoryNavigation();
+  }
+
+  revealNewsContent(element) {
+    if (!element) return;
+    const navigation = this.newsTrack?.closest(".anchor-nav");
+    const headerBottom = document.querySelector(".site-header")?.getBoundingClientRect().bottom || 0;
+    const stickyTop = navigation ? parseFloat(getComputedStyle(navigation).top) || 0 : 0;
+    const offset = Math.max(headerBottom, stickyTop) + (navigation?.offsetHeight || 0) + 16;
+    window.scrollBy({ top: element.getBoundingClientRect().top - offset, behavior: "instant" });
+  }
+
+  updateNews(changes, { replace = false, resetPage = true, syncInput = true, focusPage = false } = {}) {
+    const requested = newsUrl(location.search, changes, { resetPage });
+    const search = new URL(requested, location.href).search;
+    this.newsResult = queryNews(search);
+    const href = newsUrl(search, this.newsResult.state) + location.hash;
+    if (href !== location.pathname + location.search + location.hash) {
+      history[replace ? "replaceState" : "pushState"](history.state, "", href);
+    }
+    this.newsType.innerHTML = renderNewsCategoryOptions(this.newsResult.state);
+    this.newsYear.innerHTML = renderNewsYearOptions(this.newsResult.state);
+    if (syncInput) this.newsSearch.value = this.newsResult.state.query;
+    this.newsResults.innerHTML = renderNewsResults(this.newsResult);
+    this.syncNewsCategoryNavigation();
+    if (focusPage) {
+      this.newsResults.querySelector('[data-news-id] a')?.focus({ preventScroll: true });
+      this.revealNewsContent(this.newsResults);
+    }
   }
 
   setupNewsFilters() {
-    const { navigate, routes } = this;
-    const newsType = document.querySelector("[data-news-type]");
-    const newsYear = document.querySelector("[data-news-year]");
-    const newsSearch = document.querySelector("[data-news-search]");
-    const newsSearchButton = document.querySelector("[data-news-search-button]");
-    const newsItems = [...document.querySelectorAll("[data-news-search-item]")];
-    const applyNewsFilters = () => {
-      const query = newsSearch?.value.trim().toLowerCase() || "";
-      const year = newsYear?.value || "";
-      let visible = 0;
-      newsItems.forEach((item) => {
-        const show =
-          (!query || item.textContent.toLowerCase().includes(query)) &&
-          (!year || item.dataset.newsYear === year);
-        item.hidden = !show;
-        if (show) visible += 1;
-      });
-      const empty = document.querySelector("[data-news-empty]");
-      if (empty) empty.hidden = visible !== 0;
-    };
-    newsType?.addEventListener("change", () => {
-      const filterTop = newsType.closest(".news-filters")?.getBoundingClientRect().top ?? 0;
-      navigate(
-        routes.news +
-          (newsType.value && newsType.value !== "all" ? `?category=${newsType.value}` : ""),
-        false,
-      );
-      const nextFilter = document.querySelector(".news-filters");
-      if (nextFilter)
-        window.scrollBy({
-          top: nextFilter.getBoundingClientRect().top - filterTop,
-          behavior: "instant",
-        });
-    });
-    newsYear?.addEventListener("change", applyNewsFilters);
-    newsSearch?.addEventListener("input", applyNewsFilters);
-    newsSearchButton?.addEventListener("click", () => newsSearch?.focus());
+    this.newsType = document.querySelector("[data-news-type]");
+    this.newsYear = document.querySelector("[data-news-year]");
+    this.newsSearch = document.querySelector("[data-news-search]");
+    this.newsResults = document.querySelector(".news-results");
+    if (!this.newsType || !this.newsResults || !this.newsController) return;
+    const options = { signal: this.newsController.signal };
+    this.updateNews({}, { replace: true, resetPage: false });
+    this.newsTrack.addEventListener("click", (event) => {
+      const link = event.target.closest("a[data-link]");
+      if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const group = newsStateFromSearch(new URL(link.href, location.href).search).group;
+      this.updateNews({ group, subcategory: "" });
+      this.revealNewsContent(this.newsType.closest(".news-filters"));
+    }, options);
+    this.newsType.addEventListener("change", () => this.updateNews({ subcategory: this.newsType.value }), options);
+    this.newsYear.addEventListener("change", () => this.updateNews({ year: this.newsYear.value }), options);
+    const applySearch = (replace = false) => this.updateNews({ query: this.newsSearch.value }, { replace, syncInput: false });
+    this.newsSearch.addEventListener("input", () => applySearch(true), options);
+    this.newsSearch.addEventListener("search", () => applySearch(true), options);
+    this.newsSearch.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      applySearch();
+    }, options);
+    document.querySelector("[data-news-search-button]")?.addEventListener("click", () => {
+      applySearch();
+      this.newsSearch.focus({ preventScroll: true });
+    }, options);
+    this.newsResults.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-news-page]");
+      if (button) this.updateNews({ page: Number(button.dataset.newsPage) }, { resetPage: false, focusPage: true });
+    }, options);
   }
 
   setupEventFilters() {

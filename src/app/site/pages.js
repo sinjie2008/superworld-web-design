@@ -10,6 +10,7 @@ import automotive from "../../pages/applications/automotive.html";
 import communication from "../../pages/applications/communication.html";
 import { matchProductRoute } from "../product-catalog.js";
 import { productFieldLabel } from "../product-pages.js";
+import { NEWS_CATEGORIES, newsCategoriesForGroup, newsYears, queryNews } from "../news-catalog.js";
 import products from "../../pages/products.html";
 import productGroup from "../../pages/products/general.html";
 import productFamily from "../../pages/products/general/emc.html";
@@ -105,65 +106,51 @@ const generalCategories = {
   ],
 };
 
-const newsCategories = {
-  all: "ALL",
-  latest: "Latest Product News",
-  product: "Product Releases",
-  brochures: "Brochures",
-  events: "Exhibitions & Trade Shows",
-  csr: "Corporate Social Responsibility",
-  eol: "End-of-Life Notices",
-  business: "Business Updates",
-  announcements: "Announcements",
-};
+export function renderNewsCategoryOptions(state) {
+  return `<option value="">${state.group === "latest" ? "All Categories" : "ALL"}</option>` +
+    newsCategoriesForGroup(state.group).map((category) =>
+      `<option value="${category.id}"${category.id === state.subcategory ? " selected" : ""}>${escapeHtml(category.label)}</option>`,
+    ).join("");
+}
+
+export function renderNewsYearOptions(state) {
+  return '<option value="">Year</option>' + newsYears().map((year) =>
+    `<option value="${year}"${year === state.year ? " selected" : ""}>${year}</option>`,
+  ).join("");
+}
+
+export function renderNewsResults({ state, items, total, totalPages }) {
+  const categoryLabel = (item) => NEWS_CATEGORIES.find((category) => category.id === item.categoryId)?.label || "";
+  const content = items.map((item) => {
+    const title = escapeHtml(item.title);
+    const attributes = `data-news-search-item data-news-id="${escapeHtml(item.id)}" data-news-category="${item.categoryId}" data-news-year="${item.publishedAt.slice(0, 4)}"`;
+    if (state.group === "product") {
+      const specifications = item.sku
+        ? `<div class="news-list-specifications"><h3>${escapeHtml(item.sku)}</h3><p>Dimension Range : ${escapeHtml(item.dimensions)}</p></div>`
+        : "";
+      const date = item.publishedAt.split("-").reverse().join("/");
+      return `<article class="news-list-item" ${attributes}><div class="ph news-list-image image-cover"><picture><source media="(max-width: 560px)" srcset="https://placehold.co/310x168" width="310" height="168"/>${placeholderImage(248, 134, item.imageAlt || `${item.title}\nNews`)}</picture></div><div class="news-list-copy"><h3>${title}</h3><p>${escapeHtml(item.summary || "")}</p></div><div class="news-list-meta"><span class="tag">${escapeHtml(item.productCategory || categoryLabel(item))}</span>${specifications}<small>${item.categoryId === "eol" ? "End-of-Life" : "Release Date"} : ${date}</small></div>${link(item.href, `<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View ${title}</span>`, "news-list-arrow-link")}</article>`;
+    }
+    const date = new Intl.DateTimeFormat("en-GB", {
+      day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+    }).format(new Date(`${item.publishedAt}T00:00:00Z`));
+    return `<article class="news-card" ${attributes}><div class="ph news-card-visual image-cover">${placeholderImage(300, 220, `${item.title}\nNews`)}<span class="tag">${escapeHtml(categoryLabel(item))}</span></div><div class="news-card-body"><h3>${title}</h3><div class="news-card-footer">${link(item.href, `View More<span class="sr-only">: ${title}</span>`, "link-arrow")}<span>${date}</span></div></div></article>`;
+  }).join("");
+  const firstPage = Math.max(1, Math.min(state.page - 2, totalPages - 4));
+  const pageButtons = Array.from({ length: Math.min(5, totalPages) }, (_, index) => {
+    const page = firstPage + index;
+    return `<button type="button" data-news-page="${page}" aria-label="Page ${page}" aria-controls="news-results"${page === state.page ? ' class="is-active" aria-current="page"' : ""}>${page}</button>`;
+  }).join("");
+  return `<div class="${state.group === "product" ? "news-list" : "news-grid"}">${content}</div><p class="news-empty" data-news-empty role="status"${total ? " hidden" : ""}>No news matches your filters.</p><div class="pagination" data-news-pagination role="navigation" aria-label="News pagination"${total ? "" : " hidden"}>${pageButtons}</div>`;
+}
 
 function newsSlots(search = globalThis.location?.search || "") {
-  const category = new URLSearchParams(search).get("category") || "all";
-  const allNewsCards = [
-    ["Latest Product News", "Radial-Leaded Inductor: Fully Automated Production Overview"],
-    ["Business Updates", "Our Johor Bahru facility is progressing"],
-    ["Exhibitions & Trade Shows", "NEPCON Japan 2026 Recap: Innovations, Insights & Trends"],
-    ["Corporate Social Responsibility", "Superworld Electronics’ CSR Program at Gladiolus Place"],
-    ["Announcements", "Holiday closure notice"],
-    ["Brochures", "Superworld Product Brochure"],
-    ["Latest Product News", "New A4K Series Release"],
-    ["Business Updates", "Superworld Electronics expands regional support"],
-  ];
-  const categoryCards = {
-    latest: allNewsCards.filter((item) => item[0] === "Latest Product News"),
-    events: allNewsCards.filter((item) => item[0] === "Exhibitions & Trade Shows"),
-    csr: allNewsCards.filter((item) => item[0] === "Corporate Social Responsibility"),
-    business: allNewsCards.filter((item) =>
-      ["Business Updates", "Corporate Social Responsibility", "Announcements"].includes(item[0]),
-    ),
-    announcements: allNewsCards.filter((item) => item[0] === "Announcements"),
-    brochures: allNewsCards.filter((item) => item[0] === "Brochures"),
-  };
-  const selectedCards = category === "all" ? allNewsCards : categoryCards[category] || allNewsCards;
-  const cards = Array.from(
-    { length: 8 },
-    (_, index) => selectedCards[index % selectedCards.length],
-  ).map(
-    (item) =>
-      `<article class="news-card" data-news-search-item data-news-year="2025"><div class="ph news-card-visual image-cover">${placeholderImage(300, 220, `${item[1]}\nNews`)}<span class="tag">${item[0]}</span></div><div class="news-card-body"><h3>${item[1]}</h3><div class="news-card-footer">${link(routes.detail, `View More<span class="sr-only">: ${escapeHtml(item[1])}</span>`, "link-arrow")}<span>17 December 2025</span></div></div></article>`,
-  );
-  const list = Array.from(
-    { length: 5 },
-    () =>
-      `<article class="news-list-item" data-news-search-item data-news-year="2026"><div class="ph news-list-image image-cover"><picture><source media="(max-width: 560px)" srcset="https://placehold.co/310x168" width="310" height="168"/>${placeholderImage(248, 134, "Molded Power\nInductor")}</picture></div><div class="news-list-copy"><h3>Molded Power Inductor</h3><p>Low profile as low as 1mm. Capable of handling high current ratings while maintaining optimal performance in high-temperature environments.</p></div><div class="news-list-meta"><span class="tag">General</span><div class="news-list-specifications"><h3>PHA0301S</h3><p>Dimension Range : XXX - XXX</p></div><small>${category === "eol" ? "End-of-Life" : "Release Date"} : 15/04/2026</small></div>${link(routes.detail, '<span class="news-list-arrow" aria-hidden="true"></span><span class="sr-only">View Molded Power Inductor</span>', "news-list-arrow-link")}</article>`,
-  ).join("");
-  const results =
-    category === "product" || category === "eol"
-      ? `<div class="news-list">${list}</div>`
-      : `<div class="news-grid">${cards.join("")}</div>`;
+  const result = queryNews(search);
   return {
-    NEWS_CATEGORY_OPTIONS: Object.entries(newsCategories)
-      .map(
-        ([value, name]) =>
-          `<option value="${value}" ${value === category ? "selected" : ""}>${name}</option>`,
-      )
-      .join(""),
-    NEWS_RESULTS: `${results}<p class="news-empty" data-news-empty hidden>No news matches your search.</p>${pagination()}`,
+    NEWS_CATEGORY_OPTIONS: renderNewsCategoryOptions(result.state),
+    NEWS_YEAR_OPTIONS: renderNewsYearOptions(result.state),
+    NEWS_SEARCH_VALUE: escapeHtml(result.state.query),
+    NEWS_RESULTS: renderNewsResults(result),
   };
 }
 

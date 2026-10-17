@@ -103,7 +103,7 @@
 - SiteApplication calls `window.SpecSearchApp.initialize()` after every route render, including non-Spec routes, so the facade also releases Spec Search listeners, cached DOM, renderer listeners, and active requests on unload.
 - `scripts/validate-artifact.mjs` runs `src/app/features/spec-search/lifecycle-check.mjs`; that behavioral check covers repeated initialize/destroy listener counts, stale DOM invalidation, request abort, and the frozen facade keys. Generated artifacts remain build-only; never edit `worker/index.js`, `dist/**`, or `.generated/**` by hand.
 - The esbuild `--minify` flag minifies the JavaScript wrapper but preserves HTML imported through `--loader:.html=text`; keep that flag enabled while maintaining readable, non-minified HTML in `src/pages/`.
-- Current production cache query versions are `/styles.css?v=153`, `/spec-search.css?v=113`, `/app.js?v=153`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-153` for both mode-dependent assets.
+- Current production cache query versions are `/styles.css?v=157`, `/spec-search.css?v=113`, `/app.js?v=157`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-157` for both mode-dependent assets.
 
 ## Local restoration
 
@@ -161,7 +161,7 @@
 - Search magnifiers share 24×24 SVG geometry with a 2px round stroke. Applications, News and Spec facets consume the non-emitting `components/_search-icon.scss` mixins; Quality, Locations and Spec results use matching inline SVGs. The clear cross uses the same dimensions and stroke, with the original controls and accessible labels.
 - At <=560px, direct CTA button groups stack and each direct button fills the available width. The independent `.a4k-selection-cta > div:last-child` follows the same full-width rule while keeping its selected-parts Inquiry action and unavailable-download behavior.
 - Specification Search centers its page-size control at <=560px while keeping the same select and table state.
-- Current assets are styles153, app153, spec-search CSS113 and spec-search JS105. Keep the document, build and validation version assertions synchronized.
+- Current assets are styles157, app157, spec-search CSS113 and spec-search JS105. Keep the document, build and validation version assertions synchronized.
 
 ## Slide follow-up 23–28 and 44–45 (2026-10-17)
 
@@ -169,5 +169,17 @@
 - Related News on `/news/radial-leaded-inductor` uses 300px cards, 16px gaps and a 48px narrow-screen reserve for the next-card preview. Its existing carousel owns autoplay, touch handling and clamped boundaries.
 - Product family placeholders request 80×80 images through a responsive `<picture>` source; Event Calendar uses 310×168 through 1024px; Inquiry uses 72×72 through 560px. Preserve real product images, desktop sources and desktop `contain` behavior; responsive frames use `cover`.
 - Product-series search has a shared 24px magnifier at the right of its existing input. The detail navigation centers using actual element bounds, with symmetric rail padding, and releases its resize/focus/scroll listeners on route changes.
-- News category navigation derives its single active link and `aria-current="page"` from the URL: brochures → Resources; business/csr/announcements → Company; product/eol → Product; events/calendar → Events. Recenter on mount, resize and keyboard focus.
+- News category navigation derives its single active link and `aria-current="page"` from the shared News query model. Legacy brochures → Resources; business/csr/announcements → Company; product/eol → Product; events/calendar → Events remain compatible. Recenter on mount, resize and keyboard focus.
 - Chrome DevTools window resizing does not replace an existing device viewport override. Use explicit `emulate.viewport` and assert `innerWidth` before claiming a tested width. Wait for the product `data-catalog-series-id` before testing hydrated controls.
+
+## News navigation and filtering (2026-10-17)
+
+- News currently uses the frontend's finite article data, not a News CMS endpoint. Read-only inspection of the configured backend database found catalog/product/Typst tables and product parent-category relationships only. Do not create a second database taxonomy or modify product categories to implement News filters.
+- `src/app/news-catalog.js` is the single source for News parent groups, existing leaf categories, original article records, URL normalization, combined filtering, newest-first ordering and real pagination. Latest News is the aggregate view; the existing leaf named Latest Product News stays under Product News. Do not introduce Product Updates without source content.
+- Per explicit user confirmation, Molded Power Inductor is one Product Releases record. End-of-Life Notices remains an empty available category; do not fabricate an EOL announcement or duplicate articles to fill cards/pages. The nine unique list records retain their original titles, dates, destinations and product metadata.
+- News URLs retain `category` for the main group (latest/product/events/business/brochures), with `subcategory`, `year`, `q` and `page` for filters. Legacy category=csr/announcements/eol infers the appropriate parent and leaf. Normalize invalid or cross-parent filters gracefully and preserve unrelated/repeated query parameters.
+- Header News links labelled Business Updates, New Product Releases and Product Enhancements explicitly target their leaf via `subcategory`; Product Enhancements retains the existing Latest Product News content. Main five-tab and footer links remain group views. Preserve the original menu labels and styling.
+- Switching a News main tab clears the leaf and resets page 1 while retaining year/search; changing any filter also resets page 1. Apply all filters before sorting/slicing eight articles per page. Browser history restores all controls from the URL.
+- News results reuse the owning `pages.js` renderer and existing grid/product-list HTML. The controller updates results and options in place, preserving the header, hero, main DOM, input focus and the existing five tabs. Its listeners and scheduled frame are released with its AbortController on route changes. Event Calendar retains its independent filtering.
+- After user paging, focus the first article link and reveal the results below the measured sticky header/navigation. Main-tab changes reveal the existing filter controls. Short result pages would otherwise leave the reader at the footer after the document height shrinks.
+- Keep the News layout and responsive styles unchanged. Its pagination only needs the existing black/white active colors and an explicit scoped `[hidden]` rule: the author `.pagination { display:flex }` otherwise overrides the browser's hidden default and exposes page 1 for an empty result set.

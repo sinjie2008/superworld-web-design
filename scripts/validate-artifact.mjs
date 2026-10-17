@@ -306,10 +306,10 @@ assert.doesNotMatch(
   /@import\b/,
   "styles.scss must use Sass modules instead of deprecated @import",
 );
-assert.match(documentLayoutSource, /\/styles\.css\?v=153/);
+assert.match(documentLayoutSource, /\/styles\.css\?v=157/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=113/);
 assert.match(documentLayoutSource, /\/spec-search\.js\?v=105/);
-assert.match(documentLayoutSource, /\/app\.js\?v=153/);
+assert.match(documentLayoutSource, /\/app\.js\?v=157/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
   cwd: projectRoot,
@@ -433,10 +433,10 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   );
   assert.doesNotMatch(html, /<!--APP_SLOT:/, `${route} must not expose unresolved document slots`);
   if (route === "/") {
-    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-153" : "153"}`));
+    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-157" : "157"}`));
     assert.match(html, /\/spec-search\.css\?v=113/);
     assert.match(html, /\/spec-search\.js\?v=105/);
-    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-153" : "153"}`));
+    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-157" : "157"}`));
   }
   assert.equal(
     html.includes('content="noindex,follow"'),
