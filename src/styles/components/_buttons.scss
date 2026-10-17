@@ -107,7 +107,13 @@
       padding: 28px 22px;
 
       > .button-group {
-        flex-wrap: wrap;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+
+        > .button {
+          width: 100%;
+        }
       }
     }
   }

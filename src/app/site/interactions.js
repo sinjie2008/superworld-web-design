@@ -649,7 +649,7 @@ class GeneralPageController {
         if (!link || track.scrollWidth <= track.clientWidth) return;
         const bounds = link.getBoundingClientRect();
         const viewport = track.getBoundingClientRect();
-        const delta = bounds.left < viewport.left ? bounds.left - viewport.left : bounds.right > viewport.right ? bounds.right - viewport.right : 0;
+        const delta = bounds.left + bounds.width / 2 - viewport.left - viewport.width / 2;
         if (delta) track.scrollBy({ left: delta, behavior: "instant" });
       };
       let activeLink = null;

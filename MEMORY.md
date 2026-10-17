@@ -103,7 +103,7 @@
 - SiteApplication calls `window.SpecSearchApp.initialize()` after every route render, including non-Spec routes, so the facade also releases Spec Search listeners, cached DOM, renderer listeners, and active requests on unload.
 - `scripts/validate-artifact.mjs` runs `src/app/features/spec-search/lifecycle-check.mjs`; that behavioral check covers repeated initialize/destroy listener counts, stale DOM invalidation, request abort, and the frozen facade keys. Generated artifacts remain build-only; never edit `worker/index.js`, `dist/**`, or `.generated/**` by hand.
 - The esbuild `--minify` flag minifies the JavaScript wrapper but preserves HTML imported through `--loader:.html=text`; keep that flag enabled while maintaining readable, non-minified HTML in `src/pages/`.
-- Current production cache query versions are `/styles.css?v=146`, `/spec-search.css?v=110`, `/app.js?v=148`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-146` / `v=dev-148` for the two mode-dependent assets.
+- Current production cache query versions are `/styles.css?v=151`, `/spec-search.css?v=113`, `/app.js?v=152`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-151` / `v=dev-152` for the two mode-dependent assets.
 
 ## Local restoration
 
@@ -151,5 +151,14 @@
 - Mobile Product News follows the native 342×480 Penpot card: 16px inner offset, 310×168 picture, left-aligned category/copy, title-side 44px link, SKU/dimensions and a full-width date strip. Keep the same renderer and state; desktop/tablet retain their existing layout and 248×134 image source.
 - Environmental carousel uses a 342×292 mobile frame/source and a 704×360 tablet source; reset the shared .ph.map minimum height in this owning component. Misconduct hotline/email are separate grid rows with a 16px gap.
 - Quality, Locations and Specification Search icons remain inside their existing search controls. Specification Search needs an input/icon wrapper because its mobile label becomes a grid; a naked sibling SVG becomes an unwanted extra row. News input/button heights are both 52px.
-- Final asset versions are styles149, app151, spec-search CSS112 and spec-search JS105. Increment versions after source repairs before browser QA; immutable asset caching otherwise mixes old JS/CSS with freshly rendered HTML.
+- This round used styles149, app151, spec-search CSS112 and spec-search JS105. Increment versions after source repairs before browser QA; immutable asset caching otherwise mixes old JS/CSS with freshly rendered HTML.
 - Follow-up evidence is external under `slide-followup-15-26-33/`. The original uncommitted development worker was backed up there before production regeneration; never hand-edit the generated worker. Backend and Penpot remain unchanged.
+
+## Slide follow-up 15 and 34–37 (2026-10-17)
+
+- Home Quality and Latest News use 300px cards and 16px gaps through 1024px. Bound the card by `calc(100% - 48px)` so narrow screens retain a visible neighboring card; the existing carousel widget still owns movement, boundaries and autoplay.
+- Shared section navigation centers the active or focused link within its horizontal track. Symmetric responsive track padding lets the first and last links center too. Manual rail movement remains available until the active section changes; preserve query parameters and avoid vertical `scrollIntoView()`.
+- Search magnifiers share 24×24 SVG geometry with a 2px round stroke. Applications, News and Spec facets consume the non-emitting `components/_search-icon.scss` mixins; Quality, Locations and Spec results use matching inline SVGs. The clear cross uses the same dimensions and stroke, with the original controls and accessible labels.
+- At <=560px, direct CTA button groups stack and each direct button fills the available width. Products carousel controls inherit the shared unboxed chevrons, typography and 44px hit targets.
+- Specification Search centers its page-size control at <=560px while keeping the same select and table state.
+- Current assets are styles151, app152, spec-search CSS113 and spec-search JS105. Keep the document, build and validation version assertions synchronized.

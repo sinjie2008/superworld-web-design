@@ -1,5 +1,6 @@
 @use "../base/scope";
 @use "../tokens" as *;
+@use "../components/search-icon";
 @include scope.within {
   .communication {
     &-route-section {
@@ -215,48 +216,11 @@
     }
 
     &-search-icon {
-      position: relative;
-      width: 16px;
-      height: 16px
+      @include search-icon.magnifier;
     }
 
-    &-search-icon::before {
-      content: "";
-      position: absolute;
-      left: 1px;
-      top: 1px;
-      width: 8px;
-      height: 8px;
-      border: 2px solid currentColor;
-      border-radius: 50%
-    }
-
-    &-search-icon::after {
-      content: "";
-      position: absolute;
-      left: 11px;
-      top: 11px;
-      width: 6px;
-      height: 2px;
-      background: currentColor;
-      transform: rotate(45deg);
-      transform-origin: left center
-    }
-
-    &-search button.is-clear .market-search-icon::before,&-search button.is-clear .market-search-icon::after {
-      left: 7px;
-      top: 0;
-      width: 2px;
-      height: 17px;
-      border: 0;
-      border-radius: 0;
-      background: currentColor;
-      transform: rotate(45deg);
-      transform-origin: center
-    }
-
-    &-search button.is-clear .market-search-icon::after {
-      transform: rotate(-45deg)
+    &-search button.is-clear .market-search-icon {
+      @include search-icon.clear;
     }
 
     &-detail-item {

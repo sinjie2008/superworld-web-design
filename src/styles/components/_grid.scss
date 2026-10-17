@@ -115,6 +115,7 @@
         display: flex;
         min-width: 0;
         gap: 8px;
+        padding-inline: max(0px, calc((100% - 184px) / 2));
         overflow-x: auto;
         scrollbar-width: none;
       }

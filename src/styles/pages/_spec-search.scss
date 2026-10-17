@@ -1,3 +1,5 @@
+@use "../components/search-icon";
+
 $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" !default;
 #{$scope_prefix} {
   @media (max-width: 1024px) {
@@ -321,46 +323,14 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
       background: #f3f3f3;
     }
 
-    &-search-action::before,&-search-action::after {
+    &-search-action::before {
+      @include search-icon.magnifier;
       content: "";
-      position: absolute;
       pointer-events: none;
     }
 
-    &-search-action::before {
-      top: 50%;
-      left: 50%;
-      width: 10px;
-      height: 10px;
-      border: 2px solid currentColor;
-      border-radius: 50%;
-      transform: translate(-65%, -65%);
-    }
-
-    &-search-action::after {
-      top: calc(50% + 3px);
-      left: calc(50% + 2px);
-      width: 7px;
-      height: 2px;
-      background: currentColor;
-      transform: rotate(45deg);
-      transform-origin: left center;
-    }
-
-    &-search-action.is-clear::before,&-search-action.is-clear::after {
-      top: 50%;
-      left: 50%;
-      width: 14px;
-      height: 2px;
-      background: currentColor;
-      border: 0;
-      border-radius: 0;
-      transform: translate(-50%, -50%) rotate(45deg);
-      transform-origin: center;
-    }
-
-    &-search-action.is-clear::after {
-      transform: translate(-50%, -50%) rotate(-45deg);
+    &-search-action.is-clear::before {
+      @include search-icon.clear;
     }
   }
 
@@ -1162,7 +1132,7 @@ $scope_prefix: "#superworld_electronics_tools_spec_search_specification_search" 
 
       @media (max-width: 560px) {
         grid-column: 1 / -1;
-        justify-self: end;
+        justify-self: center;
         min-height: 44px;
         border: 0;
         padding: 0;
