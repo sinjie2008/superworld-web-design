@@ -198,8 +198,25 @@ function renderFamily(main, index, route) {
         const image = row.querySelector("td:first-child img");
         if (image) {
           if (defaultHref !== href) {
-            image.src = `https://placehold.co/${image.width || 255}x${image.height || 195}`;
+            const sourceWidth = Number(image.getAttribute("width")) || 255;
+            const sourceHeight = Number(image.getAttribute("height")) || 195;
+            image.src = `https://placehold.co/${sourceWidth}x${sourceHeight}`;
             image.alt = `${node.name} image unavailable`;
+          }
+          if (image.getAttribute("src")?.startsWith("https://placehold.co/")) {
+            let picture = image.closest("picture");
+            if (!picture) {
+              picture = document.createElement("picture");
+              image.replaceWith(picture);
+              picture.append(image);
+            }
+            let source = picture.querySelector("source");
+            if (!source) {
+              source = document.createElement("source");
+              picture.prepend(source);
+            }
+            source.media = "(max-width: 1024px)";
+            source.srcset = "https://placehold.co/80x80";
           }
         }
         const seriesCell = row.cells[1];
@@ -569,6 +586,9 @@ export class ProductPages {
   }
 
   setupPageControls(main) {
+    this.sectionScrollCleanup?.();
+    const controls = new AbortController();
+    const listenerOptions = { signal: controls.signal };
     main.querySelectorAll("[data-a4k-media]").forEach((button) =>
       button.addEventListener("click", () => {
         main.querySelectorAll("[data-a4k-media]").forEach((item) => {
@@ -581,7 +601,7 @@ export class ProductPages {
           .forEach((panel) =>
             panel.classList.toggle("is-active", panel.dataset.a4kPanel === button.dataset.a4kMedia),
           );
-      }),
+      }, listenerOptions),
     );
     const sectionButtons = [...main.querySelectorAll("[data-a4k-section]")];
     const sectionNav = main.querySelector(".a4k-section-nav");
@@ -592,19 +612,26 @@ export class ProductPages {
           left: Number(button.dataset.a4kNavStep) * Math.max(184, sectionNav.clientWidth * 0.8),
           behavior: "smooth",
         });
-      }),
+      }, listenerOptions),
     );
-    let activeSectionId = "overview";
+    let activeSectionId = sectionButtons.find((button) => button.classList.contains("is-active"))?.dataset.a4kSection || "overview";
+    const centerButton = (button, behavior = "smooth") => {
+      if (!sectionNav || !button) return;
+      const viewport = sectionNav.getBoundingClientRect();
+      const bounds = button.getBoundingClientRect();
+      const delta = bounds.left + bounds.width / 2 - (viewport.left + viewport.width / 2);
+      sectionNav.scrollTo({ left: sectionNav.scrollLeft + delta, behavior });
+    };
+    const centerActive = (behavior) => centerButton(
+      sectionButtons.find((button) => button.dataset.a4kSection === activeSectionId),
+      behavior,
+    );
     const activateSection = (sectionId, center = false) => {
       activeSectionId = sectionId;
       sectionButtons.forEach((button) => {
         const active = button.dataset.a4kSection === sectionId;
         button.classList.toggle("is-active", active);
-        if (active && center && sectionNav)
-          sectionNav.scrollTo({
-            left: button.offsetLeft - (sectionNav.clientWidth - button.offsetWidth) / 2,
-            behavior: "smooth",
-          });
+        if (active && center) centerButton(button);
       });
     };
     const sectionOffset = () => {
@@ -614,7 +641,7 @@ export class ProductPages {
         document.querySelector(".site-header")?.getBoundingClientRect().bottom || 0;
       return Math.max(stickyTop, headerBottom) + sectionNavWrap.offsetHeight + 16;
     };
-    sectionButtons.forEach((button) =>
+    sectionButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const section = document.getElementById(button.dataset.a4kSection);
         if (!section) return;
@@ -623,8 +650,9 @@ export class ProductPages {
           behavior: "smooth",
         });
         activateSection(button.dataset.a4kSection, true);
-      }),
-    );
+      }, listenerOptions);
+      button.addEventListener("focus", () => centerButton(button), listenerOptions);
+    });
     const syncSection = () => {
       const current = sectionButtons
         .map((button) => document.getElementById(button.dataset.a4kSection))
@@ -632,8 +660,24 @@ export class ProductPages {
         .at(-1);
       if (current && current.id !== activeSectionId) activateSection(current.id, true);
     };
-    window.addEventListener("scroll", syncSection, { passive: true });
-    this.sectionScrollCleanup = () => window.removeEventListener("scroll", syncSection);
+    let centerFrame = 0;
+    const scheduleCenter = () => {
+      window.cancelAnimationFrame(centerFrame);
+      centerFrame = window.requestAnimationFrame(() => {
+        syncSection();
+        centerActive("auto");
+      });
+    };
+    window.addEventListener("scroll", syncSection, { ...listenerOptions, passive: true });
+    window.addEventListener("resize", scheduleCenter, listenerOptions);
+    const resizeObserver = sectionNav ? new ResizeObserver(scheduleCenter) : null;
+    if (sectionNav) resizeObserver.observe(sectionNav);
+    scheduleCenter();
+    this.sectionScrollCleanup = () => {
+      controls.abort();
+      resizeObserver?.disconnect();
+      window.cancelAnimationFrame(centerFrame);
+    };
   }
 
   setupTable(wrapper, context) {

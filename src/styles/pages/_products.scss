@@ -596,17 +596,49 @@
     }
 
     tbody td:first-child {
+      .ph picture, > picture {
+        display: block;
+      }
+
+      .ph picture {
+        width: 100%;
+        height: 100%;
+      }
+
+      > picture {
+        width: 86px;
+        height: 64px;
+        margin-inline: auto;
+      }
+
+      picture img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
       @media (max-width: 1024px) {
         display: flex;
         align-items: center;
         min-height: 108px;
         padding: 0 0 16px;
 
-        .ph, .product-thumb {
+        .ph, .product-thumb, > picture {
           width: 80px;
           height: 80px;
           min-height: 0;
           margin: 0;
+          overflow: hidden;
+        }
+
+        .ph img, > picture img {
+          width: 100%;
+          height: 100%;
+        }
+
+        .ph img, .product-thumb, > picture img {
+          object-fit: cover;
         }
       }
     }

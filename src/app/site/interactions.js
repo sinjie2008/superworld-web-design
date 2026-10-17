@@ -1263,6 +1263,64 @@ class NewsEventFiltersController {
     this.mounted = false;
   }
 
+  setupNewsCategoryNavigation() {
+    const track = document.querySelector(".news-page .anchor-nav-track");
+    if (!track) return;
+
+    const controller = new AbortController();
+    const options = { signal: controller.signal };
+    let frame = 0;
+    const categoryFor = (pathname, search) => {
+      if (pathname.replace(/\/$/, "") === "/news/event-calendar") return "events";
+      const category = new URLSearchParams(search).get("category") || "all";
+      if (category === "brochures") return "brochures";
+      if (["business", "csr", "announcements"].includes(category)) return "business";
+      if (["product", "eol"].includes(category)) return "product";
+      if (category === "events") return "events";
+      return "latest";
+    };
+    const activeCategory = categoryFor(window.location.pathname, window.location.search);
+    const links = [...track.querySelectorAll("a")];
+    const activeLink = links.find((link) => {
+      const target = new URL(link.href, window.location.href);
+      return categoryFor(target.pathname, target.search) === activeCategory;
+    });
+    links.forEach((link) => {
+      const selected = link === activeLink;
+      link.classList.toggle("is-active", selected);
+      if (selected) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    const reveal = (link) => {
+      if (!link || track.scrollWidth <= track.clientWidth) return;
+      const linkBounds = link.getBoundingClientRect();
+      const trackBounds = track.getBoundingClientRect();
+      const delta =
+        linkBounds.left + linkBounds.width / 2 - trackBounds.left - trackBounds.width / 2;
+      if (Math.abs(delta) > 1) track.scrollBy({ left: delta, behavior: "instant" });
+    };
+    const scheduleReveal = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        reveal(activeLink);
+      });
+    };
+
+    window.addEventListener("resize", scheduleReveal, options);
+    track.addEventListener(
+      "focusin",
+      (event) => reveal(event.target.closest("a")),
+      options,
+    );
+    this.cleanups.push(() => {
+      controller.abort();
+      if (frame) window.cancelAnimationFrame(frame);
+    });
+    reveal(activeLink);
+  }
+
   setupNewsFilters() {
     const { navigate, routes } = this;
     const newsType = document.querySelector("[data-news-type]");
@@ -1330,6 +1388,7 @@ class NewsEventFiltersController {
   initialize() {
     if (this.mounted) return this;
     this.mounted = true;
+    this.setupNewsCategoryNavigation();
     this.setupNewsFilters();
     this.setupEventFilters();
     return this;

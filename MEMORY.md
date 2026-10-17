@@ -103,7 +103,7 @@
 - SiteApplication calls `window.SpecSearchApp.initialize()` after every route render, including non-Spec routes, so the facade also releases Spec Search listeners, cached DOM, renderer listeners, and active requests on unload.
 - `scripts/validate-artifact.mjs` runs `src/app/features/spec-search/lifecycle-check.mjs`; that behavioral check covers repeated initialize/destroy listener counts, stale DOM invalidation, request abort, and the frozen facade keys. Generated artifacts remain build-only; never edit `worker/index.js`, `dist/**`, or `.generated/**` by hand.
 - The esbuild `--minify` flag minifies the JavaScript wrapper but preserves HTML imported through `--loader:.html=text`; keep that flag enabled while maintaining readable, non-minified HTML in `src/pages/`.
-- Current production cache query versions are `/styles.css?v=151`, `/spec-search.css?v=113`, `/app.js?v=152`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-151` / `v=dev-152` for the two mode-dependent assets.
+- Current production cache query versions are `/styles.css?v=153`, `/spec-search.css?v=113`, `/app.js?v=153`, and `/spec-search.js?v=105`. Development builds compile the document to `v=dev-153` for both mode-dependent assets.
 
 ## Local restoration
 
@@ -138,13 +138,13 @@
 - Carousel offsets use rendered card width and gap and stop at remaining content. Manual controls clamp and expose disabled boundaries; autoplay may loop. Runtime track replacements reset the owning widget, while dots retain their DOM nodes and keyboard focus. Company product controls share the same chevrons and boundary behavior.
 - Product release preview cards are 324 × 400 px on tablet/mobile; Support location cards are 320 × 432 px. Keep their existing owning tracks and single control sets. The prior generic 300 px preview rule is not a universal card size.
 - Locations category buttons retain intrinsic desktop widths; tablet/mobile use an overflow rail with real Prev/Next controls. Highlighting regions uses an outline rather than layout-changing padding or borders. Filters/search and category query parameters remain owned by LocationsController.
-- News event/card images use a 300:220 ratio and cover their frame. The explicit slide request takes precedence over the older 300:160 event image; cards therefore grow vertically. Product News retains the 248 × 134 tablet image and right-hand details stack.
+- News cards use a 300:220 ratio and cover their frame. Event Calendar has its own 310:168 responsive image reference; do not apply the generic News card ratio there. Product News retains the 248 × 134 tablet image and right-hand details stack.
 - Inquiry dimensions come from actual length/width/height fields. Its download action remains unavailable when the public API has no PDF URL; never synthesize a URL or backend field. Quantity, removal and Inquiry query synchronization share the original cart state.
 - Slide-request QA and screenshots are external under the task's `slide-bugfix-2026-10-16/` evidence folder. No permanent project tests were added.
 
 ## Slide follow-up 15 and 26–33 (2026-10-16)
 
-- Footer bottom information stacks into two centered rows at <=1024px, with an 8px gap. The explicit slide request takes precedence over the original horizontal tablet footer arrangement.
+- Footer bottom information follows the latest slide reference: Terms/Privacy left and Copyright right at 561–1024px; two centered rows with an 8px gap at <=560px. Keep both lines present in the shared footer.
 - Home uses one picture per hero slide: 390×530 mobile, 768×530 tablet and 1440×780 desktop sources. Company Overview keeps its existing picture with a 350×420 mobile source; avoid cropping wide placeholder dimensions into tall mobile frames.
 - Shared section navigation reveals the active link by scrolling only its horizontal track when the reached section changes. Manual rail movement remains available until the active section changes again; keyboard focus also reveals its link. Do not use link scrollIntoView(), which moves the page vertically.
 - Mobile Company Milestones use 230px items (bounded by the available width) to show neighboring circles. Center the track from actual item geometry. Loop resets must synchronously flush the no-transition position and active clone before restoring transitions, including child circle transitions; otherwise the browser animates across five items. Mobile details remain in normal flow, with controls 24px below them. Wider circle centering must account for the circle exceeding its item's content box.
@@ -159,6 +159,15 @@
 - Home Quality and Latest News use 300px cards and 16px gaps through 1024px. Bound the card by `calc(100% - 48px)` so narrow screens retain a visible neighboring card; the existing carousel widget still owns movement, boundaries and autoplay.
 - Shared section navigation centers the active or focused link within its horizontal track. Symmetric responsive track padding lets the first and last links center too. Manual rail movement remains available until the active section changes; preserve query parameters and avoid vertical `scrollIntoView()`.
 - Search magnifiers share 24×24 SVG geometry with a 2px round stroke. Applications, News and Spec facets consume the non-emitting `components/_search-icon.scss` mixins; Quality, Locations and Spec results use matching inline SVGs. The clear cross uses the same dimensions and stroke, with the original controls and accessible labels.
-- At <=560px, direct CTA button groups stack and each direct button fills the available width. Products carousel controls inherit the shared unboxed chevrons, typography and 44px hit targets.
+- At <=560px, direct CTA button groups stack and each direct button fills the available width. The independent `.a4k-selection-cta > div:last-child` follows the same full-width rule while keeping its selected-parts Inquiry action and unavailable-download behavior.
 - Specification Search centers its page-size control at <=560px while keeping the same select and table state.
-- Current assets are styles151, app152, spec-search CSS113 and spec-search JS105. Keep the document, build and validation version assertions synchronized.
+- Current assets are styles153, app153, spec-search CSS113 and spec-search JS105. Keep the document, build and validation version assertions synchronized.
+
+## Slide follow-up 23–28 and 44–45 (2026-10-17)
+
+- Responsive Prev/Next controls use native 8×12px chevrons with a 2px round stroke and at least 80×48px targets. Tablet labels use Inter 14/20 regular; mobile labels use Poppins 13/18 regular. Preserve desktop control styling.
+- Related News on `/news/radial-leaded-inductor` uses 300px cards, 16px gaps and a 48px narrow-screen reserve for the next-card preview. Its existing carousel owns autoplay, touch handling and clamped boundaries.
+- Product family placeholders request 80×80 images through a responsive `<picture>` source; Event Calendar uses 310×168 through 1024px; Inquiry uses 72×72 through 560px. Preserve real product images, desktop sources and desktop `contain` behavior; responsive frames use `cover`.
+- Product-series search has a shared 24px magnifier at the right of its existing input. The detail navigation centers using actual element bounds, with symmetric rail padding, and releases its resize/focus/scroll listeners on route changes.
+- News category navigation derives its single active link and `aria-current="page"` from the URL: brochures → Resources; business/csr/announcements → Company; product/eol → Product; events/calendar → Events. Recenter on mount, resize and keyboard focus.
+- Chrome DevTools window resizing does not replace an existing device viewport override. Use explicit `emulate.viewport` and assert `innerWidth` before claiming a tested width. Wait for the product `data-catalog-series-id` before testing hydrated controls.
