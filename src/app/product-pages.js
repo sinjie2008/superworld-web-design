@@ -1,5 +1,8 @@
 import { productApi } from "./product-api.js";
 import { CatalogMissingDiagnostics } from "./catalog-missing-diagnostics.js";
+import { hydrateCategoryContent } from "./catalog-category-content.js";
+import { catalogMediaUrl } from "./catalog-media.js";
+import { renderSeriesContent } from "./catalog-series-content.js";
 import {
   CatalogTreeStore,
   PRODUCT_ROUTES,
@@ -295,6 +298,30 @@ function applyFamilyFacets(row, facets) {
   });
 }
 
+function applyFamilyMedia(row, detail) {
+  const image = row.cells[0].querySelector("img");
+  const imageUrl = catalogMediaUrl(detail?.media?.series_product_image);
+  if (image && imageUrl) {
+    image.removeAttribute("srcset");
+    image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove());
+    image.src = imageUrl;
+    image.alt = detail.resource.name;
+    row.cells[0].dataset.catalogContentBound = "series_product_image";
+  }
+  const button = row.cells[6].querySelector("button");
+  const pdfUrl = catalogMediaUrl(detail?.media?.series_product_spec);
+  if (button && pdfUrl) {
+    const link = document.createElement("a");
+    link.className = button.className;
+    link.href = pdfUrl;
+    link.download = "";
+    link.setAttribute("aria-label", button.getAttribute("aria-label"));
+    link.append(...button.childNodes);
+    button.replaceWith(link);
+    row.cells[6].dataset.catalogContentBound = "series_product_spec";
+  }
+}
+
 function tableColumns(fields, defaultHeadings) {
   const electrical = fields.filter(
     (field) => !["acf.length", "acf.width", "acf.height"].includes(field.key),
@@ -388,7 +415,9 @@ export class ProductPages {
           renderFamily(main, index, route);
           this.setupFamilyFacets(main, { signal, isCurrent });
         }
-        if (__CATALOG_DIAGNOSTICS__) this.diagnostics.layout(main, index, route);
+        const content = await hydrateCategoryContent(this.api, route, main, { signal, isCurrent });
+        if (__CATALOG_DIAGNOSTICS__ && !signal?.aborted && isCurrent())
+          this.diagnostics.layout(main, index, route, content);
       }
       if (signal?.aborted || !isCurrent()) return;
       scope.removeAttribute("aria-busy");
@@ -432,12 +461,13 @@ export class ProductPages {
       try {
         let cached = this.familyFacetCache.get(path);
         if (!cached || Date.now() - cached.loadedAt >= 15000) {
-          const [response, fields] = await Promise.all([
+          const [response, fields, detail] = await Promise.all([
             this.api.facets(path, { signal: controller.signal }),
             __CATALOG_DIAGNOSTICS__ ? this.api.fields(path, { signal: controller.signal }) : null,
+            this.api.series(path, { signal: controller.signal }).catch(() => null),
           ]);
           if (stopped || controller.signal.aborted || !isCurrent()) return;
-          cached = { facets: response.facets || [], loadedAt: Date.now() };
+          cached = { facets: response.facets || [], detail, loadedAt: Date.now() };
           if (__CATALOG_DIAGNOSTICS__) cached.fields = fields;
           this.familyFacetCache.set(path, cached);
           if (this.familyFacetCache.size > 64)
@@ -445,7 +475,11 @@ export class ProductPages {
         }
         if (!stopped && isCurrent() && row.isConnected) {
           applyFamilyFacets(row, cached.facets);
-          if (__CATALOG_DIAGNOSTICS__) this.diagnostics.familyRanges(row, cached.fields, cached.facets);
+          applyFamilyMedia(row, cached.detail);
+          if (__CATALOG_DIAGNOSTICS__) {
+            this.diagnostics.familyRanges(row, cached.fields, cached.facets);
+            this.diagnostics.familyMedia(row, cached.detail);
+          }
         }
       } catch (error) {
         if (!stopped && isCurrent() && row.isConnected && error?.name !== "AbortError" && __CATALOG_DIAGNOSTICS__)
@@ -564,8 +598,8 @@ export class ProductPages {
         link.setAttribute("aria-disabled", "true");
         link.removeAttribute("href");
         link.tabIndex = -1;
-        link.addEventListener("click", (event) => event.preventDefault());
       });
+      renderSeriesContent(main, detail);
       this.setupPageControls(main);
     }
     if (__CATALOG_DIAGNOSTICS__) this.diagnostics.series(main, detail, fields, facetResponse.facets || [], embedded);
@@ -574,6 +608,7 @@ export class ProductPages {
       rootId: crumbs[0]?.id,
       categoryId: category?.id,
       fields: selectedFields,
+      media: detail.media,
       page,
       signal,
       isCurrent,
@@ -722,8 +757,9 @@ export class ProductPages {
     const defaultHeadings = [...table.querySelectorAll("thead th")]
       .slice(2, 6)
       .map((heading) => heading.textContent);
-    const columns = tableColumns(context.fields, defaultHeadings);
-    const extraFields = context.fields.filter(
+    const specFields = context.fields.filter((field) => field.type !== "file" && field.key !== "product_curve_notes");
+    const columns = tableColumns(specFields, defaultHeadings);
+    const extraFields = specFields.filter(
       (field) =>
         !columns.includes(field) && !["acf.length", "acf.width", "acf.height"].includes(field.key),
     );
@@ -755,9 +791,8 @@ export class ProductPages {
       }
     };
     const summaryImage = wrapper.closest("main")?.querySelector(".a4k-media-panel img");
-    const cardImage = summaryImage
-      ? `<img class="a4k-part-image" src="${escapeHtml(summaryImage.getAttribute("src"))}" alt="" width="80" height="80">`
-      : "";
+    const fallbackImage = catalogMediaUrl(context.media?.series_product_image) || summaryImage?.getAttribute("src");
+    const seriesPdf = catalogMediaUrl(context.media?.series_product_spec);
     const paint = (response) => {
       currentPage = response;
       rows.innerHTML = response.parts.length
@@ -780,7 +815,14 @@ export class ProductPages {
                   return `<td role="cell" data-label="${escapeHtml(field ? productFieldLabel(field) : defaultHeadings[index])}" ${field ? `data-product-field="${escapeHtml(field.key)}"` : ""}><span class="a4k-cell-value">${present ? displayValue(value) : defaults[index + 2] || "—"}${extraValues}</span></td>`;
                 })
                 .join("");
-              const download = defaults.at(-1) || '<span class="button small">PDF</span>';
+              const partImage = catalogMediaUrl(part.media?.product_image) || fallbackImage;
+              const cardImage = partImage
+                ? `<img class="a4k-part-image" src="${escapeHtml(partImage)}" alt="" width="80" height="80">`
+                : "";
+              const pdf = catalogMediaUrl(part.media?.product_spec) || seriesPdf;
+              const download = pdf
+                ? `<a class="button small" href="${escapeHtml(pdf)}" download>PDF</a>`
+                : defaults.at(-1) || '<span class="button small">PDF</span>';
               return `<tr role="row" data-a4k-row data-product-id="${part.id}" data-product-sku="${escapeHtml(part.sku)}"><td role="cell" class="a4k-select-cell"><input type="checkbox" data-a4k-select aria-label="Select ${escapeHtml(part.sku)} for inquiry or loss analysis" ${this.selectedParts.has(part.id) ? "checked" : ""}></td><td role="cell" data-label="Product">${cardImage}<a class="a4k-part-link" href="#specifications">${escapeHtml(part.sku || part.name)}</a></td>${values}<td role="cell" data-label="Download">${download}</td></tr>`;
             })
             .join("")

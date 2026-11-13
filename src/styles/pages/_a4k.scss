@@ -72,13 +72,13 @@
       letter-spacing: .06em
     }
 
-    &-intro p,&-intro ul {
+    &-intro p,&-intro :is(ul, ol) {
       margin: 0;
       color: #555;
       font-size: 15px
     }
 
-    &-intro ul {
+    &-intro :is(ul, ol) {
       display: grid;
       gap: 7px;
       padding-left: 18px
@@ -522,6 +522,29 @@
       color: #555
     }
 
+    &-diagram-card figure {
+      margin: 14px 0;
+    }
+
+    &-diagram-card img, &-info-card > img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    &-dimension-list {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 6px 16px;
+      margin: 12px 0 0;
+      text-align: left;
+
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+    }
+
     &-download-grid {
       display: grid;
       grid-template-columns: repeat(3,minmax(0,1fr));
@@ -782,14 +805,14 @@
       }
     }
 
-    .a4k-intro p, .a4k-intro ul {
+    .a4k-intro p, .a4k-intro :is(ul, ol) {
       @media (max-width: 1024px) {
         font-size: 15px;
         line-height: 1.5;
       }
     }
 
-    .a4k-intro ul {
+    .a4k-intro :is(ul, ol) {
       @media (max-width: 1024px) {
         gap: 16px;
       }

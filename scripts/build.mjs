@@ -78,8 +78,8 @@ function documentVersionPlugin() {
           async ({ path }) => {
             let contents = readFileSync(path, "utf8");
             const productionVersions = [
-              ["/styles.css", "157"],
-              ["/app.js", "157"],
+              ["/styles.css", "160"],
+              ["/app.js", "160"],
             ];
 
             for (const [assetPath, version] of productionVersions) {

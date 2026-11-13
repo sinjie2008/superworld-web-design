@@ -220,8 +220,20 @@ export class CatalogMissingDiagnostics {
     this.set(element, { content, node, part, status: "MAPPING_NOT_VERIFIED", editor, source, note: note || "No exact public field is verified for this placeholder. Confirm a suitable definition and public/frontend mapping; do not enter data in an unrelated field." });
   }
 
-  category(element, content, node) {
-    this.set(element, { content, node, editor: "category", status: "MISSING_PUBLIC_API_MAPPING", source: `/api/categories/${node.path} → resource (category custom fields omitted)`, note: "Category Fields Set exists, but this API exposes only hierarchy properties. Confirm the appropriate per-category field key in the manager; a separate API/frontend mapping change is needed." });
+  category(element, content, node, field, results) {
+    const outcome = results?.get(node.path);
+    const bound = element?.hasAttribute("data-catalog-content-bound")
+      || Boolean(element?.querySelector("[data-catalog-content-bound]"));
+    const value = outcome?.response?.content?.[field];
+    this.set(element, {
+      content, node, field,
+      status: contentStatus({
+        failed: outcome?.status === "rejected", definition: { key: field },
+        sourceVerified: outcome?.status === "fulfilled", value, rendered: bound,
+      }),
+      source: `/api/categories/${node.path} → content[${field}]`,
+      note: "Fill this column on the category row in the Catalog CSV. For an image, use the UUID of a ready Media Library asset.",
+    });
   }
 
   findNode(path) {
@@ -236,35 +248,56 @@ export class CatalogMissingDiagnostics {
     return visit(this.tree);
   }
 
-  layout(main, index, route) {
+  layout(main, index, route, categoryContent) {
     if (route.type === "root") {
       // The global hero and marketing carousel have no verified catalog owner.
       this.unverified(main.querySelector(".hero-panel p"), "Product landing introduction", null);
       this.unverified(main.querySelector(".hero-brand"), "Product landing visual", null);
       return;
     }
-    this.category(main.querySelector(".hero-panel p"), "Category introduction", route.node);
-    this.category(main.querySelector(".hero-brand"), "Category visual", route.node);
+    this.category(main.querySelector(".hero-panel p"), "Category introduction", route.node, "category_introduction", categoryContent);
+    this.category(main.querySelector(".hero-brand"), "Category visual", route.node, "category_hero_image_media_id", categoryContent);
     if (route.type === "group") {
       const families = (route.node.children || []).filter((node) => node.type === "category");
       [...main.querySelectorAll("section.product-family")].forEach((section, position) => {
         const family = families[position];
         if (!family) return;
-        this.category(section.querySelector(".ph.tall"), "Category image", family);
+        this.category(section.querySelector(".product-family-visual"), "Category image", family, "category_banner_image_media_id", categoryContent);
         const categories = (family.children || []).filter((node) => node.type === "category");
         section.querySelectorAll(".family-icon").forEach((icon, index) => {
-          if (categories[index]) this.category(icon.querySelector(".ph, img"), "Category icon", categories[index]);
+          if (categories[index]) this.category(icon, "Category icon", categories[index], "category_icon_image_media_id", categoryContent);
         });
       });
     } else {
       main.querySelectorAll("tr[data-catalog-api-path]").forEach((row) => {
         const node = this.findNode(row.dataset.catalogApiPath);
         const category = this.findNode(node?.path.split("/").slice(0, -1).join("/"));
-        this.category(row.closest("section")?.querySelector(".container > p"), "Category overview", category || route.node);
-        this.unverified(row.cells[0], "Series image", node, { source: `/api/series/${node.path} → metadata`, note: "The tree contains no media. Series image definitions/values are not fetched by this family layout; verify series_product_image in the public series response before changing content." });
-        this.unverified(row.cells[6], "Series datasheet", node, { source: `/api/series/${node.path} → metadata`, note: "The tree contains no document URL. Verify series_product_spec in the public series response; this family layout has no document mapping yet." });
+        this.category(row.closest("section")?.querySelector(".container > p"), "Category overview", category || route.node, "category_introduction", categoryContent);
+        if (!this.records.has(row.cells[0]) && !row.cells[0].dataset.catalogContentBound)
+          this.unverified(row.cells[0], "Series image", node, { source: `/api/series/${node.path} → media`, note: "This row loads Series media when it enters view. Use series_image_media_id on the Series CSV row." });
+        if (!this.records.has(row.cells[6]) && !row.cells[6].dataset.catalogContentBound)
+          this.unverified(row.cells[6], "Series datasheet", node, { source: `/api/series/${node.path} → media`, note: "This row loads Series media when it enters view. Use series_pdf_media_id on the Series CSV row." });
       });
     }
+  }
+
+  familyMedia(row, detail) {
+    const node = this.findNode(row.dataset.catalogApiPath);
+    if (!node) return;
+    [
+      [row.cells[0], "Series image", "series_product_image", "series_image_media_id"],
+      [row.cells[6], "Series datasheet", "series_product_spec", "series_pdf_media_id"],
+    ].forEach(([element, content, key, field]) => {
+      const value = detail?.metadata?.find((item) => item.key === key)?.value;
+      this.set(element, {
+        node, content, field, editor: "metadata",
+        status: contentStatus({
+          failed: !detail, definition: { key }, value, rendered: Boolean(element.dataset.catalogContentBound),
+        }),
+        source: `/api/series/${node.path} → media[${key}]`,
+        note: "Use a ready Media Library UUID in this column on the Series CSV row.",
+      });
+    });
   }
 
   familyRanges(row, fields = [], facets = []) {
@@ -287,8 +320,17 @@ export class CatalogMissingDiagnostics {
     if (!embedded) {
       const notes = detail.metadata?.find((field) => field.key === "series_notes");
       this.set(main.querySelector(".a4k-intro p"), { node, content: "Series overview", field: notes?.key, editor: "metadata", source: `${source} → metadata[series_notes].value`, status: contentStatus({ definition: notes, value: notes?.value, rendered: hasValue(notes?.value) }), note: notes ? "The layout overview uses the public Series Notes value. Save Series Metadata Values and refresh. Metadata may include backend defaults; explicit-value provenance is unavailable." : "series_notes is not in the public response. It may be undefined or hidden; verify its definition and visibility in Series Metadata Field Editor." });
+      const features = main.querySelector(".a4k-intro > :is(ul, ol)");
+      if (!features?.dataset.catalogContentBound && !features?.querySelector("[data-catalog-content-bound]")) {
+        const key = "series_features";
+        const value = detail.metadata?.find((field) => field.key === key)?.value;
+        this.set(features, { node, content: "Series features", field: key, editor: "metadata",
+          source: `${source} → metadata[${key}].value`,
+          status: contentStatus({ definition: { key }, value }),
+          note: "Fill series_features on the Series CSV row with one HTML list. Use <ul> or <ol> and one <li> per feature." });
+      }
       const selectors = [
-        [".a4k-intro ul", "Series features"], [".a4k-compliance", "Compliance"],
+        [".a4k-compliance", "Compliance"],
         [".a4k-product-media", "Series image / 3D view"],
         [".a4k-spec-mini > div:nth-child(4)", "Standard pack quantity"],
         [".a4k-summary-grid > div:nth-child(3)", "Test frequency summary"],
@@ -297,10 +339,19 @@ export class CatalogMissingDiagnostics {
         ["#tape-reel", "Tape and reel"], ["#soldering", "Soldering / washing"],
         ["#downloads", "Download documents"], ["#performance-curves h3", "Performance curves"],
       ];
-      selectors.forEach(([selector, content]) => this.unverified(main.querySelector(selector), content, node, { source }));
-      [[".a4k-product-media", "Series image", "series_product_image"], ["#downloads", "Series datasheet", "series_product_spec"]].forEach(([selector, content, key]) => {
+      selectors.forEach(([selector, content]) => {
+        const element = main.querySelector(selector);
+        const section = selector === "#performance-curves h3" ? element?.closest("section") : element;
+        if (!section?.hasAttribute("data-catalog-content-bound") && !section?.querySelector("[data-catalog-content-bound]"))
+          this.unverified(element, content, node, { source, note: "Enter the corresponding section fields on the Series row of the Catalog CSV." });
+      });
+      [[".a4k-product-media", "Series image", "series_product_image", "series_image_media_id"], ["#downloads", "Series datasheet", "series_product_spec", "series_pdf_media_id"]].forEach(([selector, content, key, fieldName]) => {
         const field = detail.metadata?.find((item) => item.key === key);
-        if (field) this.set(main.querySelector(selector), { node, content, field: key, editor: "metadata", source: `${source} → metadata[${key}].value`, status: contentStatus({ definition: field, value: field.value, rendered: false }), note: "This verified metadata key is supported by backend Specification Search, but this page has no media/document consumer. A frontend mapping change is needed for a usable returned URL; empty values can be edited in Series Metadata Values." });
+        if (field) {
+          const element = main.querySelector(selector);
+          const rendered = Boolean(element?.querySelector(`[data-catalog-content-bound="${key}"]`));
+          this.set(element, { node, content, field: fieldName, editor: "metadata", source: `${source} → media[${key}]`, status: contentStatus({ definition: field, value: field.value, rendered }), note: "Fill this column on the Series CSV row with a ready Media Library UUID." });
+        }
       });
       ["acf.length", "acf.width", "acf.height"].forEach((key, position) => {
         const field = fields.find((item) => item.key === key);
@@ -318,8 +369,9 @@ export class CatalogMissingDiagnostics {
     });
     const downloadHeading = table.tHead.rows[0].cells[6];
     const spec = metadata?.find((item) => item.key === "series_product_spec");
-    if (spec) this.set(downloadHeading, { node, content: "Series datasheet", field: spec.key, editor: "metadata", source: `/api/series/${apiPath} → metadata[${spec.key}].value`, status: contentStatus({ definition: spec, value: spec.value, rendered: false }), note: "This is a series-level document. This table does not yet consume its URL; it is not a part attribute." });
-    else this.unverified(downloadHeading, "Series datasheet", node, { source, note: "No verified public document URL is consumed by this table. The retained PDF controls are layout placeholders." });
+    if (table.tBodies[0]?.querySelector('a[download][href^="/api/media/public.php?"]')) this.clear(downloadHeading);
+    else if (spec) this.set(downloadHeading, { node, content: "Series datasheet", field: "series_pdf_media_id", editor: "metadata", source: `/api/series/${apiPath} → media[${spec.key}]`, status: contentStatus({ definition: spec, value: spec.value, rendered: false }), note: "Use series_pdf_media_id for the whole Series or product_pdf_media_id for an individual part." });
+    else this.unverified(downloadHeading, "Series datasheet", node, { source, note: "Use series_pdf_media_id on a Series row or product_pdf_media_id on a product row." });
     for (const row of table.querySelectorAll("tr[data-product-id]")) {
       const part = parts.find((item) => item.id === Number(row.dataset.productId));
       if (!part) continue;
