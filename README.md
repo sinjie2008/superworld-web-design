@@ -50,6 +50,11 @@ The preview forwards `/api/` to
 `http://localhost/Foundational-Electronics-Core-Systems/api/`. Check
 [API health](http://localhost:4173/api/health) if products fail to load.
 
+Specification Search uses the same FECS connection for Series images and datasheets.
+The preview serves public media on `/storage/media/catalog-hierarchy/`,
+`/storage/typst-pdfs/` and `/storage/latex-pdfs/`. For a deployed site, route those
+public paths and `/api/` to the configured FECS host when it returns relative media URLs.
+
 ## Turn diagnostics ON
 
 Run `npm run dev` in the frontend folder. It builds development assets, then starts the

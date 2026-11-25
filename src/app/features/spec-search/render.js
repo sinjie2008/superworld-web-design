@@ -1,3 +1,5 @@
+import { specSearchImageFallback, specSearchMediaUrl } from "./media-url.js";
+
 const FIXED_PRODUCT_SPEC_COLUMNS = Object.freeze([
   { key: "acf.length", title: "Length (mm)", sourceKeys: ["acf.length"] },
   { key: "acf.width", title: "Width (mm)", sourceKeys: ["acf.width"] },
@@ -467,7 +469,17 @@ export class SpecificationSearchRenderer {
       content.className = "product-cell";
       const image = document.createElement("img");
       image.className = "series-image";
-      image.src = "https://placehold.co/80x80";
+      const imageUrl = specSearchMediaUrl(product.seriesImage);
+      if (imageUrl) {
+        image.addEventListener(
+          "error",
+          () => {
+            image.src = specSearchImageFallback;
+          },
+          { once: true },
+        );
+      }
+      image.src = imageUrl || specSearchImageFallback;
       image.alt = product.series || "Series image";
       image.width = 80;
       image.height = 80;
@@ -488,10 +500,14 @@ export class SpecificationSearchRenderer {
       return;
     }
     if (column.kind === "pdf") {
-      if (this.isSafeResourceUrl(value, "data:application/pdf")) {
+      const resourceUrl =
+        typeof value === "string" && value.startsWith("data:application/pdf")
+          ? value
+          : specSearchMediaUrl(value);
+      if (this.isSafeResourceUrl(resourceUrl, "data:application/pdf")) {
         const link = document.createElement("a");
         link.className = "btn btn-sm btn-outline-secondary";
-        link.href = value;
+        link.href = resourceUrl;
         link.download = `${product.sku || "product"}.pdf`;
         link.textContent = "Download";
         cell.append(link);

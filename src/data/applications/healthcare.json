@@ -1,0 +1,294 @@
+{
+  "id": "healthcare",
+  "name": "Healthcare Devices",
+  "heroTitle": "COMPONENTS FOR HEALTHCARE DEVICES",
+  "intro": "Superworld’s magnetic, EMC and wireless power components support compact healthcare electronics, low-noise measurement circuits and efficient power management in portable devices.",
+  "summary": {
+    "heading": "Supporting the next generation of healthcare electronics.",
+    "text": "Explore component solutions for personal health monitoring, portable medical electronics and hearing assistance devices.",
+    "focus": "Low Noise / Power"
+  },
+  "designTitle": "SUPPORT COMPACT AND RELIABLE HEALTHCARE ELECTRONICS",
+  "designIntro": "Support sensitive measurement circuits, efficient power management and portable device designs.",
+  "quality": {
+    "manufacturing": "Controlled production supports consistent component supply for compact displays, sensors and control assemblies.",
+    "performance": "Filtering and power component options help manage supply noise around sensitive measurement and radio circuits.",
+    "engineering": "Superworld can help review component choices for low-power circuits, compact layouts and rechargeable designs."
+  },
+  "journey": {
+    "identify": "Choose a blood pressure device, electronic thermometer or hearing aid to find the relevant circuit areas.",
+    "review": "Identify the measurement, display, connectivity or charging circuit you need to support.",
+    "match": "Compare component families and series by footprint, supply current and charging architecture.",
+    "contact": "Share your device architecture, power requirements and preferred series with our sales team."
+  },
+  "support": "Share your device type, circuit area and power or space requirements so Superworld can help with component selection.",
+  "needs": [
+    {
+      "title": "Reduce Electrical Noise",
+      "text": "Support EMI suppression around sensitive measurement circuits, sensor supplies and signal paths."
+    },
+    {
+      "title": "Support Low-Power Designs",
+      "text": "Provide component options for efficient power delivery in battery-powered electronics."
+    },
+    {
+      "title": "Enable Miniaturisation",
+      "text": "Support compact and low-profile electronic assemblies for devices with limited enclosure space."
+    },
+    {
+      "title": "Support Wireless Power & Connectivity",
+      "text": "Provide component options for wireless communication and inductive charging circuits."
+    }
+  ],
+  "systems": [
+    {
+      "id": "blood-pressure",
+      "title": "Blood Pressure Devices",
+      "summary": "Blood pressure devices combine a sensing front end and processing with optional local display and wireless data transfer.",
+      "modules": [
+        {
+          "id": "power-supply-unit",
+          "title": "Power Supply Unit",
+          "description": "The supply powers measurement, display and control electronics.",
+          "need": "Support steady power near sensitive measurement circuits.",
+          "mappings": [
+            {
+              "role": "EMI filtering",
+              "why": "Filter noise on a documented supply or signal branch.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Power inductor",
+              "why": "Store energy in a compatible low-voltage regulator.",
+              "series": [
+                "general-products/magnetic-components/shielded-power-inductor/sdb0705-series"
+              ],
+              "condition": "Confirm converter topology, peak and RMS current, switching frequency and maximum mounted height against the SDB0705 drawing."
+            }
+          ],
+          "consultation": "Share the power source, isolation needs and enclosure limits to review the low-voltage supply choices."
+        },
+        {
+          "id": "display-panel",
+          "title": "Display Panel",
+          "description": "The display presents readings and device status.",
+          "need": "Support clean, compact power for the display electronics.",
+          "mappings": [
+            {
+              "role": "EMI filtering",
+              "why": "Filter noise on the display supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Power inductor",
+              "why": "Store energy in a compact, compatible display regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "wireless-connectivity",
+          "title": "Wireless Connectivity",
+          "description": "An optional radio sends readings to a connected device.",
+          "need": "Support low-noise radio power and a stable wireless link.",
+          "mappings": [
+            {
+              "role": "Radio supply filtering",
+              "why": "Filter conducted noise on the low-voltage radio supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "RF matching",
+              "why": "Support RF matching on a documented external antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series"
+              ],
+              "condition": "Check the selected chip inductor’s inductance, Q and self-resonant frequency against the operating band and PCB layout."
+            },
+            {
+              "role": "RF matching",
+              "why": "Provide a compact wire-wound option for external RF matching.",
+              "series": [
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Check the wire-wound part against the operating band and the assembled antenna layout."
+            }
+          ],
+          "consultation": "Share the radio, reference layout, operating band and antenna for review."
+        },
+        {
+          "id": "wireless-charging",
+          "title": "Wireless Charging",
+          "description": "An inductive receiver can power compatible rechargeable designs.",
+          "need": "Support charging within the device’s coil space and alignment limits.",
+          "mappings": [
+            {
+              "role": "Receiver coil",
+              "why": "Receive power when paired with compatible charging electronics and a transmitter.",
+              "series": [
+                "general-products/wireless-power-transfer/receiver-coil/srx10300112r8kb"
+              ],
+              "condition": "Confirm receiver size, air gap, alignment, charging power and controller pairing for the intended enclosure."
+            }
+          ],
+          "consultation": "Check the receiver envelope, spacing, alignment, controller pairing and temperature rise."
+        },
+        {
+          "id": "cpu",
+          "title": "CPU",
+          "description": "The processor coordinates measurement, display and device controls.",
+          "need": "Support a stable supply for digital processing.",
+          "mappings": [
+            {
+              "role": "EMI filtering",
+              "why": "Filter conducted noise on the documented processor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thermometer",
+      "title": "Electronic Thermometer",
+      "summary": "A compact temperature instrument typically combines a sensing element, low-noise measurement front end, processing, display and optional connectivity.",
+      "modules": [
+        {
+          "id": "wireless-connectivity",
+          "title": "Wireless Connectivity",
+          "description": "An optional radio shares temperature readings with a connected device.",
+          "need": "Support stable wireless operation in a compact layout.",
+          "mappings": [
+            {
+              "role": "Radio supply filtering",
+              "why": "Filter conducted noise on the low-voltage radio supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "RF matching",
+              "why": "Support RF matching on a documented external antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series"
+              ],
+              "condition": "Check the selected chip inductor’s inductance, Q and self-resonant frequency against the operating band and PCB layout."
+            },
+            {
+              "role": "RF matching",
+              "why": "Provide a compact wire-wound option for external RF matching.",
+              "series": [
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Check the wire-wound part against the operating band and the assembled antenna layout."
+            }
+          ],
+          "consultation": "Share the radio, reference layout, operating band and antenna for review."
+        },
+        {
+          "id": "temperature-detection",
+          "title": "Temperature Detection",
+          "description": "The detection circuit reads the temperature sensor.",
+          "need": "Protect sensitive measurements from supply noise.",
+          "mappings": [
+            {
+              "role": "Optional sensor supply filtering",
+              "why": "Filter conducted noise on a documented sensor supply branch.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ],
+          "consultation": "Share the sensing method, supply branch, measurement range and sampling conditions for review."
+        },
+        {
+          "id": "cpu",
+          "title": "CPU",
+          "description": "The processor interprets sensor readings and controls device operation.",
+          "need": "Support stable low-power digital operation.",
+          "mappings": [
+            {
+              "role": "EMI filtering",
+              "why": "Filter conducted noise on the documented processor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "display-panel",
+          "title": "Display Panel",
+          "description": "The display presents the measured temperature and device status.",
+          "need": "Support clean display power within a compact enclosure.",
+          "mappings": [
+            {
+              "role": "EMI filtering",
+              "why": "Filter noise on the display supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Power inductor",
+              "why": "Store energy in a compact, compatible display regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "wireless-charging",
+          "title": "Wireless Charging",
+          "description": "An inductive receiver can charge a compatible rechargeable design.",
+          "need": "Support a charging layout that fits the device or a separate charging module.",
+          "mappings": [
+            {
+              "role": "Receiver coil",
+              "why": "Receive power when paired with compatible charging electronics and a transmitter.",
+              "series": [
+                "general-products/wireless-power-transfer/receiver-coil/srx10300112r8kb"
+              ],
+              "condition": "Confirm receiver size, air gap, alignment, charging power and controller pairing for the intended enclosure."
+            }
+          ],
+          "consultation": "Check the available coil area and allow for thermal recovery before temperature readings. This size may suit a larger enclosure or charging module."
+        }
+      ]
+    },
+    {
+      "id": "hearing-aid",
+      "title": "Hearing Aid",
+      "summary": "A highly space-constrained, low-power wearable where any inductive charging receiver must fit the acoustic device and its charging case.",
+      "modules": [
+        {
+          "id": "wireless-charging",
+          "title": "Wireless Charging",
+          "description": "An inductive dock can charge a compatible rechargeable hearing aid.",
+          "need": "Support power transfer in the small charging assembly.",
+          "mappings": [],
+          "consultation": "Send the hearing aid and dock envelopes, charging architecture, alignment tolerances and thermal limits for a receiver-fit review.",
+          "componentGuidance": {
+            "category": "Transmitter Coil / Receiver Coil",
+            "purpose": "Pair a transmitter in the dock with a receiver designed for the hearing aid enclosure and spacing."
+          }
+        }
+      ],
+      "explodedViewReference": {
+        "label": "Phonak Piconet opened case",
+        "url": "https://commons.wikimedia.org/wiki/File:Phonak_Piconet_2_P2_AZ_-_case_opened-0637.jpg"
+      }
+    }
+  ]
+}

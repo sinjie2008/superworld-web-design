@@ -78,8 +78,8 @@ function documentVersionPlugin() {
           async ({ path }) => {
             let contents = readFileSync(path, "utf8");
             const productionVersions = [
-              ["/styles.css", "160"],
-              ["/app.js", "160"],
+              ["/styles.css", "162"],
+              ["/app.js", "162"],
             ];
 
             for (const [assetPath, version] of productionVersions) {
@@ -168,6 +168,7 @@ await buildWithEsbuild({
     ".html": "text",
     ".txt": "text",
     ".png": "dataurl",
+    ".webp": "dataurl",
   },
   minify: true,
   outfile: workerPath,

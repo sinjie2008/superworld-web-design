@@ -1,3 +1,4 @@
+import { MarketApplicationController } from "./site/market-applications.js";
 import { SiteInteractions } from "./site/interactions.js";
 import { SiteEnhancements } from "./site/enhancements.js";
 import { footer as siteFooter, header as siteHeader, pageRegistry } from "./site/pages.js";
@@ -77,6 +78,7 @@ export class SiteApplication {
       updateInquiryQuery: () => this.updateInquiryQuery(),
     });
     this.enhancements = new SiteEnhancements();
+    this.marketApplications = new MarketApplicationController();
     this.productPages = new ProductPages({
       navigate: this.navigate,
       onReady: (name) => this.setProductMetadata(name),
@@ -97,6 +99,7 @@ export class SiteApplication {
     this.started = false;
     document.removeEventListener("click", this.handleDocumentClick);
     window.removeEventListener("popstate", this.handleHistoryChange);
+    this.marketApplications.destroy();
     this.interactions.destroy();
     this.enhancements.destroy();
     this.cancelInquiryRequest();
@@ -355,6 +358,7 @@ export class SiteApplication {
 
   render(scrollTop = true) {
     const version = ++this.renderVersion;
+    this.marketApplications.destroy();
     this.interactions.destroy();
     this.enhancements.destroy();
     this.cancelInquiryRequest();
@@ -366,6 +370,7 @@ export class SiteApplication {
     this.syncPageMetadata();
     this.enhancements.initialize();
     this.interactions.initialize();
+    this.marketApplications.initialize();
     window.SpecSearchApp?.initialize?.();
     const articleSeries =
       location.pathname === this.routes.detail

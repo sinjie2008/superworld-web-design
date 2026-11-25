@@ -244,7 +244,7 @@ const routeTemplateByRoute = new Map(
     return [templatePath === "home.html" ? "/" : `/${templatePath.slice(0, -5)}`, routeSource];
   }),
 );
-assert.equal(routeTemplateSources.length, 20, "exactly 20 route HTML fragments are required");
+assert.equal(routeTemplateSources.length, 24, "exactly 24 route HTML fragments are required");
 assert.ok(
   headerTemplateSource && footerTemplateSource,
   "shared header and footer templates are required",
@@ -261,7 +261,7 @@ for (const { path, source: routeSource } of routeTemplateSources) {
     `${relative(projectRoot, path)} must contain one #main-content`,
   );
 }
-assert.equal(Object.keys(PAGE_METADATA).length, 20, "SEO metadata must cover exactly 20 routes");
+assert.equal(Object.keys(PAGE_METADATA).length, 24, "SEO metadata must cover exactly 24 routes");
 assert.doesNotMatch(
   mainEntrySource,
   /function\s+[A-Za-z0-9_]+Page\s*\(/,
@@ -306,10 +306,10 @@ assert.doesNotMatch(
   /@import\b/,
   "styles.scss must use Sass modules instead of deprecated @import",
 );
-assert.match(documentLayoutSource, /\/styles\.css\?v=160/);
+assert.match(documentLayoutSource, /\/styles\.css\?v=162/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=113/);
-assert.match(documentLayoutSource, /\/spec-search\.js\?v=105/);
-assert.match(documentLayoutSource, /\/app\.js\?v=160/);
+assert.match(documentLayoutSource, /\/spec-search\.js\?v=106/);
+assert.match(documentLayoutSource, /\/app\.js\?v=162/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
   cwd: projectRoot,
@@ -389,7 +389,11 @@ assert.match(
 );
 assert.doesNotMatch(appSource, /\?root=1&category=159&category=161&inquiry=1467&inquiry=1468/);
 assert.match(appSource, /class="market-detail-image-placeholder"/);
-assert.match(appSource, /aria-disabled="true"\s*>\s*Details unavailable<\/span\s*>/);
+for (const market of ["consumer", "healthcare", "industrial", "smart-home"]) {
+  assert.ok(PAGE_METADATA["/applications/" + market], "Market route must be registered");
+}
+assert.match(appSource, /data-market-systems/);
+assert.match(appSource, /APPLICATION_MARKET_CARDS/);
 assert.match(pageTemplateSource, /class="series-chip"\s+type="button"\s+aria-expanded="false"/);
 assert.match(pageTemplateSource, /Dimensions Range : LWH\(mm\)/);
 assert.match(
@@ -433,10 +437,10 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   );
   assert.doesNotMatch(html, /<!--APP_SLOT:/, `${route} must not expose unresolved document slots`);
   if (route === "/") {
-    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-160" : "160"}`));
+    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-162" : "162"}`));
     assert.match(html, /\/spec-search\.css\?v=113/);
-    assert.match(html, /\/spec-search\.js\?v=105/);
-    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-160" : "160"}`));
+    assert.match(html, /\/spec-search\.js\?v=106/);
+    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-162" : "162"}`));
   }
   assert.equal(
     html.includes('content="noindex,follow"'),

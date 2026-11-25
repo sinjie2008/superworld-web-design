@@ -42,7 +42,20 @@
         <button class="nav-menu-button" type="button" data-menu="products">
           Our Products <span class="menu-caret">⌄</span>
         </button>
-        <a data-link class="nav-link" href="/applications">Applications</a>
+        <div class="application-navigation">
+          <a data-link class="nav-link" href="/applications">Applications</a>
+          <details class="application-market-menu" data-market-header-menu>
+            <summary aria-label="Browse application markets">
+              <span aria-hidden="true">⌄</span>
+            </summary>
+            <ul aria-label="Application markets">
+              <li><a data-link href="/applications/consumer">Consumer</a></li>
+              <li><a data-link href="/applications/healthcare">Healthcare Devices</a></li>
+              <li><a data-link href="/applications/industrial">Industrial &amp; Energy</a></li>
+              <li><a data-link href="/applications/smart-home">Smart Home</a></li>
+            </ul>
+          </details>
+        </div>
         <a data-link class="nav-link" href="/tools/spec-search">Tools</a>
         <button class="nav-menu-button" type="button" data-menu="news">News</button>
       </nav>

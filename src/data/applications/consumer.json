@@ -1,0 +1,552 @@
+{
+  "id": "consumer",
+  "name": "Consumer",
+  "heroTitle": "COMPONENTS FOR CONSUMER ELECTRONICS",
+  "intro": "Superworld’s magnetic and EMC components support efficient power conversion, noise suppression and wireless connectivity in compact audio devices and connected appliances.",
+  "summary": {
+    "heading": "From everyday devices to smarter consumer experiences.",
+    "text": "Explore component solutions for consumer electronics, from portable audio and connected devices to intelligent home appliances.",
+    "focus": "Power / EMI"
+  },
+  "designTitle": "SUPPORT COMPACT AND EFFICIENT CONSUMER ELECTRONICS",
+  "designIntro": "Enable compact designs, efficient power delivery and reliable connectivity.",
+  "quality": {
+    "manufacturing": "Controlled production supports consistent component supply for compact audio devices and connected appliances.",
+    "performance": "Magnetic and EMC component options help deliver steady power and filter noise in audio, radio and control circuits.",
+    "engineering": "Superworld can help match component size, power needs and filtering goals to your device."
+  },
+  "journey": {
+    "identify": "Choose the consumer system you are designing, from portable audio to a robotic cleaner or air purifier.",
+    "review": "Open the relevant circuit area and identify its power, RF or noise-control needs.",
+    "match": "Compare compact magnetic and EMC options using the series information and datasheets.",
+    "contact": "Send your circuit area, available board space and preferred series to our sales team."
+  },
+  "support": "Share your device type, circuit area and available board space so Superworld can help you select components.",
+  "needs": [
+    {
+      "title": "Reduce EMI & Noise",
+      "text": "Support noise suppression across power, audio and signal circuits."
+    },
+    {
+      "title": "Enable Compact Designs",
+      "text": "Provide compact and low-profile magnetic component options for space-constrained products."
+    },
+    {
+      "title": "Improve Power Efficiency",
+      "text": "Support efficient power conversion in portable and battery-powered consumer devices."
+    },
+    {
+      "title": "Support Wireless Connectivity",
+      "text": "Provide component options for RF, signal filtering and wireless power circuits."
+    }
+  ],
+  "systems": [
+    {
+      "id": "speakers",
+      "title": "Speakers",
+      "summary": "Audio products combine wireless connectivity, power conversion and sensitive signal paths in compact enclosures.",
+      "modules": [
+        {
+          "id": "wifi-bluetooth",
+          "title": "WiFi / Bluetooth",
+          "description": "Wi-Fi and Bluetooth connect the speaker to audio sources and controls.",
+          "need": "Support clean radio power and RF matching in compact audio products.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on the low-voltage radio supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "RF / signal filtering support",
+              "why": "Support RF matching in a compatible antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series",
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Circuit topology, target frequency, Q, parasitics and antenna co-design must be specified."
+            }
+          ]
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "Local conversion supplies the amplifier, radio and control electronics.",
+          "need": "Support efficient power delivery within the available board space.",
+          "mappings": [
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage switching regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        },
+        {
+          "id": "power-conditioning",
+          "title": "Power Conditioning",
+          "description": "Power conditioning helps keep supply noise away from audio and control circuits.",
+          "need": "Filter input and supply noise while maintaining power delivery.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on a low-voltage branch after the input regulator.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Common-mode filtering",
+              "why": "Reduce common-mode noise in a compatible filter position.",
+              "series": [
+                "general-products/magnetic-components/common-mode-choke/w2f-series"
+              ],
+              "condition": "Check current, impedance curve, differential signal integrity and layout."
+            },
+            {
+              "role": "Wireless charging reception",
+              "why": "Receive power in a compatible inductive charging circuit.",
+              "series": [
+                "general-products/wireless-power-transfer/receiver-coil/srx10300112r8kb"
+              ],
+              "condition": "Verify protocol/controller pairing, coil alignment, operating frequency, power and enclosure spacing."
+            }
+          ]
+        },
+        {
+          "id": "speaker-headphone-microphone",
+          "title": "Speaker, Headphone and Microphone",
+          "description": "Speaker, headphone and microphone circuits handle audio output and sensitive input signals.",
+          "need": "Support low-noise audio supplies without excessive voltage drop.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on microphone bias or an audio-control supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Audio supply power inductor",
+              "why": "Store energy in a separate low-voltage regulator for the audio electronics.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ],
+              "condition": "Select for the regulator topology, inductance, peak current and available height."
+            }
+          ],
+          "consultation": "Share the audio supply topology, signal levels and filtering requirements for review."
+        }
+      ]
+    },
+    {
+      "id": "hearables",
+      "title": "Hearable Products",
+      "summary": "Wearables prioritize low profile, limited battery capacity, reliable connectivity and careful thermal design.",
+      "modules": [
+        {
+          "id": "connectivity",
+          "title": "Connectivity",
+          "description": "The radio carries audio and control signals in a compact wearable.",
+          "need": "Support a stable wireless link within a small layout.",
+          "mappings": [
+            {
+              "role": "RF / signal filtering support",
+              "why": "Support RF matching when the radio has an external antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series",
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Circuit topology, target frequency, Q, parasitics and antenna co-design must be specified."
+            }
+          ]
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "Local conversion supplies the battery-powered audio and radio circuits.",
+          "need": "Support compact conversion for low-power wearable electronics.",
+          "mappings": [
+            {
+              "role": "Very-light-load regulator inductor",
+              "why": "Support an auxiliary rail within the selected L2 part’s current rating.",
+              "series": [
+                "general-products/emc-components/multilayer-power-chip-inductor/l2-series"
+              ],
+              "condition": "The documented L2 variants are rated 15–50 mA. Confirm the selected part’s rating, rail load and regulator topology."
+            }
+          ]
+        },
+        {
+          "id": "battery",
+          "title": "Battery",
+          "description": "The battery power path supplies the wearable and manages charging.",
+          "need": "Support charging in the space available in the wearable or its case.",
+          "mappings": [],
+          "consultation": "Share the battery and charging-case dimensions, charging method and controller requirements to evaluate a contact or wireless charging architecture.",
+          "componentGuidance": {
+            "category": "Receiver Coil / Receiver Module",
+            "purpose": "Receive power in a compatible contactless charging case with room for the selected receiver."
+          }
+        }
+      ]
+    },
+    {
+      "id": "uav",
+      "title": "Unmanned Aerial Vehicle",
+      "summary": "UAV subsystems need compact power magnetics and noise control around radio, camera and control electronics.",
+      "modules": [
+        {
+          "id": "remote-control",
+          "title": "Remote Control",
+          "description": "The handheld controller sends flight commands and receives telemetry.",
+          "need": "Support clean control power and a stable radio link.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on the handset’s radio or control supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "RF / signal filtering support",
+              "why": "Support RF matching in a compatible remote-control antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series",
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Circuit topology, target frequency, Q, parasitics and antenna co-design must be specified."
+            }
+          ]
+        },
+        {
+          "id": "charger",
+          "title": "Charger",
+          "description": "The charger manages power delivery to the battery pack.",
+          "need": "Support compact conversion for the selected charging architecture.",
+          "mappings": [
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage charger regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            },
+            {
+              "role": "Wireless charging receiver",
+              "why": "Receive power in a compatible inductive charging design.",
+              "series": [
+                "general-products/wireless-power-transfer/receiver-coil/srx10300112r8kb"
+              ],
+              "condition": "Verify protocol, power, alignment, charger IC, thermal path and enclosure clearance."
+            }
+          ]
+        },
+        {
+          "id": "camera",
+          "title": "Camera",
+          "description": "The camera captures images and processes video for the system.",
+          "need": "Support low-noise power for the image sensor and processor.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on a low-voltage sensor or image-processor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage camera regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        },
+        {
+          "id": "vehicle-control-module",
+          "title": "Vehicle Control Module",
+          "description": "The flight controller processes sensor inputs and sends commands to the vehicle electronics.",
+          "need": "Support stable power for flight-control logic and sensors.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on a low-voltage logic or sensor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage control regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "robotic-cleaner",
+      "title": "Robotic Cleaner",
+      "summary": "Robotic cleaners integrate digital control, wireless links, sensors, conversion stages and a display panel.",
+      "modules": [
+        {
+          "id": "cpu",
+          "title": "CPU",
+          "description": "The processor coordinates navigation, sensing and cleaning functions.",
+          "need": "Keep supply noise away from the control processor.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on a documented processor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            }
+          ]
+        },
+        {
+          "id": "wireless-connectivity",
+          "title": "Wireless Connectivity",
+          "description": "Wireless connectivity supports app control and status updates.",
+          "need": "Support a stable connection alongside switching and motor noise.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on the low-voltage radio supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "RF / signal filtering support",
+              "why": "Support RF matching in a compatible antenna network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series",
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ],
+              "condition": "Circuit topology, target frequency, Q, parasitics and antenna co-design must be specified."
+            }
+          ]
+        },
+        {
+          "id": "sensor",
+          "title": "Sensor",
+          "description": "Sensors support navigation, obstacle detection and device monitoring.",
+          "need": "Support low-noise power delivery around sensitive sensing circuits.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on a documented sensor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage sensor regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        },
+        {
+          "id": "ac-dc-converter",
+          "title": "AC-DC Converter",
+          "description": "The AC-DC stage supplies downstream circuits from AC input.",
+          "need": "Support low-noise output power within the chosen supply topology.",
+          "mappings": [
+            {
+              "role": "Low-voltage output EMI filtering",
+              "why": "Filter conducted noise on a separately identified low-voltage output branch.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series"
+              ],
+              "condition": "Choose the bead for measured noise, DC-bias impedance, rail current and allowable voltage drop."
+            }
+          ],
+          "consultation": "Mains topology, isolation, safety standards, surge/inrush, transformer windings and working-voltage evidence require product-engineering review."
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "The DC-DC stage supplies regulated power to control and sensor circuits.",
+          "need": "Support efficient conversion across changing device loads.",
+          "mappings": [
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage switching regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        },
+        {
+          "id": "display-panel",
+          "title": "Display Panel",
+          "description": "The display presents device status and user controls.",
+          "need": "Support clean display power and stable communication with the controller.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on the low-voltage display logic supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            },
+            {
+              "role": "Common-mode filtering",
+              "why": "Reduce common-mode noise on a compatible display interface.",
+              "series": [
+                "general-products/magnetic-components/common-mode-choke/w2f-series"
+              ],
+              "condition": "Verify signal protocol, line impedance, current, insertion loss and layout."
+            },
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage display regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ],
+          "consultation": "Share the interface and display supply to review suitable filtering or power components."
+        }
+      ],
+      "explodedViewReference": {
+        "label": "Roomba 581 teardown",
+        "url": "https://www.ifixit.com/Teardown/iRobot+Roomba+581+Teardown/201843"
+      }
+    },
+    {
+      "id": "air-purifier",
+      "title": "Air Purifier",
+      "summary": "Air-purifier control and power boards benefit from validated EMI filtering and appropriately rated power magnetics.",
+      "modules": [
+        {
+          "id": "cpu",
+          "title": "CPU",
+          "description": "The processor coordinates fan settings, sensing and system status.",
+          "need": "Support a stable processor supply near switching loads.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on the processor supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            }
+          ]
+        },
+        {
+          "id": "driver-board",
+          "title": "Driver Board",
+          "description": "The driver board controls the fan motor.",
+          "need": "Reduce switching noise on the driver’s low-voltage control supply.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter noise on the low-voltage driver control rail.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            }
+          ]
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "Local converters supply regulated power to sensing and control circuits.",
+          "need": "Support efficient conversion in the available board area.",
+          "mappings": [
+            {
+              "role": "Low-voltage converter energy storage",
+              "why": "Store energy in a compatible low-voltage switching regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ],
+              "condition": "Choose by topology, inductance, saturation/rated current, DCR, switching frequency, thermal rise, and footprint."
+            }
+          ]
+        },
+        {
+          "id": "power-supply",
+          "title": "Power Supply",
+          "description": "The power supply delivers power to the control and driver boards.",
+          "need": "Support clean power on the downstream low-voltage rails.",
+          "mappings": [
+            {
+              "role": "Low-voltage rail EMI filtering",
+              "why": "Filter conducted noise on a separately identified low-voltage output branch.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series",
+                "general-products/emc-components/ferrite-chip-bead/z2-series",
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series"
+              ],
+              "condition": "Confirm noise spectrum, DC current/bias, impedance curve, DCR, temperature rise and footprint; validate rail transient response."
+            }
+          ],
+          "consultation": "Share the power topology and working-voltage, isolation and surge requirements for a supply review."
+        }
+      ]
+    }
+  ]
+}

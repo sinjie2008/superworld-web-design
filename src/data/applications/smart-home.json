@@ -1,0 +1,266 @@
+{
+  "id": "smart-home",
+  "name": "Smart Home",
+  "heroTitle": "COMPONENTS FOR SMART HOME SYSTEMS",
+  "intro": "Magnetic and EMC components for connected home devices, supporting efficient power management, intelligent control and wireless connectivity in compact designs.",
+  "summary": {
+    "heading": "Connecting everyday living through smarter electronics.",
+    "text": "Explore component solutions for intelligent home controls, connected appliances and electronic access systems.",
+    "focus": "IoT / Power"
+  },
+  "designTitle": "SUPPORT CONNECTED AND ENERGY-EFFICIENT SMART HOME SYSTEMS",
+  "designIntro": "Enable efficient power delivery, stable controls and reliable wireless communication.",
+  "quality": {
+    "manufacturing": "Controlled production supports consistent component supply for connected appliances, home controls and electronic locks.",
+    "performance": "Filtering and power component options help support stable control circuits as devices switch between standby and active use.",
+    "engineering": "Superworld can help match component size, standby power and connectivity requirements to your product."
+  },
+  "journey": {
+    "identify": "Choose a thermostat, smart coffee machine or keyless door lock to see its circuit areas.",
+    "review": "Identify the power, control or wireless block and its standby or active-use needs.",
+    "match": "Compare magnetic and EMC options for the selected rail, display, interface or radio circuit.",
+    "contact": "Share the circuit area, supply range and compact-layout requirements with our sales team."
+  },
+  "support": "Share your product type, circuit area and power or connectivity needs so Superworld can help you select components.",
+  "needs": [
+    {
+      "title": "Support Energy Efficiency",
+      "text": "Provide component options for low-power and standby operation in connected devices."
+    },
+    {
+      "title": "Enable Wireless Connectivity",
+      "text": "Support RF circuits and communication interface filtering for connected home products."
+    },
+    {
+      "title": "Enable Compact Power Designs",
+      "text": "Provide compact magnetic components for power conversion in integrated home electronics."
+    },
+    {
+      "title": "Support Intelligent Control",
+      "text": "Support stable power and signal circuits for sensing, display and control functions."
+    }
+  ],
+  "systems": [
+    {
+      "id": "thermostat",
+      "title": "Thermostat",
+      "summary": "A thermostat brings sensing, display and connected control together in a compact device.",
+      "modules": [
+        {
+          "id": "display-panel",
+          "title": "Display Panel",
+          "description": "The display shows temperature, settings and operating status.",
+          "need": "Support clean, compact power for the display electronics.",
+          "mappings": [
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter conducted noise on the display supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Low-current multilayer power inductor candidate",
+              "why": "Support a very-light-load auxiliary rail within the selected L2 part’s current rating.",
+              "series": [
+                "general-products/emc-components/multilayer-power-chip-inductor/l2-series"
+              ],
+              "condition": "Verify the auxiliary rail’s load and ripple against the exact L2 part rating. The FECS variants are rated 15–50 mA."
+            }
+          ],
+          "consultation": "Confirm panel voltage/current, switching spectrum, allowable ripple and PCB area before selecting a part."
+        },
+        {
+          "id": "interface",
+          "title": "Interface",
+          "description": "The interface connects the controls, display and device electronics.",
+          "need": "Support clean power and signals between thermostat assemblies.",
+          "mappings": [
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter noise on the identified low-voltage interface path.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Low-current multilayer power inductor candidate",
+              "why": "Support a very-light-load auxiliary rail within the selected L2 part’s current rating.",
+              "series": [
+                "general-products/emc-components/multilayer-power-chip-inductor/l2-series"
+              ],
+              "condition": "Verify the auxiliary rail’s load and ripple against the exact L2 part rating. The FECS variants are rated 15–50 mA."
+            }
+          ],
+          "consultation": "Provide interface type, line rate, signal voltage, power rail and emissions test data for a specific recommendation."
+        },
+        {
+          "id": "power-management",
+          "title": "Power Management",
+          "description": "Power management supplies the controls and radio in standby and active modes.",
+          "need": "Support efficient conversion and stable output as loads change.",
+          "mappings": [
+            {
+              "role": "Semi-shielded power inductor",
+              "why": "Store energy in a compatible low-voltage regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ]
+            },
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter conducted noise on a documented low-voltage supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ],
+          "consultation": "Confirm converter IC, VIN/VOUT, peak and RMS current, switching frequency, temperature rise and footprint."
+        }
+      ]
+    },
+    {
+      "id": "coffee-machine",
+      "title": "Smart Coffee Machine",
+      "summary": "Connected coffee machines combine power switching, user controls and optional tap-to-pair or access features.",
+      "modules": [
+        {
+          "id": "power-board",
+          "title": "Power Board",
+          "description": "The power board feeds the appliance’s control and connected functions.",
+          "need": "Support stable low-voltage power near switching and motor loads.",
+          "mappings": [
+            {
+              "role": "Semi-shielded power inductor",
+              "why": "Store energy in a compatible low-voltage power-board regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ]
+            }
+          ],
+          "consultation": "For an isolated power stage, share the input range, power level and insulation requirements to review transformer options."
+        },
+        {
+          "id": "connectivity",
+          "title": "Connectivity",
+          "description": "Wireless connectivity supports app controls and machine status.",
+          "need": "Support a stable radio link in the appliance enclosure.",
+          "mappings": [
+            {
+              "role": "Ceramic wire-wound inductor candidate",
+              "why": "Support compact RF matching in a documented external antenna network.",
+              "series": [
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ]
+            }
+          ],
+          "consultation": "Share the operating band, antenna layout and RF circuit for a matching review."
+        },
+        {
+          "id": "nfc-module",
+          "title": "NFC Module",
+          "description": "The NFC reader exchanges data with nearby tags or devices.",
+          "need": "Support a stable connection in the assembled reader and antenna layout.",
+          "mappings": [],
+          "consultation": "Provide the NFC reader, mounted antenna geometry, nearby metal and matching-network targets for a 13.56 MHz design review.",
+          "componentGuidance": {
+            "category": "Chip Inductor",
+            "purpose": "Support the reader’s EMC filter when matched to the mounted 13.56 MHz antenna."
+          }
+        },
+        {
+          "id": "intelligent-control-board",
+          "title": "Intelligent Control Board",
+          "description": "The control board coordinates sensors, displays and appliance functions.",
+          "need": "Support stable power and reduce noise around control circuits.",
+          "mappings": [
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter conducted noise on a documented control-board supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ],
+          "consultation": "Share the schematic, clock and radio bands, rail currents, PCB stack-up and EMC test findings for a design review."
+        }
+      ]
+    },
+    {
+      "id": "door-lock",
+      "title": "Keyless Entry Door Lock",
+      "summary": "Keyless locks rely on dependable low-power control and robust communication in a constrained enclosure.",
+      "modules": [
+        {
+          "id": "wireless-communication",
+          "title": "Wireless Communication",
+          "description": "The radio exchanges access commands and device status.",
+          "need": "Support connectivity within a compact, battery-powered lock.",
+          "mappings": [
+            {
+              "role": "Ferrite bead for supply filtering",
+              "why": "Filter conducted noise on the documented radio supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            },
+            {
+              "role": "Ceramic wire-wound inductor candidate",
+              "why": "Support RF matching in a compatible external antenna network.",
+              "series": [
+                "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series"
+              ]
+            }
+          ],
+          "consultation": "Confirm radio protocol, band, antenna, supply current and board layout before choosing RF parts."
+        },
+        {
+          "id": "main-control-board",
+          "title": "Main Control Board",
+          "description": "The main board reads access inputs and operates the locking actuator.",
+          "need": "Support stable control power as loads change between standby and actuation.",
+          "mappings": [
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter conducted noise on a documented low-voltage control supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ],
+          "consultation": "Confirm battery chemistry and voltage, actuator pulse current, sleep budget, transient profile and EMC results."
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "The DC-DC converter supplies regulated power to the lock electronics.",
+          "need": "Support efficient conversion through standby and active loads.",
+          "mappings": [
+            {
+              "role": "Semi-shielded power inductor",
+              "why": "Store energy in a compatible low-voltage regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series",
+                "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series"
+              ]
+            },
+            {
+              "role": "Ferrite bead filtering",
+              "why": "Filter conducted noise on a documented converter rail.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead/z1-series"
+              ]
+            }
+          ],
+          "consultation": "Provide converter IC, battery input range, output rails, peak/RMS load, switching frequency, ripple limits and board area."
+        }
+      ],
+      "explodedViewReference": {
+        "label": "Yale Assure Lock installation diagrams",
+        "url": "https://support.shopyalehome.com/installation-manual-Hyg9Ji7WS"
+      }
+    }
+  ]
+}

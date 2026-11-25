@@ -8,6 +8,12 @@ import sustainability from "../../pages/company/sustainability.html";
 import applications from "../../pages/applications.html";
 import automotive from "../../pages/applications/automotive.html";
 import communication from "../../pages/applications/communication.html";
+import marketTemplate0 from "../../pages/applications/consumer.html";
+import marketTemplate1 from "../../pages/applications/healthcare.html";
+import marketTemplate2 from "../../pages/applications/industrial.html";
+import marketTemplate3 from "../../pages/applications/smart-home.html";
+import { marketPageSlots } from "./market-pages.js";
+
 import { matchProductRoute } from "../product-catalog.js";
 import { productFieldLabel } from "../product-pages.js";
 import { NEWS_CATEGORIES, newsCategoriesForGroup, newsYears, queryNews } from "../news-catalog.js";
@@ -33,6 +39,10 @@ const pages = new Map([
   ["/applications", applications],
   ["/applications/automotive", automotive],
   ["/applications/communication", communication],
+  ["/applications/consumer", marketTemplate0],
+  ["/applications/healthcare", marketTemplate1],
+  ["/applications/industrial", marketTemplate2],
+  ["/applications/smart-home", marketTemplate3],
   ["/products", products],
   ["/tools/spec-search", specSearch],
   ["/news", news],
@@ -629,6 +639,8 @@ export class PageRegistry {
 
   slotsForPath(path, state, search = globalThis.location?.search || "") {
     path = path.replace(/\/+$/, "") || "/";
+    const marketSlots = marketPageSlots(path, search, replaceSlot);
+    if (marketSlots) return marketSlots;
     if (path === "/news") return newsSlots(search);
     if (path === "/locations") return locationSlots(search);
     if (path === "/support") return supportSlots(search);

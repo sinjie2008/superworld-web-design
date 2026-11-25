@@ -102,7 +102,7 @@ function renderRoot(main, index) {
       .map((family) => {
         const href = familyUrl(index, family.path);
         const categories = (family.children || []).filter((node) => node.type === "category");
-        return `<div><h3><a data-link href="${escapeHtml(href)}">${escapeHtml(family.name)}</a></h3><ul>${categories.map((category) => `<li><span class="check-square"></span><a data-link href="${escapeHtml(href)}#${escapeHtml(sectionAnchor(group, href.split("/").at(-1), category.slug))}">${escapeHtml(category.name)}</a></li>`).join("")}</ul></div>`;
+        return `<div><h3><a data-link href="${escapeHtml(href)}">${escapeHtml(family.name)}</a></h3><ul>${categories.map((category) => `<li><span class="check-square category-index-icon" data-category-path="${escapeHtml(category.path)}" aria-hidden="true"></span><a data-link href="${escapeHtml(href)}#${escapeHtml(sectionAnchor(group, href.split("/").at(-1), category.slug))}">${escapeHtml(category.name)}</a></li>`).join("")}</ul></div>`;
       })
       .join("");
   });
@@ -364,6 +364,7 @@ export class ProductPages {
     this.searchTimer = null;
     this.familyFacetCleanup = null;
     this.familyFacetCache = new Map();
+    this.categoryContentCache = new Map();
   }
 
   cancel() {
@@ -415,7 +416,7 @@ export class ProductPages {
           renderFamily(main, index, route);
           this.setupFamilyFacets(main, { signal, isCurrent });
         }
-        const content = await hydrateCategoryContent(this.api, route, main, { signal, isCurrent });
+        const content = await hydrateCategoryContent(this.api, route, main, { signal, isCurrent, cache: this.categoryContentCache });
         if (__CATALOG_DIAGNOSTICS__ && !signal?.aborted && isCurrent())
           this.diagnostics.layout(main, index, route, content);
       }

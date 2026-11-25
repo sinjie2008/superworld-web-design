@@ -72,8 +72,8 @@ for (const path of checkedFiles) {
 
 assert.equal(
   Object.keys(PAGE_METADATA).length,
-  20,
-  "the production route check expects all 20 routes",
+  24,
+  "the production route check expects all 24 routes",
 );
 const workerModule = await import(pathToFileURL(workerPath).href);
 assert.equal(typeof workerModule.default?.fetch, "function");
@@ -107,8 +107,8 @@ for (const route of Object.keys(PAGE_METADATA)) {
   assert.equal(response.status, 200, `${route} must remain available from the production worker`);
   const html = await response.text();
   assertNoDiagnosticBytes(route, html);
-  assert.match(html, /\/styles\.css\?v=160(?:["'\s])/);
-  assert.match(html, /\/app\.js\?v=160(?:["'\s])/);
+  assert.match(html, /\/styles\.css\?v=162(?:["'\s])/);
+  assert.match(html, /\/app\.js\?v=162(?:["'\s])/);
   assert.doesNotMatch(html, /\?v=dev-/);
   cleanRouteHtml.set(route, html);
 }

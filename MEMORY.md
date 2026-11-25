@@ -83,7 +83,7 @@
 - Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, and 52 px controls. Category and facet `.form-check` rows and labels intentionally omit the 44 px minimum height and retain an 8 px inline gap; result-table inquiry checkboxes are 20 × 20 px, and wide tables remain horizontally scrollable inside their container.
 - Specification Search `.content-column` intentionally has no padding at any viewport width; its inner sections own the visible spacing so content is not inset twice.
 - Specification Search facet inputs are 40 px high and use one real `.facet-search-action` button that shows a magnifier when empty, switches to a clear cross when text is entered, and restores every hidden option when cleared.
-- Specification Search result-table `.series-image` cells render a real borderless 80 × 80 `<img>` from `https://placehold.co/80x80`; the image has no padding or border and keeps `object-fit:contain` at desktop and narrow widths.
+- Specification Search result-table `.series-image` cells use the live `seriesImage` URL and keep the existing borderless 80 × 80 `<img>` with `object-fit:contain`. Missing or failed images use the inline fallback.
 - Specification Search Product cells display `items.name` and link to the owning series using the catalog route registry and `seriesId`; the frontend-only `seriesUrl` is excluded from specification columns. Product sorting and search use the item name while series-name text search remains supported.
 - Specification Search pagination keeps the first, last, and nearby pages with ellipses for skipped ranges; controls never shrink or wrap their text, and the group wraps inside the footer on narrow screens.
 - The generic `ProductPages` series hydrator preserves the supplied A4K page and article layouts while supplying live table rows, search, selection, loss analysis where supported, and Inquiry.
@@ -193,3 +193,24 @@
 - Existing untracked `src/app/catalog-category-content.js`, `catalog-media.js`, `catalog-series-content.js` were observed in this working tree and were not modified by this task.
 - Dev preview built using `npm run build:dev` and `npm run validate` (20 routes passing), restarted to load the new worker with app/style `dev-158`; the prior 3 MB generated worker was backed up to Downloads before rebuilding.
 - No real uploaded media UUIDs were available for UI image verification. The content/API/import/export logic passed disposable DB tests; actual media selection needs a ready Media Library image and CSV UUID.
+
+## Product index Category icons (2026-11-17)
+
+- Root and group Category icons use the same Public Product API media field, category_icon_image_media_id. Derive paths from the live catalog tree and resolve media with catalogMediaUrl(). Keep Category media ownership in FECS.
+- Root hydration uses a four-request Category queue, a 15-second cache capped at 64 successful responses, and route-signal checks. A loaded image fills the original 20px slot. Missing or failed image loads keep the same footprint, and adjacent link text provides the accessible name.
+- Group icons with bound API images use contain and decorative empty alt text. Category family anchors and Series media continue through the existing renderers.
+- The site CSS and JavaScript asset versions are 161 in production and dev-161 in development. Synchronize document and build assertions on future bumps. Use an isolated build when a checkout already contains generated-worker edits.
+
+## Specification Search media and SPQ (2026-11-17)
+
+- Resolve Series images and PDF links with the same Specification Search media helper. The preview routes relative public catalog media to FECS, and registered aliases continue through `/api/media/public.php`. Absolute HTTP(S) URLs retain their origin.
+- The live products response exposes a nonempty Series `series_spq_per_reel` as string `spq`. Leave missing values empty in the existing SPQ column and preserve the legacy `acf.spq` lookup. Spec Search JavaScript is version 106.
+
+## FECS Family banners (2026-11-19)
+
+- The seven General and Automotive Family banners hydrate through FECS `category_banner_image_media_id` and `category_banner_image_alt`. Add or replace them through a Category CSV upsert and a ready Media Library UUID. Product photos remain attached to their owning Series.
+- The shared Family banner cover frame is 420, 180, and 112 px high at the verified 1440, 768, and 390 px viewports. Position important product pixels well inside a 1320 × 420 banner and validate the actual center crop at all three widths.
+
+- For a Family banner revision, keep old media bytes available for rollback and update the banner UUIDs through a targeted Category upsert. Scale actual product silhouettes when composing art. For responsive crop QA, center the banner in the target viewport before capture and compare its pixels with the expected centered cover image.
+
+- 2026-11-25 recovery: canonical frontend is `C:\laragon\www\superworld-web-design`. The older lo-wireframe checkout is a historical migration source only. Recovery branch: `recovery/2026-11-25`.

@@ -33,28 +33,62 @@ function setImage(element, value, alt, path, field) {
   mark(element.closest(".hero-brand, .product-family-visual, .ph, .family-icon"), path, field);
 }
 
-/** Hydrate category-owned copy and imagery for product group and family routes. */
-export async function hydrateCategoryContent(api, route, main, { signal, isCurrent } = {}) {
+/** Hydrate category-owned copy and imagery for product routes. */
+export async function hydrateCategoryContent(api, route, main, { signal, isCurrent, cache } = {}) {
   const results = new Map();
-  if (!route?.node || !["group", "family"].includes(route.type)) return results;
+  if (!["root", "group", "family"].includes(route?.type)) return results;
+
+  const isActive = () => !signal?.aborted && (typeof isCurrent !== "function" || isCurrent());
+  const rootIcons = new Map(
+    [...main.querySelectorAll(".category-index-icon[data-category-path]")].map((element) => [element.dataset.categoryPath, element]),
+  );
+  const rootTargets = route.type === "root"
+    ? (route.nodes || []).flatMap((group) => categoryChildren(group).flatMap(categoryChildren))
+      .filter((node) => rootIcons.has(node.path))
+    : [];
 
   const root = route.node;
   const children = categoryChildren(root);
-  const targets = [root, ...children];
+  const targets = route.type === "root" ? rootTargets : [root, ...children];
   if (route.type === "group") targets.push(...children.flatMap(categoryChildren));
 
   const uniqueTargets = [...new Map(targets.map((node) => [node.path, node])).values()];
-  const settled = await Promise.allSettled(uniqueTargets.map((node) =>
-    api.category(node.path, { signal })
-  ));
-  if (signal?.aborted || (typeof isCurrent === "function" && !isCurrent())) return results;
-
-  uniqueTargets.forEach((node, index) => {
-    const outcome = settled[index];
-    results.set(node.path, outcome.status === "fulfilled"
-      ? { status: "fulfilled", response: outcome.value }
-      : { status: "rejected", error: outcome.reason });
-  });
+  let nextTarget = 0;
+  async function loadNext() {
+    while (nextTarget < uniqueTargets.length && isActive()) {
+      const node = uniqueTargets[nextTarget++];
+      try {
+        const cached = cache?.get(node.path);
+        const response = cached && Date.now() - cached.loadedAt < 15000
+          ? cached.response
+          : await api.category(node.path, { signal });
+        if (!isActive()) return;
+        if (cache && response !== cached?.response) {
+          cache.delete(node.path);
+          cache.set(node.path, { response, loadedAt: Date.now() });
+          if (cache.size > 64) cache.delete(cache.keys().next().value);
+        }
+        results.set(node.path, { status: "fulfilled", response });
+        const icon = rootIcons.get(node.path);
+        const url = catalogMediaUrl(response?.media?.category_icon_image_media_id);
+        if (icon && url) {
+          const image = document.createElement("img");
+          image.alt = "";
+          image.addEventListener("load", () => {
+            if (!isActive()) return;
+            icon.replaceChildren(image);
+            icon.classList.add("has-image");
+            mark(icon, node.path, "category_icon_image_media_id");
+          }, { once: true });
+          image.src = url;
+        }
+      } catch (error) {
+        if (isActive()) results.set(node.path, { status: "rejected", error });
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(4, uniqueTargets.length) }, loadNext));
+  if (!isActive() || route.type === "root") return results;
   const responseFor = (node) => results.get(node.path)?.response;
 
   const rootResponse = responseFor(root);
@@ -100,10 +134,11 @@ export async function hydrateCategoryContent(api, route, main, { signal, isCurre
         const link = links[index];
         const leafResponse = responseFor(leaf);
         const icon = link?.querySelector("img");
+        if (icon) icon.alt = "";
         setImage(
           icon,
           leafResponse?.media?.category_icon_image_media_id,
-          `${leaf.name} icon`,
+          "",
           leaf.path,
           "category_icon_image_media_id",
         );

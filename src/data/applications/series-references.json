@@ -1,0 +1,58 @@
+{
+  "general-products/emc-components/chip-inductor/c0-series": {
+    "name": "C0 SERIES",
+    "category": "Chip Inductor"
+  },
+  "general-products/emc-components/ferrite-chip-bead-large-current/z1-hc-series": {
+    "name": "Z1_HC SERIES",
+    "category": "Ferrite Chip Bead (Large Current)"
+  },
+  "general-products/emc-components/ferrite-chip-bead-large-current/z1pz-hc-series": {
+    "name": "Z1PZ_HC SERIES",
+    "category": "Ferrite Chip Bead (Large Current)"
+  },
+  "general-products/emc-components/ferrite-chip-bead/z1-series": {
+    "name": "Z1 SERIES",
+    "category": "Ferrite Chip Bead"
+  },
+  "general-products/emc-components/ferrite-chip-bead/z2-series": {
+    "name": "Z2 SERIES",
+    "category": "Ferrite Chip Bead"
+  },
+  "general-products/emc-components/multilayer-power-chip-inductor/l2-series": {
+    "name": "L2 SERIES",
+    "category": "Multilayer Power Chip Inductor"
+  },
+  "general-products/magnetic-components/ceramic-wire-wound-inductor/sci0402c-series": {
+    "name": "SCI0402C SERIES",
+    "category": "Ceramic Wire Wound Inductor"
+  },
+  "general-products/magnetic-components/common-mode-choke/w2f-series": {
+    "name": "W2F SERIES",
+    "category": "Common Mode Choke"
+  },
+  "general-products/magnetic-components/common-mode-choke/w8af-series": {
+    "name": "W8AF SERIES",
+    "category": "Common Mode Choke"
+  },
+  "general-products/magnetic-components/molded-power-inductor/pia0603s-series": {
+    "name": "PIA0603S SERIES",
+    "category": "Molded Power Inductor"
+  },
+  "general-products/magnetic-components/semi-shielded-power-inductor/pns3010t-series": {
+    "name": "PNS3010T SERIES",
+    "category": "Semi-Shielded Power Inductor"
+  },
+  "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series": {
+    "name": "SPA201610FA SERIES",
+    "category": "Semi-Shielded Power Inductor"
+  },
+  "general-products/magnetic-components/shielded-power-inductor/sdb0705-series": {
+    "name": "SDB0705 SERIES",
+    "category": "Shielded Power Inductor"
+  },
+  "general-products/wireless-power-transfer/receiver-coil/srx10300112r8kb": {
+    "name": "SRX10300112R8KB",
+    "category": "Receiver Coil"
+  }
+}

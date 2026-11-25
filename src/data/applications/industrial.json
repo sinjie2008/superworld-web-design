@@ -1,0 +1,294 @@
+{
+  "id": "industrial",
+  "name": "Industrial & Energy",
+  "heroTitle": "COMPONENTS FOR INDUSTRIAL & ENERGY SYSTEMS",
+  "intro": "Superworld supplies magnetic and EMC components for industrial automation, power conversion, energy management and noise filtering in connected control systems.",
+  "summary": {
+    "heading": "From industrial automation to efficient energy management.",
+    "text": "Explore component solutions supporting industrial control, connected equipment, power electronics and intelligent energy systems.",
+    "focus": "Power / EMC"
+  },
+  "designTitle": "SUPPORT RELIABLE INDUSTRIAL AND ENERGY SYSTEMS",
+  "designIntro": "Enable efficient power conversion, electrical noise control and stable industrial circuit designs.",
+  "quality": {
+    "manufacturing": "Controlled production supports repeat component orders for industrial power and control assemblies.",
+    "performance": "Magnetic and EMC options support power conversion and limit switching noise around control and interface circuits.",
+    "engineering": "Superworld can help assess current, operating temperature and enclosure needs when selecting industrial components."
+  },
+  "journey": {
+    "identify": "Choose your equipment type, from industrial robots and security systems to smart meters and lighting.",
+    "review": "Locate the power, motor-control or communication circuit and identify its role in the system.",
+    "match": "Compare series for the relevant circuit or review component guidance where selection depends on the topology.",
+    "contact": "Share your supply range, operating environment and circuit area with our sales team."
+  },
+  "support": "Share your equipment type, power requirements and operating environment so Superworld can help you select components.",
+  "needs": [
+    {
+      "title": "Support Efficient Power Conversion",
+      "text": "Provide magnetic component options for conversion stages in industrial power circuits."
+    },
+    {
+      "title": "Control EMI & Switching Noise",
+      "text": "Support noise filtering across switching, interface and control circuits in connected equipment."
+    },
+    {
+      "title": "Support Current & Thermal Requirements",
+      "text": "Provide component options for different current demands and operating temperatures."
+    },
+    {
+      "title": "Enable Reliable Industrial Control",
+      "text": "Support stable power delivery and signal filtering in connected control systems."
+    }
+  ],
+  "systems": [
+    {
+      "id": "industrial-robots",
+      "title": "Industrial Robots",
+      "summary": "Power and EMC component candidates for robot controller boards.",
+      "modules": [
+        {
+          "id": "controller-board",
+          "title": "Controller Board",
+          "description": "The controller board coordinates motion and communication with connected equipment.",
+          "need": "Support stable power for low-voltage control electronics.",
+          "mappings": [
+            {
+              "role": "Molded power inductor",
+              "why": "Store energy in a compatible point-of-load regulator.",
+              "series": [
+                "general-products/magnetic-components/molded-power-inductor/pia0603s-series"
+              ]
+            }
+          ],
+          "consultation": "Share the controller power tree, peak load current and rail-voltage constraints for review."
+        }
+      ]
+    },
+    {
+      "id": "3d-printers",
+      "title": "3D Printers",
+      "summary": "Application-specific filtering and conversion review for printer interfaces, wireless, motor drives and supplies.",
+      "modules": [
+        {
+          "id": "interface",
+          "title": "Interface",
+          "description": "The interface carries commands and data between the printer and connected equipment.",
+          "need": "Reduce common-mode noise while maintaining interface bandwidth.",
+          "mappings": [
+            {
+              "role": "High-speed line filtering",
+              "why": "Suppress common-mode noise on a compatible differential interface.",
+              "series": [
+                "general-products/magnetic-components/common-mode-choke/w8af-series"
+              ],
+              "condition": "Confirm the protocol, signal bandwidth, differential insertion loss and impedance before selection."
+            }
+          ],
+          "consultation": "Share the interface protocol, signalling rate, cable length and emissions or immunity data for review."
+        },
+        {
+          "id": "wifi-connection",
+          "title": "WiFi Connection",
+          "description": "Wi-Fi connects the printer for job transfer and remote monitoring.",
+          "need": "Support stable RF operation near switching and motion-control electronics.",
+          "mappings": [
+            {
+              "role": "Antenna-matching inductor",
+              "why": "Tune a compatible external Wi-Fi matching network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series"
+              ],
+              "condition": "Select by required inductance, Q and self-resonant frequency at the radio band."
+            }
+          ],
+          "consultation": "Share the radio architecture, module, antenna layout and band for RF matching and supply-filter review."
+        },
+        {
+          "id": "motor-driver",
+          "title": "Motor Driver",
+          "description": "The motor driver controls the printer’s motion axes.",
+          "need": "Support clean power for a separate low-voltage driver supply.",
+          "mappings": [
+            {
+              "role": "Shielded power inductor",
+              "why": "Store energy in a compatible low-voltage supply for the motor-driver electronics.",
+              "series": [
+                "general-products/magnetic-components/shielded-power-inductor/sdb0705-series"
+              ]
+            }
+          ],
+          "consultation": "Confirm the driver supply topology, ripple, saturation behaviour, enclosure temperature and footprint."
+        },
+        {
+          "id": "power-supply",
+          "title": "Power Supply",
+          "description": "The power supply feeds the printer’s control, motion and heating circuits.",
+          "need": "Support steady power across changing loads.",
+          "mappings": [],
+          "consultation": "Share input range, output loads, case temperature and insulation or protection requirements.",
+          "componentGuidance": {
+            "category": "Common Mode Choke / Power Converter Transformer",
+            "purpose": "Filter input noise or support isolated conversion where the supply topology calls for it."
+          }
+        }
+      ]
+    },
+    {
+      "id": "security-products",
+      "title": "Security Products",
+      "summary": "Conditional component candidates for camera supply and low-voltage conversion; interface choices require design data.",
+      "modules": [
+        {
+          "id": "camera-module",
+          "title": "Camera Module",
+          "description": "The camera module captures and processes video.",
+          "need": "Support low-noise supply rails for the image sensor and processor.",
+          "mappings": [
+            {
+              "role": "High-current ferrite chip bead",
+              "why": "Filter conducted noise on a documented low-voltage camera supply.",
+              "series": [
+                "general-products/emc-components/ferrite-chip-bead-large-current/z1-hc-series"
+              ]
+            }
+          ],
+          "consultation": "Share the camera sensor, rail voltages and conducted noise readings to assess a supply filter."
+        },
+        {
+          "id": "dc-dc-converter",
+          "title": "DC-DC Converter",
+          "description": "The converter supplies regulated power to cameras, radios and controls.",
+          "need": "Support efficient local conversion across the expected loads.",
+          "mappings": [
+            {
+              "role": "Semi-shielded power inductor",
+              "why": "Store energy in a compatible low-voltage switching regulator.",
+              "series": [
+                "general-products/magnetic-components/semi-shielded-power-inductor/spa201610fa-series"
+              ]
+            }
+          ],
+          "consultation": "Share the input and output range, switch frequency, load profile and inductor dimensions."
+        },
+        {
+          "id": "wifi",
+          "title": "WiFi",
+          "description": "Wi-Fi carries video and control data over the network.",
+          "need": "Support a stable wireless link near digital and power circuits.",
+          "mappings": [
+            {
+              "role": "Antenna-matching inductor",
+              "why": "Tune a compatible external Wi-Fi matching network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series"
+              ],
+              "condition": "Select by required inductance, Q and self-resonant frequency at the radio band."
+            }
+          ],
+          "consultation": "Share the radio, operating band and PCB layout to assess the supply and external matching requirements."
+        },
+        {
+          "id": "usb-hdmi",
+          "title": "USB / HDMI",
+          "description": "USB and HDMI carry high-speed data over differential links.",
+          "need": "Reduce common-mode noise while preserving signal integrity.",
+          "mappings": [
+            {
+              "role": "High-speed line filtering",
+              "why": "Suppress common-mode noise on a compatible differential pair.",
+              "series": [
+                "general-products/magnetic-components/common-mode-choke/w8af-series"
+              ],
+              "condition": "Check the USB or HDMI generation and verify signal integrity against the link requirements."
+            }
+          ],
+          "consultation": "Provide the USB or HDMI generation, topology and measured signal integrity so the interface filter can be reviewed."
+        }
+      ]
+    },
+    {
+      "id": "smart-meter",
+      "title": "Smart Meter",
+      "summary": "Engineering review for mains-connected power blocks, measurement and wireless communications.",
+      "modules": [
+        {
+          "id": "power-supply-circuit",
+          "title": "Power Supply Circuit",
+          "description": "The supply powers metrology, processing and communications.",
+          "need": "Support a stable supply for measurement and communication loads.",
+          "mappings": [
+            {
+              "role": "Shielded converter inductor",
+              "why": "Store energy in a separate low-voltage switching regulator.",
+              "series": [
+                "general-products/magnetic-components/shielded-power-inductor/sdb0705-series"
+              ],
+              "condition": "Check current, saturation, temperature rise and height against the regulator and enclosure."
+            }
+          ],
+          "consultation": "Provide the meter supply architecture, metrology isolation requirements and communications load."
+        },
+        {
+          "id": "ac-dc-converter",
+          "title": "AC-DC Converter",
+          "description": "The AC-DC stage produces the meter’s regulated supply from line power.",
+          "need": "Support the selected conversion and isolation architecture.",
+          "mappings": [],
+          "consultation": "Share the converter topology, working voltage, surge conditions, insulation and thermal limits for review.",
+          "componentGuidance": {
+            "category": "Power Converter Transformer",
+            "purpose": "Transfer power across the isolation barrier in an isolated converter."
+          }
+        },
+        {
+          "id": "wireless-module",
+          "title": "Wireless Module",
+          "description": "The wireless module transmits meter readings to the network.",
+          "need": "Support a stable radio link and modem power during transmission.",
+          "mappings": [
+            {
+              "role": "Antenna-matching inductor",
+              "why": "Tune a compatible external radio matching network.",
+              "series": [
+                "general-products/emc-components/chip-inductor/c0-series"
+              ],
+              "condition": "Select by the modem band, required inductance, Q and self-resonant frequency."
+            }
+          ],
+          "consultation": "Share the modem, frequency bands and antenna network to define the power and RF filtering roles."
+        }
+      ]
+    },
+    {
+      "id": "led-lighting",
+      "title": "LED Lighting",
+      "summary": "Review mains and converter stages against the actual power topology and applicable safety requirements.",
+      "modules": [
+        {
+          "id": "ac-power",
+          "title": "AC Power",
+          "description": "The AC input supplies line power to the LED driver.",
+          "need": "Support noise filtering in the line-side input network.",
+          "mappings": [],
+          "consultation": "Share the luminaire input range, surge requirements, protection architecture and available board space.",
+          "componentGuidance": {
+            "category": "Common Mode Choke",
+            "purpose": "Filter common-mode noise where the AC input uses a suitable mains-rated choke."
+          }
+        },
+        {
+          "id": "ac-dc-converter",
+          "title": "AC-DC Converter",
+          "description": "The driver converts AC power into regulated current for the LEDs.",
+          "need": "Support stable LED current within the driver and isolation architecture.",
+          "mappings": [],
+          "consultation": "Share the LED string voltage and current, conversion topology, thermal limits and isolation requirements.",
+          "componentGuidance": {
+            "category": "Power Converter Transformer",
+            "purpose": "Transfer power in an isolated driver designed for the LED load."
+          }
+        }
+      ]
+    }
+  ]
+}

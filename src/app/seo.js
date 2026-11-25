@@ -86,6 +86,30 @@ export const PAGE_METADATA = {
       ["AI, HPC & Emerging Tech", "/applications/communication"],
     ],
   },
+  "/applications/consumer": {
+    title: "Consumer Electronics Components | Superworld Electronics",
+    description: "Explore component options for speakers, hearables, UAVs, robotic cleaners and air purifiers.",
+    heading: "Components for Consumer Electronics",
+    breadcrumbs: [["Home", "/"], ["Applications", "/applications"], ["Consumer", "/applications/consumer"]],
+  },
+  "/applications/healthcare": {
+    title: "Healthcare Device Components | Superworld Electronics",
+    description: "Compare noise filtering, power and wireless component options for blood pressure devices, thermometers and hearing-aid designs.",
+    heading: "Components for Healthcare Devices",
+    breadcrumbs: [["Home", "/"], ["Applications", "/applications"], ["Healthcare Devices", "/applications/healthcare"]],
+  },
+  "/applications/industrial": {
+    title: "Industrial & Energy Components | Superworld Electronics",
+    description: "Explore circuit needs in industrial robots, 3D printers, security equipment, smart meters and LED lighting.",
+    heading: "Components for Industrial & Energy Systems",
+    breadcrumbs: [["Home", "/"], ["Applications", "/applications"], ["Industrial & Energy", "/applications/industrial"]],
+  },
+  "/applications/smart-home": {
+    title: "Smart Home Electronics Components | Superworld Electronics",
+    description: "Review power management and signal integrity needs for thermostats, connected coffee machines and keyless entry door locks.",
+    heading: "Components for Smart Home Systems",
+    breadcrumbs: [["Home", "/"], ["Applications", "/applications"], ["Smart Home", "/applications/smart-home"]],
+  },
   "/products": {
     title: "Electronic Component Products | Superworld Electronics",
     description:

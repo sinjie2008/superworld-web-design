@@ -7,6 +7,41 @@ import responsiveBrandDataUrl from "../assets/brand-responsive.png";
 import { PAGE_METADATA, SITE_ORIGIN, SOCIAL_IMAGE_PATH, seo } from "./seo.js";
 import documentTemplate from "../pages/layouts/document.html";
 
+import speakerImage from "../../public/assets/applications/consumer/speakers-exploded-view.webp";
+import hearablesImage from "../../public/assets/applications/consumer/hearables-board-disassembly.webp";
+import uavImage from "../../public/assets/applications/consumer/uav-camera-disassembly.webp";
+import airPurifierImage from "../../public/assets/applications/consumer/air-purifier-control-assembly.webp";
+import ledImage from "../../public/assets/applications/industrial/led-lighting-exploded-view.webp";
+import bloodPressureImage from "../../public/assets/applications/healthcare/blood-pressure-exploded-view.webp";
+import cuffMonitorImage from "../../public/assets/applications/healthcare/blood-pressure-cuff-disassembly.webp";
+import thermometerImage from "../../public/assets/applications/healthcare/thermometer-display-disassembly.webp";
+import printerImage from "../../public/assets/applications/industrial/3d-printers-exploded-view.webp";
+import robotControllerImage from "../../public/assets/applications/industrial/kuka-controller-cabinet.webp";
+import securityImage from "../../public/assets/applications/industrial/security-camera-disassembly.webp";
+import smartMeterImage from "../../public/assets/applications/industrial/openzmeter-assembly.webp";
+import thermostatImage from "../../public/assets/applications/smart-home/thermostat-disassembly.webp";
+import coffeeMachineImage from "../../public/assets/applications/smart-home/coffee-machine-control-assembly.webp";
+import { MarketCatalogApi, marketCatalogPrefix } from "./site/market-catalog-api.js";
+import { marketIllustrations } from "./site/market-data.js";
+
+const marketCatalogApi = new MarketCatalogApi();
+const marketImages = new Map([
+  [marketIllustrations.speakers.path, speakerImage],
+  [marketIllustrations.hearables.path, hearablesImage],
+  [marketIllustrations.uav.path, uavImage],
+  [marketIllustrations["air-purifier"].path, airPurifierImage],
+  [marketIllustrations["led-lighting"].path, ledImage],
+  ["/assets/applications/healthcare/blood-pressure-exploded-view.webp", bloodPressureImage],
+  [marketIllustrations["blood-pressure"].path, cuffMonitorImage],
+  [marketIllustrations.thermometer.path, thermometerImage],
+  [marketIllustrations["3d-printers"].path, printerImage],
+  [marketIllustrations["industrial-robots"].path, robotControllerImage],
+  [marketIllustrations["security-products"].path, securityImage],
+  [marketIllustrations["smart-meter"].path, smartMeterImage],
+  [marketIllustrations.thermostat.path, thermostatImage],
+  [marketIllustrations["coffee-machine"].path, coffeeMachineImage],
+]);
+
 const escapeAttribute = (value) =>
   String(value).replace(
     /[&<>"']/g,
@@ -161,9 +196,21 @@ const pdfDownloads = {
 const mime = (path) => (path.endsWith(".webp") ? "image/webp" : "font/woff2");
 
 export class SiteWorker {
-  async fetch(request) {
+  async fetch(request, env = {}) {
     const url = new URL(request.url);
     const path = url.pathname;
+    if (path.startsWith(marketCatalogPrefix)) {
+      return marketCatalogApi.handle(request, env.FECS_PUBLIC_API_BASE);
+    }
+    const marketImage = marketImages.get(path);
+    if (marketImage) {
+      return new Response(decodeBase64(marketImage.split(",")[1]), {
+        headers: {
+          "content-type": "image/webp",
+          "cache-control": "public, max-age=86400",
+        },
+      });
+    }
     if (pdfDownloads[path]) {
       const document = pdfDownloads[path];
       return new Response(createPlaceholderPdf(document.title), {

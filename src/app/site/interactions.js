@@ -204,7 +204,7 @@ class CommunicationController {
 
   setupCommunicationSystemTabs() {
     const { communicationSystemOrder, navigate } = this;
-    const root = document.getElementById("systemTabsRoot");
+    const root = document.querySelector("#systemTabsRoot:not([data-market-systems])");
     if (!root || root.dataset.systemTabsReady === "true") return;
     root.dataset.systemTabsReady = "true";
     const hasSystemTabs = Boolean(root.querySelector(".system-tabs-nav"));
