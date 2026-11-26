@@ -13,6 +13,7 @@
     "validate": "npm run check:html --silent && node scripts/validate-artifact.mjs"
   },
   "devDependencies": {
+    "@google/model-viewer": "4.4.0",
     "esbuild": "^0.25.6",
     "prettier": "3.9.6",
     "sass": "^1.89.2"

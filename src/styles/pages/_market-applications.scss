@@ -100,19 +100,15 @@
       }
     }
 
-    .system-hotspot-stage {
+    .system-hotspot-stage.has-system-image {
       min-height: 0;
-      aspect-ratio: 2.16 / 1;
+      aspect-ratio: auto;
       margin-bottom: 12px;
     }
 
-    @media (max-width: 600px) {
-      .system-hotspot-stage.has-system-image.market-image-narrow {
-        aspect-ratio: var(--market-image-ratio);
-      }
-    }
-
     .system-hotspot-image.market-stage-placeholder {
+      position: static;
+      aspect-ratio: var(--market-image-ratio);
       padding: 8px;
       background: var(--soft);
     }
@@ -122,18 +118,19 @@
     }
 
     .market-image-frame.has-image {
-      inset: 0 auto 0 50%;
-      width: auto;
-      height: 100%;
-      aspect-ratio: var(--market-image-ratio);
-      max-width: 100%;
-      transform: translateX(-50%);
+      position: relative;
+      inset: auto;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
 
     .market-physical-hotspot {
       z-index: 1;
-      width: 40px;
-      height: 40px;
+      width: var(--touch-target);
+      height: var(--touch-target);
       border-color: currentColor;
       color: #111;
       background: #fff;

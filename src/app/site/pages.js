@@ -20,7 +20,7 @@ import { NEWS_CATEGORIES, newsCategoriesForGroup, newsYears, queryNews } from ".
 import products from "../../pages/products.html";
 import productGroup from "../../pages/products/general.html";
 import productFamily from "../../pages/products/general/emc.html";
-import productSeries from "../../pages/products/general/emc/a4k.html";
+import productSeries from "../../pages/products/series-detail.html";
 import specSearch from "../../pages/tools/spec-search.html";
 import news from "../../pages/news.html";
 import calendar from "../../pages/news/event-calendar.html";

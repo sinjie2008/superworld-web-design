@@ -5,6 +5,7 @@ import { relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import { PAGE_METADATA, SITE_ORIGIN } from "../src/app/seo.js";
+import { matchProductRoute } from "../src/app/product-catalog.js";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const sourceRoot = resolve(projectRoot, "src");
@@ -109,7 +110,7 @@ const requiredSourcePaths = [
     "applications/communication",
     "products/general",
     "products/general/emc",
-    "products/general/emc/a4k",
+    "products/series-detail",
     "tools/spec-search",
     "news/event-calendar",
     "news/radial-leaded-inductor",
@@ -239,9 +240,14 @@ const pageTemplateByPath = new Map(
 const headerTemplateSource = pageTemplateByPath.get("layouts/header.html");
 const footerTemplateSource = pageTemplateByPath.get("layouts/footer.html");
 const routeTemplateByRoute = new Map(
-  routeTemplateSources.map(({ path, source: routeSource }) => {
+  routeTemplateSources.flatMap(({ path, source: routeSource }) => {
     const templatePath = relative(pagesRoot, path).replaceAll("\\", "/");
-    return [templatePath === "home.html" ? "/" : `/${templatePath.slice(0, -5)}`, routeSource];
+    if (templatePath === "products/series-detail.html") {
+      return Object.keys(PAGE_METADATA)
+        .filter((route) => matchProductRoute(route)?.type === "series")
+        .map((route) => [route, routeSource]);
+    }
+    return [[templatePath === "home.html" ? "/" : `/${templatePath.slice(0, -5)}`, routeSource]];
   }),
 );
 assert.equal(routeTemplateSources.length, 24, "exactly 24 route HTML fragments are required");
@@ -306,10 +312,10 @@ assert.doesNotMatch(
   /@import\b/,
   "styles.scss must use Sass modules instead of deprecated @import",
 );
-assert.match(documentLayoutSource, /\/styles\.css\?v=162/);
+assert.match(documentLayoutSource, /\/styles\.css\?v=168/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=113/);
 assert.match(documentLayoutSource, /\/spec-search\.js\?v=106/);
-assert.match(documentLayoutSource, /\/app\.js\?v=162/);
+assert.match(documentLayoutSource, /\/app\.js\?v=170/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
   cwd: projectRoot,
@@ -437,10 +443,10 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   );
   assert.doesNotMatch(html, /<!--APP_SLOT:/, `${route} must not expose unresolved document slots`);
   if (route === "/") {
-    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-162" : "162"}`));
+    assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-168" : "168"}`));
     assert.match(html, /\/spec-search\.css\?v=113/);
     assert.match(html, /\/spec-search\.js\?v=106/);
-    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-162" : "162"}`));
+    assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-170" : "170"}`));
   }
   assert.equal(
     html.includes('content="noindex,follow"'),

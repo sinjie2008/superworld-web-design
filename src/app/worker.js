@@ -1,5 +1,6 @@
 import css from "../../.generated/styles.css";
 import appJs from "../../.generated/app.txt";
+import seriesModelViewerJs from "../../.generated/series-model-viewer.txt";
 import specSearchCss from "../../.generated/spec-search.css";
 import specSearchJs from "../../.generated/spec-search-app.txt";
 import ogImageDataUrl from "../../public/og.png";
@@ -7,39 +8,45 @@ import responsiveBrandDataUrl from "../assets/brand-responsive.png";
 import { PAGE_METADATA, SITE_ORIGIN, SOCIAL_IMAGE_PATH, seo } from "./seo.js";
 import documentTemplate from "../pages/layouts/document.html";
 
-import speakerImage from "../../public/assets/applications/consumer/speakers-exploded-view.webp";
-import hearablesImage from "../../public/assets/applications/consumer/hearables-board-disassembly.webp";
-import uavImage from "../../public/assets/applications/consumer/uav-camera-disassembly.webp";
-import airPurifierImage from "../../public/assets/applications/consumer/air-purifier-control-assembly.webp";
-import ledImage from "../../public/assets/applications/industrial/led-lighting-exploded-view.webp";
-import bloodPressureImage from "../../public/assets/applications/healthcare/blood-pressure-exploded-view.webp";
-import cuffMonitorImage from "../../public/assets/applications/healthcare/blood-pressure-cuff-disassembly.webp";
-import thermometerImage from "../../public/assets/applications/healthcare/thermometer-display-disassembly.webp";
-import printerImage from "../../public/assets/applications/industrial/3d-printers-exploded-view.webp";
-import robotControllerImage from "../../public/assets/applications/industrial/kuka-controller-cabinet.webp";
-import securityImage from "../../public/assets/applications/industrial/security-camera-disassembly.webp";
-import smartMeterImage from "../../public/assets/applications/industrial/openzmeter-assembly.webp";
-import thermostatImage from "../../public/assets/applications/smart-home/thermostat-disassembly.webp";
-import coffeeMachineImage from "../../public/assets/applications/smart-home/coffee-machine-control-assembly.webp";
+import speakersIllustration from "../../public/assets/applications/consumer/speakers-technical-exploded.webp";
+import hearablesIllustration from "../../public/assets/applications/consumer/hearables-technical-exploded.webp";
+import uavIllustration from "../../public/assets/applications/consumer/uav-technical-exploded.webp";
+import roboticCleanerIllustration from "../../public/assets/applications/consumer/robotic-cleaner-technical-exploded.webp";
+import airPurifierIllustration from "../../public/assets/applications/consumer/air-purifier-technical-exploded.webp";
+import bloodPressureIllustration from "../../public/assets/applications/healthcare/blood-pressure-technical-exploded.webp";
+import thermometerIllustration from "../../public/assets/applications/healthcare/thermometer-technical-exploded.webp";
+import hearingAidIllustration from "../../public/assets/applications/healthcare/hearing-aid-technical-exploded.webp";
+import industrialRobotsIllustration from "../../public/assets/applications/industrial/industrial-robots-technical-exploded.webp";
+import printerIllustration from "../../public/assets/applications/industrial/3d-printers-technical-exploded.webp";
+import securityProductsIllustration from "../../public/assets/applications/industrial/security-products-technical-exploded.webp";
+import smartMeterIllustration from "../../public/assets/applications/industrial/smart-meter-technical-exploded.webp";
+import ledLightingIllustration from "../../public/assets/applications/industrial/led-lighting-technical-exploded.webp";
+import thermostatIllustration from "../../public/assets/applications/smart-home/thermostat-technical-exploded.webp";
+import coffeeMachineIllustration from "../../public/assets/applications/smart-home/coffee-machine-technical-exploded.webp";
+import doorLockIllustration from "../../public/assets/applications/smart-home/door-lock-technical-exploded.webp";
+import bloodPressureResearchImage from "../../public/assets/applications/healthcare/blood-pressure-exploded-view.webp";
 import { MarketCatalogApi, marketCatalogPrefix } from "./site/market-catalog-api.js";
 import { marketIllustrations } from "./site/market-data.js";
 
 const marketCatalogApi = new MarketCatalogApi();
 const marketImages = new Map([
-  [marketIllustrations.speakers.path, speakerImage],
-  [marketIllustrations.hearables.path, hearablesImage],
-  [marketIllustrations.uav.path, uavImage],
-  [marketIllustrations["air-purifier"].path, airPurifierImage],
-  [marketIllustrations["led-lighting"].path, ledImage],
-  ["/assets/applications/healthcare/blood-pressure-exploded-view.webp", bloodPressureImage],
-  [marketIllustrations["blood-pressure"].path, cuffMonitorImage],
-  [marketIllustrations.thermometer.path, thermometerImage],
-  [marketIllustrations["3d-printers"].path, printerImage],
-  [marketIllustrations["industrial-robots"].path, robotControllerImage],
-  [marketIllustrations["security-products"].path, securityImage],
-  [marketIllustrations["smart-meter"].path, smartMeterImage],
-  [marketIllustrations.thermostat.path, thermostatImage],
-  [marketIllustrations["coffee-machine"].path, coffeeMachineImage],
+  [marketIllustrations["speakers"].path, speakersIllustration],
+  [marketIllustrations["hearables"].path, hearablesIllustration],
+  [marketIllustrations["uav"].path, uavIllustration],
+  [marketIllustrations["robotic-cleaner"].path, roboticCleanerIllustration],
+  [marketIllustrations["air-purifier"].path, airPurifierIllustration],
+  [marketIllustrations["blood-pressure"].path, bloodPressureIllustration],
+  [marketIllustrations["thermometer"].path, thermometerIllustration],
+  [marketIllustrations["hearing-aid"].path, hearingAidIllustration],
+  [marketIllustrations["industrial-robots"].path, industrialRobotsIllustration],
+  [marketIllustrations["3d-printers"].path, printerIllustration],
+  [marketIllustrations["security-products"].path, securityProductsIllustration],
+  [marketIllustrations["smart-meter"].path, smartMeterIllustration],
+  [marketIllustrations["led-lighting"].path, ledLightingIllustration],
+  [marketIllustrations["thermostat"].path, thermostatIllustration],
+  [marketIllustrations["coffee-machine"].path, coffeeMachineIllustration],
+  [marketIllustrations["door-lock"].path, doorLockIllustration],
+  ["/assets/applications/healthcare/blood-pressure-exploded-view.webp", bloodPressureResearchImage],
 ]);
 
 const escapeAttribute = (value) =>
@@ -233,6 +240,13 @@ export class SiteWorker {
         headers: {
           "content-type": "text/javascript; charset=utf-8",
           "cache-control": "public, max-age=300",
+        },
+      });
+    if (path === "/series-model-viewer.js")
+      return new Response(seriesModelViewerJs, {
+        headers: {
+          "content-type": "text/javascript; charset=utf-8",
+          "cache-control": "public, max-age=86400",
         },
       });
     if (path === "/spec-search.css")

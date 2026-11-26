@@ -1,4 +1,6 @@
 // Development-only module. Every consumer is guarded by the compiler constant.
+import { catalogValueState } from "./catalog-availability.js";
+
 export const DIAGNOSTIC_STATUS = {
   MISSING_VALUE: "Missing value",
   MISSING_FIELD: "Missing field",
@@ -314,70 +316,46 @@ export class CatalogMissingDiagnostics {
     });
   }
 
-  series(main, detail, fields, facets, embedded = false) {
-    const node = detail.resource;
-    const source = `/api/series/${node.path}`;
-    if (!embedded) {
-      const notes = detail.metadata?.find((field) => field.key === "series_notes");
-      this.set(main.querySelector(".a4k-intro p"), { node, content: "Series overview", field: notes?.key, editor: "metadata", source: `${source} → metadata[series_notes].value`, status: contentStatus({ definition: notes, value: notes?.value, rendered: hasValue(notes?.value) }), note: notes ? "The layout overview uses the public Series Notes value. Save Series Metadata Values and refresh. Metadata may include backend defaults; explicit-value provenance is unavailable." : "series_notes is not in the public response. It may be undefined or hidden; verify its definition and visibility in Series Metadata Field Editor." });
-      const features = main.querySelector(".a4k-intro > :is(ul, ol)");
-      if (!features?.dataset.catalogContentBound && !features?.querySelector("[data-catalog-content-bound]")) {
-        const key = "series_features";
-        const value = detail.metadata?.find((field) => field.key === key)?.value;
-        this.set(features, { node, content: "Series features", field: key, editor: "metadata",
-          source: `${source} → metadata[${key}].value`,
-          status: contentStatus({ definition: { key }, value }),
-          note: "Fill series_features on the Series CSV row with one HTML list. Use <ul> or <ol> and one <li> per feature." });
-      }
-      const selectors = [
-        [".a4k-compliance", "Compliance"],
-        [".a4k-product-media", "Series image / 3D view"],
-        [".a4k-spec-mini > div:nth-child(4)", "Standard pack quantity"],
-        [".a4k-summary-grid > div:nth-child(3)", "Test frequency summary"],
-        [".a4k-summary-grid > div:nth-child(4)", "Operating temperature"],
-        ["#environmental", "Environmental information"], ["#physical", "Physical characteristics"],
-        ["#tape-reel", "Tape and reel"], ["#soldering", "Soldering / washing"],
-        ["#downloads", "Download documents"], ["#performance-curves h3", "Performance curves"],
-      ];
-      selectors.forEach(([selector, content]) => {
-        const element = main.querySelector(selector);
-        const section = selector === "#performance-curves h3" ? element?.closest("section") : element;
-        if (!section?.hasAttribute("data-catalog-content-bound") && !section?.querySelector("[data-catalog-content-bound]"))
-          this.unverified(element, content, node, { source, note: "Enter the corresponding section fields on the Series row of the Catalog CSV." });
-      });
-      [[".a4k-product-media", "Series image", "series_product_image", "series_image_media_id"], ["#downloads", "Series datasheet", "series_product_spec", "series_pdf_media_id"]].forEach(([selector, content, key, fieldName]) => {
-        const field = detail.metadata?.find((item) => item.key === key);
-        if (field) {
-          const element = main.querySelector(selector);
-          const rendered = Boolean(element?.querySelector(`[data-catalog-content-bound="${key}"]`));
-          this.set(element, { node, content, field: fieldName, editor: "metadata", source: `${source} → media[${key}]`, status: contentStatus({ definition: field, value: field.value, rendered }), note: "Fill this column on the Series CSV row with a ready Media Library UUID." });
-        }
-      });
-      ["acf.length", "acf.width", "acf.height"].forEach((key, position) => {
-        const field = fields.find((item) => item.key === key);
-        const values = facets.find((item) => item.key === key)?.values || [];
-        this.field(main.querySelectorAll(".a4k-spec-mini > div b")[position], { node, field, value: values.length ? values.map((item) => item.value).join("–") : null, rendered: values.length > 0, source: `${source}/facets → facets[${key}].values` });
-      });
-    }
+  series(main, detail, embedded = false) {
+    if (embedded) return;
+    const overview = main.querySelector(".a4k-intro p");
+    const notes = detail.metadata.find((field) => field.key === "series_notes");
+    this.set(overview, {
+      node: detail.resource,
+      content: "Series overview",
+      field: notes?.key,
+      editor: "metadata",
+      source: "/api/series/" + detail.resource.path + " → metadata[series_notes].value",
+      status: contentStatus({
+        definition: notes,
+        value: notes?.value,
+        rendered: overview?.dataset.catalogContentBound === "series_notes",
+      }),
+      note: "Save the public Series Notes value and refresh the page. API defaults do not prove that a value was explicitly entered.",
+    });
   }
 
-  table(table, { node, metadata, fields, parts, columns, defaultHeadings, apiPath }) {
+  table(table, { node, fields, parts, apiPath }) {
     this.prune();
-    const source = `/api/series/${apiPath}/parts`;
-    columns.forEach((field, index) => {
-      if (!field) this.unverified(table.tHead.rows[0].cells[index + 2], defaultHeadings[index], node, { source: `/api/series/${apiPath}/fields`, note: "No suitable public attribute definition is verified for this layout column. It may be undefined, hidden, or not applicable; review before adding a field." });
-    });
-    const downloadHeading = table.tHead.rows[0].cells[6];
-    const spec = metadata?.find((item) => item.key === "series_product_spec");
-    if (table.tBodies[0]?.querySelector('a[download][href^="/api/media/public.php?"]')) this.clear(downloadHeading);
-    else if (spec) this.set(downloadHeading, { node, content: "Series datasheet", field: "series_pdf_media_id", editor: "metadata", source: `/api/series/${apiPath} → media[${spec.key}]`, status: contentStatus({ definition: spec, value: spec.value, rendered: false }), note: "Use series_pdf_media_id for the whole Series or product_pdf_media_id for an individual part." });
-    else this.unverified(downloadHeading, "Series datasheet", node, { source, note: "Use series_pdf_media_id on a Series row or product_pdf_media_id on a product row." });
+    const source = "/api/series/" + apiPath + "/parts";
+    const partsById = new Map(parts.map((part) => [String(part.id), part]));
+    const fieldsByKey = new Map(fields.map((field) => [field.key, field]));
     for (const row of table.querySelectorAll("tr[data-product-id]")) {
-      const part = parts.find((item) => item.id === Number(row.dataset.productId));
+      const part = partsById.get(row.dataset.productId);
       if (!part) continue;
       for (const cell of row.querySelectorAll("[data-product-field]")) {
-        const field = fields.find((item) => item.key === cell.dataset.productField);
-        this.field(cell, { node, part, field, value: part.values?.[field?.key], rendered: hasValue(part.values?.[field?.key]), source: `${source} → parts[id=${part.id}].values[${field?.key}]` });
+        const field = fieldsByKey.get(cell.dataset.productField);
+        if (!field) continue;
+        const raw = part.values?.[field.key];
+        const valid = catalogValueState(raw) === "available";
+        this.field(cell, {
+          node,
+          part,
+          field,
+          value: valid ? raw : null,
+          rendered: valid,
+          source: source + " → parts[id=" + part.id + "].values[" + field.key + "]",
+        });
       }
     }
     this.schedule();

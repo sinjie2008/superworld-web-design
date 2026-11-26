@@ -75,6 +75,17 @@ export class ProductApiClient {
     return this.request(`series/${encodePath(path)}`, options);
   }
 
+  seriesSummary(path, options) {
+    return this.request(`series/${encodePath(path)}/summary`, options);
+  }
+
+  categorySummaries(path, { signal, page = 1, perPage = 300 } = {}) {
+    return this.request(`categories/${encodePath(path)}/summaries`, {
+      signal,
+      query: { page, per_page: perPage },
+    });
+  }
+
   fields(path, options) {
     return this.request(`series/${encodePath(path)}/fields`, options);
   }

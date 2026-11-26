@@ -78,8 +78,8 @@ function documentVersionPlugin() {
           async ({ path }) => {
             let contents = readFileSync(path, "utf8");
             const productionVersions = [
-              ["/styles.css", "162"],
-              ["/app.js", "162"],
+              ["/styles.css", "168"],
+              ["/app.js", "170"],
             ];
 
             for (const [assetPath, version] of productionVersions) {
@@ -145,6 +145,11 @@ run(esbuildCli, [
   `--outfile=${resolve(generatedRoot, "app.js")}`,
 ]);
 cpSync(resolve(generatedRoot, "app.js"), resolve(generatedRoot, "app.txt"));
+const modelViewer = resolve(projectRoot, "node_modules/@google/model-viewer/dist/model-viewer.min.js");
+writeFileSync(
+  resolve(generatedRoot, "series-model-viewer.txt"),
+  readFileSync(modelViewer, "utf8").replace(/^\/\/# sourceMappingURL=.*$/m, ""),
+);
 
 run(esbuildCli, [
   resolve(projectRoot, "src/app/features/spec-search/app.js"),

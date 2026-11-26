@@ -1,0 +1,710 @@
+{
+  "speakers": {
+    "path": "/assets/applications/consumer/speakers-technical-exploded.webp",
+    "alt": "Exploded portable speaker with audio drivers, circuit board and power input",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "wifi-bluetooth",
+        "label": "WiFi / Bluetooth",
+        "x": 42.812,
+        "y": 30.696,
+        "labelPosition": {
+          "x": 13.426,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 50.075,
+        "y": 34.224,
+        "labelPosition": {
+          "x": 86.574,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "power-conditioning",
+        "label": "Power Conditioning",
+        "x": 58.379,
+        "y": 44.313,
+        "labelPosition": {
+          "x": 13.426,
+          "y": 77.5
+        }
+      },
+      {
+        "blockId": "speaker-headphone-microphone",
+        "label": "Speaker, Headphone and Microphone",
+        "x": 60.796,
+        "y": 48.511,
+        "labelPosition": {
+          "x": 86.574,
+          "y": 77.5
+        }
+      }
+    ],
+    "revision": "479f43aff718"
+  },
+  "hearables": {
+    "path": "/assets/applications/consumer/hearables-technical-exploded.webp",
+    "alt": "Exploded wireless earbuds and charging case with battery and circuit boards",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "connectivity",
+        "label": "Connectivity",
+        "x": 70.248,
+        "y": 40.794,
+        "labelPosition": {
+          "x": 86.574,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 65.172,
+        "y": 39.449,
+        "labelPosition": {
+          "x": 13.889,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "battery",
+        "label": "Battery",
+        "x": 19.324,
+        "y": 70.927,
+        "labelPosition": {
+          "x": 13.889,
+          "y": 77.5
+        }
+      }
+    ],
+    "revision": "33278e44a896"
+  },
+  "uav": {
+    "path": "/assets/applications/consumer/uav-technical-exploded.webp",
+    "alt": "Exploded camera quadcopter, handheld controller and charging assembly",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "remote-control",
+        "label": "Remote Control",
+        "x": 19.529,
+        "y": 50.462,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 23.25
+        }
+      },
+      {
+        "blockId": "charger",
+        "label": "Charger",
+        "x": 91.947,
+        "y": 75.754,
+        "labelPosition": {
+          "x": 86.806,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "camera",
+        "label": "Camera",
+        "x": 58.531,
+        "y": 63.524,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 77.5
+        }
+      },
+      {
+        "blockId": "vehicle-control-module",
+        "label": "Vehicle Control Module",
+        "x": 64.236,
+        "y": 43.47,
+        "labelPosition": {
+          "x": 71.296,
+          "y": 80.25
+        }
+      }
+    ],
+    "revision": "b5df92fc4932"
+  },
+  "robotic-cleaner": {
+    "path": "/assets/applications/consumer/robotic-cleaner-technical-exploded.webp",
+    "alt": "Exploded robotic vacuum with its separate powered charging dock",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "cpu",
+        "label": "CPU",
+        "x": 63.386,
+        "y": 56.482,
+        "labelPosition": {
+          "x": 85.069,
+          "y": 21.25
+        }
+      },
+      {
+        "blockId": "wireless-connectivity",
+        "label": "Wireless Connectivity",
+        "x": 60.924,
+        "y": 50.863,
+        "labelPosition": {
+          "x": 52.083,
+          "y": 20.75
+        }
+      },
+      {
+        "blockId": "sensor",
+        "label": "Sensor",
+        "x": 68.45,
+        "y": 71.216,
+        "labelPosition": {
+          "x": 54.398,
+          "y": 81.5
+        }
+      },
+      {
+        "blockId": "ac-dc-converter",
+        "label": "AC-DC Converter",
+        "x": 19.097,
+        "y": 57.11,
+        "labelPosition": {
+          "x": 16.667,
+          "y": 21.0
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 68.517,
+        "y": 55.507,
+        "labelPosition": {
+          "x": 34.722,
+          "y": 64.5
+        }
+      },
+      {
+        "blockId": "display-panel",
+        "label": "Display Panel",
+        "x": 69.074,
+        "y": 48.365,
+        "labelPosition": {
+          "x": 86.574,
+          "y": 57.5
+        }
+      }
+    ],
+    "revision": "b5c38505b397"
+  },
+  "air-purifier": {
+    "path": "/assets/applications/consumer/air-purifier-technical-exploded.webp",
+    "alt": "Exploded air purifier with filter, fan and exposed electrical assemblies",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "cpu",
+        "label": "CPU",
+        "x": 44.951,
+        "y": 51.252,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "driver-board",
+        "label": "Driver Board",
+        "x": 54.921,
+        "y": 42.2,
+        "labelPosition": {
+          "x": 86.806,
+          "y": 22.75
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 55.843,
+        "y": 55.737,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 77.5
+        }
+      },
+      {
+        "blockId": "power-supply",
+        "label": "Power Supply",
+        "x": 53.602,
+        "y": 69.782,
+        "labelPosition": {
+          "x": 86.806,
+          "y": 77.5
+        }
+      }
+    ],
+    "revision": "970166ea6848"
+  },
+  "blood-pressure": {
+    "path": "/assets/applications/healthcare/blood-pressure-technical-exploded.webp",
+    "alt": "Exploded upper-arm blood pressure monitor, cuff and receiver coil",
+    "width": 1728,
+    "height": 800,
+    "note": "Wireless communication and charging are optional.",
+    "hotspots": [
+      {
+        "blockId": "power-supply-unit",
+        "label": "Power Supply Unit",
+        "x": 47.454,
+        "y": 50.5,
+        "labelPosition": {
+          "x": 12.153,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "display-panel",
+        "label": "Display Panel",
+        "x": 59.028,
+        "y": 38.75,
+        "labelPosition": {
+          "x": 50.347,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "wireless-connectivity",
+        "label": "Wireless Connectivity",
+        "x": 63.426,
+        "y": 50.25,
+        "labelPosition": {
+          "x": 69.444,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "wireless-charging",
+        "label": "Wireless Charging",
+        "x": 65.972,
+        "y": 71.0,
+        "labelPosition": {
+          "x": 87.963,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "cpu",
+        "label": "CPU",
+        "x": 53.472,
+        "y": 50.75,
+        "labelPosition": {
+          "x": 31.25,
+          "y": 20.5
+        }
+      }
+    ],
+    "revision": "8aebcb91a7d6"
+  },
+  "thermometer": {
+    "path": "/assets/applications/healthcare/thermometer-technical-exploded.webp",
+    "alt": "Exploded contact thermometer with a sensing tip, control board, display and receiver coil",
+    "width": 1728,
+    "height": 800,
+    "note": "Wireless communication and charging are optional.",
+    "hotspots": [
+      {
+        "blockId": "wireless-connectivity",
+        "label": "Wireless Connectivity",
+        "x": 60.88,
+        "y": 51.25,
+        "labelPosition": {
+          "x": 69.444,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "temperature-detection",
+        "label": "Temperature Detection",
+        "x": 14.005,
+        "y": 57.25,
+        "labelPosition": {
+          "x": 12.153,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "cpu",
+        "label": "CPU",
+        "x": 48.727,
+        "y": 50.0,
+        "labelPosition": {
+          "x": 50.347,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "display-panel",
+        "label": "Display Panel",
+        "x": 44.676,
+        "y": 39.5,
+        "labelPosition": {
+          "x": 31.25,
+          "y": 20.5
+        }
+      },
+      {
+        "blockId": "wireless-charging",
+        "label": "Wireless Charging",
+        "x": 66.435,
+        "y": 63.5,
+        "labelPosition": {
+          "x": 87.963,
+          "y": 20.5
+        }
+      }
+    ],
+    "revision": "4de2dfe2641a"
+  },
+  "hearing-aid": {
+    "path": "/assets/applications/healthcare/hearing-aid-technical-exploded.webp",
+    "alt": "Exploded rechargeable hearing aid with its receiver coil and charging dock",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "wireless-charging",
+        "label": "Wireless Charging",
+        "x": 32.176,
+        "y": 40.5,
+        "labelPosition": {
+          "x": 49.769,
+          "y": 20.5
+        }
+      }
+    ],
+    "revision": "4481a891a85c"
+  },
+  "industrial-robots": {
+    "path": "/assets/applications/industrial/industrial-robots-technical-exploded.webp",
+    "alt": "Robot arm and exploded external controller cabinet",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "controller-board",
+        "label": "Controller Board",
+        "x": 37.847,
+        "y": 42.5,
+        "labelPosition": {
+          "x": 15.856,
+          "y": 26.0
+        }
+      }
+    ],
+    "revision": "f577ae7dc742"
+  },
+  "3d-printers": {
+    "path": "/assets/applications/industrial/3d-printers-technical-exploded.webp",
+    "alt": "Exploded filament 3D printer with controller, motor drivers and power supply",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "interface",
+        "label": "Interface",
+        "x": 62.616,
+        "y": 54.0,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 23.5
+        }
+      },
+      {
+        "blockId": "wifi-connection",
+        "label": "WiFi Connection",
+        "x": 67.94,
+        "y": 40.75,
+        "labelPosition": {
+          "x": 87.037,
+          "y": 23.5
+        }
+      },
+      {
+        "blockId": "motor-driver",
+        "label": "Motor Driver",
+        "x": 44.213,
+        "y": 76.0,
+        "labelPosition": {
+          "x": 12.963,
+          "y": 81.5
+        }
+      },
+      {
+        "blockId": "power-supply",
+        "label": "Power Supply",
+        "x": 54.167,
+        "y": 75.25,
+        "labelPosition": {
+          "x": 87.037,
+          "y": 81.5
+        }
+      }
+    ],
+    "revision": "38088452cf0c"
+  },
+  "security-products": {
+    "path": "/assets/applications/industrial/security-products-technical-exploded.webp",
+    "alt": "Exploded connected camera with optical module, circuit boards and wired ports",
+    "width": 1728,
+    "height": 800,
+    "note": "Available wired interfaces vary by design.",
+    "hotspots": [
+      {
+        "blockId": "camera-module",
+        "label": "Camera Module",
+        "x": 20.139,
+        "y": 49.5,
+        "labelPosition": {
+          "x": 11.574,
+          "y": 22.5
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 73.958,
+        "y": 55.0,
+        "labelPosition": {
+          "x": 87.847,
+          "y": 23.25
+        }
+      },
+      {
+        "blockId": "wifi",
+        "label": "WiFi",
+        "x": 66.782,
+        "y": 59.5,
+        "labelPosition": {
+          "x": 14.699,
+          "y": 82.25
+        }
+      },
+      {
+        "blockId": "usb-hdmi",
+        "label": "USB / HDMI",
+        "x": 82.176,
+        "y": 53.5,
+        "labelPosition": {
+          "x": 85.648,
+          "y": 82.25
+        }
+      }
+    ],
+    "revision": "65b34d70d8ae"
+  },
+  "smart-meter": {
+    "path": "/assets/applications/industrial/smart-meter-technical-exploded.webp",
+    "alt": "Exploded electricity meter with mains power supply, metrology and radio assemblies",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "power-supply-circuit",
+        "label": "Power Supply Circuit",
+        "x": 78.009,
+        "y": 49.5,
+        "labelPosition": {
+          "x": 90.046,
+          "y": 23.75
+        }
+      },
+      {
+        "blockId": "ac-dc-converter",
+        "label": "AC-DC Converter",
+        "x": 69.907,
+        "y": 55.0,
+        "labelPosition": {
+          "x": 15.972,
+          "y": 26.25
+        }
+      },
+      {
+        "blockId": "wireless-module",
+        "label": "Wireless Module",
+        "x": 82.176,
+        "y": 60.5,
+        "labelPosition": {
+          "x": 90.046,
+          "y": 82.25
+        }
+      }
+    ],
+    "revision": "acf707da91e0"
+  },
+  "led-lighting": {
+    "path": "/assets/applications/industrial/led-lighting-technical-exploded.webp",
+    "alt": "Exploded line-powered LED bulb with electrical base, driver board, LED filaments and diffuser",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "ac-power",
+        "label": "AC Power",
+        "x": 17.708,
+        "y": 57.0,
+        "labelPosition": {
+          "x": 13.31,
+          "y": 25.75
+        }
+      },
+      {
+        "blockId": "ac-dc-converter",
+        "label": "AC-DC Converter",
+        "x": 51.852,
+        "y": 41.25,
+        "labelPosition": {
+          "x": 88.426,
+          "y": 25.5
+        }
+      }
+    ],
+    "revision": "6184b7aac73a"
+  },
+  "thermostat": {
+    "path": "/assets/applications/smart-home/thermostat-technical-exploded.webp",
+    "alt": "Exploded thermostat with display, interface and power regulation circuitry",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "display-panel",
+        "label": "Display Panel",
+        "x": 41.591,
+        "y": 40.945,
+        "labelPosition": {
+          "x": 17.824,
+          "y": 22.25
+        }
+      },
+      {
+        "blockId": "interface",
+        "label": "Interface",
+        "x": 51.968,
+        "y": 53.75,
+        "labelPosition": {
+          "x": 49.884,
+          "y": 20.75
+        }
+      },
+      {
+        "blockId": "power-management",
+        "label": "Power Management",
+        "x": 55.813,
+        "y": 57.293,
+        "labelPosition": {
+          "x": 81.944,
+          "y": 22.75
+        }
+      }
+    ],
+    "revision": "aad441a9b217"
+  },
+  "coffee-machine": {
+    "path": "/assets/applications/smart-home/coffee-machine-technical-exploded.webp",
+    "alt": "Exploded automatic coffee machine with water system, power board, control electronics and radios",
+    "width": 1728,
+    "height": 800,
+    "note": "NFC is optional.",
+    "hotspots": [
+      {
+        "blockId": "power-board",
+        "label": "Power Board",
+        "x": 69.364,
+        "y": 69.318,
+        "labelPosition": {
+          "x": 90.972,
+          "y": 55.0
+        }
+      },
+      {
+        "blockId": "connectivity",
+        "label": "Connectivity",
+        "x": 63.488,
+        "y": 60.64,
+        "labelPosition": {
+          "x": 82.06,
+          "y": 19.5
+        }
+      },
+      {
+        "blockId": "nfc-module",
+        "label": "NFC Module",
+        "x": 53.938,
+        "y": 47.176,
+        "labelPosition": {
+          "x": 49.653,
+          "y": 19.5
+        }
+      },
+      {
+        "blockId": "intelligent-control-board",
+        "label": "Intelligent Control Board",
+        "x": 59.94,
+        "y": 61.232,
+        "labelPosition": {
+          "x": 67.13,
+          "y": 80.0
+        }
+      }
+    ],
+    "revision": "a99a6076b6e1"
+  },
+  "door-lock": {
+    "path": "/assets/applications/smart-home/door-lock-technical-exploded.webp",
+    "alt": "Exploded electronic door lock with keypad, bolt actuator, battery and control board",
+    "width": 1728,
+    "height": 800,
+    "hotspots": [
+      {
+        "blockId": "wireless-communication",
+        "label": "Wireless Communication",
+        "x": 62.425,
+        "y": 59.476,
+        "labelPosition": {
+          "x": 74.074,
+          "y": 20.0
+        }
+      },
+      {
+        "blockId": "main-control-board",
+        "label": "Main Control Board",
+        "x": 50.424,
+        "y": 68.594,
+        "labelPosition": {
+          "x": 9.028,
+          "y": 20.0
+        }
+      },
+      {
+        "blockId": "dc-dc-converter",
+        "label": "DC-DC Converter",
+        "x": 60.297,
+        "y": 67.979,
+        "labelPosition": {
+          "x": 90.972,
+          "y": 20.0
+        }
+      }
+    ],
+    "revision": "dba0392d1cda"
+  }
+}

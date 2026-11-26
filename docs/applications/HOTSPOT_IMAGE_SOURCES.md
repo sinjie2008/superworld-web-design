@@ -1,5 +1,9 @@
 # Exploded views and physical hotspot evidence
 
+## Current application illustrations
+
+The 16 application systems now use original monochrome engineering assembly illustrations with 56 HTML hotspot controls. The current paths and normalized anchors live in [illustrations.json](../../src/data/applications/illustrations.json). The historical source notes below document the preview that preceded those assets.
+
 Reviewed 25 November 2026 SGT. All 16 systems have an image-status record. Six original-source views appear inline in the preview. Ten systems display **Verified Exploded View Pending** and one source link. Every system provides separate circuit-block navigation.
 
 ## Published images

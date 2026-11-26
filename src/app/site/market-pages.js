@@ -86,18 +86,16 @@ function publishedExplodedView(system, illustration) {
         return `${leader}<a class="hotspot-link market-physical-hotspot${markerClass}" href="#${id}" data-open-card="${id}" style="left:${labelX}%;top:${labelY}%" aria-label="${index + 1}. ${escapeHtml(label)}"><span>${index + 1}</span></a>`;
       })
       .join("") || "";
-  const publisher = illustration.sourcePublisher ? " (" + escapeHtml(illustration.sourcePublisher) + ")" : "";
-  const layout = illustration.width / illustration.height < 1.5 ? " market-image-narrow" : "";
-  return `<div class="system-hotspot-stage has-system-image${layout}" style="--market-image-ratio:${illustration.width}/${illustration.height}">
+  const note = illustration.note ? " " + escapeHtml(illustration.note) : "";
+  return `<div class="system-hotspot-stage has-system-image" style="--market-image-ratio:${illustration.width}/${illustration.height}">
         <div class="system-hotspot-image has-image market-image-frame">
-            <img src="${illustration.path}" alt="${escapeHtml(illustration.alt)}" width="${illustration.width}" height="${illustration.height}" loading="lazy">
+            <img src="${illustration.path}?v=${illustration.revision}" alt="${escapeHtml(illustration.alt)}" width="${illustration.width}" height="${illustration.height}" loading="lazy">
           ${markers}
         </div>
-        <div class="system-hotspot-image market-stage-placeholder" data-system-image-fallback hidden>Verified Exploded View Pending</div>
+        <div class="system-hotspot-image market-stage-placeholder" data-system-image-fallback hidden>Exploded view unavailable</div>
       </div>
       <p class="market-image-credit">
-        ${escapeHtml(illustration.title)} · <a href="${escapeHtml(illustration.source)}">${escapeHtml(illustration.creator)}</a>
-        / <a href="${escapeHtml(illustration.licenseUrl)}">${escapeHtml(illustration.license)}</a>${publisher} (${escapeHtml(illustration.changes)}). ${escapeHtml(illustration.context)}
+        Representative engineering illustration.${note}
       </p>`;
 }
 
