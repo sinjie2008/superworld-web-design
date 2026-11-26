@@ -236,12 +236,6 @@
     }
   }
 
-  .home-hero .carousel-window,.home-hero .slide {
-    @media (max-width:820px) {
-      height: 390px
-    }
-  }
-
   .achievement {
     &-strip {
       @media (max-width:820px) {
@@ -980,10 +974,6 @@
     }
   }
 
-  .home-hero .carousel-window,.home-hero .slide {
-    height: 620px
-  }
-
   h1 {
     font-size: clamp(28px,3vw,42px)
   }
@@ -1251,12 +1241,6 @@
     }
   }
 
-  .home-hero .carousel-window,.home-hero .slide {
-    @media (max-width:950px) {
-      height: 500px
-    }
-  }
-
   .quality {
     &-section-header,&-main-tabs,&-panel-layout {
       @media (max-width:950px) {
@@ -1514,12 +1498,6 @@
       @media (max-width:680px) {
         font-size: 20px
       }
-    }
-  }
-
-  .home-hero .carousel-window,.home-hero .slide {
-    @media (max-width:640px) {
-      height: 390px
     }
   }
 

@@ -81,8 +81,15 @@ class CarouselWidget {
   startAuto() {
     window.clearInterval(this.timer);
     this.timer = 0;
-    if (!this.mounted || this.reducedMotion.matches || this.pointerPaused || document.hidden
-      || this.root.contains(document.activeElement) || this.maxIndex() === 0) return;
+    if (
+      !this.mounted ||
+      this.root.dataset.autoplay === "false" ||
+      this.reducedMotion.matches ||
+      this.pointerPaused ||
+      document.hidden ||
+      this.root.contains(document.activeElement) ||
+      this.maxIndex() === 0
+    ) return;
     this.timer = window.setInterval(() => this.move(1, true), 4500);
   }
 

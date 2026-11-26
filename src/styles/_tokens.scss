@@ -58,6 +58,8 @@ $font-body: Inter, Arial, sans-serif;
   --line: #1d1d1d;
   --color-brand-blue: #4077be;
   --color-brand-navy: #203362;
+  --color-card-tag-bg: #50c177;
+  --color-card-tag-text: #ffffff;
   --max: 1320px;
   --gutter: clamp(18px, 4vw, 64px);
   --container-width: min(var(--max), calc(100% - (var(--gutter) * 2)));

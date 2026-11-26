@@ -2,57 +2,6 @@
 @use "../tokens" as *;
 
 @include scope.within {
-  .application-navigation {
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    .nav-link {
-      width: auto;
-    }
-  }
-
-  .application-market-menu {
-    > summary {
-      display: grid;
-      place-items: center;
-      min-width: 32px;
-      min-height: var(--touch-target);
-      padding-inline: 5px;
-      font-size: 14px;
-      cursor: pointer;
-      list-style: none;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      @media (pointer: coarse) {
-        min-width: var(--touch-target);
-      }
-    }
-
-    > ul {
-      position: absolute;
-      z-index: 11;
-      top: 100%;
-      left: 0;
-      min-width: max-content;
-      margin: 0;
-      padding: 8px;
-      border: 1px solid var(--line);
-      background-color: #fff;
-      list-style: none;
-
-      a {
-        display: flex;
-        align-items: center;
-        min-height: var(--touch-target);
-        padding: 5px 12px;
-      }
-    }
-  }
-
   .market-overview-placeholder {
     aspect-ratio: 36 / 25;
     background: var(--soft);

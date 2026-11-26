@@ -15,17 +15,8 @@
       position: fixed;
       right: 0;
       left: 0;
+      color: var(--ink);
       background: transparent;
-
-      @media (min-width: 1025px) {
-        color: #fff;
-
-        .nav-link,
-        .nav-menu-button,
-        .utility button {
-          color: inherit;
-        }
-      }
 
       &:hover,
       &:focus-within,

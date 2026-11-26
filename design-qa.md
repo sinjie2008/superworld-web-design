@@ -231,7 +231,7 @@
 
 ## Follow-up Polish
 
-- [P3] A dedicated mobile screenshot was not captured because the selected cloud browser exposed a fixed desktop viewport. Responsive breakpoints and mobile navigation are implemented, but this remains a residual visual test gap.
+- [P3] The original cloud-browser pass could not capture a mobile screenshot because its viewport was fixed. The later Home Hero Responsive Height Adjustment below verifies a 390 × 844 mobile viewport, including the mobile navigation and hero.
 
 ## Implementation Checklist
 
@@ -248,5 +248,14 @@
 - [x] Re-measured the Quality hero and Certification Vault from the original 1440 px `Lo - Home _ Quality Standards.png` source rather than the reduced chat preview.
 - [x] Restored the Quality hero to its 1282 × 481 px desktop frame, including source-scale typography, logo, tags, and spacing.
 - [x] Restored the Certification Vault to the source-scale 1296 px four-column grid with 395 px cards, 201 px image placeholders, a 722 × 74 px search field, and 42 px pagination controls.
+
+final result: passed
+
+## Home Hero Responsive Height Adjustment (2026-11-26)
+
+- Tablet and mobile hero frames now retain the original 530 px height below 1024 px; the matching tablet and mobile images cover that frame. Desktop remains unchanged at the 2034:773 ratio and uses `contain`.
+- At 900 × 900, the rendered tablet hero was 885 × 530, used the tablet JPEG, and kept the title below the 134 px header. At 390 × 844, the mobile hero was 375 × 530, used the mobile JPEG, and kept the title below the 73 px header.
+- Desktop remained 1532 × 582 at 1547 × 893. The product banner opens first at all three viewports. A later autoplay check verified a full desktop loop and automatic advance on tablet and mobile.
+- Production build and `npm run validate --silent` passed. Desktop, tablet, and mobile screenshots were inspected from the local preview.
 
 final result: passed

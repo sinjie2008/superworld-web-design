@@ -16,6 +16,7 @@
 - Series selections use current API part IDs and persist across filtering and paging. Estimated loss uses paired, valid DCR and current values for each selected part with explicit unit conversion and the legacy defaults for bare catalog values.
 - A4K section navigation owns its vertical offset using the live sticky header and section-nav heights; horizontally center buttons by scrolling `.a4k-section-nav`, because button `scrollIntoView()` also moves the page vertically.
 - The shared Our Products menu links to both `/products/general` and `/products/automotive`.
+- Applications is a direct link to `/applications` in the shared navigation. The overview page links to the individual markets from its cards.
 - The Contact Us page lives at `/support` and uses the `type` query parameter for General Inquiry, Request for Quotation, Technical Support, Quality / Complaint, Book An Appointment, and Anonymous layouts.
 - Book An Appointment adds location and preferred-date fields; Anonymous omits contact and business fields while keeping attachment and remarks.
 - The Support page locations section is a responsive slider across all six company offices: three cards on desktop, two on tablet, and one on mobile. It advances one card every 4.5 seconds, loops to the start, pauses on hover/focus or reduced-motion settings, and keeps manual Prev/Next controls without a position counter.
@@ -78,6 +79,7 @@
 - Shared type roles use Poppins for headings, navigation, and actions, and Inter for body copy, labels, form controls, and tables.
 - Responsive type tokens are: page title 28-42 px, section title 22-29 px, subheading 18-20 px, card title 16 px, body 14 px (15 px on narrow viewports), label 13 px, caption 12 px, action 13 px, and table content 14 px. Mobile text-entry controls use 16 px to avoid browser zoom and improve readability.
 - Every `.card` and `*-card` uses the shared card roles: 16 px titles, 14 px desktop body text, 15 px narrow-view body text, and 13 px tags/chips/badges. Numeric callouts such as `.design-card-number` keep their emphasis size.
+- Home news and certification card tags share the borderless style in `components/_cards.scss` and use `--color-card-tag-bg` and `--color-card-tag-text` for their palette.
 - Bordered card slides inside `.carousel-window` need 1 px bottom padding on the clipping window so their bottom border remains visible. The shared selector covers `.card`, `.media-card`, `.release-product-card`, and `.certification-card`; governance principle cards intentionally remain left-border-only.
 - Shared spacing uses a 4 px base scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, and 80 px. Section spacing is responsive from 48-72 px, compact sections from 36-48 px, standard form controls are 52 px high, and interactive targets are at least 44 px.
 - Specification Search maps its embedded styles to the same monochrome Poppins/Inter type roles, spacing scale, and 52 px controls. Category and facet `.form-check` rows and labels intentionally omit the 44 px minimum height and retain an 8 px inline gap; result-table inquiry checkboxes are 20 × 20 px, and wide tables remain horizontally scrollable inside their container.
@@ -135,7 +137,7 @@
 ## Slide-request fixes (2026-10-16)
 
 - Home navigation overlays the hero transparently at the top and becomes white on hover, focus, open menus or scroll. Header height is measured into `--site-header-height`; section navigation sticks immediately below it, tracks the reached section and preserves query parameters when changing hashes.
-- Home hero height is 780 px on desktop and 530 px at <=1024 px. Desktop overlay navigation starts with white text and switches to dark text on hover, focus, open menus or scroll. Home viewing actions use View More; regional entries use three tablet columns and two mobile columns without dropping any region.
+- Home hero art uses separate text-free desktop, tablet, and mobile images. The heading and underline are HTML overlays in the first slide. The header stays transparent at the top and changes to paper on hover, focus, open menus, or scroll. Home viewing actions use View More; regional entries use three tablet columns and two mobile columns without dropping any region.
 - Carousel offsets use rendered card width and gap and stop at remaining content. Manual controls clamp and expose disabled boundaries; autoplay may loop. Runtime track replacements reset the owning widget, while dots retain their DOM nodes and keyboard focus. Company product controls share the same chevrons and boundary behavior.
 - Product release preview cards are 324 × 400 px on tablet/mobile; Support location cards are 320 × 432 px. Keep their existing owning tracks and single control sets. The prior generic 300 px preview rule is not a universal card size.
 - Locations category buttons retain intrinsic desktop widths; tablet/mobile use an overflow rail with real Prev/Next controls. Highlighting regions uses an outline rather than layout-changing padding or borders. Filters/search and category query parameters remain owned by LocationsController.
@@ -146,7 +148,7 @@
 ## Slide follow-up 15 and 26–33 (2026-10-16)
 
 - Footer bottom information follows the latest slide reference: Terms/Privacy left and Copyright right at 561–1024px; two centered rows with an 8px gap at <=560px. Keep both lines present in the shared footer.
-- Home uses one picture per hero slide: 390×530 mobile, 768×530 tablet and 1440×780 desktop sources. Company Overview keeps its existing picture with a 350×420 mobile source; avoid cropping wide placeholder dimensions into tall mobile frames.
+- Company Overview keeps its existing picture with a 350×420 mobile source; avoid cropping wide placeholder dimensions into tall mobile frames. The current Home hero sizing is recorded under Home hero and footer icon visibility.
 - Shared section navigation reveals the active link by scrolling only its horizontal track when the reached section changes. Manual rail movement remains available until the active section changes again; keyboard focus also reveals its link. Do not use link scrollIntoView(), which moves the page vertically.
 - Mobile Company Milestones use 230px items (bounded by the available width) to show neighboring circles. Center the track from actual item geometry. Loop resets must synchronously flush the no-transition position and active clone before restoring transitions, including child circle transitions; otherwise the browser animates across five items. Mobile details remain in normal flow, with controls 24px below them. Wider circle centering must account for the circle exceeding its item's content box.
 - Mobile Product News follows the native 342×480 Penpot card: 16px inner offset, 310×168 picture, left-aligned category/copy, title-side 44px link, SKU/dimensions and a full-width date strip. Keep the same renderer and state; desktop/tablet retain their existing layout and 248×134 image source.
@@ -219,6 +221,11 @@
 
 - Product families load FECS Category Summaries, bind Series by canonical path and ID, and render engineering display strings and public media provided by FECS. The Tree still provides navigation and Category responses supply descriptions and banners. Series overview values use Single Series Summary. Keep per-part filtering, selection and loss comparison on the detail APIs.
 - Apply family table labels after replacing cloned rows. The mobile card styles read each cell's `data-label`. Verify those attributes and the rendered labels at the 1024px breakpoint when changing columns.
-- The production app bundle is version 166. The 4173 preview imports its generated worker at startup. Rebuild and restart the existing preview to serve updated behavior.
 
 - Application diagrams for Consumer, Healthcare, Industrial and Smart Home use original WebPs from the market asset folders. Canonical normalized anchors and asset hashes live in `src/data/applications/illustrations.json`. The image loads at its intrinsic ratio and its content box sets the SVG leader and button coordinate system.
+
+## Home hero and footer icon visibility (2026-11-26)
+
+- The home hero first slide uses three generated text-free backgrounds: desktop 2034 × 773, tablet 1681 × 936, and mobile 1229 × 1280. Desktop keeps its 2034:773 frame with `contain`; tablet and mobile keep the original 530 px frame height with `cover`. The headline and gradient underline remain HTML. Start on the product banner and use the shared 4.5-second autoplay loop.
+- Align `.home-hero-copy` to the shared `--container-width` gutters. Position the copy below the closed navigation so its heading and underline stay inside the hero, including when the compact menu opens. The underline starts blue and switches to green at 66%.
+- Footer social sprite circles are supplemented by a 3 px white border on each icon target for clear contrast against the blue footer.

@@ -15,6 +15,13 @@
     font-size: 13px;
   }
 
+  .certification-tag,
+  .home-news-tag {
+    border: 0;
+    color: var(--color-card-tag-text);
+    background-color: var(--color-card-tag-bg);
+  }
+
   .card {
     border: 1px solid var(--line);
     padding: var(--space-6);

@@ -9,30 +9,11 @@ export class MarketApplicationController {
 
   initialize() {
     if (this.listeners) return;
-    this.listeners = new AbortController();
-    const { signal } = this.listeners;
-    const menu = document.querySelector("[data-market-header-menu]");
-    if (menu) {
-      document.addEventListener(
-        "click",
-        (event) => {
-          if (!menu.contains(event.target)) menu.open = false;
-        },
-        { signal },
-      );
-      menu.addEventListener(
-        "keydown",
-        (event) => {
-          if (event.key !== "Escape" || !menu.open) return;
-          menu.open = false;
-          menu.querySelector("summary").focus();
-        },
-        { signal },
-      );
-    }
-
     this.root = document.querySelector("[data-market-systems]");
     if (!this.root) return;
+
+    this.listeners = new AbortController();
+    const { signal } = this.listeners;
     this.root.addEventListener("click", (event) => this.handleClick(event), { signal });
     this.root.addEventListener("keydown", (event) => this.handleKeys(event), { signal });
     this.root.addEventListener(
