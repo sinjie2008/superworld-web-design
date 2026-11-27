@@ -28,10 +28,10 @@ export function displayFieldLabel(value) {
 }
 
 export function defaultColumns() {
-  return productColumns([]);
+  return productColumns();
 }
 
-export function productColumns(products) {
+export function productColumns(columnKeys = []) {
   const fixedSpecKeys = new Set(
     FIXED_PRODUCT_SPEC_COLUMNS.flatMap((column) => column.sourceKeys),
   );
@@ -49,10 +49,8 @@ export function productColumns(products) {
     ...fixedSpecKeys,
   ]);
   const dynamicKeys = new Set();
-  products.forEach((product) => {
-    Object.keys(product).forEach((key) => {
-      if (!excluded.has(key)) dynamicKeys.add(key);
-    });
+  columnKeys.forEach((key) => {
+    if (!excluded.has(key)) dynamicKeys.add(key);
   });
 
   const fixedColumns = FIXED_PRODUCT_SPEC_COLUMNS.map(
@@ -128,61 +126,19 @@ export class SpecificationSearchRenderer {
   }
 
   resetTableInteraction() {
-    this.state.table.query = "";
     this.state.table.sortKey = null;
     this.state.table.sortDirection = "asc";
     this.state.table.page = 1;
     this.state.table.pageSize = 10;
-    this.state.inquiryProductIds.clear();
-    this.dom["table-search"].value = "";
+    this.state.inquiryProductSkus.clear();
     this.dom["page-size"].value = "10";
   }
 
   deriveTableRows() {
-    const query = this.state.table.query.trim().toLocaleLowerCase();
-    const searchableColumns = this.state.table.columns.filter(
-      (column) => column.searchable,
-    );
-    const filtered = query
-      ? this.state.products.filter((product) =>
-          String(product.series || "").toLocaleLowerCase().includes(query) ||
-          searchableColumns.some((column) =>
-            String(column.value(product)).toLocaleLowerCase().includes(query),
-          ),
-        )
-      : this.state.products.slice();
-
-    const sortColumn = this.state.table.columns.find(
-      (column) => column.key === this.state.table.sortKey && column.sortable,
-    );
-    if (sortColumn) {
-      const direction = this.state.table.sortDirection === "desc" ? -1 : 1;
-      const collator = new Intl.Collator(undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
-      filtered.sort(
-        (left, right) =>
-          direction *
-          collator.compare(
-            String(sortColumn.value(left)),
-            String(sortColumn.value(right)),
-          ),
-      );
-    }
-
-    const pageCount = Math.max(
-      1,
-      Math.ceil(filtered.length / this.state.table.pageSize),
-    );
-    if (this.state.table.page > pageCount) this.state.table.page = pageCount;
+    const pageCount = Math.max(1, Math.ceil(this.state.resultTotal / this.state.table.pageSize));
     const startIndex = (this.state.table.page - 1) * this.state.table.pageSize;
     return {
-      filtered,
-      pageRows: filtered.slice(
-        startIndex,
-        startIndex + this.state.table.pageSize,
-      ),
+      pageRows: this.state.products,
       pageCount,
       startIndex,
     };
@@ -195,7 +151,8 @@ export class SpecificationSearchRenderer {
       : current.filter((item) => item !== value);
     if (this.state.filters[key].length === 0) delete this.state.filters[key];
     this.state.table.page = 1;
-    this.state.inquiryProductIds.clear();
+    this.state.inquiryProductSkus.clear();
+    this.state.pendingInquiryProductIds = [];
     this.query.sync();
     this.renderSelectedFilters();
     void this.actions.loadProducts();
@@ -271,7 +228,9 @@ export class SpecificationSearchRenderer {
           this.state.rootId = root.id;
           this.state.categoryIds = [];
           this.state.filters = {};
-          this.state.inquiryProductIds.clear();
+          this.state.inquiryProductSkus.clear();
+          this.state.pendingInquiryProductIds = [];
+          this.state.table.page = 1;
           this.query.sync();
           void this.actions.loadCategories(root.id);
         },
@@ -541,8 +500,9 @@ export class SpecificationSearchRenderer {
     button.addEventListener(
       "click",
       () => {
+        if (this.state.scopeLoading) return;
         this.state.table.page = page;
-        this.renderTable();
+        void this.actions.loadProducts();
       },
       { signal },
     );
@@ -603,7 +563,7 @@ export class SpecificationSearchRenderer {
   }
 
   renderInquiryAction() {
-    const count = this.state.inquiryProductIds.size;
+    const count = this.state.inquiryProductSkus.size;
     this.dom["inquiry-button"].disabled = count === 0;
     this.dom["inquiry-button"].textContent =
       count > 0 ? `Inquiry (${count})` : "Inquiry";
@@ -618,7 +578,7 @@ export class SpecificationSearchRenderer {
     const activePageLabel = this.dom.pagination.contains(activeElement)
       ? activeElement.getAttribute("aria-label") || activeElement.textContent
       : null;
-    const { filtered, pageRows, pageCount, startIndex } =
+    const { pageRows, pageCount, startIndex } =
       this.deriveTableRows();
     this.dom.tableHead.replaceChildren();
     this.dom.tableBody.replaceChildren();
@@ -668,6 +628,7 @@ export class SpecificationSearchRenderer {
         button.addEventListener(
           "click",
           () => {
+            if (this.state.scopeLoading) return;
             if (this.state.table.sortKey === column.key) {
               this.state.table.sortDirection =
                 this.state.table.sortDirection === "asc" ? "desc" : "asc";
@@ -676,7 +637,7 @@ export class SpecificationSearchRenderer {
               this.state.table.sortDirection = "asc";
             }
             this.state.table.page = 1;
-            this.renderTable();
+            void this.actions.loadProducts();
           },
           { signal },
         );
@@ -696,7 +657,7 @@ export class SpecificationSearchRenderer {
       cell.setAttribute("role", "cell");
       cell.className = "empty-cell";
       cell.colSpan = this.state.table.columns.length + 1;
-      cell.textContent = "No products found.";
+      cell.textContent = this.state.productResponseReady ? "No products found." : "";
       row.append(cell);
       this.dom.tableBody.append(row);
     } else {
@@ -708,7 +669,7 @@ export class SpecificationSearchRenderer {
         selectCell.className = "inquiry-select-column";
         const selectInput = document.createElement("input");
         selectInput.type = "checkbox";
-        selectInput.checked = this.state.inquiryProductIds.has(product.id);
+        selectInput.checked = this.state.inquiryProductSkus.has(product.id);
         selectInput.setAttribute(
           "aria-label",
           `Select ${product.sku || product.series || "product"} for inquiry`,
@@ -717,9 +678,8 @@ export class SpecificationSearchRenderer {
         selectInput.addEventListener(
           "change",
           () => {
-            if (selectInput.checked)
-              this.state.inquiryProductIds.add(product.id);
-            else this.state.inquiryProductIds.delete(product.id);
+            if (selectInput.checked) this.state.inquiryProductSkus.set(product.id, product.sku);
+            else this.state.inquiryProductSkus.delete(product.id);
             row.classList.toggle("is-selected", selectInput.checked);
             this.query.sync();
             this.renderInquiryAction();
@@ -745,17 +705,11 @@ export class SpecificationSearchRenderer {
 
     this.renderInquiryAction();
 
-    const visibleStart = filtered.length === 0 ? 0 : startIndex + 1;
-    const visibleEnd =
-      filtered.length === 0
-        ? 0
-        : Math.min(startIndex + this.state.table.pageSize, filtered.length);
-    const filteredSuffix = this.state.table.query.trim()
-      ? ` (filtered from ${this.state.products.length} total entries)`
-      : "";
+    const visibleStart = pageRows.length === 0 ? 0 : startIndex + 1;
+    const visibleEnd = pageRows.length === 0 ? 0 : startIndex + pageRows.length;
     this.dom["table-info"].textContent =
-      `Showing ${visibleStart} to ${visibleEnd} of ${filtered.length} entries${filteredSuffix}`;
-    this.renderPagination(pageCount, filtered.length);
+      `Showing ${visibleStart} to ${visibleEnd} of ${this.state.resultTotal} entries`;
+    this.renderPagination(pageCount, this.state.resultTotal);
     if (activeSortKey) {
       [...this.dom.tableHead.querySelectorAll("th")]
         .find((header) => header.dataset.column === activeSortKey)

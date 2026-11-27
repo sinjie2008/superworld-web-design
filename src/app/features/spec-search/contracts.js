@@ -157,7 +157,20 @@ export function validateProductResponse(response, input) {
     const { items, total } = valid.data;
     expectContract(Array.isArray(items), "products.data.items", "array", items);
     expectContract(Number.isInteger(total) && total >= 0, "products.data.total", "non-negative integer", total);
-    expectContract(total === items.length, "products.data.total", "items.length", total);
+    expectContract(isPlainObject(valid.data.pagination), "products.data.pagination", "object", valid.data.pagination);
+    expectContract(Number.isInteger(valid.data.pagination.page) && valid.data.pagination.page > 0, "products.data.pagination.page", "positive integer", valid.data.pagination.page);
+    expectContract(Number.isInteger(valid.data.pagination.per_page) && valid.data.pagination.per_page > 0, "products.data.pagination.per_page", "positive integer", valid.data.pagination.per_page);
+    expectContract(Array.isArray(valid.data.column_keys) && valid.data.column_keys.every((key) => typeof key === "string"), "products.data.column_keys", "string array", valid.data.column_keys);
+    expectContract(Array.isArray(valid.data.inquiry_items), "products.data.inquiry_items", "array", valid.data.inquiry_items);
+    const inquiryIds = new Set();
+    valid.data.inquiry_items.forEach((item, index) => {
+        const path = `products.data.inquiry_items[${index}]`;
+        expectContract(isPlainObject(item), path, "object", item);
+        expectContract(Number.isInteger(item.id) && item.id > 0, `${path}.id`, "positive integer", item.id);
+        expectContract(typeof item.sku === "string", `${path}.sku`, "string", item.sku);
+        expectContract(!inquiryIds.has(item.id), `${path}.id`, "unique inquiry product ID", item.id);
+        inquiryIds.add(item.id);
+    });
 
     const selectedCategoryIds = new Set(input.categoryIds);
     const seenIds = new Set();

@@ -229,3 +229,10 @@
 - The home hero first slide uses three generated text-free backgrounds: desktop 2034 × 773, tablet 1681 × 936, and mobile 1229 × 1280. Desktop keeps its 2034:773 frame with `contain`; tablet and mobile keep the original 530 px frame height with `cover`. The headline and gradient underline remain HTML. Start on the product banner and use the shared 4.5-second autoplay loop.
 - Align `.home-hero-copy` to the shared `--container-width` gutters. Position the copy below the closed navigation so its heading and underline stay inside the hero, including when the compact menu opens. The underline starts blue and switches to green at 66%.
 - Footer social sprite circles are supplemented by a 3 px white border on each icon target for clear contrast against the blue footer.
+
+## Specification Search catalogue pagination (2026-11-27)
+
+- With no `root` in the URL, both root radios start unchecked and FECS searches all eligible roots. The General category cards remain the initial picker. An explicit root or category narrows the products request.
+- Products requests opt into FECS pagination. `total` is the full match count, `items` contains the requested page, and `column_keys` keeps specification columns stable across pages. Keep search and sort in the same request so they run across the whole scope.
+- Keep Inquiry selection by product ID and SKU across result pages. Restore URL selections with the products API's `inquiry_ids` and preserve the repeated ID/SKU order when opening the cart.
+- Specification Search restores `q` before loading the catalogue scope and synchronizes it through the existing search input. A new term starts on page 1, an empty term removes `q`, and category selection retains the search term.

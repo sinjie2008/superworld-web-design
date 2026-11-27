@@ -314,7 +314,7 @@ assert.doesNotMatch(
 );
 assert.match(documentLayoutSource, /\/styles\.css\?v=193/);
 assert.match(documentLayoutSource, /\/spec-search\.css\?v=113/);
-assert.match(documentLayoutSource, /\/spec-search\.js\?v=106/);
+assert.match(documentLayoutSource, /\/spec-search\.js\?v=109/);
 assert.match(documentLayoutSource, /\/app\.js\?v=173/);
 
 const { stdout: lifecycleOutput } = await execFileAsync(process.execPath, [lifecycleCheckPath], {
@@ -415,6 +415,10 @@ assert.match(appModuleSource, /addEventListener\(\s*"pointerleave",\s*restorePin
 assert.doesNotMatch(stylesSource, /\.mapping-row:hover \.series-detail\[hidden\]/);
 assert.match(stylesSource, /\.cta>\.button-group\{flex:0 0 auto;flex-wrap:nowrap\}/);
 assert.match(specSearchModuleSource, /setInitialSelection\(this\.window\.location\.search\)/);
+assert.match(specSearchModuleSource, /root_id:\s*rootId/);
+assert.match(specSearchModuleSource, /pagination,\s*search,\s*sort_key:\s*sortKey,\s*sort_direction:\s*sortDirection/);
+assert.match(specSearchModuleSource, /column_keys/);
+assert.match(specSearchModuleSource, /inquiry_items/);
 
 const titles = new Set();
 const descriptions = new Set();
@@ -445,7 +449,7 @@ for (const [route, metadata] of Object.entries(PAGE_METADATA)) {
   if (route === "/") {
     assert.match(html, new RegExp(`/styles\\.css\\?v=${buildMode === "dev" ? "dev-193" : "193"}`));
     assert.match(html, /\/spec-search\.css\?v=113/);
-    assert.match(html, /\/spec-search\.js\?v=106/);
+    assert.match(html, /\/spec-search\.js\?v=109/);
     assert.match(html, new RegExp(`/app\\.js\\?v=${buildMode === "dev" ? "dev-173" : "173"}`));
   }
   assert.equal(

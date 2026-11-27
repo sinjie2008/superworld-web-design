@@ -66,6 +66,7 @@ export class SpecificationSearchApplication {
     this.query.setInitialSelection(this.window.location.search);
     try {
       this.dom.cache();
+      this.dom["table-search"].value = this.state.table.query;
       this.events.bind();
       this.state.table.columns = defaultColumns();
       this.renderer.renderSelectedFilters();

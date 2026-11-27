@@ -29,6 +29,7 @@ export function parseQuerySelection(search) {
   });
 
   return {
+    query: params.get("q") ?? "",
     rootId: Number.isInteger(rootId) && rootId > 0 ? rootId : null,
     categoryIds,
     filters: Object.fromEntries(filterValues),
@@ -68,6 +69,7 @@ export class SpecificationSearchQuery {
 
   setInitialSelection(search) {
     this.initialSelection = parseQuerySelection(search);
+    this.state.table.query = this.initialSelection.query;
   }
 
   buildInquiryUrl() {
@@ -75,15 +77,22 @@ export class SpecificationSearchQuery {
       this.state.rootId,
       this.state.categoryIds,
       this.state.filters,
-      [...this.state.inquiryProductIds],
+      [...this.state.inquiryProductSkus.keys()],
     );
     const params = new URLSearchParams(queryString);
-    const productsById = new Map(this.state.products.map((product) => [product.id, product]));
-    this.state.inquiryProductIds.forEach((id) => {
-      const sku = productsById.get(id)?.sku;
+    this.state.inquiryProductSkus.forEach((sku) => {
       if (sku) params.append("sku", sku);
     });
     return `/inquiry${params.size ? `?${params}` : ""}`;
+  }
+
+  syncSearch(url = new URL(this.window.location.href)) {
+    const { query } = this.state.table;
+    if (query.trim()) url.searchParams.set("q", query);
+    else url.searchParams.delete("q");
+    if (url.href !== this.window.location.href) {
+      this.window.history.replaceState(null, "", url.href);
+    }
   }
 
   sync() {
@@ -98,9 +107,9 @@ export class SpecificationSearchQuery {
         this.state.rootId,
         this.state.categoryIds,
         this.state.filters,
-        Array.from(this.state.inquiryProductIds),
+        Array.from(this.state.inquiryProductSkus.keys()),
       ),
     ).forEach((value, key) => url.searchParams.append(key, value));
-    this.window.history.replaceState(null, "", url.href);
+    this.syncSearch(url);
   }
 }

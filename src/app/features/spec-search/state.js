@@ -9,7 +9,11 @@ export class SpecificationSearchState {
     this.facets = [];
     this.products = [];
     this.resultTotal = 0;
-    this.inquiryProductIds = new Set();
+    this.productResponseReady = false;
+    this.scopeLoading = true;
+    this.skipInitialFilters = false;
+    this.inquiryProductSkus = new Map();
+    this.pendingInquiryProductIds = [];
     this.rootId = null;
     this.categoryIds = [];
     this.filters = {};

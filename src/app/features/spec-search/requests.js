@@ -52,6 +52,7 @@ export class SpecificationSearchRequests {
       error.name === "AbortError"
     )
       return;
+    this.state.scopeLoading = false;
     this.requestController = null;
     const correlation = error.correlationId
       ? ` (Correlation ID: ${error.correlationId})`
@@ -63,6 +64,7 @@ export class SpecificationSearchRequests {
   }
 
   async loadRoots() {
+    this.state.pendingInquiryProductIds = this.query.initialSelection.inquiryProductIds ?? [];
     const request = this.begin("Loading roots...");
     try {
       const response = await this.dataService.getRootCategories({
@@ -79,15 +81,9 @@ export class SpecificationSearchRequests {
       const requestedRoot = this.state.roots.find(
         (root) => root.id === this.query.initialSelection.rootId,
       );
-      this.state.rootId = requestedRoot
-        ? requestedRoot.id
-        : (this.state.roots[0]?.id ?? null);
+      this.state.rootId = requestedRoot ? requestedRoot.id : null;
       this.renderer.renderRoots();
-      if (this.state.rootId === null) {
-        this.finish(request.revision);
-        return;
-      }
-      await this.loadCategories(this.state.rootId, true);
+      await this.loadCategories(this.state.rootId ?? this.state.roots[0]?.id, true);
     } catch (error) {
       if (!this.isCurrent(request.revision)) return;
       this.state.roots = [];
@@ -98,8 +94,9 @@ export class SpecificationSearchRequests {
       this.state.facets = [];
       this.state.products = [];
       this.state.resultTotal = 0;
+      this.state.productResponseReady = false;
       this.state.table.columns = defaultColumns();
-      this.renderer.resetTableInteraction();
+      this.state.table.page = 1;
       this.renderer.renderRoots();
       this.renderer.renderCategories();
       this.renderer.renderSelectedFilters();
@@ -110,15 +107,20 @@ export class SpecificationSearchRequests {
   }
 
   async loadCategories(rootId, applyQuerySelection = false) {
+    this.state.scopeLoading = true;
+    this.state.table.page = 1;
+    this.state.products = [];
+    this.state.resultTotal = 0;
+    this.state.productResponseReady = false;
+    this.renderer.renderResults();
     const request = this.begin("Loading categories...");
     this.renderer.renderCategories("Loading...");
     try {
-      const response = await this.dataService.getProductCategories({
-        rootId,
-        signal: request.signal,
-      });
+      const groups = rootId === undefined
+        ? []
+        : (await this.dataService.getProductCategories({ rootId, signal: request.signal })).data.groups;
       if (!this.isCurrent(request.revision)) return;
-      this.state.groups = response.data.groups;
+      this.state.groups = groups;
       const availableCategoryIds = new Set(
         this.state.groups.flatMap((group) =>
           group.categories.map((category) => category.id),
@@ -131,30 +133,23 @@ export class SpecificationSearchRequests {
         : [];
       this.state.filters = {};
       this.state.facets = [];
-      this.state.products = [];
-      this.state.resultTotal = 0;
       this.state.table.columns = defaultColumns();
-      this.renderer.resetTableInteraction();
       this.renderer.renderCategories();
       this.renderer.renderFacets();
       this.renderer.renderSelectedFilters();
       this.renderer.renderResults();
-      if (applyQuerySelection && this.state.categoryIds.length > 0) {
-        await this.loadFacetsAndProducts(
-          this.query.initialSelection.filters,
-          this.query.initialSelection.inquiryProductIds,
-        );
-        return;
-      }
-      this.finish(request.revision);
+      const initialFilters = applyQuerySelection ? this.query.initialSelection.filters : null;
+      await this.loadFacetsAndProducts(initialFilters);
     } catch (error) {
       if (!this.isCurrent(request.revision)) return;
       this.state.groups = [];
+      this.state.scopeLoading = false;
       this.state.categoryIds = [];
       this.state.filters = {};
       this.state.facets = [];
       this.state.products = [];
       this.state.resultTotal = 0;
+      this.state.table.page = 1;
       this.state.table.columns = defaultColumns();
       this.renderer.resetTableInteraction();
       this.renderer.renderCategories();
@@ -165,47 +160,71 @@ export class SpecificationSearchRequests {
     }
   }
 
-  async loadFacetsAndProducts(
-    requestedFilters = null,
-    requestedInquiryProductIds = [],
-  ) {
+  async loadFacetsAndProducts(requestedFilters = null) {
+    if (this.state.categoryIds.length === 0) {
+      this.state.scopeLoading = false;
+      this.state.facets = [];
+      this.renderer.renderFacets();
+      await this.loadProducts();
+      return;
+    }
+    this.state.scopeLoading = true;
     const request = this.begin("Loading filters...");
     const input = {
       categoryIds: this.state.categoryIds.slice(),
       signal: request.signal,
     };
-    let stage = "filters";
     try {
       const facetResponse = await this.dataService.getFacets(input);
       if (!this.isCurrent(request.revision)) return;
       this.state.facets = facetResponse.data.facets;
-      if (requestedFilters)
+      this.state.scopeLoading = false;
+      if (requestedFilters && !this.state.skipInitialFilters)
         this.state.filters = selectAvailableFilters(
           requestedFilters,
           this.state.facets,
         );
       this.renderer.renderFacets();
       this.renderer.renderSelectedFilters();
-      stage = "products";
-      this.renderer.setStatus("Loading products...", "loading");
+      return this.loadProducts();
+    } catch (error) {
+      if (!this.isCurrent(request.revision)) return;
+      this.state.products = [];
+      this.state.resultTotal = 0;
+      this.state.productResponseReady = false;
+      this.state.table.page = 1;
+      this.state.table.columns = defaultColumns();
+      this.renderer.renderResults();
+      const prefix = error.kind === "contract" ? "Invalid API response" : "Error loading filters";
+      this.handleLoadError(prefix, error, request.revision);
+    }
+  }
 
-      const productResponse = await this.dataService.getProducts({
+  async loadProducts() {
+    if (this.state.scopeLoading) return;
+    const table = this.state.table;
+    const inquiryIds = this.state.pendingInquiryProductIds;
+    const request = this.begin("Loading products...");
+    try {
+      const response = await this.dataService.getProducts({
+        rootId: this.state.rootId,
         categoryIds: this.state.categoryIds.slice(),
         filters: deepCopy(this.state.filters),
+        pagination: { page: table.page, per_page: table.pageSize },
+        search: table.query,
+        sortKey: table.sortKey,
+        sortDirection: table.sortDirection,
+        inquiryIds,
         signal: request.signal,
       });
       if (!this.isCurrent(request.revision)) return;
-      this.state.products = productResponse.data.items;
-      this.state.resultTotal = productResponse.data.total;
-      this.state.table.columns = productColumns(this.state.products);
-      this.renderer.resetTableInteraction();
-      const availableProductIds = new Set(
-        this.state.products.map((product) => product.id),
-      );
-      requestedInquiryProductIds.forEach((productId) => {
-        if (availableProductIds.has(productId))
-          this.state.inquiryProductIds.add(productId);
-      });
+      this.state.products = response.data.items;
+      this.state.resultTotal = response.data.total;
+      table.page = response.data.pagination.page;
+      table.columns = productColumns(response.data.column_keys);
+      this.state.productResponseReady = true;
+      response.data.inquiry_items.forEach(({ id, sku }) => this.state.inquiryProductSkus.set(id, sku));
+      this.state.pendingInquiryProductIds = [];
       this.query.sync();
       this.renderer.renderResults();
       this.finish(request.revision);
@@ -213,51 +232,9 @@ export class SpecificationSearchRequests {
       if (!this.isCurrent(request.revision)) return;
       this.state.products = [];
       this.state.resultTotal = 0;
+      this.state.productResponseReady = false;
+      this.state.table.page = 1;
       this.state.table.columns = defaultColumns();
-      this.renderer.resetTableInteraction();
-      this.renderer.renderResults();
-      const prefix =
-        error.kind === "contract"
-          ? "Invalid API response"
-          : stage === "filters"
-            ? "Error loading filters"
-            : "Error loading products";
-      this.handleLoadError(prefix, error, request.revision);
-    }
-  }
-
-  async loadProducts() {
-    if (this.state.categoryIds.length === 0) {
-      this.cancelActive();
-      this.state.products = [];
-      this.state.resultTotal = 0;
-      this.state.table.columns = defaultColumns();
-      this.renderer.resetTableInteraction();
-      this.renderer.renderResults();
-      this.renderer.setStatus("");
-      return;
-    }
-
-    const request = this.begin("Loading products...");
-    try {
-      const response = await this.dataService.getProducts({
-        categoryIds: this.state.categoryIds.slice(),
-        filters: deepCopy(this.state.filters),
-        signal: request.signal,
-      });
-      if (!this.isCurrent(request.revision)) return;
-      this.state.products = response.data.items;
-      this.state.resultTotal = response.data.total;
-      this.state.table.columns = productColumns(this.state.products);
-      this.renderer.resetTableInteraction();
-      this.renderer.renderResults();
-      this.finish(request.revision);
-    } catch (error) {
-      if (!this.isCurrent(request.revision)) return;
-      this.state.products = [];
-      this.state.resultTotal = 0;
-      this.state.table.columns = defaultColumns();
-      this.renderer.resetTableInteraction();
       this.renderer.renderResults();
       this.handleLoadError(
         error.kind === "contract"

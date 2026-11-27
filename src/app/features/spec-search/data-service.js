@@ -201,16 +201,17 @@ export class ApiDataProvider {
     });
   }
 
-  getProducts({ categoryIds, filters, signal }) {
+  getProducts({ rootId, categoryIds, filters, pagination, search, sortKey, sortDirection, inquiryIds, signal }) {
     return requestApi(this.config, this.window, this.fetch, "products", {
       method: "POST",
-      json: { category_ids: categoryIds, filters },
+      json: { root_id: rootId, category_ids: categoryIds, filters, pagination, search, sort_key: sortKey, sort_direction: sortDirection, ...(inquiryIds?.length ? { inquiry_ids: inquiryIds } : {}) },
       signal,
     });
   }
 }
 
 function normalizeRootId(rootId) {
+  if (rootId === null || rootId === undefined || rootId === "") return null;
   const normalized = Number(rootId);
   expectContract(
     Number.isInteger(normalized) && normalized > 0,
@@ -291,8 +292,14 @@ export class SpecificationSearchDataService {
 
   async getProducts(input) {
     const normalized = {
+      rootId: normalizeRootId(input.rootId),
       categoryIds: normalizeCategoryIds(input.categoryIds),
       filters: normalizeFilters(input.filters),
+      pagination: input.pagination,
+      search: input.search || "",
+      sortKey: input.sortKey ?? null,
+      sortDirection: input.sortDirection === "desc" ? "desc" : "asc",
+      inquiryIds: input.inquiryIds || [],
       signal: input.signal,
     };
     const response = validateProductResponse(
